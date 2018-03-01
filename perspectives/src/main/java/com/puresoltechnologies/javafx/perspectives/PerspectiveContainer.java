@@ -28,12 +28,15 @@ public class PerspectiveContainer extends BorderPane {
 	    ImageView switchWidowsImage = ResourceUtils.getImageView(this,
 		    "/icons/FatCow_Icons16x16/switch_windows.png");
 	    Button openPerspectiveButton = new Button("Open...", switchWidowsImage);
+	    openPerspectiveButton.setId("OpenPerspectivesButton");
 	    openPerspectiveButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 	    ImageView resetPerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/undo.png");
 	    Button resetButton = new Button("Reset", resetPerspectiveImage);
+	    openPerspectiveButton.setId("resetPerspectiveButton");
 	    resetButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 	    ImageView closePerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
 	    Button closeButton = new Button("Close", closePerspectiveImage);
+	    openPerspectiveButton.setId("ClosePerspectiveButton");
 	    closeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
 	    openPerspectiveButton.setOnAction(event -> openNewPerspective());
