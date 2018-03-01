@@ -38,7 +38,7 @@ public class PartHeader extends HBox {
 		event.consume();
 	    });
 	    imageView.setOnMouseClicked(event -> {
-		partStack.removePart(part);
+		partStack.removeElement(part);
 	    });
 	} catch (IOException e) {
 	    throw new RuntimeException(e);

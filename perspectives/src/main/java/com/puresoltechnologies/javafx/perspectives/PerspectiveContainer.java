@@ -10,6 +10,7 @@ import java.util.Optional;
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ToolBar;
@@ -80,7 +81,7 @@ public class PerspectiveContainer extends BorderPane {
     public void addPerspective(Perspective perspective) {
 	this.perspectives.add(perspective);
 	currentPerspective = perspective;
-	setCenter(currentPerspective.getContent());
+	Platform.runLater(() -> setCenter(currentPerspective.getContent()));
     }
 
     public void removePerspective(Perspective perspective) {

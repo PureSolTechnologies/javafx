@@ -16,7 +16,7 @@ class PerspectiveHandler {
     }
 
     private Part findPart(String partId) {
-	return findPart(perspective.getElement(), partId);
+	return findPart(perspective, partId);
     }
 
     private Part findPart(PerspectiveElement parent, String partId) {
@@ -43,14 +43,14 @@ class PerspectiveHandler {
 	return null;
     }
 
-    private PartStack findPartStack(String stackId) {
-	return findPartStack(perspective.getElement(), stackId);
+    private PerspectiveElement findElement(String stackId) {
+	return findPartStack(perspective, stackId);
     }
 
-    private PartStack findPartStack(PerspectiveElement parent, String stackId) {
+    private PerspectiveElement findPartStack(PerspectiveElement parent, String stackId) {
 	for (PerspectiveElement element : parent.getElements()) {
 	    if (element instanceof PartSplit) {
-		PartStack partStack = findPartStack(element, stackId);
+		PerspectiveElement partStack = findPartStack(element, stackId);
 		if (partStack != null) {
 		    return partStack;
 		}
@@ -65,19 +65,19 @@ class PerspectiveHandler {
     }
 
     public void movePartToStack(String oldStackId, String partId, String newStackId) {
-	PartStack oldPartStack = findPartStack(oldStackId);
+	PerspectiveElement oldPartStack = findElement(oldStackId);
 	Part part = findPart(partId);
-	PartStack newPartStack = findPartStack(newStackId);
+	PerspectiveElement newPartStack = findElement(newStackId);
 	Platform.runLater(() -> {
-	    oldPartStack.removePart(part);
-	    newPartStack.addPart(part);
+	    oldPartStack.removeElement(part);
+	    newPartStack.addElement(part);
 	    removeEmptyElements();
 	    printElements();
 	});
     }
 
     private void removeEmptyElements() {
-	removeEmptyElements(perspective.getElement());
+	removeEmptyElements(perspective);
     }
 
     private void removeEmptyElements(PerspectiveElement perspectiveElement) {
@@ -113,7 +113,7 @@ class PerspectiveHandler {
     }
 
     private void printElements() {
-	printElements(perspective.getElement(), 0);
+	printElements(perspective.getRootElement(), 0);
     }
 
     private void printElements(PerspectiveElement parent, int depth) {
@@ -149,10 +149,10 @@ class PerspectiveHandler {
 
     private void movePartToNew(String oldStackId, String partId, String newStackId, Orientation orientation,
 	    boolean first) {
-	PartStack oldPartStack = findPartStack(oldStackId);
+	PerspectiveElement oldPartStack = findElement(oldStackId);
 	Part part = findPart(partId);
-	PartStack selectedPartStack = findPartStack(newStackId);
-	PartSplit selectedPartSplit = selectedPartStack.getPartSplit();
+	PerspectiveElement selectedPartStack = findElement(newStackId);
+	PerspectiveElement selectedPartSplit = selectedPartStack.getParent();
 
 	Platform.runLater(() -> {
 	    System.err.println("Create new empty elements");
@@ -169,7 +169,7 @@ class PerspectiveHandler {
 
 	    }
 	    selectedPartSplit.addElement(newPartSplit);
-	    oldPartStack.removePart(part);
+	    oldPartStack.removeElement(part);
 	    newPartStack.addPart(part);
 
 	    removeEmptyElements();

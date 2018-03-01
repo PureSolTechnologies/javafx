@@ -12,6 +12,8 @@ import javafx.scene.control.SplitPane;
 
 public class PartSplit extends AbstractPerspectiveElement {
 
+    private static final long serialVersionUID = -699720713406202843L;
+
     private List<PerspectiveElement> elements = new ArrayList<>();
     private final SplitPane splitPane;
 
@@ -44,9 +46,14 @@ public class PartSplit extends AbstractPerspectiveElement {
 
     @Override
     public void addElement(PerspectiveElement element) {
+	if (elements.size() >= 2) {
+	    throw new IllegalStateException("More than two elements are not allowed in a split.");
+	}
 	if (element instanceof PartSplit) {
+	    ((PartSplit) element).setParent(this);
 	    ((PartSplit) element).setPerspectiveHandler(getPerspectiveHandler());
 	} else if (element instanceof PartStack) {
+	    ((PartStack) element).setParent(this);
 	    ((PartStack) element).setPerspectiveHandler(getPerspectiveHandler());
 	} else {
 	    throw new IllegalStateException("Element of type '" + element.getClass().getName() + "' is not supported.");
@@ -62,9 +69,9 @@ public class PartSplit extends AbstractPerspectiveElement {
 
     @Override
     public void removeElement(String id) {
-	Iterator<Node> items = splitPane.getItems().iterator();
+	Iterator<PerspectiveElement> items = elements.iterator();
 	while (items.hasNext()) {
-	    Node item = items.next();
+	    PerspectiveElement item = items.next();
 	    if (item.getId() == id) {
 		items.remove();
 	    }
@@ -95,4 +102,10 @@ public class PartSplit extends AbstractPerspectiveElement {
     public void setDividerPosition(double positions) {
 	splitPane.setDividerPosition(0, positions);
     }
+
+    @Override
+    public boolean isSplit() {
+	return true;
+    }
+
 }

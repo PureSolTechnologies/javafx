@@ -23,6 +23,8 @@ import javafx.scene.shape.Rectangle;
 
 public class PartStack extends AbstractPerspectiveElement {
 
+    private static final long serialVersionUID = -8205338293180406512L;
+
     private static final double DRAG_EDGE_FRACTION = 0.2;
 
     private PartSplit partStashContainer = null;
@@ -97,6 +99,8 @@ public class PartStack extends AbstractPerspectiveElement {
 	    return;
 	}
 	/* data dropped */
+	ObservableList<Node> children = borderPane.getChildren();
+	children.remove(children.size() - 1);
 	/* if there is a string data on dragboard, read it and use it */
 	Dragboard db = event.getDragboard();
 	boolean success = false;
@@ -137,8 +141,6 @@ public class PartStack extends AbstractPerspectiveElement {
 	    }
 
 	}
-	ObservableList<Node> children = borderPane.getChildren();
-	children.remove(children.size() - 1);
 	event.setDropCompleted(success);
 	event.consume();
     }
@@ -239,11 +241,26 @@ public class PartStack extends AbstractPerspectiveElement {
 	borderPane.setCenter(part.getContent());
     }
 
-    public void removePart(Part part) {
-	removeChild(part.getId());
+    List<Part> getParts() {
+	return parts;
     }
 
-    public void removeChild(String partId) {
+    @Override
+    public BorderPane getContent() {
+	return borderPane;
+    }
+
+    @Override
+    public void addElement(PerspectiveElement e) {
+	if (!Part.class.isAssignableFrom(e.getClass())) {
+	    throw new IllegalArgumentException(
+		    "Part stacks can only contain parts. Type '" + e.getClass().getName() + "' is not supported.");
+	}
+	addPart((Part) e);
+    }
+
+    @Override
+    public void removeElement(String partId) {
 	PartHeader header = headers.get(partId);
 	toolBar.getItems().remove(header);
 	headers.remove(partId);
@@ -261,27 +278,14 @@ public class PartStack extends AbstractPerspectiveElement {
 	}
     }
 
-    List<Part> getParts() {
-	return parts;
-    }
-
-    @Override
-    public BorderPane getContent() {
-	return borderPane;
-    }
-
-    @Override
-    public void addElement(PerspectiveElement e) {
-	throw new IllegalStateException();
-    }
-
-    @Override
-    public void removeElement(String id) {
-	throw new IllegalStateException();
-    }
-
     @Override
     public void removeElement(PerspectiveElement element) {
-	throw new IllegalStateException();
+	removeElement(element.getId());
     }
+
+    @Override
+    public boolean isSplit() {
+	return false;
+    }
+
 }
