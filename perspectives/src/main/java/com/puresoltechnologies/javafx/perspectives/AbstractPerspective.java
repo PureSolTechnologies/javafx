@@ -24,8 +24,21 @@ public abstract class AbstractPerspective implements Perspective {
 
     private void createNewContent() {
 	element = createContent();
+	setContext(element);
 	borderPane.setCenter(element.getContent());
 	((AbstractPerspectiveElement) element).setPerspectiveHandler(perspectiveHandler);
+    }
+
+    protected void setContext(PerspectiveElement element) {
+	if (element instanceof PartSplit) {
+	    ((PartSplit) element).setParent(this);
+	    ((PartSplit) element).setPerspectiveHandler(perspectiveHandler);
+	} else if (element instanceof PartStack) {
+	    ((PartStack) element).setParent(this);
+	    ((PartStack) element).setPerspectiveHandler(perspectiveHandler);
+	} else {
+	    throw new IllegalStateException("Element of type '" + element.getClass().getName() + "' is not supported.");
+	}
     }
 
     protected abstract PerspectiveElement createContent();
@@ -71,6 +84,7 @@ public abstract class AbstractPerspective implements Perspective {
 	    throw new IllegalStateException("Root element was already set.");
 	}
 	element = e;
+	setContext(element);
 	borderPane.setCenter(element.getContent());
     }
 
@@ -84,10 +98,7 @@ public abstract class AbstractPerspective implements Perspective {
 
     @Override
     public void removeElement(PerspectiveElement element) {
-	if (element.getId().equals(element.getId())) {
-	    element = null;
-	    borderPane.setCenter(null);
-	}
+	removeElement(element.getId());
     }
 
     @Override

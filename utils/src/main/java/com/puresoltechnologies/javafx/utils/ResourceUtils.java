@@ -22,7 +22,25 @@ public class ResourceUtils {
      * @param clazz
      *            is the class to specify the classloader.
      * @param imageResource
-     *            is the resource path of the image to be loaed.
+     *            is the resource path of the image to be loaded.
+     * @return A {@link Image} object is returned. containing the picture.
+     * @throws IOException
+     *             is thrown in case of I/O issues.
+     */
+    public static Image getImage(Object clazz, String imageResource) throws IOException {
+	try (InputStream perspectivesImage = clazz.getClass().getResourceAsStream(imageResource)) {
+	    return new Image(perspectivesImage);
+	}
+    }
+
+    /**
+     * This method reads the image from the given resource path relative to the
+     * given class.
+     * 
+     * @param clazz
+     *            is the class to specify the classloader.
+     * @param imageResource
+     *            is the resource path of the image to be loaded.
      * @return A {@link ImageView} object is returned. containing the picture.
      * @throws IOException
      *             is thrown in case of I/O issues.

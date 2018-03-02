@@ -49,15 +49,7 @@ public class PartSplit extends AbstractPerspectiveElement {
 	if (elements.size() >= 2) {
 	    throw new IllegalStateException("More than two elements are not allowed in a split.");
 	}
-	if (element instanceof PartSplit) {
-	    ((PartSplit) element).setParent(this);
-	    ((PartSplit) element).setPerspectiveHandler(getPerspectiveHandler());
-	} else if (element instanceof PartStack) {
-	    ((PartStack) element).setParent(this);
-	    ((PartStack) element).setPerspectiveHandler(getPerspectiveHandler());
-	} else {
-	    throw new IllegalStateException("Element of type '" + element.getClass().getName() + "' is not supported.");
-	}
+	setContext(element);
 	elements.add(element);
 	rearrangeItems();
     }

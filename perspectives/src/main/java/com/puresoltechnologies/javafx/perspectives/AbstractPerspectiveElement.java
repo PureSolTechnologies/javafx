@@ -33,4 +33,16 @@ public abstract class AbstractPerspectiveElement implements PerspectiveElement {
 	this.perspectiveHandler = perspectiveHandler;
     }
 
+    protected void setContext(PerspectiveElement element) {
+	if (element instanceof PartSplit) {
+	    ((PartSplit) element).setParent(this);
+	    ((PartSplit) element).setPerspectiveHandler(getPerspectiveHandler());
+	} else if (element instanceof PartStack) {
+	    ((PartStack) element).setParent(this);
+	    ((PartStack) element).setPerspectiveHandler(getPerspectiveHandler());
+	} else {
+	    throw new IllegalStateException("Element of type '" + element.getClass().getName() + "' is not supported.");
+	}
+    }
+
 }

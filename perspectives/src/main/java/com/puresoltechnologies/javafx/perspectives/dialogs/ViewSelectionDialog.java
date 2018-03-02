@@ -46,12 +46,10 @@ public class ViewSelectionDialog extends Dialog<Part> {
     }
 
     private void fillListView(ListView<Part> listView) {
-	ServiceLoader<Part> perspectives = ServiceLoader.load(Part.class);
-	List<Part> items = new ArrayList<>();
+	ServiceLoader<ViewerPart> perspectives = ServiceLoader.load(ViewerPart.class);
+	List<ViewerPart> items = new ArrayList<>();
 	perspectives.forEach(p -> {
-	    if (ViewerPart.class.isAssignableFrom(p.getClass())) {
-		items.add(p);
-	    }
+	    items.add(p);
 	});
 	Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
 	listView.setItems(FXCollections.observableArrayList(items));

@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.perspectives;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,14 +88,16 @@ class PerspectiveHandler {
 	    if (elements instanceof PartSplit) {
 		PartSplit partSplit = (PartSplit) elements;
 		removeEmptyElements(partSplit);
-		// List<PerspectiveElement> items = partSplit.getElements();
-		// if (items.isEmpty()) {
-		// removeIds.add(partSplit.getId());
-		// } else if (items.size() == 1) {
-		// removeIds.add(partSplit.getId());
-		// PerspectiveElement child = items.get(0);
-		// addElements.add(child);
-		// }
+		List<PerspectiveElement> items = partSplit.getElements();
+		if (items.isEmpty()) {
+		    removeIds.add(() -> partSplit.getParent().removeElement(partSplit.getId()));
+		} else if (items.size() == 1) {
+		    removeIds.add(() -> {
+			partSplit.getParent().removeElement(partSplit.getId());
+		    });
+		    PerspectiveElement child = items.get(0);
+		    addElements.add(child);
+		}
 	    } else if (elements instanceof PartStack) {
 		PartStack partStack = (PartStack) elements;
 		if (!partStack.hasParts()) {
@@ -113,6 +116,7 @@ class PerspectiveHandler {
     }
 
     private void printElements() {
+	System.out.println("=== " + LocalDateTime.now() + " ===");
 	printElements(perspective.getRootElement(), 0);
     }
 
@@ -155,10 +159,8 @@ class PerspectiveHandler {
 	PerspectiveElement selectedPartSplit = selectedPartStack.getParent();
 
 	Platform.runLater(() -> {
-	    System.err.println("Create new empty elements");
 	    PartSplit newPartSplit = new PartSplit(orientation);
 	    PartStack newPartStack = new PartStack();
-	    System.err.println("Create new empty elements");
 	    selectedPartSplit.removeElement(selectedPartStack);
 	    if (first) {
 		newPartSplit.addElement(newPartStack);

@@ -4,12 +4,19 @@ import java.io.IOException;
 
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
+import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
 public class PartHeader extends HBox {
 
@@ -19,6 +26,9 @@ public class PartHeader extends HBox {
 	super();
 	this.part = part;
 	try {
+	    setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(0.0),
+		    new BorderWidths(1.0, 1.0, 1.0, 1.0, false, false, false, false), new Insets(5, 5, 5, 5))));
+
 	    ImageView imageView = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
 	    imageView.setScaleX(0.5);
 	    imageView.setScaleY(0.5);
