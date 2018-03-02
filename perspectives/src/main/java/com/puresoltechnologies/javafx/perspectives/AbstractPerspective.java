@@ -95,9 +95,4 @@ public abstract class AbstractPerspective implements Perspective {
 	return false;
     }
 
-    public void rearrange() {
-	// TODO Auto-generated method stub
-
-    }
-
 }

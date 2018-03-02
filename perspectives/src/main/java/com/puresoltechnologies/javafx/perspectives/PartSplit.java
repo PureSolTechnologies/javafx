@@ -76,6 +76,7 @@ public class PartSplit extends AbstractPerspectiveElement {
 		items.remove();
 	    }
 	}
+	rearrangeItems();
     }
 
     @Override

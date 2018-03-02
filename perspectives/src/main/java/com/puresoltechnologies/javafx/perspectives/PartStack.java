@@ -27,7 +27,6 @@ public class PartStack extends AbstractPerspectiveElement {
 
     private static final double DRAG_EDGE_FRACTION = 0.2;
 
-    private PartSplit partStashContainer = null;
     private final ToolBar toolBar;
     private final List<Part> parts = new ArrayList<>();
     private final Map<String, PartHeader> headers = new HashMap<>();
@@ -225,14 +224,6 @@ public class PartStack extends AbstractPerspectiveElement {
 	return Collections.emptyList();
     }
 
-    protected void setPartStashContainer(PartSplit partStashContainer) {
-	this.partStashContainer = partStashContainer;
-    }
-
-    protected PartSplit getPartSplit() {
-	return partStashContainer;
-    }
-
     public void addPart(Part part) {
 	PartHeader button = new PartHeader(this, part);
 	headers.put(part.getId(), button);
@@ -265,16 +256,22 @@ public class PartStack extends AbstractPerspectiveElement {
 	toolBar.getItems().remove(header);
 	headers.remove(partId);
 	Iterator<Part> iterator = parts.iterator();
+	boolean currentActiveEffected = false;
 	while (iterator.hasNext()) {
 	    Part part = iterator.next();
 	    if (partId.equals(part.getId())) {
 		iterator.remove();
+		if (part == borderPane.getCenter()) {
+		    currentActiveEffected = true;
+		}
 	    }
 	}
-	if (parts.size() > 0) {
-	    borderPane.setCenter(parts.get(parts.size() - 1).getContent());
-	} else {
-	    borderPane.setCenter(null);
+	if (currentActiveEffected) {
+	    if (parts.size() > 0) {
+		borderPane.setCenter(parts.get(parts.size() - 1).getContent());
+	    } else {
+		borderPane.setCenter(null);
+	    }
 	}
     }
 
@@ -286,6 +283,10 @@ public class PartStack extends AbstractPerspectiveElement {
     @Override
     public boolean isSplit() {
 	return false;
+    }
+
+    public boolean hasParts() {
+	return !parts.isEmpty();
     }
 
 }

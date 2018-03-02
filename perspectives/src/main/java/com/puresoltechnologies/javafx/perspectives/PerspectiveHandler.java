@@ -81,28 +81,28 @@ class PerspectiveHandler {
     }
 
     private void removeEmptyElements(PerspectiveElement perspectiveElement) {
-	List<String> removeIds = new ArrayList<>();
+	List<Runnable> removeIds = new ArrayList<>();
 	List<PerspectiveElement> addElements = new ArrayList<>();
 	for (PerspectiveElement elements : perspectiveElement.getElements()) {
 	    if (elements instanceof PartSplit) {
 		PartSplit partSplit = (PartSplit) elements;
 		removeEmptyElements(partSplit);
-		List<PerspectiveElement> items = partSplit.getElements();
-		if (items.isEmpty()) {
-		    removeIds.add(partSplit.getId());
-		} else if (items.size() == 1) {
-		    removeIds.add(partSplit.getId());
-		    PerspectiveElement child = items.get(0);
-		    addElements.add(child);
-		}
+		// List<PerspectiveElement> items = partSplit.getElements();
+		// if (items.isEmpty()) {
+		// removeIds.add(partSplit.getId());
+		// } else if (items.size() == 1) {
+		// removeIds.add(partSplit.getId());
+		// PerspectiveElement child = items.get(0);
+		// addElements.add(child);
+		// }
 	    } else if (elements instanceof PartStack) {
 		PartStack partStack = (PartStack) elements;
-		if (partStack.getContent().getCenter() == null) {
-		    removeIds.add(partStack.getId());
+		if (!partStack.hasParts()) {
+		    removeIds.add(() -> partStack.getParent().removeElement(partStack));
 		}
 	    }
 	}
-	removeIds.forEach(id -> perspectiveElement.removeElement(id));
+	removeIds.forEach(r -> r.run());
 	addElements.forEach(e -> {
 	    if (e instanceof PartSplit) {
 		perspectiveElement.addElement(e);
