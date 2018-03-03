@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
+
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.perspectives;
+package com.puresoltechnologies.javafx.perspectives.parts;
 
 /**
  * This is the abstract implementation of an Editor. Editors can have mutable

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.perspectives;
+package com.puresoltechnologies.javafx.perspectives.parts;
 
 import javafx.scene.input.DataFormat;
 

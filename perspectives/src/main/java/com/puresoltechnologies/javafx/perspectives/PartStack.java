@@ -8,7 +8,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.perspectives.parts.PartDragData;
+import com.puresoltechnologies.javafx.perspectives.parts.PartDragDataFormat;
+import com.puresoltechnologies.javafx.perspectives.parts.PartHeader;
+
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -37,6 +43,7 @@ public class PartStack extends AbstractPerspectiveElement {
 	borderPane = new BorderPane();
 	borderPane.setId(UUID.randomUUID().toString());
 	toolBar = new ToolBar();
+	toolBar.setPadding(Insets.EMPTY);
 	borderPane.setTop(toolBar);
 	borderPane.setOnDragEntered(event -> {
 	    onDragEntered(event);
@@ -229,7 +236,7 @@ public class PartStack extends AbstractPerspectiveElement {
 	headers.put(part.getId(), button);
 	parts.add(part);
 	toolBar.getItems().add(button);
-	borderPane.setCenter(part.getContent());
+	setActive(part.getId());
     }
 
     List<Part> getParts() {
@@ -268,9 +275,10 @@ public class PartStack extends AbstractPerspectiveElement {
 	}
 	if (currentActiveEffected) {
 	    if (parts.size() > 0) {
-		borderPane.setCenter(parts.get(parts.size() - 1).getContent());
+		Part part = parts.get(parts.size() - 1);
+		setActive(part.getId());
 	    } else {
-		borderPane.setCenter(null);
+		setActive(null);
 	    }
 	}
     }
@@ -278,6 +286,24 @@ public class PartStack extends AbstractPerspectiveElement {
     @Override
     public void removeElement(PerspectiveElement element) {
 	removeElement(element.getId());
+    }
+
+    public void setActive(String partId) {
+	if ((partId != null) && (!partId.isEmpty())) {
+	    Iterator<Part> iterator = parts.iterator();
+	    while (iterator.hasNext()) {
+		Part part = iterator.next();
+		if (partId.equals(part.getId())) {
+		    headers.forEach((id, header) -> header.setActive(false));
+		    headers.get(partId).setActive(true);
+		    borderPane.setCenter(part.getContent());
+		    break;
+		}
+	    }
+	} else {
+	    headers.forEach((id, header) -> header.setActive(false));
+	    borderPane.setCenter(null);
+	}
     }
 
     @Override

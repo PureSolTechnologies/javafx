@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.perspectives;
 
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
+
 /**
  * This is the interface for a Perspective.
  * 
@@ -13,5 +15,7 @@ public interface Perspective extends PerspectiveElement {
     public void reset();
 
     public PerspectiveElement getRootElement();
+
+    public void showPart(Part part);
 
 }

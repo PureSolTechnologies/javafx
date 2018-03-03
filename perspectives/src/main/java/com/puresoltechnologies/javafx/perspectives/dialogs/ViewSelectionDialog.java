@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import com.puresoltechnologies.javafx.perspectives.Part;
-import com.puresoltechnologies.javafx.perspectives.ViewerPart;
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

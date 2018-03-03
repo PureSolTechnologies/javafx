@@ -3,6 +3,8 @@ package com.puresoltechnologies.javafx.perspectives;
 import java.util.Arrays;
 import java.util.List;
 
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
+
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
 
@@ -99,6 +101,19 @@ public abstract class AbstractPerspective implements Perspective {
     @Override
     public void removeElement(PerspectiveElement element) {
 	removeElement(element.getId());
+    }
+
+    @Override
+    public void showPart(Part part) {
+	showPart(element, part);
+    }
+
+    private void showPart(PerspectiveElement element, Part part) {
+	if (element.isSplit()) {
+	    showPart(element.getElements().get(0), part);
+	} else {
+	    element.addElement(part);
+	}
     }
 
     @Override

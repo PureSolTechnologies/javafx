@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.application.Platform;
@@ -23,7 +24,7 @@ public class PerspectiveContainer extends BorderPane {
     private final List<Perspective> perspectives = new ArrayList<>();
     private Perspective currentPerspective = null;
 
-    public PerspectiveContainer() {
+    PerspectiveContainer() {
 	super();
 	try {
 	    ImageView switchWidowsImage = ResourceUtils.getImageView(this,
@@ -128,6 +129,5 @@ public class PerspectiveContainer extends BorderPane {
 
     public void showView(Part part) {
 	// TODO Auto-generated method stub
-
     }
 }

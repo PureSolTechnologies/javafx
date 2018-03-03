@@ -3,6 +3,9 @@ package com.puresoltechnologies.javafx.perspectives;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
+import com.puresoltechnologies.javafx.perspectives.parts.AbstractPart;
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
+
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -55,6 +58,11 @@ public class PerspectivesTest extends ApplicationTest {
 		    borderPane.setCenter(new Label("Part 1"));
 		    return borderPane;
 		}
+
+		@Override
+		public void close() {
+		    // intentionally left empty
+		}
 	    };
 	    Part part2 = new AbstractPart("Part 2", true) {
 
@@ -70,6 +78,11 @@ public class PerspectivesTest extends ApplicationTest {
 		    BorderPane borderPane = new BorderPane();
 		    borderPane.setCenter(new Label("Part 2"));
 		    return borderPane;
+		}
+
+		@Override
+		public void close() {
+		    // intentionally left empty
 		}
 
 	    };

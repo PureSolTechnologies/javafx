@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.perspectives;
+package com.puresoltechnologies.javafx.perspectives.parts;
 
 /**
  * This is the abstract implementation of a Viewer. Viewers cannot have mutable

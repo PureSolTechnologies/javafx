@@ -1,7 +1,10 @@
-package com.puresoltechnologies.javafx.perspectives;
+package com.puresoltechnologies.javafx.perspectives.parts;
 
 import java.util.Collections;
 import java.util.List;
+
+import com.puresoltechnologies.javafx.perspectives.PartStack;
+import com.puresoltechnologies.javafx.perspectives.PerspectiveElement;
 
 public abstract class AbstractPart implements Part {
 
@@ -28,7 +31,7 @@ public abstract class AbstractPart implements Part {
     }
 
     @Override
-    public PerspectiveElement getParent() {
+    public PartStack getParent() {
 	return parent;
     }
 
