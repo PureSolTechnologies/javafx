@@ -79,7 +79,7 @@ class PerspectiveHandler {
 	});
     }
 
-    private void removeEmptyElements() {
+    void removeEmptyElements() {
 	removeEmptyElements(perspective);
     }
 

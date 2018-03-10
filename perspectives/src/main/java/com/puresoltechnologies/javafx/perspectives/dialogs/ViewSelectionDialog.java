@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 
-import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
 
 import javafx.collections.FXCollections;
@@ -15,9 +14,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.util.Callback;
+import javafx.scene.image.ImageView;
 
-public class ViewSelectionDialog extends Dialog<Part> {
+public class ViewSelectionDialog extends Dialog<ViewerPart> {
 
     public ViewSelectionDialog() {
 	super();
@@ -25,7 +24,7 @@ public class ViewSelectionDialog extends Dialog<Part> {
 	setHeaderText("Choose a part to be opened.");
 	setResizable(true);
 
-	ListView<Part> listView = new ListView<>();
+	ListView<ViewerPart> listView = new ListView<>();
 	listView.setEditable(false);
 	fillListView(listView);
 
@@ -45,7 +44,7 @@ public class ViewSelectionDialog extends Dialog<Part> {
 
     }
 
-    private void fillListView(ListView<Part> listView) {
+    private void fillListView(ListView<ViewerPart> listView) {
 	ServiceLoader<ViewerPart> perspectives = ServiceLoader.load(ViewerPart.class);
 	List<ViewerPart> items = new ArrayList<>();
 	perspectives.forEach(p -> {
@@ -53,21 +52,27 @@ public class ViewSelectionDialog extends Dialog<Part> {
 	});
 	Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
 	listView.setItems(FXCollections.observableArrayList(items));
-	listView.setCellFactory(new Callback<>() {
-	    @Override
-	    public ListCell<Part> call(ListView<Part> p) {
-		ListCell<Part> cell = new ListCell<>() {
-		    @Override
-		    protected void updateItem(Part t, boolean bln) {
-			super.updateItem(t, bln);
-			if (t != null) {
-			    setText(t.getName());
+	listView.setCellFactory(p -> {
+	    ListCell<ViewerPart> cell = new ListCell<>() {
+		@Override
+		protected void updateItem(ViewerPart t, boolean bln) {
+		    super.updateItem(t, bln);
+		    if (t != null) {
+			setText(t.getName());
+			if (t.getImage() != null) {
+			    setGraphic(new ImageView(t.getImage()));
 			}
 		    }
-		};
-		return cell;
-	    }
-
+		}
+	    };
+	    cell.setOnMouseClicked(event -> {
+		if (event.getClickCount() == 2 && (!cell.isEmpty())) {
+		    ViewerPart viewer = cell.getItem();
+		    setResult(viewer);
+		    close();
+		}
+	    });
+	    return cell;
 	});
     }
 

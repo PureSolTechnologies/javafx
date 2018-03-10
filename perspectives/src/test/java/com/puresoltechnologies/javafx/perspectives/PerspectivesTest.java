@@ -9,6 +9,7 @@ import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import javafx.geometry.Orientation;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
@@ -53,6 +54,11 @@ public class PerspectivesTest extends ApplicationTest {
 		}
 
 		@Override
+		public Image getImage() {
+		    return null;
+		}
+
+		@Override
 		public Pane getContent() {
 		    BorderPane borderPane = new BorderPane();
 		    borderPane.setCenter(new Label("Part 1"));
@@ -71,6 +77,11 @@ public class PerspectivesTest extends ApplicationTest {
 		@Override
 		public String getId() {
 		    return "part2";
+		}
+
+		@Override
+		public Image getImage() {
+		    return null;
 		}
 
 		@Override

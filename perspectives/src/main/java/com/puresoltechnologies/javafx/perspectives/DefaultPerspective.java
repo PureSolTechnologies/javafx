@@ -2,6 +2,8 @@ package com.puresoltechnologies.javafx.perspectives;
 
 import java.util.function.Supplier;
 
+import javafx.scene.image.Image;
+
 public class DefaultPerspective extends AbstractPerspective {
 
     private static final long serialVersionUID = -3297051920552496687L;
@@ -18,6 +20,11 @@ public class DefaultPerspective extends AbstractPerspective {
     @Override
     public final String getId() {
 	return id;
+    }
+
+    @Override
+    public Image getImage() {
+	return null;
     }
 
     @Override

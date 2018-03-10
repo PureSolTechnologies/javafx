@@ -7,6 +7,7 @@ import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
@@ -30,15 +31,22 @@ public class PartHeader extends HBox {
 	super();
 	this.part = part;
 	try {
-	    setPadding(Insets.EMPTY);
 	    setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(0.0),
 		    new BorderWidths(1.0, 1.0, 1.0, 1.0, false, false, false, false), new Insets(5, 5, 5, 5))));
 
-	    ImageView imageView = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
-	    imageView.setScaleX(0.5);
-	    imageView.setScaleY(0.5);
-	    getChildren().add(new Label(part.getName()));
-	    getChildren().add(imageView);
+	    Image image = part.getImage();
+	    if (image != null) {
+		ImageView imageView = new ImageView(image);
+		getChildren().add(imageView);
+		setMargin(imageView, new Insets(2.0));
+	    }
+	    Label label = new Label(part.getName());
+	    getChildren().add(label);
+	    setMargin(label, new Insets(2.0));
+
+	    ImageView crossView = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
+	    getChildren().add(crossView);
+	    setMargin(crossView, new Insets(2.0));
 
 	    setOnDragDetected(event -> {
 		/* drag was detected, start a drag-and-drop gesture */
@@ -56,7 +64,7 @@ public class PartHeader extends HBox {
 		partStack.setActive(part.getId());
 		event.consume();
 	    });
-	    imageView.setOnMouseClicked(event -> {
+	    crossView.setOnMouseClicked(event -> {
 		partStack.removeElement(part);
 	    });
 	} catch (IOException e) {

@@ -268,7 +268,7 @@ public class PartStack extends AbstractPerspectiveElement {
 	    Part part = iterator.next();
 	    if (partId.equals(part.getId())) {
 		iterator.remove();
-		if (part == borderPane.getCenter()) {
+		if (part.getContent() == borderPane.getCenter()) {
 		    currentActiveEffected = true;
 		}
 	    }
@@ -303,6 +303,7 @@ public class PartStack extends AbstractPerspectiveElement {
 	} else {
 	    headers.forEach((id, header) -> header.setActive(false));
 	    borderPane.setCenter(null);
+	    getPerspectiveHandler().removeEmptyElements();
 	}
     }
 

@@ -19,7 +19,7 @@ public class ResourceUtils {
      * This method reads the image from the given resource path relative to the
      * given class.
      * 
-     * @param clazz
+     * @param object
      *            is the class to specify the classloader.
      * @param imageResource
      *            is the resource path of the image to be loaded.
@@ -27,8 +27,15 @@ public class ResourceUtils {
      * @throws IOException
      *             is thrown in case of I/O issues.
      */
-    public static Image getImage(Object clazz, String imageResource) throws IOException {
-	try (InputStream perspectivesImage = clazz.getClass().getResourceAsStream(imageResource)) {
+    public static Image getImage(Object object, String imageResource) throws IOException {
+	return getImage(object.getClass(), imageResource);
+    }
+
+    public static Image getImage(Class<?> clazz, String imageResource) throws IOException {
+	try (InputStream perspectivesImage = clazz.getResourceAsStream(imageResource)) {
+	    if (perspectivesImage == null) {
+		return null;
+	    }
 	    return new Image(perspectivesImage);
 	}
     }
@@ -37,7 +44,7 @@ public class ResourceUtils {
      * This method reads the image from the given resource path relative to the
      * given class.
      * 
-     * @param clazz
+     * @param object
      *            is the class to specify the classloader.
      * @param imageResource
      *            is the resource path of the image to be loaded.
@@ -45,8 +52,12 @@ public class ResourceUtils {
      * @throws IOException
      *             is thrown in case of I/O issues.
      */
-    public static ImageView getImageView(Object clazz, String imageResource) throws IOException {
-	try (InputStream perspectivesImage = clazz.getClass().getResourceAsStream(imageResource)) {
+    public static ImageView getImageView(Object object, String imageResource) throws IOException {
+	return getImageView(object.getClass(), imageResource);
+    }
+
+    public static ImageView getImageView(Class<?> clazz, String imageResource) throws IOException {
+	try (InputStream perspectivesImage = clazz.getResourceAsStream(imageResource)) {
 	    return new ImageView(new Image(perspectivesImage));
 	}
     }

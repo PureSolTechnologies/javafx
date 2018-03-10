@@ -14,7 +14,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
-import javafx.util.Callback;
+import javafx.scene.image.ImageView;
 
 public class PerspectiveSelectionDialog extends Dialog<Perspective> {
 
@@ -26,6 +26,7 @@ public class PerspectiveSelectionDialog extends Dialog<Perspective> {
 
 	ListView<Perspective> listView = new ListView<>();
 	listView.setEditable(false);
+
 	fillListView(listView);
 
 	getDialogPane().setContent(listView);
@@ -50,21 +51,27 @@ public class PerspectiveSelectionDialog extends Dialog<Perspective> {
 	perspectives.forEach(p -> items.add(p));
 	Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
 	listView.setItems(FXCollections.observableArrayList(items));
-	listView.setCellFactory(new Callback<>() {
-	    @Override
-	    public ListCell<Perspective> call(ListView<Perspective> p) {
-		ListCell<Perspective> cell = new ListCell<>() {
-		    @Override
-		    protected void updateItem(Perspective t, boolean bln) {
-			super.updateItem(t, bln);
-			if (t != null) {
-			    setText(t.getName());
+	listView.setCellFactory(p -> {
+	    ListCell<Perspective> cell = new ListCell<>() {
+		@Override
+		protected void updateItem(Perspective t, boolean bln) {
+		    super.updateItem(t, bln);
+		    if (t != null) {
+			setText(t.getName());
+			if (t.getImage() != null) {
+			    setGraphic(new ImageView(t.getImage()));
 			}
 		    }
-		};
-		return cell;
-	    }
-
+		}
+	    };
+	    cell.setOnMouseClicked(event -> {
+		if (event.getClickCount() == 2 && (!cell.isEmpty())) {
+		    Perspective perspesctive = cell.getItem();
+		    setResult(perspesctive);
+		    close();
+		}
+	    });
+	    return cell;
 	});
     }
 
