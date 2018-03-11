@@ -5,6 +5,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<officalName>JavaFX-Extensions</officalName>
+		<streaming.version>1.2.0-SNAPSHOT</streaming.version>
 		<testfx.version>4.0.12-alpha</testfx.version>
 	</properties>
 
@@ -75,6 +76,11 @@
 				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>utils</artifactId>
 				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.streaming</groupId>
+				<artifactId>iterators</artifactId>
+				<version>${streaming.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.testfx</groupId>
@@ -310,6 +316,7 @@
 		<module>preferences</module>
 		<module>perspectives</module>
 		<module>workspaces</module>
+		<module>charts</module>
 	</modules>
 
 </project>
