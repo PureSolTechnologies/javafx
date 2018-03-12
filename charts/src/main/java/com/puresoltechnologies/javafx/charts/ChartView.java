@@ -61,7 +61,7 @@ public class ChartView extends GridPane {
 	return subTitle.getText();
     }
 
-    public void addPlot(Plot<?, ?> plot) {
+    public void addPlot(Plot<?, ?, ?> plot) {
 	plotArea.addPlot(plot);
     }
 

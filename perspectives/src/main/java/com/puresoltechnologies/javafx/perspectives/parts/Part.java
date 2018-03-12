@@ -12,6 +12,8 @@ public interface Part extends PerspectiveElement, AutoCloseable {
 
     public boolean isSingleton();
 
+    public void initialize();
+
     @Override
     public void close();
 

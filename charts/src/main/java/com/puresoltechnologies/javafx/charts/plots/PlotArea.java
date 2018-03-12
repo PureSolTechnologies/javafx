@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresoltechnologies.javafx.charts.renderer.AxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.AxisRendererFactory;
+import com.puresoltechnologies.javafx.charts.renderer.axis.AxisRenderer;
+import com.puresoltechnologies.javafx.charts.renderer.axis.AxisRendererFactory;
 import com.puresoltechnologies.streaming.CompositeStreamIterator;
 import com.puresoltechnologies.streaming.StreamIterable;
 
@@ -17,7 +17,7 @@ import javafx.scene.shape.Rectangle;
 
 public class PlotArea extends Canvas {
 
-    private final List<Plot<?, ?>> plots = new ArrayList<>();
+    private final List<Plot<?, ?, ?>> plots = new ArrayList<>();
 
     public PlotArea() {
 	super();
@@ -69,27 +69,31 @@ public class PlotArea extends Canvas {
 	draw();
     }
 
-    public void addPlot(Plot<?, ?> plot) {
+    public void addPlot(Plot<?, ?, ?> plot) {
 	plots.add(plot);
     }
 
     private void draw() {
-	drawFrame();
-
+	clearPlotArea();
 	Rectangle plottingArea = drawAxes();
+	drawFrame();
+    }
+
+    private void clearPlotArea() {
+	double width = getWidth();
+	double height = getHeight();
+	GraphicsContext gc = getGraphicsContext2D();
+	gc.setFill(Color.WHITE);
+	gc.setStroke(Color.WHITE);
+	gc.fillRect(0.0, 0.0, width, height);
     }
 
     private void drawFrame() {
 	double width = getWidth();
 	double height = getHeight();
 	GraphicsContext gc = getGraphicsContext2D();
-	gc.setFill(Color.WHITE);
 	gc.setStroke(Color.BLACK);
-	gc.fillRect(0.0, 0.0, width, height);
-	gc.strokeLine(0.0, 0.0, width, 0.0);
-	gc.strokeLine(0.0, height, width, height);
-	gc.strokeLine(0.0, 0.0, 0.0, height);
-	gc.strokeLine(width, 0.0, width, height);
+	gc.strokeRect(0.0, 0.0, width, height);
     }
 
     private Rectangle drawAxes() {
@@ -124,8 +128,16 @@ public class PlotArea extends Canvas {
 	Map<Axis<?>, AxisRenderer> renderers = new HashMap<>();
 	for (Axis<?> axis : StreamIterable.of(CompositeStreamIterator.of(xAxes.iterator(), yAxes.iterator(),
 		altXAxes.iterator(), altYAxes.iterator()))) {
+	    List<Plot<?, ?, ?>> affectedPlots = new ArrayList<>();
+	    plots.forEach(plot -> {
+		if (plot.getXAxis().equals(axis)) {
+		    affectedPlots.add(plot);
+		} else if (plot.getYAxis().equals(axis)) {
+		    affectedPlots.add(plot);
+		}
+	    });
 	    if (!renderers.containsKey(axis)) {
-		renderers.put(axis, AxisRendererFactory.forAxis(this, axis));
+		renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots));
 	    }
 	}
 	double xAxesThickness = calculateThickness(xAxes, renderers);

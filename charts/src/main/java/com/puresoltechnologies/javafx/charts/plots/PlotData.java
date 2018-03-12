@@ -1,6 +1,6 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
-import javafx.collections.ObservableList;
+import java.util.List;
 
 /**
  * This is the model interface for the plot data.
@@ -10,13 +10,21 @@ import javafx.collections.ObservableList;
  * @param <X>
  * @param <Y>
  */
-public interface PlotData<X, Y> {
+public interface PlotData<X, Y, D> {
+
+    public X getMinX();
+
+    public X getMaxX();
+
+    public Y getMinY();
+
+    public Y getMaxY();
 
     /**
      * Returns the data to be plotted.
      * 
      * @return
      */
-    public ObservableList<PlotDate<X, Y>> getData();
+    public List<D> getData();
 
 }

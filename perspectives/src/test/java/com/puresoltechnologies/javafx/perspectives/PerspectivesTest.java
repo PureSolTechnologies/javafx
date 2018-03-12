@@ -66,6 +66,11 @@ public class PerspectivesTest extends ApplicationTest {
 		}
 
 		@Override
+		public void initialize() {
+		    // intentionally left empty
+		}
+
+		@Override
 		public void close() {
 		    // intentionally left empty
 		}
@@ -89,6 +94,11 @@ public class PerspectivesTest extends ApplicationTest {
 		    BorderPane borderPane = new BorderPane();
 		    borderPane.setCenter(new Label("Part 2"));
 		    return borderPane;
+		}
+
+		@Override
+		public void initialize() {
+		    // intentionally left empty
 		}
 
 		@Override

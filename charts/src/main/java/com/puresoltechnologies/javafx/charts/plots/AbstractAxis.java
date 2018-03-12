@@ -7,14 +7,14 @@ public abstract class AbstractAxis<T> implements Axis<T> {
     private final UUID id = UUID.randomUUID();
     private final String title;
     private final String unit;
-    private final AxisType type;
+    private final AxisType axisType;
     private final Class<T> valueType;
 
     public AbstractAxis(String title, String unit, AxisType type, Class<T> valueType) {
 	super();
 	this.title = title;
 	this.unit = unit;
-	this.type = type;
+	this.axisType = type;
 	this.valueType = valueType;
     }
 
@@ -35,7 +35,7 @@ public abstract class AbstractAxis<T> implements Axis<T> {
 
     @Override
     public final AxisType getAxisType() {
-	return type;
+	return axisType;
     }
 
     @Override

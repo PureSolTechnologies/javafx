@@ -12,6 +12,7 @@ import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.perspectives.parts.PartDragData;
 import com.puresoltechnologies.javafx.perspectives.parts.PartDragDataFormat;
 import com.puresoltechnologies.javafx.perspectives.parts.PartHeader;
+import com.puresoltechnologies.javafx.utils.FXThreads;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -235,8 +236,11 @@ public class PartStack extends AbstractPerspectiveElement {
 	PartHeader button = new PartHeader(this, part);
 	headers.put(part.getId(), button);
 	parts.add(part);
-	toolBar.getItems().add(button);
-	setActive(part.getId());
+	FXThreads.proceedOnFXThread(() -> {
+	    part.initialize();
+	    toolBar.getItems().add(button);
+	    setActive(part.getId());
+	});
     }
 
     List<Part> getParts() {
@@ -268,6 +272,7 @@ public class PartStack extends AbstractPerspectiveElement {
 	    Part part = iterator.next();
 	    if (partId.equals(part.getId())) {
 		iterator.remove();
+		part.close();
 		if (part.getContent() == borderPane.getCenter()) {
 		    currentActiveEffected = true;
 		}

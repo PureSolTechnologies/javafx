@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
+import com.puresoltechnologies.javafx.utils.FXThreads;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -26,32 +27,6 @@ public class ViewSelectionDialog extends Dialog<ViewerPart> {
 
 	ListView<ViewerPart> listView = new ListView<>();
 	listView.setEditable(false);
-	fillListView(listView);
-
-	getDialogPane().setContent(listView);
-
-	ButtonType buttonTypeOk = new ButtonType("OK", ButtonData.OK_DONE);
-	ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-	ObservableList<ButtonType> buttonTypes = getDialogPane().getButtonTypes();
-	buttonTypes.addAll(buttonTypeOk, buttonTypeCancel);
-
-	setResultConverter(b -> {
-	    if (b == buttonTypeOk) {
-		return listView.getSelectionModel().getSelectedItem();
-	    }
-	    return null;
-	});
-
-    }
-
-    private void fillListView(ListView<ViewerPart> listView) {
-	ServiceLoader<ViewerPart> perspectives = ServiceLoader.load(ViewerPart.class);
-	List<ViewerPart> items = new ArrayList<>();
-	perspectives.forEach(p -> {
-	    items.add(p);
-	});
-	Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
-	listView.setItems(FXCollections.observableArrayList(items));
 	listView.setCellFactory(p -> {
 	    ListCell<ViewerPart> cell = new ListCell<>() {
 		@Override
@@ -73,6 +48,34 @@ public class ViewSelectionDialog extends Dialog<ViewerPart> {
 		}
 	    });
 	    return cell;
+	});
+	fillListView(listView);
+
+	getDialogPane().setContent(listView);
+
+	ButtonType buttonTypeOk = new ButtonType("OK", ButtonData.OK_DONE);
+	ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+	ObservableList<ButtonType> buttonTypes = getDialogPane().getButtonTypes();
+	buttonTypes.addAll(buttonTypeOk, buttonTypeCancel);
+
+	setResultConverter(b -> {
+	    if (b == buttonTypeOk) {
+		return listView.getSelectionModel().getSelectedItem();
+	    }
+	    return null;
+	});
+
+    }
+
+    private void fillListView(ListView<ViewerPart> listView) {
+	FXThreads.runAsync(() -> {
+	    ServiceLoader<ViewerPart> perspectives = ServiceLoader.load(ViewerPart.class);
+	    List<ViewerPart> items = new ArrayList<>();
+	    perspectives.forEach(p -> {
+		items.add(p);
+	    });
+	    Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
+	    FXThreads.runOnFXThread(() -> listView.setItems(FXCollections.observableArrayList(items)));
 	});
     }
 

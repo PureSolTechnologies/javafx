@@ -1,13 +1,13 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
-public abstract class AbstractPlot<X, Y> implements Plot<X, Y> {
+public abstract class AbstractPlot<X, Y, D> implements Plot<X, Y, D> {
 
     private final String title;
     private final Axis<X> xAxis;
     private final Axis<Y> yAxis;
-    private final PlotData<X, Y> data;
+    private final PlotData<X, Y, D> data;
 
-    public AbstractPlot(String title, Axis<X> xAxis, Axis<Y> yAxis, PlotData<X, Y> data) {
+    public AbstractPlot(String title, Axis<X> xAxis, Axis<Y> yAxis, PlotData<X, Y, D> data) {
 	super();
 	this.title = title;
 	this.xAxis = xAxis;
@@ -38,4 +38,12 @@ public abstract class AbstractPlot<X, Y> implements Plot<X, Y> {
 	return yAxis;
     }
 
+    @Override
+    public final PlotData<X, Y, D> getData() {
+	return data;
+    }
+
+    public abstract X getAxisX(D date);
+
+    public abstract Y getAxisY(D date);
 }
