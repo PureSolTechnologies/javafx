@@ -1,8 +1,8 @@
-package com.puresoltechnologies.javafx.charts.renderer.axis;
+package com.puresoltechnologies.javafx.charts.renderer.axes;
 
 import java.util.List;
 
-import com.puresoltechnologies.javafx.charts.plots.Axis;
+import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.scene.canvas.Canvas;
@@ -16,11 +16,29 @@ public class OridinalAxisRenderer extends AbstractAxisRenderer<Comparable<Object
     }
 
     @Override
+    public Comparable<Object> getMin() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
+    public Comparable<Object> getMax() {
+	// TODO Auto-generated method stub
+	return null;
+    }
+
+    @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
 	text.setFont(AXIS_LABEL_FONT);
 	text.applyCss();
 	return text.getLayoutBounds().getHeight();
+    }
+
+    @Override
+    public double calculatePos(double x, double y, double width, double height, Comparable<Object> value) {
+	// TODO Auto-generated method stub
+	return 0;
     }
 
     @Override

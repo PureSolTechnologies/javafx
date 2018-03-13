@@ -1,12 +1,12 @@
-package com.puresoltechnologies.javafx.charts.renderer.axis;
+package com.puresoltechnologies.javafx.charts.renderer.axes;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
-import com.puresoltechnologies.javafx.charts.plots.Axis;
-import com.puresoltechnologies.javafx.charts.plots.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.geometry.VPos;
@@ -48,6 +48,21 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     }
 
     @Override
+    public double calculatePos(double x, double y, double width, double height, Number value) {
+	return super.calculatePos(x, y, width, height, min, max, value.doubleValue());
+    }
+
+    @Override
+    public Double getMin() {
+	return min;
+    }
+
+    @Override
+    public Double getMax() {
+	return max;
+    }
+
+    @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
 	text.setFont(AXIS_LABEL_FONT);
@@ -84,13 +99,25 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	    break;
 	}
 	Collections.sort(possibleTicks);
-	double position = 0.0;
+	double position;
+	switch (axisType) {
+	case X:
+	case ALT_X:
+	    position = x;
+	    break;
+	case Y:
+	case ALT_Y:
+	    position = y + height;
+	    break;
+	default:
+	    throw new IllegalStateException("Unknown axis type '" + axisType + "' found.");
+	}
 	for (double current : possibleTicks) {
 	    double currentPosition;
 	    switch (axisType) {
 	    case X:
-		currentPosition = width / (max - min) * (current - min);
-		if ((currentPosition - position < MIN_DISTANCE) && (position > 0.0)) {
+		currentPosition = calculatePos(x, y, width, height, current);
+		if ((currentPosition - position < MIN_DISTANCE) && (position > x)) {
 		    continue;
 		}
 		position = currentPosition;
@@ -100,8 +127,8 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		gc.fillText(String.valueOf(current), x + position, y + AXIS_THICKNESS);
 		break;
 	    case ALT_X:
-		currentPosition = width / (max - min) * (current - min);
-		if (currentPosition - position < MIN_DISTANCE) {
+		currentPosition = calculatePos(x, y, width, height, current);
+		if ((currentPosition - position < MIN_DISTANCE) && (position > x)) {
 		    continue;
 		}
 		position = currentPosition;
@@ -111,8 +138,8 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		gc.fillText(String.valueOf(current), x + position, y + height - AXIS_THICKNESS);
 		break;
 	    case Y:
-		currentPosition = height / (max - min) * (current - min);
-		if (currentPosition - position < MIN_DISTANCE) {
+		currentPosition = calculatePos(x, y, width, height, current);
+		if ((position - currentPosition < MIN_DISTANCE) && (currentPosition < y + height)) {
 		    continue;
 		}
 		position = currentPosition;
@@ -122,8 +149,8 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		gc.fillText(String.valueOf(current), x + width - AXIS_THICKNESS, y + height - position);
 		break;
 	    case ALT_Y:
-		currentPosition = height / (max - min) * (current - min);
-		if (currentPosition - position < MIN_DISTANCE) {
+		currentPosition = calculatePos(x, y, width, height, current);
+		if ((position - currentPosition < MIN_DISTANCE) && (currentPosition < y + height)) {
 		    continue;
 		}
 		position = currentPosition;

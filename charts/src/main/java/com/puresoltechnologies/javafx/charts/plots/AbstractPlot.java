@@ -1,5 +1,12 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
+import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.axes.AxisType;
+import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
+import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
+
+import javafx.scene.canvas.Canvas;
+
 public abstract class AbstractPlot<X, Y, D> implements Plot<X, Y, D> {
 
     private final String title;
@@ -21,6 +28,15 @@ public abstract class AbstractPlot<X, Y, D> implements Plot<X, Y, D> {
 	    throw new IllegalArgumentException("Provided Y axis is not an Y axis.");
 	}
 	this.data = data;
+    }
+
+    public abstract PlotRenderer getRenderer(Canvas canvas, AxisRenderer<X> xAxisRenderer,
+	    AxisRenderer<Y> yAxisRenderer);
+
+    @SuppressWarnings("unchecked")
+    public PlotRenderer getGenericRenderer(PlotArea canvas, AxisRenderer<?> xAxisRenderer,
+	    AxisRenderer<?> yAxisRenderer) {
+	return getRenderer(canvas, (AxisRenderer<X>) xAxisRenderer, (AxisRenderer<Y>) yAxisRenderer);
     }
 
     @Override
@@ -46,4 +62,5 @@ public abstract class AbstractPlot<X, Y, D> implements Plot<X, Y, D> {
     public abstract X getAxisX(D date);
 
     public abstract Y getAxisY(D date);
+
 }

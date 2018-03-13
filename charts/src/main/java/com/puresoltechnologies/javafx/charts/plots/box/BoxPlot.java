@@ -1,13 +1,19 @@
 package com.puresoltechnologies.javafx.charts.plots.box;
 
+import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
-import com.puresoltechnologies.javafx.charts.plots.Axis;
-import com.puresoltechnologies.javafx.charts.plots.OrdinalAxis;
 import com.puresoltechnologies.javafx.charts.plots.PlotData;
+import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
+import com.puresoltechnologies.javafx.charts.renderer.axes.NumberAxisRenderer;
+import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
+import com.puresoltechnologies.javafx.charts.renderer.plots.box.BoxPlotRenderer;
 
-public class BoxPlot<X, Y extends Comparable<Y>, D> extends AbstractPlot<X, Y, D> {
+import javafx.scene.canvas.Canvas;
 
-    public BoxPlot(String title, Axis<X> xAxis, OrdinalAxis<Y> yAxis, PlotData<X, Y, D> data) {
+public class BoxPlot<X, Y extends Number & Comparable<Y>, D> extends AbstractPlot<X, Y, D> {
+
+    public BoxPlot(String title, Axis<X> xAxis, NumberAxis<Y> yAxis, PlotData<X, Y, D> data) {
 	super(title, xAxis, yAxis, data);
     }
 
@@ -23,4 +29,9 @@ public class BoxPlot<X, Y extends Comparable<Y>, D> extends AbstractPlot<X, Y, D
 	return null;
     }
 
+    @Override
+    public PlotRenderer getRenderer(Canvas canvas, AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	return new BoxPlotRenderer<X, Y, D, AxisRenderer<X>>(canvas, this, xAxisRenderer,
+		(NumberAxisRenderer) yAxisRenderer);
+    }
 }

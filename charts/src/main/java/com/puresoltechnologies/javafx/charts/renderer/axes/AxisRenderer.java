@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.charts.renderer.axis;
+package com.puresoltechnologies.javafx.charts.renderer.axes;
 
 import com.puresoltechnologies.javafx.charts.renderer.Renderer;
 
@@ -6,9 +6,14 @@ import com.puresoltechnologies.javafx.charts.renderer.Renderer;
  * General interface for axis renderers.
  * 
  * @author Rick-Rainer Ludwig
- *
+ * @param <T>
+ *            is the type of the axis values.
  */
-public interface AxisRenderer extends Renderer {
+public interface AxisRenderer<T> extends Renderer {
+
+    public T getMin();
+
+    public T getMax();
 
     /**
      * Returns the thickness of the rendered axis. For x axes, this is the actual

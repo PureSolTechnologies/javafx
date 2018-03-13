@@ -1,14 +1,15 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.puresoltechnologies.javafx.charts.renderer.axis.AxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.axis.AxisRendererFactory;
-import com.puresoltechnologies.streaming.CompositeStreamIterator;
-import com.puresoltechnologies.streaming.StreamIterable;
+import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
+import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRendererFactory;
+import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,6 +19,12 @@ import javafx.scene.shape.Rectangle;
 public class PlotArea extends Canvas {
 
     private final List<Plot<?, ?, ?>> plots = new ArrayList<>();
+    private final List<Axis<?>> xAxes = new ArrayList<>();
+    private final List<Axis<?>> yAxes = new ArrayList<>();
+    private final List<Axis<?>> altXAxes = new ArrayList<>();
+    private final List<Axis<?>> altYAxes = new ArrayList<>();
+    private final Map<Axis<?>, AxisRenderer<?>> renderers = new HashMap<>();
+    private final Map<Axis<?>, List<Plot<?, ?, ?>>> affectedPlots = new HashMap<>();
 
     public PlotArea() {
 	super();
@@ -71,11 +78,45 @@ public class PlotArea extends Canvas {
 
     public void addPlot(Plot<?, ?, ?> plot) {
 	plots.add(plot);
+	Axis<?> xAxis = plot.getXAxis();
+	switch (xAxis.getAxisType()) {
+	case X:
+	    xAxes.add(xAxis);
+	    break;
+	case ALT_X:
+	    altXAxes.add(xAxis);
+	    break;
+	default:
+	    throw new RuntimeException("Invalid X axis type '" + xAxis.getAxisType() + "' found.");
+	}
+	Axis<?> yAxis = plot.getYAxis();
+	switch (yAxis.getAxisType()) {
+	case Y:
+	    yAxes.add(yAxis);
+	    break;
+	case ALT_Y:
+	    altYAxes.add(yAxis);
+	    break;
+	default:
+	    throw new RuntimeException("Invalid X axis type '" + yAxis.getAxisType() + "' found.");
+	}
+
+	for (Axis<?> axis : Arrays.asList(xAxis, yAxis)) {
+	    if (!renderers.containsKey(axis)) {
+		ArrayList<Plot<?, ?, ?>> plots = new ArrayList<>();
+		plots.add(plot);
+		affectedPlots.put(axis, plots);
+	    } else {
+		affectedPlots.get(axis).add(plot);
+	    }
+	    renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
+	}
     }
 
     private void draw() {
 	clearPlotArea();
 	Rectangle plottingArea = drawAxes();
+	drawPlots(plottingArea);
 	drawFrame();
     }
 
@@ -97,49 +138,6 @@ public class PlotArea extends Canvas {
     }
 
     private Rectangle drawAxes() {
-	List<Axis<?>> xAxes = new ArrayList<>();
-	List<Axis<?>> yAxes = new ArrayList<>();
-	List<Axis<?>> altXAxes = new ArrayList<>();
-	List<Axis<?>> altYAxes = new ArrayList<>();
-	plots.forEach(plot -> {
-	    Axis<?> xAxis = plot.getXAxis();
-	    switch (xAxis.getAxisType()) {
-	    case X:
-		xAxes.add(xAxis);
-		break;
-	    case ALT_X:
-		altXAxes.add(xAxis);
-		break;
-	    default:
-		throw new RuntimeException("Invalid X axis type '" + xAxis.getAxisType() + "' found.");
-	    }
-	    Axis<?> yAxis = plot.getYAxis();
-	    switch (yAxis.getAxisType()) {
-	    case Y:
-		yAxes.add(yAxis);
-		break;
-	    case ALT_Y:
-		altYAxes.add(yAxis);
-		break;
-	    default:
-		throw new RuntimeException("Invalid X axis type '" + yAxis.getAxisType() + "' found.");
-	    }
-	});
-	Map<Axis<?>, AxisRenderer> renderers = new HashMap<>();
-	for (Axis<?> axis : StreamIterable.of(CompositeStreamIterator.of(xAxes.iterator(), yAxes.iterator(),
-		altXAxes.iterator(), altYAxes.iterator()))) {
-	    List<Plot<?, ?, ?>> affectedPlots = new ArrayList<>();
-	    plots.forEach(plot -> {
-		if (plot.getXAxis().equals(axis)) {
-		    affectedPlots.add(plot);
-		} else if (plot.getYAxis().equals(axis)) {
-		    affectedPlots.add(plot);
-		}
-	    });
-	    if (!renderers.containsKey(axis)) {
-		renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots));
-	    }
-	}
 	double xAxesThickness = calculateThickness(xAxes, renderers);
 	double yAxesThickness = calculateThickness(yAxes, renderers);
 	double altXAxesThickness = calculateThickness(altXAxes, renderers);
@@ -147,28 +145,28 @@ public class PlotArea extends Canvas {
 
 	double position = getHeight() - xAxesThickness;
 	for (Axis<?> axis : xAxes) {
-	    AxisRenderer renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
 	    renderer.renderTo(yAxesThickness, position, getWidth() - yAxesThickness - altYAxesThickness, tickness);
 	    position += tickness;
 	}
 	position = 0.0;
 	for (Axis<?> axis : yAxes) {
-	    AxisRenderer renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
 	    renderer.renderTo(position, altXAxesThickness, tickness, getHeight() - xAxesThickness - altXAxesThickness);
 	    position += tickness;
 	}
 	position = 0.0;
 	for (Axis<?> axis : altXAxes) {
-	    AxisRenderer renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
 	    renderer.renderTo(yAxesThickness, position, getWidth() - yAxesThickness - altYAxesThickness, tickness);
 	    position += tickness;
 	}
 	position = getWidth() - altYAxesThickness;
 	for (Axis<?> axis : altYAxes) {
-	    AxisRenderer renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
 	    renderer.renderTo(position, altXAxesThickness, tickness, getHeight() - xAxesThickness - altXAxesThickness);
 	    position += tickness;
@@ -184,7 +182,16 @@ public class PlotArea extends Canvas {
 	);
     }
 
-    private double calculateThickness(List<Axis<?>> axes, Map<Axis<?>, AxisRenderer> renderers) {
+    private void drawPlots(Rectangle plottingArea) {
+	for (Plot<?, ?, ?> plot : plots) {
+	    PlotRenderer plotRenderer = ((AbstractPlot<?, ?, ?>) plot).getGenericRenderer(this,
+		    renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
+	    plotRenderer.renderTo(plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
+		    plottingArea.getHeight());
+	}
+    }
+
+    private double calculateThickness(List<Axis<?>> axes, Map<Axis<?>, AxisRenderer<?>> renderers) {
 	double thickness = 0.0;
 	for (Axis<?> axis : axes) {
 	    thickness += renderers.get(axis).getTickness();

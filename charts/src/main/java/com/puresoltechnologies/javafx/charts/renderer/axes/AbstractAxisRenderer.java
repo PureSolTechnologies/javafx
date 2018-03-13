@@ -1,9 +1,11 @@
-package com.puresoltechnologies.javafx.charts.renderer.axis;
+package com.puresoltechnologies.javafx.charts.renderer.axes;
 
 import java.util.List;
 
-import com.puresoltechnologies.javafx.charts.plots.Axis;
+import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
+import com.puresoltechnologies.javafx.charts.renderer.AbstractRenderer;
 
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
@@ -14,30 +16,24 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public abstract class AbstractAxisRenderer<T> implements AxisRenderer {
+public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implements AxisRenderer<T> {
 
     protected static final double AXIS_THICKNESS = 10.0;
     protected static final double MIN_DISTANCE = 100.0;
     protected static final Font AXIS_LABEL_FONT = Font.font("Arial", FontWeight.THIN, 10.0);
     protected static final Font AXIS_TITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 12.0);
 
-    private final Canvas canvas;
     private final Axis<T> axis;
     private final List<Plot<?, ?, ?>> plots;
 
     public AbstractAxisRenderer(Canvas canvas, Axis<T> axis, List<Plot<?, ?, ?>> plots) {
-	super();
-	this.canvas = canvas;
+	super(canvas);
 	this.axis = axis;
 	this.plots = plots;
     }
 
     public final Axis<T> getAxis() {
 	return axis;
-    }
-
-    public final Canvas getCanvas() {
-	return canvas;
     }
 
     protected final List<Plot<?, ?, ?>> getPlots() {
@@ -75,11 +71,27 @@ public abstract class AbstractAxisRenderer<T> implements AxisRenderer {
 	return thickness;
     }
 
+    public double calculatePos(double x, double y, double width, double height, double min, double max, double value) {
+	AxisType axisType = getAxis().getAxisType();
+	switch (axisType) {
+	case X:
+	case ALT_X:
+	    return calcPosX(x, width, min, max, value);
+	case Y:
+	case ALT_Y:
+	    return calcPosY(y, height, min, max, value);
+	default:
+	    throw new IllegalStateException("Unknown axis type '" + axisType + "' found.");
+	}
+    }
+
+    public abstract double calculatePos(double x, double y, double width, double height, T value);
+
     protected abstract double getLabelThickness();
 
     @Override
     public void renderTo(double x, double y, double width, double height) {
-	GraphicsContext gc = canvas.getGraphicsContext2D();
+	GraphicsContext gc = getCanvas().getGraphicsContext2D();
 	clearAxisArea(gc, x, y, width, height);
 	drawAxis(gc, x, y, width, height);
 	drawTicks(gc, x, y, width, height);
@@ -132,6 +144,7 @@ public abstract class AbstractAxisRenderer<T> implements AxisRenderer {
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.TOP);
 
+	Canvas canvas = getCanvas();
 	switch (axis.getAxisType()) {
 	case X:
 	    // Title

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.charts.plots;
+package com.puresoltechnologies.javafx.charts.axes;
 
 public class OrdinalAxis<T extends Comparable<T>> extends AbstractAxis<T> {
 

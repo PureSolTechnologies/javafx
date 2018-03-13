@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.charts.plots;
+package com.puresoltechnologies.javafx.charts.axes;
 
 import java.time.Instant;
 

@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
+import com.puresoltechnologies.javafx.charts.axes.Axis;
+
 /**
  * 
  * @author Rick-Rainer Ludwig

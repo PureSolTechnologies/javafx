@@ -10,6 +10,7 @@ public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<O
     private final T high;
     private final T low;
     private final T close;
+    private final boolean increase;
 
     public OHLCValue(Instant start, Instant end, T open, T high, T low, T close) {
 	super();
@@ -19,6 +20,7 @@ public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<O
 	this.high = high;
 	this.low = low;
 	this.close = close;
+	this.increase = close.doubleValue() - open.doubleValue() < 0.0 ? false : true;
     }
 
     public final Instant getStart() {
@@ -43,6 +45,10 @@ public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<O
 
     public final T getClose() {
 	return close;
+    }
+
+    public final boolean isIncrease() {
+	return increase;
     }
 
     @Override

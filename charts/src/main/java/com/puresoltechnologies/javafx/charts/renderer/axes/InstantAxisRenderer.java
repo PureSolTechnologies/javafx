@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.charts.renderer.axis;
+package com.puresoltechnologies.javafx.charts.renderer.axes;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
-import com.puresoltechnologies.javafx.charts.plots.Axis;
-import com.puresoltechnologies.javafx.charts.plots.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.geometry.VPos;
@@ -53,11 +53,39 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
     }
 
     @Override
+    public Instant getMin() {
+	return min;
+    }
+
+    @Override
+    public Instant getMax() {
+	return max;
+    }
+
+    @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
 	text.setFont(AXIS_LABEL_FONT);
 	text.applyCss();
 	return 2 * text.getLayoutBounds().getHeight();
+    }
+
+    @Override
+    public double calculatePos(double x, double y, double width, double height, Instant value) {
+	long maxEpochSecond = max.getEpochSecond();
+	long minEpochSecond = min.getEpochSecond();
+	long currentEpochSecond = value.getEpochSecond();
+	AxisType axisType = getAxis().getAxisType();
+	switch (axisType) {
+	case X:
+	case ALT_X:
+	    return x + width / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
+	case Y:
+	case ALT_Y:
+	    return y + height - height / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
+	default:
+	    throw new IllegalStateException("Unknown axis type '" + axisType + "' found.");
+	}
     }
 
     @SuppressWarnings("unchecked")
