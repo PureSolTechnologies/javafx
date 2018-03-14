@@ -65,7 +65,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
-	text.setFont(AXIS_LABEL_FONT);
+	text.setFont(AXIS_LABEL_FONT.get().toFont());
 	text.applyCss();
 	return text.getLayoutBounds().getHeight();
     }
@@ -74,9 +74,11 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     @Override
     protected void drawTicks(GraphicsContext gc, double x, double y, double width, double height) {
 	AxisType axisType = getAxis().getAxisType();
+	gc.setStroke(AXIS_TITLE_FONT.get().getColor());
+	gc.setFill(AXIS_TITLE_FONT.get().getColor());
+	gc.setFont(AXIS_LABEL_FONT.get().toFont());
 	gc.setFill(Color.BLACK);
 	gc.setStroke(Color.BLACK);
-	gc.setFont(AXIS_LABEL_FONT);
 	List<Double> possibleTicks = new ArrayList<>();
 	switch (axisType) {
 	case X:

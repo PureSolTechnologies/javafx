@@ -32,7 +32,10 @@ public class FontSelector extends BorderPane {
 	setRight(button);
 
 	valueProperty().addListener(event -> {
-	    label.setText(value.get().toString());
+	    FontDefinition fontDefinition = value.get();
+	    label.setFont(fontDefinition.toFont());
+	    label.setStyle("-fx-text-fill: " + fontDefinition.getColor().toString().replace("0x", "#") + ";");
+	    label.setText(fontDefinition.toString());
 	});
 	button.setOnAction(event -> selectFont());
     }

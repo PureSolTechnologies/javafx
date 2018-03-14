@@ -4,6 +4,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
+import com.puresoltechnologies.javafx.preferences.Preferences;
+
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -74,15 +76,15 @@ public class PreferencesDialog extends Dialog<Void> {
 	restoreDefaultsButton.setOnAction(event -> restoreDefaults());
 	applyButton = new Button("Apply");
 	applyButton.setDisable(true);
+	applyButton.setOnAction(event -> applyChanges());
 	buttonBox.getChildren().addAll(restoreDefaultsButton, applyButton);
 	preferencesPane.setBottom(buttonBox);
 
 	getDialogPane().setContent(splitPane);
 
-	ButtonType buttonTypeOk = new ButtonType("Apply & Close", ButtonData.OK_DONE);
-	ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+	ButtonType buttonTypeCancel = new ButtonType("Close", ButtonData.CANCEL_CLOSE);
 	ObservableList<ButtonType> buttonTypes = getDialogPane().getButtonTypes();
-	buttonTypes.addAll(buttonTypeOk, buttonTypeCancel);
+	buttonTypes.addAll(buttonTypeCancel);
 
 	initializeTreeView();
     }
@@ -133,6 +135,7 @@ public class PreferencesDialog extends Dialog<Void> {
 	    imageView.setImage(preferencesPage.getImage());
 	    name.setText(preferencesPage.getName());
 	    preferencesPane.setCenter(preferencesPage.getPane());
+	    preferencesPage.load(Preferences.getInstance());
 	    currentPreferencesPage = preferencesPage;
 	    restoreDefaultsButton.setDisable(false);
 	    applyButton.setDisable(false);
@@ -173,6 +176,12 @@ public class PreferencesDialog extends Dialog<Void> {
     private void restoreDefaults() {
 	if (currentPreferencesPage != null) {
 	    currentPreferencesPage.reset();
+	}
+    }
+
+    private void applyChanges() {
+	if (currentPreferencesPage != null) {
+	    currentPreferencesPage.save(Preferences.getInstance());
 	}
     }
 }

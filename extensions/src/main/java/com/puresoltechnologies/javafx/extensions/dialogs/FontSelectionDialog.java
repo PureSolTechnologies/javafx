@@ -126,21 +126,16 @@ public class FontSelectionDialog extends Dialog<FontDefinition> {
 	} else {
 	    size = (Double) object;
 	}
-	System.out.println(object.getClass().getName());
 	FontPosture posture = fontPostureComboBox.getSelectionModel().getSelectedItem();
 	Color color = fontColorPicker.getValue();
 	return new FontDefinition(family, weight, size, posture, color);
     }
 
     private Object updateSampleText() {
-	FontDefinition createFontDefinition = createFontDefinition();
-	Color color = createFontDefinition.getColor();
-	int r = (int) (255 * color.getRed());
-	int g = (int) (255 * color.getGreen());
-	int b = (int) (255 * color.getBlue());
-	sampleTextArea.setFont(createFontDefinition.toFont());
-	sampleTextArea.setStyle(
-		"-fx-text-fill: #" + Integer.toHexString(r) + Integer.toHexString(g) + Integer.toHexString(b) + ";");
+	FontDefinition fontDefinition = createFontDefinition();
+	Color color = fontDefinition.getColor();
+	sampleTextArea.setFont(fontDefinition.toFont());
+	sampleTextArea.setStyle("-fx-text-fill: " + color.toString().replace("0x", "#") + ";");
 	return null;
     }
 

@@ -43,14 +43,21 @@ public class Preferences {
     }
 
     public static void shutdown() {
-	if (instance != null) {
+	if (instance == null) {
 	    throw new IllegalStateException("Preferences are not initialized.");
 	}
 	instance = null;
     }
 
-    public Preferences getInstance() {
+    public static Preferences getInstance() {
+	if (instance == null) {
+	    throw new IllegalStateException("Preferences are not initialized.");
+	}
 	return instance;
+    }
+
+    public static <T> ObjectProperty<T> getProperty(PropertyDefinition<T> definition) {
+	return instance.getValueProperty(definition);
     }
 
     private final File directory;

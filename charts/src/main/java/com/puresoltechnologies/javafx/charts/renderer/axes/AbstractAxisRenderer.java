@@ -5,14 +5,16 @@ import java.util.List;
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
+import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
 import com.puresoltechnologies.javafx.charts.renderer.AbstractRenderer;
+import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
+import com.puresoltechnologies.javafx.preferences.Preferences;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -20,8 +22,11 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 
     protected static final double AXIS_THICKNESS = 10.0;
     protected static final double MIN_DISTANCE = 100.0;
-    protected static final Font AXIS_LABEL_FONT = Font.font("Arial", FontWeight.THIN, 10.0);
-    protected static final Font AXIS_TITLE_FONT = Font.font("Arial", FontWeight.NORMAL, 12.0);
+
+    protected static final ObjectProperty<FontDefinition> AXIS_LABEL_FONT = Preferences
+	    .getProperty(ChartsProperties.AXIS_LABEL_FONT);
+    protected static final ObjectProperty<FontDefinition> AXIS_TITLE_FONT = Preferences
+	    .getProperty(ChartsProperties.AXIS_TITLE_FONT);
 
     private final Axis<T> axis;
     private final List<Plot<?, ?, ?>> plots;
@@ -65,7 +70,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	double thickness = AXIS_THICKNESS;
 	thickness += getLabelThickness();
 	Text text = new Text(axis.getTitle());
-	text.setFont(AXIS_TITLE_FONT);
+	text.setFont(AXIS_TITLE_FONT.get().toFont());
 	text.applyCss();
 	thickness += text.getLayoutBounds().getHeight();
 	return thickness;
@@ -135,12 +140,12 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	    axisTitle += " (" + axis.getUnit() + ")";
 	}
 	Text titleText = new Text(axisTitle);
-	titleText.setFont(AXIS_TITLE_FONT);
+	titleText.setFont(AXIS_TITLE_FONT.get().toFont());
 	titleText.applyCss();
 	// Set attributes
-	gc.setFill(Color.BLACK);
-	gc.setStroke(Color.BLACK);
-	gc.setFont(AXIS_TITLE_FONT);
+	gc.setStroke(AXIS_TITLE_FONT.get().getColor());
+	gc.setFill(AXIS_TITLE_FONT.get().getColor());
+	gc.setFont(AXIS_TITLE_FONT.get().toFont());
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.TOP);
 
