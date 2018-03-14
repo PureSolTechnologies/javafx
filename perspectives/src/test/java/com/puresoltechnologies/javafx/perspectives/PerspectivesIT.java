@@ -15,7 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-public class PerspectivesTest extends ApplicationTest {
+public class PerspectivesIT extends ApplicationTest {
 
     PerspectiveContainer perspectiveContainer;
 

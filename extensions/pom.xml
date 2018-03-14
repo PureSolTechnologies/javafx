@@ -8,14 +8,10 @@
 		<version>0.1.0-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>preferences</artifactId>
+	<artifactId>extensions</artifactId>
 	<name>${officalName} - ${project.artifactId}</name>
 
 	<dependencies>
-		<dependency>
-			<groupId>com.puresoltechnologies.javafx</groupId>
-			<artifactId>extensions</artifactId>
-		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>

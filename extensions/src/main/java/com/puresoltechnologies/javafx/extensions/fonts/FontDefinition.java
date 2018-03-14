@@ -1,0 +1,71 @@
+package com.puresoltechnologies.javafx.extensions.fonts;
+
+import java.io.Serializable;
+
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
+
+public class FontDefinition implements Serializable {
+
+    private static final long serialVersionUID = 3217549513071937543L;
+
+    public static FontDefinition of(Font font) {
+	return new FontDefinition(font.getFamily(), FontWeight.NORMAL, font.getSize(), FontPosture.REGULAR,
+		Color.BLACK);
+    }
+
+    private final String family;
+    private final FontWeight weight;
+    private final double size;
+    private final FontPosture posture;
+    private final Color color;
+
+    public FontDefinition(String family, FontWeight weight, double size, FontPosture posture, Color color) {
+	super();
+	this.family = family;
+	this.weight = weight;
+	this.size = size;
+	this.posture = posture;
+	this.color = color;
+    }
+
+    public String getFamily() {
+	return family;
+    }
+
+    public FontWeight getWeight() {
+	return weight;
+    }
+
+    public double getSize() {
+	return size;
+    }
+
+    public FontPosture getPosture() {
+	return posture;
+    }
+
+    public Color getColor() {
+	return color;
+    }
+
+    public Font toFont() {
+	return Font.font(family, weight, posture, size);
+    }
+
+    @Override
+    public String toString() {
+	StringBuilder builder = new StringBuilder(family);
+	builder.append(", ");
+	builder.append(size);
+	builder.append("pt, ");
+	builder.append(weight.name());
+	builder.append(", ");
+	builder.append(posture.name());
+	builder.append(", ");
+	builder.append(color);
+	return builder.toString();
+    }
+}

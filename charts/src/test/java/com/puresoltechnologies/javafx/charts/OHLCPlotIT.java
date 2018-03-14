@@ -19,7 +19,7 @@ import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCValue;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class OHLCPlotTest extends ApplicationTest {
+public class OHLCPlotIT extends ApplicationTest {
 
     ChartView chartView;
 

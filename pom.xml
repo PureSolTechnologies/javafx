@@ -74,6 +74,16 @@
 		<dependencies>
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>extensions</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>preferences</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -313,6 +323,7 @@
 
 	<modules>
 		<module>utils</module>
+		<module>extensions</module>
 		<module>preferences</module>
 		<module>perspectives</module>
 		<module>workspaces</module>

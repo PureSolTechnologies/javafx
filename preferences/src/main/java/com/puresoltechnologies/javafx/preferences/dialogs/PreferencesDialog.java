@@ -36,13 +36,14 @@ public class PreferencesDialog extends Dialog<Void> {
     private final BorderPane preferencesPane;
     private final ImageView imageView;
     private final Label name;
+    private final Button restoreDefaultsButton;
+    private final Button applyButton;
+    private PreferencesPage currentPreferencesPage;
 
     public PreferencesDialog() {
 	setTitle("Preferences");
 	setHeaderText("Preferences of Trader.");
 	setResizable(true);
-	setHeight(480);
-	setWidth(640);
 
 	SplitPane splitPane = new SplitPane();
 
@@ -63,13 +64,16 @@ public class PreferencesDialog extends Dialog<Void> {
 	headerBox.getChildren().addAll(imageView, name);
 	preferencesPane.setTop(headerBox);
 
-	HBox buttonBox = new HBox();
+	HBox buttonBox = new HBox(10.0);
 	buttonBox.setAlignment(Pos.CENTER_RIGHT);
 	buttonBox.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(0.0),
 		new BorderWidths(1.0, 0, 0, 0, false, false, false, false), new Insets(5, 5, 5, 5))));
 	buttonBox.setPadding(new Insets(10, 0, 0, 0));
-	Button restoreDefaultsButton = new Button("Restore Defaults");
-	Button applyButton = new Button("Restore Defaults");
+	restoreDefaultsButton = new Button("Restore Defaults");
+	restoreDefaultsButton.setDisable(true);
+	restoreDefaultsButton.setOnAction(event -> restoreDefaults());
+	applyButton = new Button("Apply");
+	applyButton.setDisable(true);
 	buttonBox.getChildren().addAll(restoreDefaultsButton, applyButton);
 	preferencesPane.setBottom(buttonBox);
 
@@ -129,7 +133,13 @@ public class PreferencesDialog extends Dialog<Void> {
 	    imageView.setImage(preferencesPage.getImage());
 	    name.setText(preferencesPage.getName());
 	    preferencesPane.setCenter(preferencesPage.getPane());
+	    currentPreferencesPage = preferencesPage;
+	    restoreDefaultsButton.setDisable(false);
+	    applyButton.setDisable(false);
 	} else {
+	    restoreDefaultsButton.setDisable(true);
+	    applyButton.setDisable(true);
+	    currentPreferencesPage = null;
 	    preferencesPane.setCenter(null);
 	    imageView.setImage(null);
 	    name.setText("");
@@ -160,4 +170,9 @@ public class PreferencesDialog extends Dialog<Void> {
 	}
     }
 
+    private void restoreDefaults() {
+	if (currentPreferencesPage != null) {
+	    currentPreferencesPage.reset();
+	}
+    }
 }

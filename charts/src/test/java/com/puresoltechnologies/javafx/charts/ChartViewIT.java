@@ -6,7 +6,7 @@ import org.testfx.framework.junit.ApplicationTest;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ChartViewTest extends ApplicationTest {
+public class ChartViewIT extends ApplicationTest {
 
     ChartView chartView;
 

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.preferences;
+package com.puresoltechnologies.javafx.charts;
 
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
@@ -11,7 +11,7 @@ import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.stage.Stage;
 
-public class PreferencesTest extends ApplicationTest {
+public class PreferencesIT extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
@@ -27,6 +27,8 @@ public class PreferencesTest extends ApplicationTest {
 	    PreferencesDialog dialog = new PreferencesDialog();
 	    dialog.showAndWait();
 	});
+	Thread.sleep(1000);
+	clickOn("Charts", MouseButton.PRIMARY);
 	Thread.sleep(1000);
 	clickOn("Cancel", MouseButton.PRIMARY);
 	Thread.sleep(5000);
