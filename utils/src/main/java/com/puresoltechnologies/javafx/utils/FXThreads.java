@@ -59,4 +59,9 @@ public class FXThreads {
 	return threadPool.submit(callable);
     }
 
+    /**
+     * Private constructor to avoid instantiation.
+     */
+    private FXThreads() {
+    }
 }

@@ -14,19 +14,30 @@ import com.puresoltechnologies.javafx.extensions.properties.PropertyDefinition;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
+/**
+ * This is the central service object for the preferences handling.
+ * 
+ * @author Rick-Rainer Ludwig
+ */
 public class Preferences {
 
     public static final String PREFERENCES_DIRECTORY_PROPERTY = Preferences.class.getPackageName() + ".directory";
     private final Map<String, ObjectProperty<?>> preferencesValues = new HashMap<>();
     private static Preferences instance = null;
 
+    /**
+     * This method is used to initialize once the {@link Preferences} service.
+     * Without initialization, the service cannot be used.
+     * 
+     * @throws IOException
+     */
     public static void initialize() throws IOException {
-	if (instance != null) {
+	if (isInitialized()) {
 	    throw new IllegalStateException("Preferences were already initialized.");
 	}
 	String directoryString = System.getProperty(PREFERENCES_DIRECTORY_PROPERTY);
 	if ((directoryString == null) || (directoryString.isEmpty())) {
-	    directoryString = System.getProperty("user.dir") + File.separator + ".javafx" + File.separator
+	    directoryString = System.getProperty("user.home") + File.separator + ".javafx" + File.separator
 		    + "preferences";
 	}
 	File directory = new File(directoryString);
@@ -43,10 +54,14 @@ public class Preferences {
     }
 
     public static void shutdown() {
-	if (instance == null) {
+	if (!isInitialized()) {
 	    throw new IllegalStateException("Preferences are not initialized.");
 	}
 	instance = null;
+    }
+
+    public static boolean isInitialized() {
+	return instance != null;
     }
 
     public static Preferences getInstance() {
@@ -75,7 +90,11 @@ public class Preferences {
 	ObjectProperty<T> value = (ObjectProperty<T>) preferencesValues.get(definition.getId());
 	if (value == null) {
 	    T t = readValue(definition);
-	    value = new SimpleObjectProperty<>(definition.getDefaultValue());
+	    if (t != null) {
+		value = new SimpleObjectProperty<>(t);
+	    } else {
+		value = new SimpleObjectProperty<>(definition.getDefaultValue());
+	    }
 	    preferencesValues.put(definition.getId(), value);
 	}
 	return value;

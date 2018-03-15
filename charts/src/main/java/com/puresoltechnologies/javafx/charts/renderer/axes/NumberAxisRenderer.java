@@ -12,7 +12,6 @@ import com.puresoltechnologies.javafx.charts.plots.Plot;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -65,7 +64,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
-	text.setFont(AXIS_LABEL_FONT.get().toFont());
+	text.setFont(axisLabelFont.get().toFont());
 	text.applyCss();
 	return text.getLayoutBounds().getHeight();
     }
@@ -74,11 +73,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     @Override
     protected void drawTicks(GraphicsContext gc, double x, double y, double width, double height) {
 	AxisType axisType = getAxis().getAxisType();
-	gc.setStroke(AXIS_TITLE_FONT.get().getColor());
-	gc.setFill(AXIS_TITLE_FONT.get().getColor());
-	gc.setFont(AXIS_LABEL_FONT.get().toFont());
-	gc.setFill(Color.BLACK);
-	gc.setStroke(Color.BLACK);
+	gc.setFont(axisLabelFont.get().toFont());
 	List<Double> possibleTicks = new ArrayList<>();
 	switch (axisType) {
 	case X:
@@ -123,7 +118,11 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		    continue;
 		}
 		position = currentPosition;
+		gc.setFill(axisColor.get());
+		gc.setStroke(axisColor.get());
 		gc.strokeLine(x + position, y, x + position, y + AXIS_THICKNESS);
+		gc.setStroke(axisTitleFont.get().getColor());
+		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.TOP);
 		gc.fillText(String.valueOf(current), x + position, y + AXIS_THICKNESS);
@@ -134,7 +133,11 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		    continue;
 		}
 		position = currentPosition;
+		gc.setFill(axisColor.get());
+		gc.setStroke(axisColor.get());
 		gc.strokeLine(x + position, y + height, x + position, y + height - AXIS_THICKNESS);
+		gc.setStroke(axisTitleFont.get().getColor());
+		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
 		gc.fillText(String.valueOf(current), x + position, y + height - AXIS_THICKNESS);
@@ -145,7 +148,11 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		    continue;
 		}
 		position = currentPosition;
+		gc.setFill(axisColor.get());
+		gc.setStroke(axisColor.get());
 		gc.strokeLine(x + width - AXIS_THICKNESS, y + height - position, x + width, y + height - position);
+		gc.setStroke(axisTitleFont.get().getColor());
+		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.RIGHT);
 		gc.setTextBaseline(VPos.CENTER);
 		gc.fillText(String.valueOf(current), x + width - AXIS_THICKNESS, y + height - position);
@@ -156,7 +163,11 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		    continue;
 		}
 		position = currentPosition;
+		gc.setFill(axisColor.get());
+		gc.setStroke(axisColor.get());
 		gc.strokeLine(x, y + height - position, x + AXIS_THICKNESS, y + height - position);
+		gc.setStroke(axisTitleFont.get().getColor());
+		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.CENTER);
 		gc.fillText(String.valueOf(current), x + AXIS_THICKNESS, y + height - position);

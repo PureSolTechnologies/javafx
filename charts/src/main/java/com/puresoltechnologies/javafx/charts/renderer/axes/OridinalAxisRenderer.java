@@ -30,7 +30,7 @@ public class OridinalAxisRenderer extends AbstractAxisRenderer<Comparable<Object
     @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
-	text.setFont(AXIS_LABEL_FONT.get().toFont());
+	text.setFont(axisLabelFont.get().toFont());
 	text.applyCss();
 	return text.getLayoutBounds().getHeight();
     }

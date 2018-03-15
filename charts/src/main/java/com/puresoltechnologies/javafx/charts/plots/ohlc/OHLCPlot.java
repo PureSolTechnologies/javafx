@@ -16,6 +16,10 @@ import javafx.scene.canvas.Canvas;
 
 public class OHLCPlot<Y extends Number & Comparable<Y>> extends AbstractPlot<Instant, Y, OHLCValue<Y>> {
 
+    public OHLCPlot(String title, TimeSeriesAxis xAxis, Axis<Y> yAxis) {
+	super(title, xAxis, yAxis);
+    }
+
     public OHLCPlot(String title, TimeSeriesAxis xAxis, Axis<Y> yAxis, PlotData<Instant, Y, OHLCValue<Y>> data) {
 	super(title, xAxis, yAxis, data);
     }

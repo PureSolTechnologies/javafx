@@ -16,7 +16,6 @@ import com.puresoltechnologies.javafx.charts.plots.Plot;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -65,7 +64,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
     @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
-	text.setFont(AXIS_LABEL_FONT.get().toFont());
+	text.setFont(axisLabelFont.get().toFont());
 	text.applyCss();
 	return 2 * text.getLayoutBounds().getHeight();
     }
@@ -92,7 +91,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
     @Override
     protected void drawTicks(GraphicsContext gc, double x, double y, double width, double height) {
 	AxisType axisType = getAxis().getAxisType();
-	gc.setFont(AXIS_LABEL_FONT.get().toFont());
+	gc.setFont(axisLabelFont.get().toFont());
 	List<Instant> possibleTicks = new ArrayList<>();
 	switch (axisType) {
 	case X:
@@ -128,13 +127,13 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(Color.BLACK);
-		gc.setFill(Color.BLACK);
+		gc.setStroke(axisColor.get());
+		gc.setFill(axisColor.get());
 		gc.strokeLine(x + position, y, x + position, y + AXIS_THICKNESS);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.TOP);
-		gc.setStroke(AXIS_LABEL_FONT.get().getColor());
-		gc.setFill(AXIS_LABEL_FONT.get().getColor());
+		gc.setStroke(axisLabelFont.get().getColor());
+		gc.setFill(axisLabelFont.get().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + position,
 			y + AXIS_THICKNESS);
 		break;
@@ -144,13 +143,13 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(Color.BLACK);
-		gc.setFill(Color.BLACK);
+		gc.setStroke(axisColor.get());
+		gc.setFill(axisColor.get());
 		gc.strokeLine(x + position, y + height, x + position, y + height - AXIS_THICKNESS);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
-		gc.setStroke(AXIS_LABEL_FONT.get().getColor());
-		gc.setFill(AXIS_LABEL_FONT.get().getColor());
+		gc.setStroke(axisLabelFont.get().getColor());
+		gc.setFill(axisLabelFont.get().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + position,
 			y + height - AXIS_THICKNESS);
 		break;
@@ -160,13 +159,13 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(Color.BLACK);
-		gc.setFill(Color.BLACK);
+		gc.setStroke(axisColor.get());
+		gc.setFill(axisColor.get());
 		gc.strokeLine(x + width - AXIS_THICKNESS, y + height - position, x + width, y + height - position);
 		gc.setTextAlign(TextAlignment.RIGHT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.setStroke(AXIS_LABEL_FONT.get().getColor());
-		gc.setFill(AXIS_LABEL_FONT.get().getColor());
+		gc.setStroke(axisLabelFont.get().getColor());
+		gc.setFill(axisLabelFont.get().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))),
 			x + width - AXIS_THICKNESS, y + height - position);
 		break;
@@ -176,13 +175,13 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(Color.BLACK);
-		gc.setFill(Color.BLACK);
+		gc.setStroke(axisColor.get());
+		gc.setFill(axisColor.get());
 		gc.strokeLine(x, y + height - position, x + AXIS_THICKNESS, y + height - position);
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.setStroke(AXIS_LABEL_FONT.get().getColor());
-		gc.setFill(AXIS_LABEL_FONT.get().getColor());
+		gc.setStroke(axisLabelFont.get().getColor());
+		gc.setFill(axisLabelFont.get().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + AXIS_THICKNESS,
 			y + height - position);
 		break;

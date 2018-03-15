@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.extensions.fonts;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.extensions.dialogs.FontSelectionDialog;
+import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 
 import javafx.beans.DefaultProperty;
 import javafx.beans.property.ObjectProperty;
@@ -34,7 +35,7 @@ public class FontSelector extends BorderPane {
 	valueProperty().addListener(event -> {
 	    FontDefinition fontDefinition = value.get();
 	    label.setFont(fontDefinition.toFont());
-	    label.setStyle("-fx-text-fill: " + fontDefinition.getColor().toString().replace("0x", "#") + ";");
+	    FXNodeUtils.setTextColor(label, fontDefinition.getColor());
 	    label.setText(fontDefinition.toString());
 	});
 	button.setOnAction(event -> selectFont());

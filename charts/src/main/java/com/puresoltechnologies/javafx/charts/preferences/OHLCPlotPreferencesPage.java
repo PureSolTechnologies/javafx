@@ -42,6 +42,8 @@ public class OHLCPlotPreferencesPage implements PreferencesPage {
     @Override
     public Pane getPane() {
 	GridPane gridPane = new GridPane();
+	gridPane.setHgap(10.0);
+	gridPane.setVgap(10.0);
 
 	Label upColorLabel = new Label("Upward trend color");
 	GridPane.setRowIndex(upColorLabel, 0);
@@ -68,14 +70,14 @@ public class OHLCPlotPreferencesPage implements PreferencesPage {
 
     @Override
     public void load(Preferences preferences) {
-	// TODO Auto-generated method stub
-
+	upColor.setValue(preferences.getValue(OHLCPlotProperties.UPWARD_TREND_COLOR));
+	downColor.setValue(preferences.getValue(OHLCPlotProperties.DOWNWARD_TREND_COLOR));
     }
 
     @Override
     public void save(Preferences preferences) {
-	// TODO Auto-generated method stub
-
+	preferences.setValue(OHLCPlotProperties.UPWARD_TREND_COLOR, upColor.getValue());
+	preferences.setValue(OHLCPlotProperties.DOWNWARD_TREND_COLOR, downColor.getValue());
     }
 
 }

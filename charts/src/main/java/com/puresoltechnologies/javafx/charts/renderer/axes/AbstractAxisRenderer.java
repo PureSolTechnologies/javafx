@@ -23,9 +23,12 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     protected static final double AXIS_THICKNESS = 10.0;
     protected static final double MIN_DISTANCE = 100.0;
 
-    protected static final ObjectProperty<FontDefinition> AXIS_LABEL_FONT = Preferences
+    protected static final ObjectProperty<Color> backgroundColor = Preferences
+	    .getProperty(ChartsProperties.BACKGROUND_COLOR);
+    protected static final ObjectProperty<Color> axisColor = Preferences.getProperty(ChartsProperties.AXIS_COLOR);
+    protected static final ObjectProperty<FontDefinition> axisLabelFont = Preferences
 	    .getProperty(ChartsProperties.AXIS_LABEL_FONT);
-    protected static final ObjectProperty<FontDefinition> AXIS_TITLE_FONT = Preferences
+    protected static final ObjectProperty<FontDefinition> axisTitleFont = Preferences
 	    .getProperty(ChartsProperties.AXIS_TITLE_FONT);
 
     private final Axis<T> axis;
@@ -70,7 +73,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	double thickness = AXIS_THICKNESS;
 	thickness += getLabelThickness();
 	Text text = new Text(axis.getTitle());
-	text.setFont(AXIS_TITLE_FONT.get().toFont());
+	text.setFont(axisTitleFont.get().toFont());
 	text.applyCss();
 	thickness += text.getLayoutBounds().getHeight();
 	return thickness;
@@ -107,14 +110,14 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     }
 
     private void clearAxisArea(GraphicsContext gc, double x, double y, double width, double height) {
-	gc.setFill(Color.WHITE);
-	gc.setStroke(Color.WHITE);
+	gc.setFill(backgroundColor.get());
+	gc.setStroke(backgroundColor.get());
 	gc.fillRect(x, y, width, height);
     }
 
     private void drawAxis(GraphicsContext gc, double x, double y, double width, double height) {
-	gc.setFill(Color.BLACK);
-	gc.setStroke(Color.BLACK);
+	gc.setFill(axisColor.get());
+	gc.setStroke(axisColor.get());
 	switch (axis.getAxisType()) {
 	case X:
 	    gc.strokeLine(x, y, x + width, y);
@@ -140,12 +143,12 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	    axisTitle += " (" + axis.getUnit() + ")";
 	}
 	Text titleText = new Text(axisTitle);
-	titleText.setFont(AXIS_TITLE_FONT.get().toFont());
+	titleText.setFont(axisTitleFont.get().toFont());
 	titleText.applyCss();
 	// Set attributes
-	gc.setStroke(AXIS_TITLE_FONT.get().getColor());
-	gc.setFill(AXIS_TITLE_FONT.get().getColor());
-	gc.setFont(AXIS_TITLE_FONT.get().toFont());
+	gc.setStroke(axisTitleFont.get().getColor());
+	gc.setFill(axisTitleFont.get().getColor());
+	gc.setFont(axisTitleFont.get().toFont());
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.TOP);
 

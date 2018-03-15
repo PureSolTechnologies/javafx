@@ -5,16 +5,24 @@ import java.time.Instant;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PlotData;
 import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCValue;
+import com.puresoltechnologies.javafx.charts.preferences.OHLCPlotProperties;
 import com.puresoltechnologies.javafx.charts.renderer.axes.InstantAxisRenderer;
 import com.puresoltechnologies.javafx.charts.renderer.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.renderer.plots.AbstractPlotRenderer;
+import com.puresoltechnologies.javafx.preferences.Preferences;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class OHLCPlotRenderer<Y extends Number & Comparable<Y>>
 	extends AbstractPlotRenderer<Instant, Y, OHLCValue<Y>, InstantAxisRenderer, NumberAxisRenderer> {
+
+    private static final ObjectProperty<Color> upwardTrendColor = Preferences
+	    .getProperty(OHLCPlotProperties.UPWARD_TREND_COLOR);
+    private static final ObjectProperty<Color> downwardTrendColor = Preferences
+	    .getProperty(OHLCPlotProperties.DOWNWARD_TREND_COLOR);
 
     public OHLCPlotRenderer(Canvas canvas, Plot<Instant, Y, OHLCValue<Y>> plot, InstantAxisRenderer xAxisRenderer,
 	    NumberAxisRenderer yAxisRenderer) {
@@ -40,14 +48,12 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>>
 	    gc.setFill(Color.GRAY);
 	    gc.fillRect(startX + (endX - startX) / 3.0, highY, (endX - startX) / 3.0, lowY - highY);
 	    if (value.isIncrease()) {
-		gc.setFill(Color.LIGHTSEAGREEN);
+		gc.setFill(upwardTrendColor.get());
 		gc.fillRect(startX, closeY, endX - startX, closeY - openY);
 	    } else {
-		gc.setFill(Color.LIGHTCORAL);
+		gc.setFill(downwardTrendColor.get());
 		gc.fillRect(startX, openY, endX - startX, openY - closeY);
 	    }
-	    System.out.println((endX - startX) / 3.0);
-	    System.out.println(highY - lowY);
 	}
     }
 

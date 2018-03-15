@@ -2,6 +2,8 @@ package com.puresoltechnologies.javafx.charts.plots;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 
+import javafx.beans.property.ObjectProperty;
+
 /**
  * 
  * @author Rick-Rainer Ludwig
@@ -21,6 +23,10 @@ public interface Plot<X, Y, D> {
 
     public Axis<Y> getYAxis();
 
+    public ObjectProperty<PlotData<X, Y, D>> dataProperty();
+
     public PlotData<X, Y, D> getData();
+
+    public void setData(PlotData<X, Y, D> data);
 
 }

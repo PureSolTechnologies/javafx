@@ -7,16 +7,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
 import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRendererFactory;
 import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
+import com.puresoltechnologies.javafx.preferences.Preferences;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 public class PlotArea extends Canvas {
+
+    protected static final ObjectProperty<Color> backgroundColor = Preferences
+	    .getProperty(ChartsProperties.BACKGROUND_COLOR);
+    protected static final ObjectProperty<Color> axisColor = Preferences.getProperty(ChartsProperties.AXIS_COLOR);
 
     private final List<Plot<?, ?, ?>> plots = new ArrayList<>();
     private final List<Axis<?>> xAxes = new ArrayList<>();
@@ -124,8 +131,8 @@ public class PlotArea extends Canvas {
 	double width = getWidth();
 	double height = getHeight();
 	GraphicsContext gc = getGraphicsContext2D();
-	gc.setFill(Color.WHITE);
-	gc.setStroke(Color.WHITE);
+	gc.setFill(backgroundColor.get());
+	gc.setStroke(backgroundColor.get());
 	gc.fillRect(0.0, 0.0, width, height);
     }
 
@@ -133,7 +140,7 @@ public class PlotArea extends Canvas {
 	double width = getWidth();
 	double height = getHeight();
 	GraphicsContext gc = getGraphicsContext2D();
-	gc.setStroke(Color.BLACK);
+	gc.setStroke(axisColor.get());
 	gc.strokeRect(0.0, 0.0, width, height);
     }
 

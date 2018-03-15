@@ -2,16 +2,19 @@ package com.puresoltechnologies.javafx.charts;
 
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PlotArea;
+import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
+import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
+import com.puresoltechnologies.javafx.preferences.Preferences;
+import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.geometry.HPos;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 /**
  * This is the component to be used to plot into.
@@ -19,6 +22,11 @@ import javafx.scene.text.FontWeight;
  * @author Rick-Rainer Ludwig
  */
 public class ChartView extends GridPane {
+
+    protected static final ObjectProperty<FontDefinition> TITLE_FONT = Preferences
+	    .getProperty(ChartsProperties.TITLE_FONT);
+    protected static final ObjectProperty<FontDefinition> SUBTITLE_FONT = Preferences
+	    .getProperty(ChartsProperties.SUBTITLE_FONT);
 
     private final PlotArea plotArea = new PlotArea();
     private final Label title = new Label();
@@ -31,11 +39,12 @@ public class ChartView extends GridPane {
 
     public ChartView() {
 	super();
-	Font defaultFont = Font.getDefault();
-	title.setFont(Font.font(defaultFont.getFamily(), FontWeight.BOLD, defaultFont.getSize() * 1.5));
+	title.setFont(TITLE_FONT.get().toFont());
 	title.setAlignment(Pos.TOP_CENTER);
-	subTitle.setFont(Font.font(defaultFont.getFamily(), FontWeight.BOLD, defaultFont.getSize()));
+	FXNodeUtils.setTextColor(title, TITLE_FONT.get().getColor());
+	subTitle.setFont(SUBTITLE_FONT.get().toFont());
 	subTitle.setAlignment(Pos.TOP_CENTER);
+	FXNodeUtils.setTextColor(subTitle, SUBTITLE_FONT.get().getColor());
 	Label status = new Label("Status");
 	GridPane.setConstraints(title, 0, 0, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
 	GridPane.setConstraints(subTitle, 0, 1, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);

@@ -5,6 +5,7 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontFamilyListView;
 import com.puresoltechnologies.javafx.extensions.fonts.FontPostureComboBox;
 import com.puresoltechnologies.javafx.extensions.fonts.FontSizeComboBox;
 import com.puresoltechnologies.javafx.extensions.fonts.FontWeightListView;
+import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -135,7 +136,7 @@ public class FontSelectionDialog extends Dialog<FontDefinition> {
 	FontDefinition fontDefinition = createFontDefinition();
 	Color color = fontDefinition.getColor();
 	sampleTextArea.setFont(fontDefinition.toFont());
-	sampleTextArea.setStyle("-fx-text-fill: " + color.toString().replace("0x", "#") + ";");
+	FXNodeUtils.setTextColor(sampleTextArea, color);
 	return null;
     }
 
