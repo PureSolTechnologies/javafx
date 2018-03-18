@@ -2,41 +2,101 @@ package com.puresoltechnologies.javafx.workspaces;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.prefs.Preferences;
 
-import javafx.application.Application;
+import com.puresoltechnologies.javafx.workspaces.dialogs.WorkspaceSelectionDialog;
 
+import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+/**
+ * This is the main class to start a JavaFX {@link Application} in a defined
+ * Workspace area.
+ * 
+ * Just use {@link #launchApplicationInWorkspace(Class, String[])} method to run
+ * the Application. The selection of the workspace directory takes place in this
+ * class.
+ * 
+ * @author Rick-Rainer Ludwig
+ *
+ */
 public class Workspace {
 
     private static Workspace instance = null;
 
     public static void launchApplicationInWorkspace(Class<? extends Application> applicationClass, String[] args)
 	    throws InterruptedException {
-	WorkspaceSettings workspaceSettings = new WorkspaceSettings();
-	do {
-	    workspaceSettings.setRestarting(false);
-	    workspaceSettings.writeSettings();
-	    File workspaceDirectory;
-	    if (workspaceSettings.isDefault()) {
-		workspaceDirectory = workspaceSettings.getDirectory();
-	    } else {
-		Thread thread = new Thread(() -> Application.launch(WorkspaceSelectionApplication.class, args));
-		ClassLoader cl = new ClassLoader() {
-		};
-		thread.setContextClassLoader(cl);
-		thread.run();
-		thread.join();
-		workspaceSettings.readSettings();
-		workspaceDirectory = workspaceSettings.getDirectory();
-	    }
-	    try {
+	/*
+	 * Set the JavaFX platform to be no closed when all windows are closed. This is
+	 * needed, because we want to support restarts for workspace changes.
+	 */
+	Platform.setImplicitExit(false);
+	/*
+	 * Run the run-rerun loop...
+	 */
+	Platform.runLater(() -> runOuterLoop(applicationClass, args));
+    }
+
+    private static void runOuterLoop(Class<? extends Application> applicationClass, String[] args) {
+	try {
+	    WorkspaceSettings workspaceSettings = new WorkspaceSettings();
+	    do {
+		boolean restarting = workspaceSettings.isRestarting();
+		File workspaceDirectory;
+		if (restarting) {
+		    // Assure no restart is happening again, if there was one...
+		    workspaceSettings.setRestarting(false);
+		    workspaceSettings.writeSettings();
+		    workspaceDirectory = workspaceSettings.getDirectory();
+		} else {
+		    // Get workspace directory or exit
+		    workspaceDirectory = retrieveWorkspaceDirectory(workspaceSettings);
+		}
+		if (workspaceDirectory == null) {
+		    break;
+		}
+		// Initialize Workspace and run application
 		initialize(workspaceDirectory);
-	    } catch (IOException e) {
-		throw new RuntimeException(e);
+		runApplication(applicationClass, args);
+		shutdown();
+		// Update settings for change made by the application
+		workspaceSettings.readSettings();
+	    } while (workspaceSettings.isRestarting());
+	    Platform.exit();
+	} catch (Exception e) {
+	    throw new RuntimeException(e);
+	}
+    }
+
+    private static File retrieveWorkspaceDirectory(WorkspaceSettings workspaceSettings) {
+	File workspaceDirectory = null;
+	if (workspaceSettings.isDefault()) {
+	    workspaceDirectory = workspaceSettings.getDirectory();
+	} else {
+	    WorkspaceSelectionDialog dialog = new WorkspaceSelectionDialog();
+	    Optional<File> result = dialog.showAndWait();
+	    if (result.isPresent()) {
+		workspaceDirectory = result.get();
 	    }
-	    Application.launch(applicationClass, args);
-	    shutdown();
-	} while (workspaceSettings.isRestarting());
+	}
+	return workspaceDirectory;
+    }
+
+    private static void runApplication(Class<? extends Application> applicationClass, String[] args) throws Exception {
+	// TODO: Because of JDK9, args cannot be registered as it is not allowed to
+	// access com.sun.javafx...
+	Application application = applicationClass.getDeclaredConstructor().newInstance();
+	application.init();
+	Stage stage = new Stage(StageStyle.DECORATED);
+	application.start(stage);
+	if (stage.isShowing()) {
+	    stage.hide();
+	}
+	stage.showAndWait();
+
     }
 
     /**

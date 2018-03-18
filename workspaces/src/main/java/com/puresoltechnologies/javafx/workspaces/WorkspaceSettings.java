@@ -17,7 +17,7 @@ import com.puresoltechnologies.javafx.utils.Settings;
  */
 public class WorkspaceSettings {
 
-    private static final String BASE_PROPERTY_NAME = "com.puresoltechnologies.javafx.workspaces.selections";
+    private static final String BASE_PROPERTY_NAME = "com.puresoltechnologies.javafx.workspaces";
 
     private static final String DIRECTORY_PROPERTY = BASE_PROPERTY_NAME + ".selections.current";
     private static final String DEFAULT_SET_PROPERTY = BASE_PROPERTY_NAME + ".selections.use_default";
@@ -43,9 +43,11 @@ public class WorkspaceSettings {
 	    File propertiesFile = getPropertiesFile();
 	    if (propertiesFile.exists()) {
 		try (FileInputStream fileInputStream = new FileInputStream(propertiesFile)) {
+		    properties.clear();
 		    properties.load(fileInputStream);
 		}
 	    }
+	    formerDirectories.clear();
 	    properties.entrySet().stream() //
 		    .filter(entry -> entry.getKey().toString().startsWith(FORMER_SELECTIONS_PROPERTY_BASE))
 		    .sorted((o1, o2) -> o1.getKey().toString().compareTo(o2.getKey().toString()))
@@ -59,6 +61,7 @@ public class WorkspaceSettings {
 
     public void writeSettings() {
 	try {
+	    updateFormerDirectories();
 	    File propertiesFile = getPropertiesFile();
 	    if (!propertiesFile.exists()) {
 		if (!propertiesFile.createNewFile()) {

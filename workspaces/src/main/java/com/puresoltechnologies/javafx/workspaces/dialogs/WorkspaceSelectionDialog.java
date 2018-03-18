@@ -39,7 +39,6 @@ public class WorkspaceSelectionDialog extends Dialog<File> {
     }
 
     private void saveSetting() {
-	workspaceSettings.updateFormerDirectories();
 	workspaceSettings.writeSettings();
     }
 

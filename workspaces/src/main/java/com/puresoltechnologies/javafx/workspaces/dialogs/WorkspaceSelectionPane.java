@@ -51,8 +51,14 @@ public class WorkspaceSelectionPane extends GridPane {
 	directoryComboBox.setItems(FXCollections.observableList(workspaceSettings.getFormerDirectories()));
 	directoryComboBox.setValue(workspaceSettings.getDirectory());
 	directoryComboBox.setEditable(true);
-	directoryComboBox.valueProperty()
-		.addListener(o -> workspaceSettings.setDirectory(directoryComboBox.getValue()));
+	directoryComboBox.valueProperty().addListener(o -> {
+	    Object object = directoryComboBox.getValue();
+	    if (object instanceof File) {
+		workspaceSettings.setDirectory((File) object);
+	    } else {
+		workspaceSettings.setDirectory(new File(object.toString()));
+	    }
+	});
 	setConstraints(directoryComboBox, 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
 	getChildren().add(directoryComboBox);
 
