@@ -7,7 +7,7 @@ import com.puresoltechnologies.javafx.charts.renderer.plots.AbstractPlotRenderer
 
 import javafx.scene.canvas.Canvas;
 
-public class BoxPlotRenderer<X, Y extends Number & Comparable<Y>, D, XAR extends AxisRenderer<?>>
+public class BoxPlotRenderer<X extends Comparable<X>, Y extends Number & Comparable<Y>, D, XAR extends AxisRenderer<?>>
 	extends AbstractPlotRenderer<X, Y, D, XAR, NumberAxisRenderer> {
 
     public BoxPlotRenderer(Canvas canvas, Plot<X, Y, D> plot, XAR xAxisRenderer, NumberAxisRenderer yAxisRenderer) {

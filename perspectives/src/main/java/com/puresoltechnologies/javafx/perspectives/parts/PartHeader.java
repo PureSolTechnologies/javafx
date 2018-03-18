@@ -1,6 +1,7 @@
 package com.puresoltechnologies.javafx.perspectives.parts;
 
 import java.io.IOException;
+import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.PartStack;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
@@ -31,12 +32,13 @@ public class PartHeader extends HBox {
 	super();
 	this.part = part;
 	try {
-	    setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID, new CornerRadii(0.0),
-		    new BorderWidths(1.0, 1.0, 1.0, 1.0, false, false, false, false), new Insets(5, 5, 5, 5))));
-
-	    Image image = part.getImage();
-	    if (image != null) {
-		ImageView imageView = new ImageView(image);
+	    setManaged(true);
+	    setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
+		    new CornerRadii(5.0, 5.0, 0.0, 0.0, false),
+		    new BorderWidths(1.0, 1.0, 0.0, 1.0, false, false, false, false), new Insets(3, 3, 3, 3))));
+	    Optional<Image> image = part.getImage();
+	    if (image.isPresent()) {
+		ImageView imageView = new ImageView(image.get());
 		getChildren().add(imageView);
 		setMargin(imageView, new Insets(2.0));
 	    }
@@ -74,7 +76,7 @@ public class PartHeader extends HBox {
 
     public void setActive(boolean active) {
 	if (active) {
-	    setBackground(new Background(new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
+	    setBackground(new Background(new BackgroundFill(Color.LIGHTSTEELBLUE, CornerRadii.EMPTY, Insets.EMPTY)));
 	} else {
 	    setBackground(null);
 	}

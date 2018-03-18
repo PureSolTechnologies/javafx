@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.perspectives.dialogs;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
@@ -15,6 +16,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 public class ViewSelectionDialog extends Dialog<ViewerPart> {
@@ -34,8 +36,9 @@ public class ViewSelectionDialog extends Dialog<ViewerPart> {
 		    super.updateItem(t, bln);
 		    if (t != null) {
 			setText(t.getName());
-			if (t.getImage() != null) {
-			    setGraphic(new ImageView(t.getImage()));
+			Optional<Image> image = t.getImage();
+			if (image.isPresent()) {
+			    setGraphic(new ImageView(image.get()));
 			}
 		    }
 		}

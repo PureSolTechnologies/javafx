@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.perspectives;
 
+import java.util.Optional;
+
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -54,8 +56,13 @@ public class PerspectivesIT extends ApplicationTest {
 		}
 
 		@Override
-		public Image getImage() {
-		    return null;
+		public Optional<Image> getImage() {
+		    return Optional.empty();
+		}
+
+		@Override
+		public Optional<PartHeaderToolBar> getToolBar() {
+		    return Optional.empty();
 		}
 
 		@Override
@@ -85,8 +92,13 @@ public class PerspectivesIT extends ApplicationTest {
 		}
 
 		@Override
-		public Image getImage() {
-		    return null;
+		public Optional<Image> getImage() {
+		    return Optional.empty();
+		}
+
+		@Override
+		public Optional<PartHeaderToolBar> getToolBar() {
+		    return Optional.empty();
 		}
 
 		@Override

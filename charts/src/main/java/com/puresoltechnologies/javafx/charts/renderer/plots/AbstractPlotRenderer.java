@@ -6,7 +6,7 @@ import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
 
 import javafx.scene.canvas.Canvas;
 
-public abstract class AbstractPlotRenderer<X, Y, D, XAR extends AxisRenderer<?>, YAR extends AxisRenderer<?>>
+public abstract class AbstractPlotRenderer<X extends Comparable<X>, Y extends Comparable<Y>, D, XAR extends AxisRenderer<?>, YAR extends AxisRenderer<?>>
 	extends AbstractRenderer implements PlotRenderer {
 
     private final Plot<X, Y, D> plot;

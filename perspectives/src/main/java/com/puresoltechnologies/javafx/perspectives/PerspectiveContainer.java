@@ -9,9 +9,11 @@ import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.ToolBar;
@@ -19,6 +21,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 public class PerspectiveContainer extends BorderPane {
+
+    private static final ObjectProperty<ContentDisplay> toolBarContentDisplay = Preferences
+	    .getProperty(PerspectiveProperties.perspectiveToolbarContentDisplay);
 
     private final ToolBar toolBar;
     private final List<Perspective> perspectives = new ArrayList<>();
@@ -31,15 +36,15 @@ public class PerspectiveContainer extends BorderPane {
 		    "/icons/FatCow_Icons16x16/switch_windows.png");
 	    Button openPerspectiveButton = new Button("Open...", switchWidowsImage);
 	    openPerspectiveButton.setId("OpenPerspectivesButton");
-	    openPerspectiveButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+	    openPerspectiveButton.setContentDisplay(toolBarContentDisplay.get());
 	    ImageView resetPerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/undo.png");
 	    Button resetButton = new Button("Reset", resetPerspectiveImage);
 	    openPerspectiveButton.setId("resetPerspectiveButton");
-	    resetButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+	    resetButton.setContentDisplay(toolBarContentDisplay.get());
 	    ImageView closePerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
 	    Button closeButton = new Button("Close", closePerspectiveImage);
 	    openPerspectiveButton.setId("ClosePerspectiveButton");
-	    closeButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+	    closeButton.setContentDisplay(toolBarContentDisplay.get());
 
 	    openPerspectiveButton.setOnAction(event -> openNewPerspective());
 	    resetButton.setOnAction(event -> resetCurrentPerspective());
@@ -61,8 +66,10 @@ public class PerspectiveContainer extends BorderPane {
     }
 
     private void resetCurrentPerspective() {
-	currentPerspective.reset();
-	setCenter(currentPerspective.getContent());
+	if (currentPerspective != null) {
+	    currentPerspective.reset();
+	    setCenter(currentPerspective.getContent());
+	}
     }
 
     private void closeCurrentPerspective() {

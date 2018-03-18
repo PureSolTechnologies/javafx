@@ -9,7 +9,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.Canvas;
 
-public abstract class AbstractPlot<X, Y, D> implements Plot<X, Y, D> {
+public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> implements Plot<X, Y, D> {
 
     private final String title;
     private final Axis<X> xAxis;

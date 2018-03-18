@@ -11,7 +11,7 @@ import com.puresoltechnologies.javafx.charts.renderer.plots.box.BoxPlotRenderer;
 
 import javafx.scene.canvas.Canvas;
 
-public class BoxPlot<X, Y extends Number & Comparable<Y>, D> extends AbstractPlot<X, Y, D> {
+public class BoxPlot<X extends Comparable<X>, Y extends Number & Comparable<Y>, D> extends AbstractPlot<X, Y, D> {
 
     public BoxPlot(String title, Axis<X> xAxis, NumberAxis<Y> yAxis, PlotData<X, Y, D> data) {
 	super(title, xAxis, yAxis, data);

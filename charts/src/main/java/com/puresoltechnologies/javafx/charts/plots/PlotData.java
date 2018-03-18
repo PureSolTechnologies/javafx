@@ -2,6 +2,8 @@ package com.puresoltechnologies.javafx.charts.plots;
 
 import java.util.List;
 
+import javafx.beans.property.ObjectProperty;
+
 /**
  * This is the model interface for the plot data.
  * 
@@ -10,7 +12,7 @@ import java.util.List;
  * @param <X>
  * @param <Y>
  */
-public interface PlotData<X, Y, D> {
+public interface PlotData<X extends Comparable<X>, Y extends Comparable<Y>, D> {
 
     public X getMinX();
 
@@ -26,5 +28,14 @@ public interface PlotData<X, Y, D> {
      * @return
      */
     public List<D> getData();
+
+    /**
+     * Returns the data to be plotted.
+     * 
+     * @return
+     */
+    public void setData(List<D> data);
+
+    public ObjectProperty<List<D>> dataProperty();
 
 }

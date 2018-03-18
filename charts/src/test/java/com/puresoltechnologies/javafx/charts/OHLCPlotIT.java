@@ -1,11 +1,14 @@
 package com.puresoltechnologies.javafx.charts;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Test;
 import org.testfx.framework.junit.ApplicationTest;
 
@@ -14,12 +17,24 @@ import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.TimeSeriesAxis;
 import com.puresoltechnologies.javafx.charts.plots.PlotData;
 import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCPlot;
+import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCPlotData;
 import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCValue;
+import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 public class OHLCPlotIT extends ApplicationTest {
+
+    @BeforeClass
+    public static void initialize() throws IOException {
+	Preferences.initialize();
+    }
+
+    @AfterClass
+    public static void shutdown() {
+	Preferences.shutdown();
+    }
 
     ChartView chartView;
 
@@ -41,52 +56,26 @@ public class OHLCPlotIT extends ApplicationTest {
     }
 
     private PlotData<Instant, Double, OHLCValue<Double>> generateTestOHLCData() {
-	PlotData<Instant, Double, OHLCValue<Double>> testData = new PlotData<>() {
+	OHLCPlotData<Double> testData = new OHLCPlotData<>();
 
-	    private final Instant begin = Instant.ofEpochSecond(1483228800);
-	    private final Instant end = Instant.ofEpochSecond(1514764800);
-	    private final List<OHLCValue<Double>> data = new ArrayList<>();
-	    {
-		double days = 0;
-		Instant current = begin;
-		Random random = new Random(1234567890l);
-		while (current.isBefore(end)) {
-		    Instant next = current.plus(1, ChronoUnit.DAYS);
-		    double open = Math.sin(2 * Math.PI / 28.0 * days);
-		    double close = open + random.nextGaussian();
-		    double high = Math.max(open, close) + 0.5;
-		    double low = Math.min(open, close) - 0.5;
-		    data.add(new OHLCValue<>(current, next, open, high, low, close));
-		    days += 1.0;
-		    current = next;
-		}
-	    }
+	Instant begin = Instant.ofEpochSecond(1483228800);
+	Instant end = Instant.ofEpochSecond(1514764800);
+	List<OHLCValue<Double>> data = new ArrayList<>();
+	double days = 0;
+	Instant current = begin;
+	Random random = new Random(1234567890l);
+	while (current.isBefore(end)) {
+	    Instant next = current.plus(1, ChronoUnit.DAYS);
+	    double open = Math.sin(2 * Math.PI / 28.0 * days);
+	    double close = open + random.nextGaussian();
+	    double high = Math.max(open, close) + 0.5;
+	    double low = Math.min(open, close) - 0.5;
+	    data.add(new OHLCValue<>(current, next, open, high, low, close));
+	    days += 1.0;
+	    current = next;
+	}
+	testData.setData(data);
 
-	    @Override
-	    public Instant getMinX() {
-		return begin;
-	    }
-
-	    @Override
-	    public Instant getMaxX() {
-		return end;
-	    }
-
-	    @Override
-	    public Double getMinY() {
-		return -2.0;
-	    }
-
-	    @Override
-	    public Double getMaxY() {
-		return 2.0;
-	    }
-
-	    @Override
-	    public List<OHLCValue<Double>> getData() {
-		return data;
-	    }
-	};
 	return testData;
     }
 

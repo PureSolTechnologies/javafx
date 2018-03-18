@@ -6,24 +6,30 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.perspectives.parts.PartDragData;
 import com.puresoltechnologies.javafx.perspectives.parts.PartDragDataFormat;
 import com.puresoltechnologies.javafx.perspectives.parts.PartHeader;
+import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Labeled;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -34,7 +40,11 @@ public class PartStack extends AbstractPerspectiveElement {
 
     private static final double DRAG_EDGE_FRACTION = 0.2;
 
-    private final ToolBar toolBar;
+    private static final ObjectProperty<ContentDisplay> toolBarContentDisplay = Preferences
+	    .getProperty(PerspectiveProperties.partHeaderToolbarContentDisplay);
+
+    private final PartHeaderToolBar toolBar;
+    private final HBox headerToolBar;
     private final List<Part> parts = new ArrayList<>();
     private final Map<String, PartHeader> headers = new HashMap<>();
     private final BorderPane borderPane;
@@ -43,8 +53,9 @@ public class PartStack extends AbstractPerspectiveElement {
 	super();
 	borderPane = new BorderPane();
 	borderPane.setId(UUID.randomUUID().toString());
-	toolBar = new ToolBar();
-	toolBar.setPadding(Insets.EMPTY);
+	headerToolBar = new HBox();
+	headerToolBar.setAlignment(Pos.CENTER_RIGHT);
+	toolBar = new PartHeaderToolBar(headerToolBar);
 	borderPane.setTop(toolBar);
 	borderPane.setOnDragEntered(event -> {
 	    onDragEntered(event);
@@ -238,7 +249,8 @@ public class PartStack extends AbstractPerspectiveElement {
 	parts.add(part);
 	FXThreads.proceedOnFXThread(() -> {
 	    part.initialize();
-	    toolBar.getItems().add(button);
+	    ObservableList<Node> items = toolBar.getItems();
+	    items.add(items.size() - 1, button);
 	    setActive(part.getId());
 	});
     }
@@ -294,6 +306,7 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     public void setActive(String partId) {
+	headerToolBar.getChildren().clear();
 	if ((partId != null) && (!partId.isEmpty())) {
 	    Iterator<Part> iterator = parts.iterator();
 	    while (iterator.hasNext()) {
@@ -302,6 +315,17 @@ public class PartStack extends AbstractPerspectiveElement {
 		    headers.forEach((id, header) -> header.setActive(false));
 		    headers.get(partId).setActive(true);
 		    borderPane.setCenter(part.getContent());
+		    Optional<PartHeaderToolBar> partToolBar = part.getToolBar();
+		    if (partToolBar.isPresent()) {
+			ToolBar ptb = partToolBar.get();
+			ptb.getItems().forEach(item -> {
+			    if (Labeled.class.isAssignableFrom(item.getClass())) {
+				((Labeled) item).setContentDisplay(toolBarContentDisplay.get());
+			    }
+			    headerToolBar.getChildren().add(item);
+
+			});
+		    }
 		    break;
 		}
 	    }
