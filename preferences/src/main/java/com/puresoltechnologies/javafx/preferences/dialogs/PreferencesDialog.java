@@ -1,10 +1,13 @@
 package com.puresoltechnologies.javafx.preferences.dialogs;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.preferences.Preferences;
+import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
+import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -31,8 +34,20 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 public class PreferencesDialog extends Dialog<Void> {
+
+    private static final Image iconSmall;
+    private static final Image iconBig;
+    static {
+	try {
+	    iconSmall = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons16x16/setting_tools.png");
+	    iconBig = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons32x32/setting_tools.png");
+	} catch (IOException e) {
+	    throw new RuntimeException(e);
+	}
+    }
 
     private final TreeView<PreferencesPageNode> treeView;
     private final BorderPane preferencesPane;
@@ -45,6 +60,9 @@ public class PreferencesDialog extends Dialog<Void> {
     public PreferencesDialog() {
 	setTitle("Preferences");
 	setHeaderText("Preferences of Trader.");
+	setGraphic(new ImageView(iconBig));
+	Stage stage = (Stage) getDialogPane().getScene().getWindow();
+	stage.getIcons().addAll(iconSmall, iconBig);
 	setResizable(true);
 
 	SplitPane splitPane = new SplitPane();

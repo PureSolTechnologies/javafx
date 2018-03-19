@@ -38,6 +38,24 @@ public class PerspectiveService {
 	currentPerspective.showPart(part);
     }
 
+    public static void openPerspective(Perspective perspective) {
+	instance.container.addPerspective(perspective);
+    }
+
+    public static void resetPerspective() {
+	Perspective currentPerspective = instance.container.getCurrentPerspective();
+	currentPerspective.reset();
+    }
+
+    public static void closePerspective() {
+	Perspective currentPerspective = instance.container.getCurrentPerspective();
+	instance.container.removePerspective(currentPerspective);
+    }
+
+    public static void closeAllPerspectives() {
+	instance.container.removeAllPerspectives();
+    }
+
     private final PerspectiveContainer container;
 
     public PerspectiveService() {

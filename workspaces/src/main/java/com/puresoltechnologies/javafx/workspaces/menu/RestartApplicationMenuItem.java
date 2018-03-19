@@ -30,15 +30,15 @@ public class RestartApplicationMenuItem extends MenuItem {
 	initialize();
     }
 
-    public RestartApplicationMenuItem(Stage application, String text, Node graphic) {
+    public RestartApplicationMenuItem(Stage stage, String text, Node graphic) {
 	super(text, graphic);
-	this.stage = application;
+	this.stage = stage;
 	initialize();
     }
 
-    public RestartApplicationMenuItem(Stage application, String text) {
+    public RestartApplicationMenuItem(Stage stage, String text) {
 	super(text);
-	this.stage = application;
+	this.stage = stage;
 	initialize();
     }
 
@@ -48,6 +48,7 @@ public class RestartApplicationMenuItem extends MenuItem {
 	    workspaceSettings.setRestarting(true);
 	    workspaceSettings.writeSettings();
 	    stage.close();
+	    event.consume();
 	});
     }
 }

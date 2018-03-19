@@ -1,11 +1,15 @@
 package com.puresoltechnologies.javafx.extensions.dialogs;
 
+import java.io.IOException;
+
 import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.extensions.fonts.FontFamilyListView;
 import com.puresoltechnologies.javafx.extensions.fonts.FontPostureComboBox;
 import com.puresoltechnologies.javafx.extensions.fonts.FontSizeComboBox;
 import com.puresoltechnologies.javafx.extensions.fonts.FontWeightListView;
+import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
 import com.puresoltechnologies.javafx.utils.FXNodeUtils;
+import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
@@ -16,11 +20,14 @@ import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.stage.Stage;
 
 public class FontSelectionDialog extends Dialog<FontDefinition> {
 
@@ -39,6 +46,17 @@ public class FontSelectionDialog extends Dialog<FontDefinition> {
 	SAMPLE_TEXT = builder.toString();
     }
 
+    private static final Image iconSmall;
+    private static final Image iconBig;
+    static {
+	try {
+	    iconSmall = ResourceUtils.getImage(AboutMenuItem.class, "/icons/FatCow_Icons16x16/font.png");
+	    iconBig = ResourceUtils.getImage(AboutMenuItem.class, "/icons/FatCow_Icons32x32/font.png");
+	} catch (IOException e) {
+	    throw new RuntimeException(e);
+	}
+    }
+
     private final FontFamilyListView fontFamilyListView = new FontFamilyListView("SansSerif");
     private final FontSizeComboBox fontSizeComboBox = new FontSizeComboBox(10.0);
     private final FontWeightListView fontWeightListView = new FontWeightListView(FontWeight.NORMAL);
@@ -51,6 +69,9 @@ public class FontSelectionDialog extends Dialog<FontDefinition> {
     public FontSelectionDialog() {
 	setTitle("Font Selection");
 	setHeaderText("Select a font.");
+	setGraphic(new ImageView(iconBig));
+	Stage stage = (Stage) getDialogPane().getScene().getWindow();
+	stage.getIcons().addAll(iconSmall, iconBig);
 	setResizable(true);
 
 	Label fontFamilyLabel = new Label("Font:");

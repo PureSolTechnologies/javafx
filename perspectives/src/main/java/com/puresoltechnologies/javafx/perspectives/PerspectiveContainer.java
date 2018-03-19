@@ -103,6 +103,12 @@ public class PerspectiveContainer extends BorderPane {
 	}
     }
 
+    public void removeAllPerspectives() {
+	this.perspectives.clear();
+	currentPerspective = null;
+	setCenter(null);
+    }
+
     public void removePerspective(String perspectiveId) {
 	Iterator<Perspective> iterator = perspectives.iterator();
 	while (iterator.hasNext()) {

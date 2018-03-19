@@ -96,7 +96,7 @@ public class Workspace {
 	    stage.hide();
 	}
 	stage.showAndWait();
-
+	application.stop();
     }
 
     /**

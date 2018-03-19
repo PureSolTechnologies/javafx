@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.perspectives.dialogs;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -7,7 +8,9 @@ import java.util.Optional;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
+import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
 import com.puresoltechnologies.javafx.utils.FXThreads;
+import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,13 +21,28 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 
 public class ViewSelectionDialog extends Dialog<ViewerPart> {
+
+    private static final Image iconSmall;
+    private static final Image iconBig;
+    static {
+	try {
+	    iconSmall = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons16x16/watch_window.png");
+	    iconBig = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons32x32/watch_window.png");
+	} catch (IOException e) {
+	    throw new RuntimeException(e);
+	}
+    }
 
     public ViewSelectionDialog() {
 	super();
 	setTitle("Views");
-	setHeaderText("Choose a part to be opened.");
+	setHeaderText("Choose a view to be opened.");
+	setGraphic(new ImageView(iconBig));
+	Stage stage = (Stage) getDialogPane().getScene().getWindow();
+	stage.getIcons().addAll(iconSmall, iconBig);
 	setResizable(true);
 
 	ListView<ViewerPart> listView = new ListView<>();

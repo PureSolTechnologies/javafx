@@ -62,6 +62,7 @@ public class SwitchWorkspaceMenu extends Menu {
 		workspaceSettings.setRestarting(true);
 		workspaceSettings.writeSettings();
 		stage.close();
+		event.consume();
 	    });
 	    getItems().add(menuItem);
 	});

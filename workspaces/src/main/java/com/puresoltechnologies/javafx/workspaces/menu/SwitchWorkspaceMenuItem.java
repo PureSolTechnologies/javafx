@@ -32,15 +32,15 @@ public class SwitchWorkspaceMenuItem extends MenuItem {
 	initialize();
     }
 
-    public SwitchWorkspaceMenuItem(Stage application, String text, Node graphic) {
+    public SwitchWorkspaceMenuItem(Stage stage, String text, Node graphic) {
 	super(text, graphic);
-	this.stage = application;
+	this.stage = stage;
 	initialize();
     }
 
-    public SwitchWorkspaceMenuItem(Stage application, String text) {
+    public SwitchWorkspaceMenuItem(Stage stage, String text) {
 	super(text);
-	this.stage = application;
+	this.stage = stage;
 	initialize();
     }
 
@@ -53,6 +53,7 @@ public class SwitchWorkspaceMenuItem extends MenuItem {
 		workspaceSettings.setRestarting(true);
 		workspaceSettings.writeSettings();
 		stage.close();
+		event.consume();
 	    }
 	});
     }

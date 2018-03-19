@@ -29,15 +29,15 @@ public class ExitApplicationMenuItem extends MenuItem {
 	initialize();
     }
 
-    public ExitApplicationMenuItem(Stage application, String text, Node graphic) {
+    public ExitApplicationMenuItem(Stage stage, String text, Node graphic) {
 	super(text, graphic);
-	this.stage = application;
+	this.stage = stage;
 	initialize();
     }
 
-    public ExitApplicationMenuItem(Stage application, String text) {
+    public ExitApplicationMenuItem(Stage stage, String text) {
 	super(text);
-	this.stage = application;
+	this.stage = stage;
 	initialize();
     }
 
@@ -47,6 +47,7 @@ public class ExitApplicationMenuItem extends MenuItem {
 	    workspaceSettings.setRestarting(false);
 	    workspaceSettings.writeSettings();
 	    stage.close();
+	    event.consume();
 	});
     }
 }
