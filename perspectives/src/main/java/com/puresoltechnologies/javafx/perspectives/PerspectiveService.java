@@ -19,6 +19,7 @@ public class PerspectiveService {
     }
 
     public static void shutdown() {
+	instance.container.removeAllPerspectives();
 	if (instance == null) {
 	    throw new IllegalStateException("CryptoCurrenciesClient is not initialized.");
 	}
@@ -33,9 +34,9 @@ public class PerspectiveService {
 	return instance.container;
     }
 
-    public static void showPart(Part part) {
+    public static void openPart(Part part) {
 	Perspective currentPerspective = instance.container.getCurrentPerspective();
-	currentPerspective.showPart(part);
+	currentPerspective.openPart(part);
     }
 
     public static void openPerspective(Perspective perspective) {

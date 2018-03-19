@@ -43,7 +43,7 @@ public class ShowViewMenuItem extends MenuItem {
 	setOnAction(event -> {
 	    Optional<ViewerPart> part = new ViewSelectionDialog().showAndWait();
 	    if (part.isPresent()) {
-		PerspectiveService.showPart(part.get());
+		PerspectiveService.openPart(part.get());
 	    }
 	    event.consume();
 	});

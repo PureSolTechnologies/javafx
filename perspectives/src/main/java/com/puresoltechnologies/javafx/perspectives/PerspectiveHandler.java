@@ -174,7 +174,7 @@ class PerspectiveHandler {
 	    }
 	    selectedPartSplit.addElement(newPartSplit);
 	    oldPartStack.removeElement(part);
-	    newPartStack.addPart(part);
+	    newPartStack.addElement(part);
 
 	    removeEmptyElements();
 	    printElements();

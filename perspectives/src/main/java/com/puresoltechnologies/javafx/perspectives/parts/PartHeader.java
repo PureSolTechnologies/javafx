@@ -67,7 +67,7 @@ public class PartHeader extends HBox {
 		event.consume();
 	    });
 	    crossView.setOnMouseClicked(event -> {
-		partStack.removeElement(part);
+		partStack.closePart(part);
 	    });
 	} catch (IOException e) {
 	    throw new RuntimeException(e);

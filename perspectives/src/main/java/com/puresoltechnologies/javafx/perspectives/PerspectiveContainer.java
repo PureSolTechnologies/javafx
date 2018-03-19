@@ -8,14 +8,19 @@ import java.util.List;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
+import com.puresoltechnologies.javafx.perspectives.dialogs.ViewSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.ToolBar;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -26,6 +31,7 @@ public class PerspectiveContainer extends BorderPane {
 	    .getProperty(PerspectiveProperties.perspectiveToolbarContentDisplay);
 
     private final ToolBar toolBar;
+    private final SplitMenuButton openPerspectiveButton;
     private final List<Perspective> perspectives = new ArrayList<>();
     private Perspective currentPerspective = null;
 
@@ -34,34 +40,65 @@ public class PerspectiveContainer extends BorderPane {
 	try {
 	    ImageView switchWidowsImage = ResourceUtils.getImageView(this,
 		    "/icons/FatCow_Icons16x16/switch_windows.png");
-	    Button openPerspectiveButton = new Button("Open...", switchWidowsImage);
+	    openPerspectiveButton = new SplitMenuButton();
+	    openPerspectiveButton.setText("Open...");
+	    openPerspectiveButton.setGraphic(switchWidowsImage);
 	    openPerspectiveButton.setId("OpenPerspectivesButton");
 	    openPerspectiveButton.setContentDisplay(toolBarContentDisplay.get());
+	    updateOpenPerspectiveButton();
+
+	    ImageView watchWidowImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/watch_window.png");
+	    Button showViewButton = new Button("Show View...", watchWidowImage);
+	    showViewButton.setId("ShowViewButton");
+	    showViewButton.setContentDisplay(toolBarContentDisplay.get());
+
 	    ImageView resetPerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/undo.png");
 	    Button resetButton = new Button("Reset", resetPerspectiveImage);
-	    openPerspectiveButton.setId("resetPerspectiveButton");
+	    resetPerspectiveImage.setId("resetPerspectiveButton");
 	    resetButton.setContentDisplay(toolBarContentDisplay.get());
+
 	    ImageView closePerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
 	    Button closeButton = new Button("Close", closePerspectiveImage);
-	    openPerspectiveButton.setId("ClosePerspectiveButton");
+	    closePerspectiveImage.setId("ClosePerspectiveButton");
 	    closeButton.setContentDisplay(toolBarContentDisplay.get());
 
 	    openPerspectiveButton.setOnAction(event -> openNewPerspective());
+	    showViewButton.setOnAction(event -> showView());
 	    resetButton.setOnAction(event -> resetCurrentPerspective());
 	    closeButton.setOnAction(event -> closeCurrentPerspective());
 
 	    toolBar = new ToolBar();
-	    toolBar.getItems().addAll(openPerspectiveButton, resetButton, closeButton);
+	    toolBar.getItems().addAll(openPerspectiveButton, showViewButton, resetButton, closeButton);
 	    setTop(toolBar);
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
+    private void updateOpenPerspectiveButton() {
+	ObservableList<MenuItem> items = openPerspectiveButton.getItems();
+	items.clear();
+	perspectives.forEach(perspective -> {
+	    MenuItem item = new MenuItem(perspective.getName());
+	    item.setOnAction(event -> {
+		PerspectiveContainer.this.selectPerspective(perspective.getId());
+		event.consume();
+	    });
+	    openPerspectiveButton.getItems().add(item);
+	});
+    }
+
     private void openNewPerspective() {
 	Optional<Perspective> perspective = new PerspectiveSelectionDialog().showAndWait();
 	if (perspective.isPresent()) {
 	    addPerspective(perspective.get());
+	}
+    }
+
+    private void showView() {
+	Optional<ViewerPart> part = new ViewSelectionDialog().showAndWait();
+	if (part.isPresent()) {
+	    PerspectiveService.openPart(part.get());
 	}
     }
 
@@ -89,24 +126,35 @@ public class PerspectiveContainer extends BorderPane {
     public void addPerspective(Perspective perspective) {
 	this.perspectives.add(perspective);
 	currentPerspective = perspective;
-	FXThreads.runOnFXThread(() -> setCenter(currentPerspective.getContent()));
-    }
-
-    public void removePerspective(Perspective perspective) {
-	this.perspectives.remove(perspective);
-	if (perspectives.size() > 0) {
-	    currentPerspective = perspectives.get(perspectives.size() - 1);
+	FXThreads.proceedOnFXThread(() -> {
+	    updateOpenPerspectiveButton();
 	    setCenter(currentPerspective.getContent());
-	} else {
-	    currentPerspective = null;
-	    setCenter(null);
-	}
+	});
     }
 
     public void removeAllPerspectives() {
-	this.perspectives.clear();
+	perspectives.forEach(perspective -> closeAllParts(perspective));
+	perspectives.clear();
 	currentPerspective = null;
-	setCenter(null);
+	FXThreads.proceedOnFXThread(() -> {
+	    setCenter(null);
+	    updateOpenPerspectiveButton();
+	});
+    }
+
+    public void removePerspective(Perspective perspective) {
+	closeAllParts(perspective);
+	this.perspectives.remove(perspective);
+	FXThreads.proceedOnFXThread(() -> {
+	    if (perspectives.size() > 0) {
+		currentPerspective = perspectives.get(perspectives.size() - 1);
+		setCenter(currentPerspective.getContent());
+	    } else {
+		currentPerspective = null;
+		setCenter(null);
+	    }
+	    updateOpenPerspectiveButton();
+	});
     }
 
     public void removePerspective(String perspectiveId) {
@@ -114,6 +162,7 @@ public class PerspectiveContainer extends BorderPane {
 	while (iterator.hasNext()) {
 	    Perspective perspective = iterator.next();
 	    if (perspective.getId().equals(perspectiveId)) {
+		closeAllParts(perspective);
 		iterator.remove();
 	    }
 	}
@@ -123,6 +172,20 @@ public class PerspectiveContainer extends BorderPane {
 	} else {
 	    setCenter(null);
 	}
+    }
+
+    private void closeAllParts(Perspective perspective) {
+	perspective.getElements().forEach(element -> closeAllParts(element));
+    }
+
+    private Object closeAllParts(PerspectiveElement element) {
+	if (element instanceof PartStack) {
+	    PartStack partStack = (PartStack) element;
+	    partStack.getParts().forEach(part -> part.close());
+	} else if (element instanceof PartSplit) {
+	    element.getElements().forEach(e -> closeAllParts(e));
+	}
+	return null;
     }
 
     public void selectPerspective(String perspectiveId) {

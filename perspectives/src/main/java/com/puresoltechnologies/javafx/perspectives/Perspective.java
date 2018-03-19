@@ -20,6 +20,6 @@ public interface Perspective extends PerspectiveElement {
 
     public PerspectiveElement getRootElement();
 
-    public void showPart(Part part);
+    public void openPart(Part part);
 
 }

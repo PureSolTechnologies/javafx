@@ -46,7 +46,7 @@ public class PartStack extends AbstractPerspectiveElement {
     private final PartHeaderToolBar toolBar;
     private final HBox headerToolBar;
     private final List<Part> parts = new ArrayList<>();
-    private final Map<String, PartHeader> headers = new HashMap<>();
+    private final Map<String, PartHeader> headerButtons = new HashMap<>();
     private final BorderPane borderPane;
 
     public PartStack() {
@@ -69,7 +69,6 @@ public class PartStack extends AbstractPerspectiveElement {
 	borderPane.setOnDragDropped(event -> {
 	    onDragDropped(event);
 	});
-
     }
 
     private void onDragEntered(DragEvent event) {
@@ -243,16 +242,14 @@ public class PartStack extends AbstractPerspectiveElement {
 	return Collections.emptyList();
     }
 
-    public void addPart(Part part) {
-	PartHeader button = new PartHeader(this, part);
-	headers.put(part.getId(), button);
-	parts.add(part);
-	FXThreads.proceedOnFXThread(() -> {
-	    part.initialize();
-	    ObservableList<Node> items = toolBar.getItems();
-	    items.add(items.size() - 1, button);
-	    setActive(part.getId());
-	});
+    public void openPart(Part part) {
+	part.initialize();
+	addElement(part);
+    }
+
+    public void closePart(Part part) {
+	removeElement(part);
+	part.close();
     }
 
     List<Part> getParts() {
@@ -270,21 +267,28 @@ public class PartStack extends AbstractPerspectiveElement {
 	    throw new IllegalArgumentException(
 		    "Part stacks can only contain parts. Type '" + e.getClass().getName() + "' is not supported.");
 	}
-	addPart((Part) e);
+	Part part = (Part) e;
+	PartHeader button = new PartHeader(this, part);
+	headerButtons.put(part.getId(), button);
+	parts.add(part);
+	FXThreads.proceedOnFXThread(() -> {
+	    ObservableList<Node> items = toolBar.getItems();
+	    items.add(items.size() - 1, button);
+	    setActive(part.getId());
+	});
     }
 
     @Override
     public void removeElement(String partId) {
-	PartHeader header = headers.get(partId);
+	PartHeader header = headerButtons.get(partId);
 	toolBar.getItems().remove(header);
-	headers.remove(partId);
+	headerButtons.remove(partId);
 	Iterator<Part> iterator = parts.iterator();
 	boolean currentActiveEffected = false;
 	while (iterator.hasNext()) {
 	    Part part = iterator.next();
 	    if (partId.equals(part.getId())) {
 		iterator.remove();
-		part.close();
 		if (part.getContent() == borderPane.getCenter()) {
 		    currentActiveEffected = true;
 		}
@@ -312,8 +316,8 @@ public class PartStack extends AbstractPerspectiveElement {
 	    while (iterator.hasNext()) {
 		Part part = iterator.next();
 		if (partId.equals(part.getId())) {
-		    headers.forEach((id, header) -> header.setActive(false));
-		    headers.get(partId).setActive(true);
+		    headerButtons.forEach((id, header) -> header.setActive(false));
+		    headerButtons.get(partId).setActive(true);
 		    borderPane.setCenter(part.getContent());
 		    Optional<PartHeaderToolBar> partToolBar = part.getToolBar();
 		    if (partToolBar.isPresent()) {
@@ -330,7 +334,7 @@ public class PartStack extends AbstractPerspectiveElement {
 		}
 	    }
 	} else {
-	    headers.forEach((id, header) -> header.setActive(false));
+	    headerButtons.forEach((id, header) -> header.setActive(false));
 	    borderPane.setCenter(null);
 	    getPerspectiveHandler().removeEmptyElements();
 	}
