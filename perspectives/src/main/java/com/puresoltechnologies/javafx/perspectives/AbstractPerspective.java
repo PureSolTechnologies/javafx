@@ -109,10 +109,10 @@ public abstract class AbstractPerspective implements Perspective {
     }
 
     private void openPart(PerspectiveElement element, Part part) {
-	if (element.isSplit()) {
+	if (element instanceof PartSplit) {
 	    openPart(element.getElements().get(0), part);
-	} else {
-	    element.addElement(part);
+	} else if (element instanceof PartStack) {
+	    ((PartStack) element).openPart(part);
 	}
     }
 

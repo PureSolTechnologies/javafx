@@ -118,6 +118,7 @@ public class PlotArea extends Canvas {
 	    }
 	    renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
 	}
+	plot.dataProperty().addListener(plotData -> draw());
     }
 
     private void draw() {
