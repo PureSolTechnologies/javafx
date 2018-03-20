@@ -16,6 +16,16 @@ public class FontDefinition implements Serializable {
 		Color.BLACK);
     }
 
+    public static FontDefinition valueOf(String string) {
+	String[] parts = string.split(",");
+	String family = parts[0];
+	double size = Double.parseDouble(parts[1]);
+	FontWeight weight = FontWeight.valueOf(parts[2]);
+	FontPosture posture = FontPosture.valueOf(parts[3]);
+	Color color = Color.valueOf(parts[4]);
+	return new FontDefinition(family, weight, size, posture, color);
+    }
+
     private final String family;
     private final FontWeight weight;
     private final double size;
@@ -58,13 +68,13 @@ public class FontDefinition implements Serializable {
     @Override
     public String toString() {
 	StringBuilder builder = new StringBuilder(family);
-	builder.append(", ");
+	builder.append(",");
 	builder.append(size);
-	builder.append("pt, ");
+	builder.append(",");
 	builder.append(weight.name());
-	builder.append(", ");
+	builder.append(",");
 	builder.append(posture.name());
-	builder.append(", ");
+	builder.append(",");
 	builder.append(color);
 	return builder.toString();
     }

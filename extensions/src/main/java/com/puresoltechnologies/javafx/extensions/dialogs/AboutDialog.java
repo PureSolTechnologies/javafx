@@ -1,6 +1,7 @@
 package com.puresoltechnologies.javafx.extensions.dialogs;
 
 import java.io.IOException;
+import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
@@ -14,6 +15,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
 public class AboutDialog extends Dialog<Void> {
@@ -38,30 +40,30 @@ public class AboutDialog extends Dialog<Void> {
 	setResizable(true);
 
 	tabPane = new TabPane();
-	tabPane.setSide(Side.BOTTOM);
+	tabPane.setSide(Side.TOP);
 	getDialogPane().setContent(tabPane);
 
-	Tab javaFX = new Tab("PureSol Technologies' JavaFX");
+	ServiceLoader<AboutDialogContribution> loader = ServiceLoader.load(AboutDialogContribution.class);
+	loader.stream().forEach(contributor -> {
+	    AboutDialogContribution contrib = contributor.get();
+	    Tab tab = new Tab(contrib.getName());
+	    if (contrib.getImage().isPresent()) {
+		tab.setGraphic(new ImageView(contrib.getImage().get()));
+	    }
+	    tab.setContent(contrib.getContent());
+	    tabPane.getTabs().add(tab);
+	});
+
+	Tab javaFX = new Tab("PST JavaFX");
 	javaFX.setClosable(false);
 	TextArea textArea = new TextArea();
 	textArea.setText("PureSol Technolofies' JavaFX\n" //
 		+ "(c) 2018 PureSol Technologies (http://puresol-technologies.com)\n\n" //
-		+ "License: Apache License, Version 2.0");
+		+ "License: Apache License, Version 2.0\n\n" //
+		+ "This software incorporates FatCow \"Farm-Fresh Web Icons\" (http://www.fatcow.com/free-icons).");
 	javaFX.setContent(textArea);
 
-	Tab thirdParty = new Tab("3rd Party Contributions");
-	thirdParty.setClosable(false);
-	TextArea textArea2 = new TextArea();
-	thirdParty.setContent(textArea2);
-
-	Tab licenseTexts = new Tab("Licenses");
-	licenseTexts.setClosable(false);
-	TabPane licensesPane = new TabPane();
-	licensesPane.setSide(Side.LEFT);
-	licensesPane.getTabs().addAll(new Tab("Apache License\nVersion 2.0"), new Tab("BSD License\n Version 3.0"));
-	licenseTexts.setContent(licensesPane);
-
-	tabPane.getTabs().addAll(javaFX, thirdParty, licenseTexts);
+	tabPane.getTabs().add(javaFX);
 
 	ButtonType buttonTypeOk = new ButtonType("OK", ButtonData.OK_DONE);
 	ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);

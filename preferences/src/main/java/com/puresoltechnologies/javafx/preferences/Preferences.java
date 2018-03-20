@@ -1,13 +1,15 @@
 package com.puresoltechnologies.javafx.preferences;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.nio.charset.Charset;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.extensions.properties.PropertyDefinition;
 
@@ -105,12 +107,17 @@ public class Preferences {
 	if (!file.exists()) {
 	    return null;
 	}
-	try (FileInputStream fileInputStream = new FileInputStream(file);
-		ObjectInputStream inputStream = new ObjectInputStream(fileInputStream)) {
-	    @SuppressWarnings("unchecked")
-	    T t = (T) inputStream.readObject();
-	    return t;
-	} catch (IOException | ClassNotFoundException e) {
+	PreferencesSerializer<T> serializer = findSerializer(definition);
+	try (FileInputStream fileInputStream = new FileInputStream(file)) {
+	    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+	    byte[] buffer = new byte[256];
+	    int size = -1;
+	    while ((size = fileInputStream.read(buffer)) != -1) {
+		byteArrayOutputStream.write(buffer, 0, size);
+	    }
+	    String string = new String(byteArrayOutputStream.toByteArray(), Charset.defaultCharset());
+	    return serializer.deserialize(definition, string);
+	} catch (IOException e) {
 	    return null;
 	}
     }
@@ -135,11 +142,27 @@ public class Preferences {
 	if (file.exists()) {
 	    file.delete();
 	}
-	try (FileOutputStream fileOutputStream = new FileOutputStream(file);
-		ObjectOutputStream inputStream = new ObjectOutputStream(fileOutputStream)) {
-	    inputStream.writeObject(value);
+	PreferencesSerializer<T> serializer = findSerializer(definition);
+	try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+	    String serialized = serializer.serialize(value);
+	    fileOutputStream.write(serialized.getBytes(Charset.defaultCharset()));
 	} catch (IOException e) {
 	    // intentionally left empty
 	}
+    }
+
+    private <T> PreferencesSerializer<T> findSerializer(PropertyDefinition<T> definition) {
+	@SuppressWarnings("rawtypes")
+	ServiceLoader<PreferencesSerializer> loader = ServiceLoader.load(PreferencesSerializer.class);
+	@SuppressWarnings("rawtypes")
+	Iterator<PreferencesSerializer> iterator = loader.iterator();
+	while (iterator.hasNext()) {
+	    @SuppressWarnings("unchecked")
+	    PreferencesSerializer<T> next = iterator.next();
+	    if (next.isSuitable(definition)) {
+		return next;
+	    }
+	}
+	return null;
     }
 }
