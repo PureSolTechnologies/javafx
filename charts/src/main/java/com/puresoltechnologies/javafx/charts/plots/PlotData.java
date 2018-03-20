@@ -25,14 +25,12 @@ public interface PlotData<X extends Comparable<X>, Y extends Comparable<Y>, D> {
     /**
      * Returns the data to be plotted.
      * 
-     * @return
+     * @return A {@link List} of values is returned.
      */
     public List<D> getData();
 
     /**
      * Returns the data to be plotted.
-     * 
-     * @return
      */
     public void setData(List<D> data);
 

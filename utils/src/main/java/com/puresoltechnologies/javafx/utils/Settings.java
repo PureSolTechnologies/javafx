@@ -16,12 +16,12 @@ public class Settings {
 
     /**
      * This method returns the method direcctory as defined in
-     * {@link #SETTINGS_DIRECTORY_NAME} ({@value #SETTINGS_DIRECTORY_NAME}). This
-     * method also assures the availabiliy by checking and creating the neded
-     * directories.
+     * {@link #SETTINGS_DIRECTORY_NAME}. This method also assures the availabiliy by
+     * checking and creating the neded directories.
      * 
-     * @return
+     * @return A {@link File} is returned pointing to the settings directory.
      * @throws IOException
+     *             in case of I/O issues.
      */
     public static File getDirectory() throws IOException {
 	File settingsDirectory = new File(SETTINGS_DIRECTORY_NAME);
