@@ -47,4 +47,10 @@ public class NominalAxisRenderer extends AbstractAxisRenderer<Object> {
 
     }
 
+    @Override
+    protected void updateMinMax() {
+	// TODO Auto-generated method stub
+
+    }
+
 }

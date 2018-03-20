@@ -22,26 +22,36 @@ import javafx.scene.text.TextAlignment;
 public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy MMM dd\nHH:mm");
-    private final Instant min;
-    private final Instant max;
+    private Instant min = null;
+    private Instant max = null;
 
     public InstantAxisRenderer(Canvas canvas, Axis<Instant> axis, List<Plot<?, ?, ?>> plots) {
 	super(canvas, axis, plots);
+    }
+
+    @Override
+    protected void updateMinMax() {
+	Axis<Instant> axis = getAxis();
+	List<Plot<?, ?, ?>> plots = getPlots();
 	Instant min = null;
 	Instant max = null;
 	switch (axis.getAxisType()) {
 	case X:
 	case ALT_X:
 	    for (Plot<?, ?, ?> plot : plots) {
-		min = calcMin(min, (Instant) plot.getData().getMinX());
-		max = calcMax(max, (Instant) plot.getData().getMaxX());
+		if (plot.hasData()) {
+		    min = calcMin(min, (Instant) plot.getMinX());
+		    max = calcMax(max, (Instant) plot.getMaxX());
+		}
 	    }
 	    break;
 	case Y:
 	case ALT_Y:
 	    for (Plot<?, ?, ?> plot : plots) {
-		min = calcMin(min, (Instant) plot.getData().getMinY());
-		max = calcMax(max, (Instant) plot.getData().getMaxY());
+		if (plot.hasData()) {
+		    min = calcMin(min, (Instant) plot.getMinY());
+		    max = calcMax(max, (Instant) plot.getMaxY());
+		}
 	    }
 	    break;
 	default:
@@ -97,7 +107,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 	case X:
 	case ALT_X:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
-		for (Object value : plot.getData().getData()) {
+		for (Object value : plot.getData()) {
 		    Instant i = ((AbstractPlot<Instant, ?, Object>) plot).getAxisX(value);
 		    possibleTicks.add(i);
 		}
@@ -106,7 +116,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 	case Y:
 	case ALT_Y:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
-		for (Object value : plot.getData().getData()) {
+		for (Object value : plot.getData()) {
 		    Instant i = ((AbstractPlot<?, Instant, Object>) plot).getAxisY(value);
 		    possibleTicks.add(i);
 		}

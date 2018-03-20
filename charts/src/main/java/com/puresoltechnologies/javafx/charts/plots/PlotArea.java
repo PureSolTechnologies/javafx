@@ -14,6 +14,7 @@ import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -118,7 +119,12 @@ public class PlotArea extends Canvas {
 	    }
 	    renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
 	}
-	plot.dataProperty().addListener(plotData -> draw());
+	plot.dataProperty().addListener(new ListChangeListener<Object>() {
+	    @Override
+	    public void onChanged(Change<?> change) {
+		draw();
+	    }
+	});
     }
 
     private void draw() {
@@ -192,10 +198,12 @@ public class PlotArea extends Canvas {
 
     private void drawPlots(Rectangle plottingArea) {
 	for (Plot<?, ?, ?> plot : plots) {
-	    PlotRenderer plotRenderer = ((AbstractPlot<?, ?, ?>) plot).getGenericRenderer(this,
-		    renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
-	    plotRenderer.renderTo(plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
-		    plottingArea.getHeight());
+	    if (plot.hasData()) {
+		PlotRenderer plotRenderer = ((AbstractPlot<?, ?, ?>) plot).getGenericRenderer(this,
+			renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
+		plotRenderer.renderTo(plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
+			plottingArea.getHeight());
+	    }
 	}
     }
 

@@ -15,12 +15,11 @@ import org.testfx.framework.junit.ApplicationTest;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.TimeSeriesAxis;
-import com.puresoltechnologies.javafx.charts.plots.PlotData;
 import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCPlot;
-import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCPlotData;
 import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCValue;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -36,15 +35,18 @@ public class OHLCPlotIT extends ApplicationTest {
 	Preferences.shutdown();
     }
 
-    ChartView chartView;
+    private ChartView chartView;
+    private OHLCPlot<Double> ohlcPlot;
+    private List<OHLCValue<Double>> plotData;
 
     @Override
     public void start(Stage stage) {
 	chartView = new ChartView();
 	TimeSeriesAxis xAxis = new TimeSeriesAxis("Timestamp", AxisType.X);
 	NumberAxis<Double> yAxis = new NumberAxis<>("Exchange Rate", null, AxisType.Y, Double.class);
-	PlotData<Instant, Double, OHLCValue<Double>> ohlcData = generateTestOHLCData();
-	OHLCPlot<Double> ohlcPlot = new OHLCPlot<Double>("OHLCPlot", xAxis, yAxis, ohlcData);
+	plotData = new ArrayList<>();
+
+	ohlcPlot = new OHLCPlot<Double>("OHLCPlot", xAxis, yAxis, plotData);
 	chartView.setTitle("Plot Test");
 	chartView.setSubTitle("OHLC Data");
 	chartView.addPlot(ohlcPlot);
@@ -55,9 +57,7 @@ public class OHLCPlotIT extends ApplicationTest {
 	stage.show();
     }
 
-    private PlotData<Instant, Double, OHLCValue<Double>> generateTestOHLCData() {
-	OHLCPlotData<Double> testData = new OHLCPlotData<>();
-
+    private List<OHLCValue<Double>> generateTestOHLCData() {
 	Instant begin = Instant.ofEpochSecond(1483228800);
 	Instant end = Instant.ofEpochSecond(1514764800);
 	List<OHLCValue<Double>> data = new ArrayList<>();
@@ -74,13 +74,15 @@ public class OHLCPlotIT extends ApplicationTest {
 	    days += 1.0;
 	    current = next;
 	}
-	testData.setData(data);
 
-	return testData;
+	return data;
     }
 
     @Test
     public void testPerspectiveDialog() throws InterruptedException {
+	Thread.sleep(1000);
+	plotData = generateTestOHLCData();
+	Platform.runLater(() -> ohlcPlot.setData(plotData));
 	Thread.sleep(1000);
     }
 

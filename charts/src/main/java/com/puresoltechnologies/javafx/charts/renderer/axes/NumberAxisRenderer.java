@@ -17,26 +17,36 @@ import javafx.scene.text.TextAlignment;
 
 public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 
-    private final double min;
-    private final double max;
+    private Double min = null;
+    private Double max = null;
 
     public NumberAxisRenderer(Canvas canvas, Axis<Number> axis, List<Plot<?, ?, ?>> plots) {
 	super(canvas, axis, plots);
+    }
+
+    @Override
+    protected void updateMinMax() {
+	Axis<Number> axis = getAxis();
+	List<Plot<?, ?, ?>> plots = getPlots();
 	Double min = null;
 	Double max = null;
 	switch (axis.getAxisType()) {
 	case X:
 	case ALT_X:
 	    for (Plot<?, ?, ?> plot : plots) {
-		min = calcMin(min, ((Number) plot.getData().getMinX()).doubleValue());
-		max = calcMax(max, ((Number) plot.getData().getMaxX()).doubleValue());
+		if (plot.hasData()) {
+		    min = calcMin(min, ((Number) plot.getMinX()).doubleValue());
+		    max = calcMax(max, ((Number) plot.getMaxX()).doubleValue());
+		}
 	    }
 	    break;
 	case Y:
 	case ALT_Y:
 	    for (Plot<?, ?, ?> plot : plots) {
-		min = calcMin(min, ((Number) plot.getData().getMinY()).doubleValue());
-		max = calcMax(max, ((Number) plot.getData().getMaxY()).doubleValue());
+		if (plot.hasData()) {
+		    min = calcMin(min, ((Number) plot.getMinY()).doubleValue());
+		    max = calcMax(max, ((Number) plot.getMaxY()).doubleValue());
+		}
 	    }
 	    break;
 	default:
@@ -47,11 +57,6 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     }
 
     @Override
-    public double calculatePos(double x, double y, double width, double height, Number value) {
-	return super.calculatePos(x, y, width, height, min, max, value.doubleValue());
-    }
-
-    @Override
     public Double getMin() {
 	return min;
     }
@@ -59,6 +64,11 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     @Override
     public Double getMax() {
 	return max;
+    }
+
+    @Override
+    public double calculatePos(double x, double y, double width, double height, Number value) {
+	return super.calculatePos(x, y, width, height, min, max, value.doubleValue());
     }
 
     @Override
@@ -79,7 +89,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	case X:
 	case ALT_X:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
-		for (Object value : plot.getData().getData()) {
+		for (Object value : plot.getData()) {
 		    Double i = ((AbstractPlot<Double, ?, Object>) plot).getAxisX(value);
 		    possibleTicks.add(i);
 		}
@@ -88,7 +98,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	case Y:
 	case ALT_Y:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
-		for (Object value : plot.getData().getData()) {
+		for (Object value : plot.getData()) {
 		    Double i = ((AbstractPlot<?, Double, Object>) plot).getAxisY(value);
 		    possibleTicks.add(i);
 		}

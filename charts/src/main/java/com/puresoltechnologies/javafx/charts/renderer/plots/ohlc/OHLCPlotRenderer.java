@@ -3,7 +3,6 @@ package com.puresoltechnologies.javafx.charts.renderer.plots.ohlc;
 import java.time.Instant;
 
 import com.puresoltechnologies.javafx.charts.plots.Plot;
-import com.puresoltechnologies.javafx.charts.plots.PlotData;
 import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCValue;
 import com.puresoltechnologies.javafx.charts.preferences.OHLCPlotProperties;
 import com.puresoltechnologies.javafx.charts.renderer.axes.InstantAxisRenderer;
@@ -35,10 +34,9 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>>
 	InstantAxisRenderer xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
 	Plot<Instant, Y, OHLCValue<Y>> plot = getPlot();
-	PlotData<Instant, Y, OHLCValue<Y>> data = plot.getData();
 	gc.setStroke(Color.BLACK);
 	gc.setLineWidth(1.0);
-	for (OHLCValue<Y> value : data.getData()) {
+	for (OHLCValue<Y> value : plot.getData()) {
 	    double startX = xAxisRenderer.calculatePos(x, y, width, height, value.getStart());
 	    double endX = xAxisRenderer.calculatePos(x, y, width, height, value.getEnd());
 	    double openY = yAxisRenderer.calculatePos(x, y, width, height, value.getOpen());

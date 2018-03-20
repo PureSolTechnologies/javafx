@@ -11,6 +11,7 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.ListChangeListener;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -38,7 +39,16 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	super(canvas);
 	this.axis = axis;
 	this.plots = plots;
+	plots.forEach(plot -> plot.dataProperty().addListener(new ListChangeListener<Object>() {
+	    @Override
+	    public void onChanged(Change<? extends Object> arg0) {
+		updateMinMax();
+	    }
+	}));
+	updateMinMax();
     }
+
+    protected abstract void updateMinMax();
 
     public final Axis<T> getAxis() {
 	return axis;
@@ -102,11 +112,14 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	GraphicsContext gc = getCanvas().getGraphicsContext2D();
 	clearAxisArea(gc, x, y, width, height);
 	drawAxis(gc, x, y, width, height);
-	drawTicks(gc, x, y, width, height);
+	if (hasData()) {
+	    drawTicks(gc, x, y, width, height);
+	}
 	renderAxisTitle(gc, x, y, width, height);
-	drawAxis(gc, x, y, width, height);
-	drawTicks(gc, x, y, width, height);
-	renderAxisTitle(gc, x, y, width, height);
+    }
+
+    private boolean hasData() {
+	return (getMin() != null) && (getMax() != null);
     }
 
     private void clearAxisArea(GraphicsContext gc, double x, double y, double width, double height) {

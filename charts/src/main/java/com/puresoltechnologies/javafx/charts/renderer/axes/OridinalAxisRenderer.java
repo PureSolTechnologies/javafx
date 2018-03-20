@@ -46,4 +46,10 @@ public class OridinalAxisRenderer extends AbstractAxisRenderer<Comparable<Object
 	// TODO Auto-generated method stub
     }
 
+    @Override
+    protected void updateMinMax() {
+	// TODO Auto-generated method stub
+
+    }
+
 }

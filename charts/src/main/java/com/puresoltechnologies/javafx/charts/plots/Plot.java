@@ -1,8 +1,10 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
+import java.util.List;
+
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 
-import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ListProperty;
 
 /**
  * 
@@ -23,10 +25,28 @@ public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D> {
 
     public Axis<Y> getYAxis();
 
-    public ObjectProperty<PlotData<X, Y, D>> dataProperty();
+    public boolean hasData();
 
-    public PlotData<X, Y, D> getData();
+    public X getMinX();
 
-    public void setData(PlotData<X, Y, D> data);
+    public X getMaxX();
+
+    public Y getMinY();
+
+    public Y getMaxY();
+
+    /**
+     * Returns the data to be plotted.
+     * 
+     * @return A {@link List} of values is returned.
+     */
+    public List<D> getData();
+
+    /**
+     * Returns the data to be plotted.
+     */
+    public void setData(List<D> data);
+
+    public ListProperty<D> dataProperty();
 
 }
