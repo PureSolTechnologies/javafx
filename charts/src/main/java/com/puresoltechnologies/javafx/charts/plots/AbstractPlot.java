@@ -10,24 +10,25 @@ import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
 
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.scene.canvas.Canvas;
 
 public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> implements Plot<X, Y, D> {
 
-    private final String title;
+    private final StringProperty title = new SimpleStringProperty();
+    private final ListProperty<D> data = new SimpleListProperty<>();
     private final Axis<X> xAxis;
     private final Axis<Y> yAxis;
-    private final ListProperty<D> data = new SimpleListProperty<>();
     private X minX = null;
     private X maxX = null;
     private Y minY = null;
     private Y maxY = null;
 
-    public AbstractPlot(String title, Axis<X> xAxis, Axis<Y> yAxis) {
+    public AbstractPlot(Axis<X> xAxis, Axis<Y> yAxis) {
 	super();
-	this.title = title;
 	this.xAxis = xAxis;
 	if ((xAxis.getAxisType() != AxisType.X) //
 		&& (xAxis.getAxisType() != AxisType.ALT_X)) {
@@ -46,6 +47,11 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 	});
     }
 
+    public AbstractPlot(String title, Axis<X> xAxis, Axis<Y> yAxis) {
+	this(xAxis, yAxis);
+	this.title.set(title);
+    }
+
     public AbstractPlot(String title, Axis<X> xAxis, Axis<Y> yAxis, List<D> data) {
 	this(title, xAxis, yAxis);
 	setData(data);
@@ -62,6 +68,16 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 
     @Override
     public final String getTitle() {
+	return title.get();
+    }
+
+    @Override
+    public final void setTitle(String title) {
+	this.title.set(title);
+    }
+
+    @Override
+    public final StringProperty titleProperty() {
 	return title;
     }
 

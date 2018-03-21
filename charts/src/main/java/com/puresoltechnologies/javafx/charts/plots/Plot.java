@@ -5,6 +5,7 @@ import java.util.List;
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 
 import javafx.beans.property.ListProperty;
+import javafx.beans.property.StringProperty;
 
 /**
  * 
@@ -20,6 +21,10 @@ import javafx.beans.property.ListProperty;
 public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D> {
 
     public String getTitle();
+
+    public void setTitle(String title);
+
+    public StringProperty titleProperty();
 
     public Axis<X> getXAxis();
 
