@@ -29,12 +29,7 @@ public class PartSplit extends AbstractPerspectiveElement {
     }
 
     @Override
-    public String getId() {
-	return splitPane.getId();
-    }
-
-    @Override
-    public List<PerspectiveElement> getElements() {
+    public final List<PerspectiveElement> getElements() {
 	return elements;
     }
 
@@ -45,7 +40,7 @@ public class PartSplit extends AbstractPerspectiveElement {
     }
 
     @Override
-    public void addElement(PerspectiveElement element) {
+    public final void addElement(PerspectiveElement element) {
 	if (elements.size() >= 2) {
 	    throw new IllegalStateException("More than two elements are not allowed in a split.");
 	}
@@ -55,12 +50,12 @@ public class PartSplit extends AbstractPerspectiveElement {
     }
 
     @Override
-    public void removeElement(PerspectiveElement element) {
+    public final void removeElement(PerspectiveElement element) {
 	removeElement(element.getId());
     }
 
     @Override
-    public void removeElement(String id) {
+    public final void removeElement(UUID id) {
 	Iterator<PerspectiveElement> items = elements.iterator();
 	while (items.hasNext()) {
 	    PerspectiveElement item = items.next();
@@ -72,7 +67,7 @@ public class PartSplit extends AbstractPerspectiveElement {
     }
 
     @Override
-    protected void setPerspectiveHandler(PerspectiveHandler perspectiveHandler) {
+    protected final void setPerspectiveHandler(PerspectiveHandler perspectiveHandler) {
 	super.setPerspectiveHandler(perspectiveHandler);
 	for (PerspectiveElement element : elements) {
 	    if (element instanceof PartSplit) {
@@ -84,21 +79,16 @@ public class PartSplit extends AbstractPerspectiveElement {
     }
 
     @Override
-    public SplitPane getContent() {
+    public final SplitPane getContent() {
 	return splitPane;
     }
 
-    public double getDividerPosition() {
+    public final double getDividerPosition() {
 	return splitPane.getDividerPositions()[0];
     }
 
-    public void setDividerPosition(double positions) {
+    public final void setDividerPosition(double positions) {
 	splitPane.setDividerPosition(0, positions);
-    }
-
-    @Override
-    public boolean isSplit() {
-	return true;
     }
 
 }

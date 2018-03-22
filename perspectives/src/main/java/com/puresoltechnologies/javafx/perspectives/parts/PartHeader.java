@@ -25,12 +25,10 @@ import javafx.scene.paint.Color;
 
 public class PartHeader extends HBox {
 
-    private final Part part;
     private boolean active = false;
 
     public PartHeader(PartStack partStack, Part part) {
 	super();
-	this.part = part;
 	try {
 	    setManaged(true);
 	    setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
@@ -42,7 +40,7 @@ public class PartHeader extends HBox {
 		getChildren().add(imageView);
 		setMargin(imageView, new Insets(2.0));
 	    }
-	    Label label = new Label(part.getName());
+	    Label label = new Label(part.getTitle());
 	    getChildren().add(label);
 	    setMargin(label, new Insets(2.0));
 

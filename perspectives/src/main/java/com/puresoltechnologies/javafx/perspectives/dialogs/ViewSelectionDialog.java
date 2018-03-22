@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
-import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
+import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
@@ -23,7 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class ViewSelectionDialog extends Dialog<ViewerPart> {
+public class ViewSelectionDialog extends Dialog<Part> {
 
     private static final Image iconSmall;
     private static final Image iconBig;
@@ -45,15 +46,15 @@ public class ViewSelectionDialog extends Dialog<ViewerPart> {
 	stage.getIcons().addAll(iconSmall, iconBig);
 	setResizable(true);
 
-	ListView<ViewerPart> listView = new ListView<>();
+	ListView<Part> listView = new ListView<>();
 	listView.setEditable(false);
 	listView.setCellFactory(p -> {
-	    ListCell<ViewerPart> cell = new ListCell<>() {
+	    ListCell<Part> cell = new ListCell<>() {
 		@Override
-		protected void updateItem(ViewerPart t, boolean bln) {
+		protected void updateItem(Part t, boolean bln) {
 		    super.updateItem(t, bln);
 		    if (t != null) {
-			setText(t.getName());
+			setText(t.getTitle());
 			Optional<Image> image = t.getImage();
 			if (image.isPresent()) {
 			    setGraphic(new ImageView(image.get()));
@@ -63,7 +64,7 @@ public class ViewSelectionDialog extends Dialog<ViewerPart> {
 	    };
 	    cell.setOnMouseClicked(event -> {
 		if (event.getClickCount() == 2 && (!cell.isEmpty())) {
-		    ViewerPart viewer = cell.getItem();
+		    Part viewer = cell.getItem();
 		    setResult(viewer);
 		    close();
 		}
@@ -88,14 +89,16 @@ public class ViewSelectionDialog extends Dialog<ViewerPart> {
 
     }
 
-    private void fillListView(ListView<ViewerPart> listView) {
+    private void fillListView(ListView<Part> listView) {
 	FXThreads.runAsync(() -> {
-	    ServiceLoader<ViewerPart> perspectives = ServiceLoader.load(ViewerPart.class);
-	    List<ViewerPart> items = new ArrayList<>();
-	    perspectives.forEach(p -> {
-		items.add(p);
-	    });
-	    Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
+	    ServiceLoader<Part> perspectives = ServiceLoader.load(Part.class);
+	    List<Part> items = new ArrayList<>();
+	    perspectives.stream() //
+		    .filter(p -> p.get().getOpenMode() == PartOpenMode.AUTO_AND_MANUAL) //
+		    .forEach(p -> {
+			items.add(p.get());
+		    });
+	    Collections.sort(items, (l, r) -> l.getTitle().compareTo(r.getTitle()));
 	    FXThreads.runOnFXThread(() -> listView.setItems(FXCollections.observableArrayList(items)));
 	});
     }

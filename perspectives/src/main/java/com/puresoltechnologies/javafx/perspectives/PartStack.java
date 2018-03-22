@@ -26,7 +26,6 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.DragEvent;
-import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -46,7 +45,7 @@ public class PartStack extends AbstractPerspectiveElement {
     private final PartHeaderToolBar toolBar;
     private final HBox headerToolBar;
     private final List<Part> parts = new ArrayList<>();
-    private final Map<String, PartHeader> headerButtons = new HashMap<>();
+    private final Map<UUID, PartHeader> headerButtons = new HashMap<>();
     private final BorderPane borderPane;
 
     public PartStack() {
@@ -118,8 +117,6 @@ public class PartStack extends AbstractPerspectiveElement {
 	/* data dropped */
 	ObservableList<Node> children = borderPane.getChildren();
 	children.remove(children.size() - 1);
-	/* if there is a string data on dragboard, read it and use it */
-	Dragboard db = event.getDragboard();
 	boolean success = false;
 	if (event.getDragboard().hasContent(PartDragDataFormat.get())) {
 	    double width = borderPane.getWidth();
@@ -141,20 +138,15 @@ public class PartStack extends AbstractPerspectiveElement {
 		    (1.0 - 2.0 * DRAG_EDGE_FRACTION) * width, (1.0 - 2.0 * DRAG_EDGE_FRACTION) * height);
 	    PartDragData dragData = (PartDragData) event.getDragboard().getContent(PartDragDataFormat.get());
 	    if (top.contains(event.getX(), event.getY())) {
-		getPerspectiveHandler().movePartToNewTop(dragData.getPartStackId(), dragData.getPartId(),
-			borderPane.getId());
+		getPerspectiveHandler().movePartToNewTop(dragData.getPartStackId(), dragData.getPartId(), getId());
 	    } else if (right.contains(event.getX(), event.getY())) {
-		getPerspectiveHandler().movePartToNewRight(dragData.getPartStackId(), dragData.getPartId(),
-			borderPane.getId());
+		getPerspectiveHandler().movePartToNewRight(dragData.getPartStackId(), dragData.getPartId(), getId());
 	    } else if (lower.contains(event.getX(), event.getY())) {
-		getPerspectiveHandler().movePartToNewLower(dragData.getPartStackId(), dragData.getPartId(),
-			borderPane.getId());
+		getPerspectiveHandler().movePartToNewLower(dragData.getPartStackId(), dragData.getPartId(), getId());
 	    } else if (left.contains(event.getX(), event.getY())) {
-		getPerspectiveHandler().movePartToNewLeft(dragData.getPartStackId(), dragData.getPartId(),
-			borderPane.getId());
+		getPerspectiveHandler().movePartToNewLeft(dragData.getPartStackId(), dragData.getPartId(), getId());
 	    } else if (innerRectangle.contains(event.getX(), event.getY())) {
-		getPerspectiveHandler().movePartToStack(dragData.getPartStackId(), dragData.getPartId(),
-			borderPane.getId());
+		getPerspectiveHandler().movePartToStack(dragData.getPartStackId(), dragData.getPartId(), getId());
 	    }
 
 	}
@@ -233,36 +225,31 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     @Override
-    public String getId() {
-	return borderPane.getId();
-    }
-
-    @Override
     public List<PerspectiveElement> getElements() {
 	return Collections.emptyList();
     }
 
-    public void openPart(Part part) {
+    public final void openPart(Part part) {
 	part.initialize();
 	addElement(part);
     }
 
-    public void closePart(Part part) {
+    public final void closePart(Part part) {
 	removeElement(part);
 	part.close();
     }
 
-    List<Part> getParts() {
+    final List<Part> getParts() {
 	return parts;
     }
 
     @Override
-    public BorderPane getContent() {
+    public final BorderPane getContent() {
 	return borderPane;
     }
 
     @Override
-    public void addElement(PerspectiveElement e) {
+    public final void addElement(PerspectiveElement e) {
 	if (!Part.class.isAssignableFrom(e.getClass())) {
 	    throw new IllegalArgumentException(
 		    "Part stacks can only contain parts. Type '" + e.getClass().getName() + "' is not supported.");
@@ -279,7 +266,7 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     @Override
-    public void removeElement(String partId) {
+    public final void removeElement(UUID partId) {
 	PartHeader header = headerButtons.get(partId);
 	toolBar.getItems().remove(header);
 	headerButtons.remove(partId);
@@ -305,13 +292,13 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     @Override
-    public void removeElement(PerspectiveElement element) {
+    public final void removeElement(PerspectiveElement element) {
 	removeElement(element.getId());
     }
 
-    public void setActive(String partId) {
+    public final void setActive(UUID partId) {
 	headerToolBar.getChildren().clear();
-	if ((partId != null) && (!partId.isEmpty())) {
+	if (partId != null) {
 	    Iterator<Part> iterator = parts.iterator();
 	    while (iterator.hasNext()) {
 		Part part = iterator.next();
@@ -338,11 +325,6 @@ public class PartStack extends AbstractPerspectiveElement {
 	    borderPane.setCenter(null);
 	    getPerspectiveHandler().removeEmptyElements();
 	}
-    }
-
-    @Override
-    public boolean isSplit() {
-	return false;
     }
 
     public boolean hasParts() {

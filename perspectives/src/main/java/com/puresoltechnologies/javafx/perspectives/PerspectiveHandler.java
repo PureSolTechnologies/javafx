@@ -3,10 +3,11 @@ package com.puresoltechnologies.javafx.perspectives;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.utils.FXThreads;
 
-import javafx.application.Platform;
 import javafx.geometry.Orientation;
 
 class PerspectiveHandler {
@@ -18,17 +19,17 @@ class PerspectiveHandler {
 	this.perspective = perspective;
     }
 
-    private Part findPart(String partId) {
+    private Part findPart(UUID partId) {
 	return findPart(perspective, partId);
     }
 
-    private Part findPart(PerspectiveElement parent, String partId) {
+    private Part findPart(PerspectiveElement parent, UUID partId) {
 	for (PerspectiveElement element : parent.getElements()) {
 	    Part part = null;
 	    if (element instanceof PartSplit) {
 		part = findPart(element, partId);
 	    } else if (element instanceof PartStack) {
-		part = findPart((PartStack) element, partId);
+		part = findPart(element, partId);
 	    }
 	    if (part != null) {
 		return part;
@@ -37,7 +38,7 @@ class PerspectiveHandler {
 	return null;
     }
 
-    private Part findPart(PartStack partStack, String partId) {
+    private Part findPart(PartStack partStack, UUID partId) {
 	for (Part part : partStack.getParts()) {
 	    if (partId.equals(part.getId())) {
 		return part;
@@ -46,11 +47,11 @@ class PerspectiveHandler {
 	return null;
     }
 
-    private PerspectiveElement findElement(String stackId) {
+    private PerspectiveElement findElement(UUID stackId) {
 	return findPartStack(perspective, stackId);
     }
 
-    private PerspectiveElement findPartStack(PerspectiveElement parent, String stackId) {
+    private PerspectiveElement findPartStack(PerspectiveElement parent, UUID stackId) {
 	for (PerspectiveElement element : parent.getElements()) {
 	    if (element instanceof PartSplit) {
 		PerspectiveElement partStack = findPartStack(element, stackId);
@@ -67,11 +68,11 @@ class PerspectiveHandler {
 	return null;
     }
 
-    public void movePartToStack(String oldStackId, String partId, String newStackId) {
+    public void movePartToStack(UUID oldStackId, UUID partId, UUID newStackId) {
 	PerspectiveElement oldPartStack = findElement(oldStackId);
 	Part part = findPart(partId);
 	PerspectiveElement newPartStack = findElement(newStackId);
-	Platform.runLater(() -> {
+	FXThreads.runAsync(() -> {
 	    oldPartStack.removeElement(part);
 	    newPartStack.addElement(part);
 	    removeEmptyElements();
@@ -123,7 +124,6 @@ class PerspectiveHandler {
     }
 
     private void printElements(PerspectiveElement parent, int depth) {
-	List<String> ids = new ArrayList<>();
 	for (PerspectiveElement element : parent.getElements()) {
 	    if (element instanceof PartSplit) {
 		PartSplit partSplit = (PartSplit) element;
@@ -134,33 +134,31 @@ class PerspectiveHandler {
 		System.out.println(depth + ": " + partStack);
 	    }
 	}
-	ids.forEach(id -> parent.removeElement(id));
     }
 
-    public void movePartToNewTop(String partStackId, String partId, String id) {
+    public void movePartToNewTop(UUID partStackId, UUID partId, UUID id) {
 	movePartToNew(partStackId, partId, id, Orientation.VERTICAL, true);
     }
 
-    public void movePartToNewRight(String partStackId, String partId, String id) {
+    public void movePartToNewRight(UUID partStackId, UUID partId, UUID id) {
 	movePartToNew(partStackId, partId, id, Orientation.HORIZONTAL, false);
     }
 
-    public void movePartToNewLower(String partStackId, String partId, String id) {
+    public void movePartToNewLower(UUID partStackId, UUID partId, UUID id) {
 	movePartToNew(partStackId, partId, id, Orientation.VERTICAL, false);
     }
 
-    public void movePartToNewLeft(String partStackId, String partId, String id) {
+    public void movePartToNewLeft(UUID partStackId, UUID partId, UUID id) {
 	movePartToNew(partStackId, partId, id, Orientation.HORIZONTAL, true);
     }
 
-    private void movePartToNew(String oldStackId, String partId, String newStackId, Orientation orientation,
-	    boolean first) {
+    private void movePartToNew(UUID oldStackId, UUID partId, UUID newStackId, Orientation orientation, boolean first) {
 	PerspectiveElement oldPartStack = findElement(oldStackId);
 	Part part = findPart(partId);
 	PerspectiveElement selectedPartStack = findElement(newStackId);
 	PerspectiveElement selectedPartSplit = selectedPartStack.getParent();
 
-	Platform.runLater(() -> {
+	FXThreads.runAsync(() -> {
 	    PartSplit newPartSplit = new PartSplit(orientation);
 	    PartStack newPartStack = new PartStack();
 	    selectedPartSplit.removeElement(selectedPartStack);

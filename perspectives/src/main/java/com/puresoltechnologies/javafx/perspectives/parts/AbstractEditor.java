@@ -10,8 +10,8 @@ public abstract class AbstractEditor extends AbstractPart implements EditorPart 
 
     private static final long serialVersionUID = 3352125016364928485L;
 
-    public AbstractEditor(String name, boolean singleton) {
-	super(name, singleton);
+    public AbstractEditor(String title, PartOpenMode openMode) {
+	super(title, openMode);
     }
 
 }

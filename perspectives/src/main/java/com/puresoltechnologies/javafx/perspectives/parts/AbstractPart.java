@@ -2,65 +2,106 @@ package com.puresoltechnologies.javafx.perspectives.parts;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import com.puresoltechnologies.javafx.perspectives.PartStack;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveElement;
+
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
+import javafx.scene.image.Image;
 
 public abstract class AbstractPart implements Part {
 
     private static final long serialVersionUID = 1609387557187949696L;
 
     private PartStack parent = null;
-    private final String name;
-    private final boolean singleton;
+    private final UUID id = UUID.randomUUID();
+    private final StringProperty title = new SimpleStringProperty();
+    private final ObjectProperty<Image> image = new SimpleObjectProperty<>();
+    private final PartOpenMode openMode;
 
-    public AbstractPart(String name, boolean singleton) {
+    public AbstractPart(String title, PartOpenMode openMode) {
 	super();
-	this.name = name;
-	this.singleton = singleton;
+	this.title.set(title);
+	this.openMode = openMode;
     }
 
     @Override
-    public final String getName() {
-	return name;
+    public final UUID getId() {
+	return id;
     }
 
     @Override
-    public final boolean isSingleton() {
-	return singleton;
+    public final String getTitle() {
+	return title.get();
     }
 
     @Override
-    public PartStack getParent() {
+    public final void setTitle(String title) {
+	this.title.set(title);
+    }
+
+    @Override
+    public final StringProperty titleProperty() {
+	return title;
+    }
+
+    @Override
+    public final Optional<Image> getImage() {
+	return Optional.ofNullable(image.get());
+    }
+
+    @Override
+    public final void setImage(Image image) {
+	this.image.set(image);
+    }
+
+    @Override
+    public final ObjectProperty<Image> imageProperty() {
+	return image;
+    }
+
+    @Override
+    public final PartOpenMode getOpenMode() {
+	return openMode;
+    }
+
+    @Override
+    public final PartStack getParent() {
 	return parent;
     }
 
-    public void setParent(PartStack parent) {
+    public final void setParent(PartStack parent) {
 	this.parent = parent;
     }
 
     @Override
-    public List<PerspectiveElement> getElements() {
+    public final List<PerspectiveElement> getElements() {
 	return Collections.emptyList();
     }
 
     @Override
-    public void addElement(PerspectiveElement e) {
+    public final void addElement(PerspectiveElement e) {
 	throw new IllegalArgumentException("Parts cannot contain perspective elements.");
     }
 
     @Override
-    public void removeElement(String id) {
+    public final void removeElement(UUID id) {
 	throw new IllegalArgumentException("Parts cannot contain perspective elements.");
     }
 
     @Override
-    public void removeElement(PerspectiveElement element) {
+    public final void removeElement(PerspectiveElement element) {
 	throw new IllegalArgumentException("Parts cannot contain perspective elements.");
     }
 
     @Override
-    public boolean isSplit() {
-	return false;
+    public void manualInitialization() {
+	// Intentionally left empty, as this is an implementation which should be
+	// provided only in cases where it is needed.
     }
 }

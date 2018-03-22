@@ -1,11 +1,14 @@
 package com.puresoltechnologies.javafx.perspectives;
 
+import java.util.UUID;
+
 public abstract class AbstractPerspectiveElement implements PerspectiveElement {
 
     private static final long serialVersionUID = 2392435422868206813L;
 
     private PerspectiveElement parent = null;
     private PerspectiveHandler perspectiveHandler = null;
+    private final UUID id = UUID.randomUUID();
 
     public AbstractPerspectiveElement() {
 	super();
@@ -17,11 +20,16 @@ public abstract class AbstractPerspectiveElement implements PerspectiveElement {
     }
 
     @Override
-    public PerspectiveElement getParent() {
+    public final UUID getId() {
+	return id;
+    }
+
+    @Override
+    public final PerspectiveElement getParent() {
 	return parent;
     }
 
-    public void setParent(PerspectiveElement parent) {
+    public final void setParent(PerspectiveElement parent) {
 	this.parent = parent;
     }
 
@@ -29,11 +37,17 @@ public abstract class AbstractPerspectiveElement implements PerspectiveElement {
 	return perspectiveHandler;
     }
 
+    /**
+     * This method is not final, as children might need to overwrite it to propagate
+     * this setting to its children in a special way.
+     * 
+     * @param perspectiveHandler
+     */
     protected void setPerspectiveHandler(PerspectiveHandler perspectiveHandler) {
 	this.perspectiveHandler = perspectiveHandler;
     }
 
-    protected void setContext(PerspectiveElement element) {
+    protected final void setContext(PerspectiveElement element) {
 	if (element instanceof PartSplit) {
 	    ((PartSplit) element).setParent(this);
 	    ((PartSplit) element).setPerspectiveHandler(getPerspectiveHandler());

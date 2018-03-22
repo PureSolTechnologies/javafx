@@ -6,11 +6,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.dialogs.ViewSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
-import com.puresoltechnologies.javafx.perspectives.parts.ViewerPart;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
@@ -48,7 +48,7 @@ public class PerspectiveContainer extends BorderPane {
 	    updateOpenPerspectiveButton();
 
 	    ImageView watchWidowImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/watch_window.png");
-	    Button showViewButton = new Button("Show View...", watchWidowImage);
+	    Button showViewButton = new Button("Show Part...", watchWidowImage);
 	    showViewButton.setId("ShowViewButton");
 	    showViewButton.setContentDisplay(toolBarContentDisplay.get());
 
@@ -96,7 +96,7 @@ public class PerspectiveContainer extends BorderPane {
     }
 
     private void showView() {
-	Optional<ViewerPart> part = new ViewSelectionDialog().showAndWait();
+	Optional<Part> part = new ViewSelectionDialog().showAndWait();
 	if (part.isPresent()) {
 	    PerspectiveService.openPart(part.get());
 	}
@@ -188,7 +188,7 @@ public class PerspectiveContainer extends BorderPane {
 	return null;
     }
 
-    public void selectPerspective(String perspectiveId) {
+    public void selectPerspective(UUID perspectiveId) {
 	Iterator<Perspective> iterator = perspectives.iterator();
 	while (iterator.hasNext()) {
 	    Perspective perspective = iterator.next();

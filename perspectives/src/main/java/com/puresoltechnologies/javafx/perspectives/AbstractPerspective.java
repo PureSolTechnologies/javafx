@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.perspectives;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 
@@ -15,6 +16,7 @@ public abstract class AbstractPerspective implements Perspective {
     private BorderPane borderPane = null;
     private PerspectiveElement element = null;
 
+    private final UUID id = UUID.randomUUID();
     private final PerspectiveHandler perspectiveHandler;
     private final String name;
 
@@ -46,6 +48,11 @@ public abstract class AbstractPerspective implements Perspective {
     protected abstract PerspectiveElement createContent();
 
     @Override
+    public final UUID getId() {
+	return id;
+    }
+
+    @Override
     public final String getName() {
 	return name;
     }
@@ -70,18 +77,18 @@ public abstract class AbstractPerspective implements Perspective {
     }
 
     @Override
-    public PerspectiveElement getParent() {
+    public final PerspectiveElement getParent() {
 	// There is no parent for a perspective.
 	return null;
     }
 
     @Override
-    public List<PerspectiveElement> getElements() {
+    public final List<PerspectiveElement> getElements() {
 	return Arrays.asList(element);
     }
 
     @Override
-    public void addElement(PerspectiveElement e) {
+    public final void addElement(PerspectiveElement e) {
 	if (element != null) {
 	    throw new IllegalStateException("Root element was already set.");
 	}
@@ -91,7 +98,7 @@ public abstract class AbstractPerspective implements Perspective {
     }
 
     @Override
-    public void removeElement(String id) {
+    public final void removeElement(UUID id) {
 	if (id.equals(element.getId())) {
 	    element = null;
 	    borderPane.setCenter(null);
@@ -99,26 +106,21 @@ public abstract class AbstractPerspective implements Perspective {
     }
 
     @Override
-    public void removeElement(PerspectiveElement element) {
+    public final void removeElement(PerspectiveElement element) {
 	removeElement(element.getId());
     }
 
     @Override
-    public void openPart(Part part) {
+    public final void openPart(Part part) {
 	openPart(element, part);
     }
 
-    private void openPart(PerspectiveElement element, Part part) {
+    private final void openPart(PerspectiveElement element, Part part) {
 	if (element instanceof PartSplit) {
 	    openPart(element.getElements().get(0), part);
 	} else if (element instanceof PartStack) {
 	    ((PartStack) element).openPart(part);
 	}
-    }
-
-    @Override
-    public boolean isSplit() {
-	return false;
     }
 
 }
