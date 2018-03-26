@@ -93,6 +93,11 @@
 				<version>${streaming.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>io.reactivex.rxjava2</groupId>
+				<artifactId>rxjava</artifactId>
+				<version>2.1.12</version>
+			</dependency>
+			<dependency>
 				<groupId>org.testfx</groupId>
 				<artifactId>testfx-core</artifactId>
 				<version>${testfx.version}</version>
@@ -148,6 +153,13 @@
 						<knownLicense>
 							<name>The Apache Software License, Version 2.0</name>
 							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+						</knownLicense>
+						<knownLicense>
+							<name>CC0 1.0 Universal</name>
+							<url>https://creativecommons.org/publicdomain/zero/1.0/</url>
+							<aliases>
+								<aliase>CC0</aliase>
+							</aliases>
 						</knownLicense>
 					</knownLicenses>
 				</configuration>
@@ -323,6 +335,7 @@
 
 	<modules>
 		<module>utils</module>
+		<module>reactive</module>
 		<module>extensions</module>
 		<module>preferences</module>
 		<module>perspectives</module>
