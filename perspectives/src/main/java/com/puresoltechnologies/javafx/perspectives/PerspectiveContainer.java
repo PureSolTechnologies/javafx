@@ -9,7 +9,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
-import com.puresoltechnologies.javafx.perspectives.dialogs.ViewSelectionDialog;
+import com.puresoltechnologies.javafx.perspectives.dialogs.PartSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXThreads;
@@ -96,9 +96,10 @@ public class PerspectiveContainer extends BorderPane {
     }
 
     private void showView() {
-	Optional<Part> part = new ViewSelectionDialog().showAndWait();
+	Optional<Part> part = new PartSelectionDialog().showAndWait();
 	if (part.isPresent()) {
 	    PerspectiveService.openPart(part.get());
+	    part.get().manualInitialization();
 	}
     }
 

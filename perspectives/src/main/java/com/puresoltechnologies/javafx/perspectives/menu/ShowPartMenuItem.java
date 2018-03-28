@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
-import com.puresoltechnologies.javafx.perspectives.dialogs.ViewSelectionDialog;
+import com.puresoltechnologies.javafx.perspectives.dialogs.PartSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -41,9 +41,10 @@ public class ShowPartMenuItem extends MenuItem {
 
     private void initialize() {
 	setOnAction(event -> {
-	    Optional<Part> part = new ViewSelectionDialog().showAndWait();
+	    Optional<Part> part = new PartSelectionDialog().showAndWait();
 	    if (part.isPresent()) {
 		PerspectiveService.openPart(part.get());
+		part.get().manualInitialization();
 	    }
 	    event.consume();
 	});

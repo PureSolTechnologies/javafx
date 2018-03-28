@@ -24,7 +24,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
-public class ViewSelectionDialog extends Dialog<Part> {
+public class PartSelectionDialog extends Dialog<Part> {
 
     private static final Image iconSmall;
     private static final Image iconBig;
@@ -37,10 +37,10 @@ public class ViewSelectionDialog extends Dialog<Part> {
 	}
     }
 
-    public ViewSelectionDialog() {
+    public PartSelectionDialog() {
 	super();
-	setTitle("Views");
-	setHeaderText("Choose a view to be opened.");
+	setTitle("Parts");
+	setHeaderText("Choose a part to be opened.");
 	setGraphic(new ImageView(iconBig));
 	Stage stage = (Stage) getDialogPane().getScene().getWindow();
 	stage.getIcons().addAll(iconSmall, iconBig);
@@ -64,8 +64,8 @@ public class ViewSelectionDialog extends Dialog<Part> {
 	    };
 	    cell.setOnMouseClicked(event -> {
 		if (event.getClickCount() == 2 && (!cell.isEmpty())) {
-		    Part viewer = cell.getItem();
-		    setResult(viewer);
+		    Part part = cell.getItem();
+		    setResult(part);
 		    close();
 		}
 	    });
