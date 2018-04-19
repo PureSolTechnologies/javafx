@@ -1,6 +1,5 @@
 package com.puresoltechnologies.javafx.perspectives;
 
-import java.io.Serializable;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +12,7 @@ import javafx.scene.Node;
  * 
  * @author Rick-Rainer Ludwig
  */
-public interface PerspectiveElement extends Serializable {
+public interface PerspectiveElement {
 
     /**
      * This method returns a unique id.
