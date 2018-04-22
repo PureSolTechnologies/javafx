@@ -35,8 +35,6 @@ import javafx.scene.shape.Rectangle;
 
 public class PartStack extends AbstractPerspectiveElement {
 
-    private static final long serialVersionUID = -8205338293180406512L;
-
     private static final double DRAG_EDGE_FRACTION = 0.2;
 
     private static final ObjectProperty<ContentDisplay> toolBarContentDisplay = Preferences
@@ -249,18 +247,35 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     @Override
-    public final void addElement(PerspectiveElement e) {
-	if (!Part.class.isAssignableFrom(e.getClass())) {
-	    throw new IllegalArgumentException(
-		    "Part stacks can only contain parts. Type '" + e.getClass().getName() + "' is not supported.");
+    public final void addElement(PerspectiveElement element) {
+	if (!Part.class.isAssignableFrom(element.getClass())) {
+	    throw new IllegalArgumentException("Part stacks can only contain parts. Type '"
+		    + element.getClass().getName() + "' is not supported.");
 	}
-	Part part = (Part) e;
+	Part part = (Part) element;
 	PartHeader button = new PartHeader(this, part);
 	headerButtons.put(part.getId(), button);
 	parts.add(part);
 	FXThreads.proceedOnFXThread(() -> {
 	    ObservableList<Node> items = toolBar.getItems();
 	    items.add(items.size() - 1, button);
+	    setActive(part.getId());
+	});
+    }
+
+    @Override
+    public void addElement(int index, PerspectiveElement element) {
+	if (!Part.class.isAssignableFrom(element.getClass())) {
+	    throw new IllegalArgumentException("Part stacks can only contain parts. Type '"
+		    + element.getClass().getName() + "' is not supported.");
+	}
+	Part part = (Part) element;
+	PartHeader button = new PartHeader(this, part);
+	headerButtons.put(part.getId(), button);
+	parts.add(part);
+	FXThreads.proceedOnFXThread(() -> {
+	    ObservableList<Node> items = toolBar.getItems();
+	    items.add(index, button);
 	    setActive(part.getId());
 	});
     }

@@ -53,6 +53,16 @@ public interface PerspectiveElement {
     public void addElement(PerspectiveElement element);
 
     /**
+     * This method adds a new {@link PerspectiveElement} element to this element.
+     * 
+     * @param element
+     *            is the new element.
+     * @param index
+     *            is the index of the position where to add the element.
+     */
+    public void addElement(int index, PerspectiveElement element);
+
+    /**
      * This method removes the child with the corresponding id.
      * 
      * @param id

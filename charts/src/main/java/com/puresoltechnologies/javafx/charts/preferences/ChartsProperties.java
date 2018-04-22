@@ -40,6 +40,8 @@ public interface ChartsProperties {
 	    FontPosture.REGULAR, Color.BLACK);
     static final FontDefinition axisLabelFontDefault = new FontDefinition("SansSerif", FontWeight.NORMAL, 10.0,
 	    FontPosture.REGULAR, Color.BLACK);
+    static final FontDefinition dataLabelFontDefault = new FontDefinition("SansSerif", FontWeight.NORMAL, 10.0,
+	    FontPosture.REGULAR, Color.BLACK);
 
     public static final PropertyDefinition<FontDefinition> TITLE_FONT = new SimplePropertyDefinition<FontDefinition>(
 	    PROPERTY_BASE + ".title.font", "Chart Title Font", "Font to be used for chart titles.",
@@ -56,5 +58,9 @@ public interface ChartsProperties {
     public static final PropertyDefinition<FontDefinition> AXIS_LABEL_FONT = new SimplePropertyDefinition<FontDefinition>(
 	    PROPERTY_BASE + ".chart.axis.label.font", "Axis Label Font", "Font to be used for chart axis labels.",
 	    FontDefinition.class, axisLabelFontDefault);
+
+    public static final PropertyDefinition<FontDefinition> DATA_LABEL_FONT = new SimplePropertyDefinition<FontDefinition>(
+	    PROPERTY_BASE + ".chart.data.label.font", "Data Label Font", "Font to be used for chart data labels.",
+	    FontDefinition.class, dataLabelFontDefault);
 
 }

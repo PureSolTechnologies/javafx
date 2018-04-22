@@ -98,6 +98,11 @@ public abstract class AbstractPerspective implements Perspective {
     }
 
     @Override
+    public final void addElement(int index, PerspectiveElement e) {
+	addElement(e);
+    }
+
+    @Override
     public final void removeElement(UUID id) {
 	if (id.equals(element.getId())) {
 	    element = null;

@@ -12,6 +12,26 @@ import javafx.geometry.Orientation;
 
 class PerspectiveHandler {
 
+    private static class AddElement {
+	private final int index;
+	private final PerspectiveElement element;
+
+	public AddElement(int index, PerspectiveElement element) {
+	    super();
+	    this.index = index;
+	    this.element = element;
+	}
+
+	public int getIndex() {
+	    return index;
+	}
+
+	public PerspectiveElement getElement() {
+	    return element;
+	}
+
+    }
+
     private final AbstractPerspective perspective;
 
     public PerspectiveHandler(AbstractPerspective perspective) {
@@ -29,7 +49,7 @@ class PerspectiveHandler {
 	    if (element instanceof PartSplit) {
 		part = findPart(element, partId);
 	    } else if (element instanceof PartStack) {
-		part = findPart(element, partId);
+		part = findPart((PartStack) element, partId);
 	    }
 	    if (part != null) {
 		return part;
@@ -72,7 +92,7 @@ class PerspectiveHandler {
 	PerspectiveElement oldPartStack = findElement(oldStackId);
 	Part part = findPart(partId);
 	PerspectiveElement newPartStack = findElement(newStackId);
-	FXThreads.runAsync(() -> {
+	FXThreads.proceedOnFXThread(() -> {
 	    oldPartStack.removeElement(part);
 	    newPartStack.addElement(part);
 	    removeEmptyElements();
@@ -86,7 +106,7 @@ class PerspectiveHandler {
 
     private void removeEmptyElements(PerspectiveElement perspectiveElement) {
 	List<Runnable> removeIds = new ArrayList<>();
-	List<PerspectiveElement> addElements = new ArrayList<>();
+	List<AddElement> addElements = new ArrayList<>();
 	for (PerspectiveElement elements : perspectiveElement.getElements()) {
 	    if (elements instanceof PartSplit) {
 		PartSplit partSplit = (PartSplit) elements;
@@ -95,11 +115,12 @@ class PerspectiveHandler {
 		if (items.isEmpty()) {
 		    removeIds.add(() -> partSplit.getParent().removeElement(partSplit.getId()));
 		} else if (items.size() == 1) {
+		    int index = ((PartSplit) partSplit.getParent()).getIndex(partSplit.getId());
 		    removeIds.add(() -> {
 			partSplit.getParent().removeElement(partSplit.getId());
 		    });
 		    PerspectiveElement child = items.get(0);
-		    addElements.add(child);
+		    addElements.add(new AddElement(index, child));
 		}
 	    } else if (elements instanceof PartStack) {
 		PartStack partStack = (PartStack) elements;
@@ -110,10 +131,10 @@ class PerspectiveHandler {
 	}
 	removeIds.forEach(r -> r.run());
 	addElements.forEach(e -> {
-	    if (e instanceof PartSplit) {
-		perspectiveElement.addElement(e);
-	    } else if (e instanceof PartStack) {
-		perspectiveElement.addElement(e);
+	    if (e.getElement() instanceof PartSplit) {
+		perspectiveElement.addElement(e.getIndex(), e.getElement());
+	    } else if (e.getElement() instanceof PartStack) {
+		perspectiveElement.addElement(e.getIndex(), e.getElement());
 	    }
 	});
     }
@@ -132,6 +153,9 @@ class PerspectiveHandler {
 	    } else if (element instanceof PartStack) {
 		PartStack partStack = (PartStack) element;
 		System.out.println(depth + ": " + partStack);
+		for (Part part : partStack.getParts()) {
+		    System.out.println("   - " + part.getTitle());
+		}
 	    }
 	}
     }
@@ -153,12 +177,16 @@ class PerspectiveHandler {
     }
 
     private void movePartToNew(UUID oldStackId, UUID partId, UUID newStackId, Orientation orientation, boolean first) {
+	printElements();
 	PerspectiveElement oldPartStack = findElement(oldStackId);
 	Part part = findPart(partId);
+	if (part == null) {
+	    throw new IllegalStateException("Part with id '" + partId.toString() + "' to be moved could not be found.");
+	}
 	PerspectiveElement selectedPartStack = findElement(newStackId);
 	PerspectiveElement selectedPartSplit = selectedPartStack.getParent();
 
-	FXThreads.runAsync(() -> {
+	FXThreads.proceedOnFXThread(() -> {
 	    PartSplit newPartSplit = new PartSplit(orientation);
 	    PartStack newPartStack = new PartStack();
 	    selectedPartSplit.removeElement(selectedPartStack);

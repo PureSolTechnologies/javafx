@@ -90,6 +90,11 @@ public abstract class AbstractPart implements Part {
     }
 
     @Override
+    public void addElement(int index, PerspectiveElement element) {
+	throw new IllegalArgumentException("Parts cannot contain perspective elements.");
+    }
+
+    @Override
     public final void removeElement(UUID id) {
 	throw new IllegalArgumentException("Parts cannot contain perspective elements.");
     }

@@ -12,6 +12,6 @@ public class TreeChartView extends BorderPane {
     }
 
     public void setTreeData(TreeDataNode rootNode) {
-
+	area.setData(rootNode);
     }
 }

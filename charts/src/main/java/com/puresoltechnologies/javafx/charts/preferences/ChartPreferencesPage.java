@@ -25,6 +25,7 @@ public class ChartPreferencesPage implements PreferencesPage {
     private FontSelector subTitleFontSelector;
     private FontSelector axisTitleFontSelector;
     private FontSelector axisLabelFontSelector;
+    private FontSelector dataLabelFontSelector;
 
     @Override
     public String getName() {
@@ -79,14 +80,20 @@ public class ChartPreferencesPage implements PreferencesPage {
 	axisTitleFontSelector = new FontSelector();
 	GridPane.setConstraints(axisTitleFontSelector, 1, 5);
 
-	Label axisLabelFontLabel = new Label("Subtitle Font");
+	Label axisLabelFontLabel = new Label("Axis Label Font");
 	GridPane.setConstraints(axisLabelFontLabel, 0, 6);
 	axisLabelFontSelector = new FontSelector();
 	GridPane.setConstraints(axisLabelFontSelector, 1, 6);
 
+	Label dataLabelFontLabel = new Label("Data Label Font");
+	GridPane.setConstraints(dataLabelFontLabel, 0, 7);
+	dataLabelFontSelector = new FontSelector();
+	GridPane.setConstraints(dataLabelFontSelector, 1, 7);
+
 	gridPane.getChildren().addAll(backgroundColorLabel, backgroundColorPicker, axisColorLabel, axisColorPicker,
 		separator, titelFontLabel, titleFontSelector, subTitleLabel, subTitleFontSelector, axisTitleLabel,
-		axisTitleFontSelector, axisLabelFontLabel, axisLabelFontSelector);
+		axisTitleFontSelector, axisLabelFontLabel, axisLabelFontSelector, dataLabelFontLabel,
+		dataLabelFontSelector);
 	return gridPane;
     }
 
@@ -98,6 +105,7 @@ public class ChartPreferencesPage implements PreferencesPage {
 	subTitleFontSelector.setValue(ChartsProperties.SUBTITLE_FONT.getDefaultValue());
 	axisTitleFontSelector.setValue(ChartsProperties.AXIS_TITLE_FONT.getDefaultValue());
 	axisLabelFontSelector.setValue(ChartsProperties.AXIS_LABEL_FONT.getDefaultValue());
+	dataLabelFontSelector.setValue(ChartsProperties.DATA_LABEL_FONT.getDefaultValue());
     }
 
     @Override
@@ -108,6 +116,7 @@ public class ChartPreferencesPage implements PreferencesPage {
 	subTitleFontSelector.setValue(preferences.getValue(ChartsProperties.SUBTITLE_FONT));
 	axisTitleFontSelector.setValue(preferences.getValue(ChartsProperties.AXIS_TITLE_FONT));
 	axisLabelFontSelector.setValue(preferences.getValue(ChartsProperties.AXIS_LABEL_FONT));
+	dataLabelFontSelector.setValue(preferences.getValue(ChartsProperties.DATA_LABEL_FONT));
     }
 
     @Override
@@ -118,6 +127,7 @@ public class ChartPreferencesPage implements PreferencesPage {
 	preferences.setValue(ChartsProperties.SUBTITLE_FONT, subTitleFontSelector.getValue());
 	preferences.setValue(ChartsProperties.AXIS_TITLE_FONT, axisTitleFontSelector.getValue());
 	preferences.setValue(ChartsProperties.AXIS_LABEL_FONT, axisLabelFontSelector.getValue());
+	preferences.setValue(ChartsProperties.DATA_LABEL_FONT, dataLabelFontSelector.getValue());
     }
 
 }

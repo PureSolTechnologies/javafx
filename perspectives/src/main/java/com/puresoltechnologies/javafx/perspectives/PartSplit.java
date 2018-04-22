@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.perspectives;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 import javafx.collections.ObservableList;
@@ -11,8 +12,6 @@ import javafx.scene.Node;
 import javafx.scene.control.SplitPane;
 
 public class PartSplit extends AbstractPerspectiveElement {
-
-    private static final long serialVersionUID = -699720713406202843L;
 
     private List<PerspectiveElement> elements = new ArrayList<>();
     private final SplitPane splitPane;
@@ -50,6 +49,20 @@ public class PartSplit extends AbstractPerspectiveElement {
     }
 
     @Override
+    public void addElement(int index, PerspectiveElement element) {
+	if (elements.size() >= 2) {
+	    throw new IllegalStateException("More than two elements are not allowed in a split.");
+	}
+	if ((index < 0) || (index > 1)) {
+	    throw new IllegalArgumentException("Index '" + index
+		    + "' is invalid. Splits only contain two elements max and index can only be 0 or 1.");
+	}
+	setContext(element);
+	elements.add(index, element);
+	rearrangeItems();
+    }
+
+    @Override
     public final void removeElement(PerspectiveElement element) {
 	removeElement(element.getId());
     }
@@ -81,6 +94,15 @@ public class PartSplit extends AbstractPerspectiveElement {
     @Override
     public final SplitPane getContent() {
 	return splitPane;
+    }
+
+    public int getIndex(UUID id) {
+	for (PerspectiveElement element : elements) {
+	    if (element.getId().equals(id)) {
+		return elements.indexOf(element);
+	    }
+	}
+	throw new NoSuchElementException("No element with id '" + id.toString() + "' was found.");
     }
 
     public final double getDividerPosition() {
