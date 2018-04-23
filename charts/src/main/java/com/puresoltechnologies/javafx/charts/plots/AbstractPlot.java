@@ -61,7 +61,7 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 	    AxisRenderer<Y> yAxisRenderer);
 
     @SuppressWarnings("unchecked")
-    public PlotRenderer getGenericRenderer(PlotArea canvas, AxisRenderer<?> xAxisRenderer,
+    public PlotRenderer getGenericRenderer(PlotCanvas canvas, AxisRenderer<?> xAxisRenderer,
 	    AxisRenderer<?> yAxisRenderer) {
 	return getRenderer(canvas, (AxisRenderer<X>) xAxisRenderer, (AxisRenderer<Y>) yAxisRenderer);
     }

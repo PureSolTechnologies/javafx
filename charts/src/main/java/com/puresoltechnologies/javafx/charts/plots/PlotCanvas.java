@@ -20,7 +20,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class PlotArea extends Canvas {
+public class PlotCanvas extends Canvas {
 
     protected static final ObjectProperty<Color> backgroundColor = Preferences
 	    .getProperty(ChartsProperties.BACKGROUND_COLOR);
@@ -34,7 +34,7 @@ public class PlotArea extends Canvas {
     private final Map<Axis<?>, AxisRenderer<?>> renderers = new HashMap<>();
     private final Map<Axis<?>, List<Plot<?, ?, ?>>> affectedPlots = new HashMap<>();
 
-    public PlotArea() {
+    public PlotCanvas() {
 	super();
 	widthProperty().addListener(event -> draw());
 	heightProperty().addListener(event -> draw());

@@ -1,7 +1,7 @@
 package com.puresoltechnologies.javafx.charts;
 
 import com.puresoltechnologies.javafx.charts.plots.Plot;
-import com.puresoltechnologies.javafx.charts.plots.PlotArea;
+import com.puresoltechnologies.javafx.charts.plots.PlotCanvas;
 import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
 import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
@@ -28,7 +28,7 @@ public class ChartView extends GridPane {
     protected static final ObjectProperty<FontDefinition> SUBTITLE_FONT = Preferences
 	    .getProperty(ChartsProperties.SUBTITLE_FONT);
 
-    private final PlotArea plotArea = new PlotArea();
+    private final PlotCanvas plotArea = new PlotCanvas();
     private final Label title = new Label();
     private final Label subTitle = new Label();
 
