@@ -105,6 +105,7 @@ class TreeAreaChartCanvas<T extends TreeAreaChartNode> extends Canvas {
 	    return;
 	}
 	if (stack.contains(dataNode)) {
+	    System.out.println("Node present.");
 	    return;
 	}
 	stack.push(dataNode);
@@ -114,7 +115,9 @@ class TreeAreaChartCanvas<T extends TreeAreaChartNode> extends Canvas {
 	gc.strokeRect(x, y, width, height);
 
 	double labelHeight = getLabelHeight(dataNode.getName());
-	// gc.strokeLine(x, y + 10.0 + labelHeight, width, y + 10.0 + labelHeight);
+	gc.strokeLine(x, y + 10.0 + labelHeight, x + width, y + 10.0 + labelHeight);
+	gc.strokeLine(x, y, x + width, y + height);
+	gc.strokeLine(x, y + height, x + width, y);
 
 	gc.setFill(axisColor.get());
 	gc.setFont(dataLabelFont.get().toFont());
@@ -130,14 +133,14 @@ class TreeAreaChartCanvas<T extends TreeAreaChartNode> extends Canvas {
 	if (horizontal) {
 	    double position = x + width * (dataNode.getValue() - sum) / dataNode.getValue();
 	    for (TreeAreaChartNode child : children) {
-		double step = width * (sum - child.getValue()) / sum;
+		double step = width * (sum - child.getValue()) / dataNode.getValue();
 		drawNode(depth - 1, position, y, step, height, child, !horizontal, stack);
 		position += step;
 	    }
 	} else {
 	    double position = y + height * (dataNode.getValue() - sum) / dataNode.getValue();
 	    for (TreeAreaChartNode child : children) {
-		double step = height * (sum - child.getValue()) / child.getValue();
+		double step = height * (sum - child.getValue()) / dataNode.getValue();
 		drawNode(depth - 1, x, position, width, step, child, !horizontal, stack);
 		position += step;
 	    }
