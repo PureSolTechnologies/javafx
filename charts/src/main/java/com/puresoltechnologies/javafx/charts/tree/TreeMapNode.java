@@ -13,7 +13,7 @@ import com.puresoltechnologies.graphs.trees.TreeNode;
  * @author Rick-Rainer Ludwig
  *
  */
-public interface TreeAreaChartNode extends TreeNode<TreeAreaChartNode> {
+public interface TreeMapNode extends TreeNode<TreeMapNode> {
 
     @Override
     public String getName();
@@ -26,14 +26,14 @@ public interface TreeAreaChartNode extends TreeNode<TreeAreaChartNode> {
     public double getValue();
 
     @Override
-    public default Set<TreeLink<TreeAreaChartNode>> getEdges() {
-	Set<TreeLink<TreeAreaChartNode>> edges = new HashSet<>();
-	getChildren().forEach(child -> edges.add(new TreeLink<TreeAreaChartNode>(this, child)));
+    public default Set<TreeLink<TreeMapNode>> getEdges() {
+	Set<TreeLink<TreeMapNode>> edges = new HashSet<>();
+	getChildren().forEach(child -> edges.add(new TreeLink<TreeMapNode>(this, child)));
 	return edges;
     }
 
     @Override
-    public TreeAreaChartNode getParent();
+    public TreeMapNode getParent();
 
     @Override
     public default boolean hasChildren() {
@@ -41,6 +41,6 @@ public interface TreeAreaChartNode extends TreeNode<TreeAreaChartNode> {
     }
 
     @Override
-    public List<TreeAreaChartNode> getChildren();
+    public List<TreeMapNode> getChildren();
 
 }

@@ -2,11 +2,11 @@ package com.puresoltechnologies.javafx.charts.tree;
 
 import javafx.scene.layout.BorderPane;
 
-public class TreeAreaChartView<T extends TreeAreaChartNode> extends BorderPane {
+public class TreeMapView<T extends TreeMapNode> extends BorderPane {
 
-    private final TreeAreaChartCanvas<T> area = new TreeAreaChartCanvas<>();
+    private final TreeMapCanvas<T> area = new TreeMapCanvas<>();
 
-    public TreeAreaChartView() {
+    public TreeMapView() {
 	super();
 	setCenter(area);
     }

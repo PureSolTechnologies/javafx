@@ -15,7 +15,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-class TreeAreaChartCanvas<T extends TreeAreaChartNode> extends Canvas {
+class TreeMapCanvas<T extends TreeMapNode> extends Canvas {
 
     protected static final ObjectProperty<Color> backgroundColor = Preferences
 	    .getProperty(ChartsProperties.BACKGROUND_COLOR);
@@ -26,7 +26,7 @@ class TreeAreaChartCanvas<T extends TreeAreaChartNode> extends Canvas {
     private T rootNode = null;
     private int depth = 1;
 
-    public TreeAreaChartCanvas() {
+    public TreeMapCanvas() {
 	super();
 	widthProperty().addListener(event -> draw());
 	heightProperty().addListener(event -> draw());
@@ -95,12 +95,12 @@ class TreeAreaChartCanvas<T extends TreeAreaChartNode> extends Canvas {
 	double y = 0.0;
 	double width = getWidth();
 	double height = getHeight();
-	Stack<TreeAreaChartNode> stack = new Stack<>();
+	Stack<TreeMapNode> stack = new Stack<>();
 	drawNode(depth, x, y, width, height, rootNode, width > height, stack);
     }
 
-    private void drawNode(int depth, double x, double y, double width, double height, TreeAreaChartNode dataNode,
-	    boolean horizontal, Stack<TreeAreaChartNode> stack) {
+    private void drawNode(int depth, double x, double y, double width, double height, TreeMapNode dataNode,
+	    boolean horizontal, Stack<TreeMapNode> stack) {
 	if (depth == 0) {
 	    return;
 	}
@@ -125,21 +125,21 @@ class TreeAreaChartCanvas<T extends TreeAreaChartNode> extends Canvas {
 	gc.setTextBaseline(VPos.BOTTOM);
 	gc.fillText(dataNode.getName(), x + 5.0, y + 5.0 + labelHeight);
 
-	List<TreeAreaChartNode> children = dataNode.getChildren();
+	List<TreeMapNode> children = dataNode.getChildren();
 	double sum = 0.0;
-	for (TreeAreaChartNode child : children) {
+	for (TreeMapNode child : children) {
 	    sum += child.getValue();
 	}
 	if (horizontal) {
 	    double position = x + width * (dataNode.getValue() - sum) / dataNode.getValue();
-	    for (TreeAreaChartNode child : children) {
+	    for (TreeMapNode child : children) {
 		double step = width * (sum - child.getValue()) / dataNode.getValue();
 		drawNode(depth - 1, position, y, step, height, child, !horizontal, stack);
 		position += step;
 	    }
 	} else {
 	    double position = y + height * (dataNode.getValue() - sum) / dataNode.getValue();
-	    for (TreeAreaChartNode child : children) {
+	    for (TreeMapNode child : children) {
 		double step = height * (sum - child.getValue()) / dataNode.getValue();
 		drawNode(depth - 1, x, position, width, step, child, !horizontal, stack);
 		position += step;
