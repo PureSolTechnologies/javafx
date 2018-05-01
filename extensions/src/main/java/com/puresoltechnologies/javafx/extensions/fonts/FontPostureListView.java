@@ -21,7 +21,7 @@ public class FontPostureListView extends ListView<FontPosture> {
     public FontPostureListView() {
 	setItems(FXCollections.observableArrayList(FontPosture.values()));
 	setCellFactory(view -> {
-	    ListCell<FontPosture> listCell = new ListCell<>() {
+	    ListCell<FontPosture> listCell = new ListCell<FontPosture>() {
 		@Override
 		protected void updateItem(FontPosture item, boolean empty) {
 		    super.updateItem(item, empty);

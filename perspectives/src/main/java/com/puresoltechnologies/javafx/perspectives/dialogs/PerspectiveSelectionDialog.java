@@ -72,7 +72,7 @@ public class PerspectiveSelectionDialog extends Dialog<Perspective> {
 	Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
 	listView.setItems(FXCollections.observableArrayList(items));
 	listView.setCellFactory(p -> {
-	    ListCell<Perspective> cell = new ListCell<>() {
+	    ListCell<Perspective> cell = new ListCell<Perspective>() {
 		@Override
 		protected void updateItem(Perspective t, boolean bln) {
 		    super.updateItem(t, bln);

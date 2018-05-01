@@ -39,7 +39,7 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 		&& (yAxis.getAxisType() != AxisType.ALT_Y)) {
 	    throw new IllegalArgumentException("Provided Y axis is not an Y axis.");
 	}
-	data.addListener(new ListChangeListener<>() {
+	data.addListener(new ListChangeListener<D>() {
 	    @Override
 	    public void onChanged(Change<? extends D> change) {
 		updateExtrema();

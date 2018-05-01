@@ -21,7 +21,7 @@ public class FontWeightComboBox extends ComboBox<FontWeight> {
     public FontWeightComboBox() {
 	setItems(FXCollections.observableArrayList(FontWeight.values()));
 	setCellFactory(view -> {
-	    ListCell<FontWeight> listCell = new ListCell<>() {
+	    ListCell<FontWeight> listCell = new ListCell<FontWeight>() {
 		@Override
 		protected void updateItem(FontWeight item, boolean empty) {
 		    super.updateItem(item, empty);

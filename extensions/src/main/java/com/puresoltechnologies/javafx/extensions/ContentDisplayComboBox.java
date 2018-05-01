@@ -16,7 +16,7 @@ public class ContentDisplayComboBox extends ComboBox<ContentDisplay> {
     public ContentDisplayComboBox() {
 	setItems(FXCollections.observableArrayList(ContentDisplay.values()));
 	setCellFactory(view -> {
-	    ListCell<ContentDisplay> listCell = new ListCell<>() {
+	    ListCell<ContentDisplay> listCell = new ListCell<ContentDisplay>() {
 		@Override
 		protected void updateItem(ContentDisplay item, boolean empty) {
 		    super.updateItem(item, empty);

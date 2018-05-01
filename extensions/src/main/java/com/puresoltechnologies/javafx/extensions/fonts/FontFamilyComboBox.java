@@ -21,7 +21,7 @@ public class FontFamilyComboBox extends ComboBox<String> {
     public FontFamilyComboBox() {
 	setItems(FXCollections.observableArrayList(Font.getFamilies()));
 	setCellFactory(view -> {
-	    ListCell<String> listCell = new ListCell<>() {
+	    ListCell<String> listCell = new ListCell<String>() {
 		@Override
 		protected void updateItem(String item, boolean empty) {
 		    super.updateItem(item, empty);

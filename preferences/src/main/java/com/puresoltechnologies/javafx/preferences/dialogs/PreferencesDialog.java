@@ -114,7 +114,7 @@ public class PreferencesDialog extends Dialog<Void> {
 	treeView.setRoot(rootItem);
 	treeView.setShowRoot(false);
 	treeView.setEditable(false);
-	treeView.setCellFactory((TreeView<PreferencesPageNode> p) -> new TreeCell<>() {
+	treeView.setCellFactory((TreeView<PreferencesPageNode> p) -> new TreeCell<PreferencesPageNode>() {
 	    @Override
 	    public void updateItem(PreferencesPageNode item, boolean empty) {
 		super.updateItem(item, empty);

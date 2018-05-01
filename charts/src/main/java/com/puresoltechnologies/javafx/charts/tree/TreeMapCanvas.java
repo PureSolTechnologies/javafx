@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.charts.tree;
 
+import java.awt.Point;
 import java.util.List;
 import java.util.Stack;
 
@@ -8,9 +9,11 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.geometry.Point2D;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
@@ -25,12 +28,26 @@ class TreeMapCanvas<T extends TreeMapNode> extends Canvas {
 
     private T rootNode = null;
     private int depth = 1;
+    private final Tooltip tooltip = new Tooltip();
 
     public TreeMapCanvas() {
 	super();
 	widthProperty().addListener(event -> draw());
 	heightProperty().addListener(event -> draw());
 	draw();
+	Tooltip.install(this, tooltip);
+
+	tooltip.setOnShowing(windowEvent -> {// called just prior to being shown
+	    Point mouse = java.awt.MouseInfo.getPointerInfo().getLocation();
+	    Point2D local = TreeMapCanvas.this.screenToLocal(mouse.x, mouse.y);
+
+	    // my app-specific code to get the chart's yaxis value
+	    // then set the text as I want
+	    // double pitch = yaxis.getValueForDisplay(local.getY()).doubleValue();
+	    // double freq = AudioUtil.pitch2frequency(pitch);
+	    // t.setText(String.format("Pitch %.1f: %.1f Hz %.1f samples", pitch, freq,
+	    // audio.rate / freq));
+	});
     }
 
     @Override

@@ -49,7 +49,7 @@ public class PartSelectionDialog extends Dialog<Part> {
 	ListView<Part> listView = new ListView<>();
 	listView.setEditable(false);
 	listView.setCellFactory(p -> {
-	    ListCell<Part> cell = new ListCell<>() {
+	    ListCell<Part> cell = new ListCell<Part>() {
 		@Override
 		protected void updateItem(Part t, boolean bln) {
 		    super.updateItem(t, bln);
