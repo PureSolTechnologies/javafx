@@ -4,7 +4,7 @@ import javafx.scene.layout.BorderPane;
 
 public class TreeMapView<T extends TreeMapNode> extends BorderPane {
 
-    private final TreeMapCanvas<T> area = new TreeMapCanvas<>();
+    private final TreeMapCanvas<T> area = new TreeMapCanvas<>(new SquarifiedTreeMapRenderer<>());
 
     public TreeMapView() {
 	super();
