@@ -41,80 +41,92 @@ public class SquarifiedTreeMapRenderer<T extends TreeMapNode> implements TreeMap
 	if ((depth == 0) || (stack.contains(node))) {
 	    return;
 	}
-	double labelHeight = getLabelHeight(node.getName());
 	stack.push(node);
-	drawBox(canvas, x, y, width, height, node);
+	double titleHeight = drawBox(canvas, x, y, width, height, node);
 	List<TreeMapNode> children = node.getChildren();
 	Collections.sort(children, (l, r) -> -Double.valueOf(l.getValue()).compareTo(r.getValue()));
-	double nodeSum = calcSum(children);
-	squarify(canvas, depth, x, y + 10.0 + labelHeight, width, height - 10.0 - labelHeight, children, nodeSum, stack,
-		new ArrayList<>());
+	squarify(canvas, depth, x, y + titleHeight, width, height - titleHeight, children, stack, new ArrayList<>());
 	stack.pop();
     }
 
     private void squarify(TreeMapCanvas<T> canvas, int depth, double x, double y, double width, double height,
-	    List<TreeMapNode> children, double nodeSum, Stack<TreeMapNode> stack, List<TreeMapNode> row) {
+	    List<TreeMapNode> children, Stack<TreeMapNode> stack, List<TreeMapNode> row) {
+	double restSum = calcSum(children);
+	double rowLength = Math.min(width, height);
+	double rowWidth = calcRowWidth(row, children, rowLength, width, height);
 	if (children.size() == 0) {
-	    layoutRow(canvas, depth, x, y, width, height, row, stack, nodeSum);
+	    if (width > height) {
+		layoutRowVertical(canvas, depth, x, y, rowWidth, height, row, stack, restSum);
+	    } else {
+		layoutRowHorizontal(canvas, depth, x, y, width, rowWidth, row, stack, restSum);
+	    }
 	    return;
 	}
-	double rowWidth = Math.max(width, height);
 	TreeMapNode c = children.get(0);
-	if (worst(row, null, rowWidth) <= worst(row, c, rowWidth)) {
+	if ((row.size() == 0) //
+		|| (worst(row, null, rowLength, restSum, width * height) >= worst(row, c, rowLength, restSum,
+			width * height))) {
 	    children.remove(0);
 	    row.add(c);
-	    squarify(canvas, depth, x, y, width, height, children, nodeSum, stack, row);
+	    squarify(canvas, depth, x, y, width, height, children, stack, row);
 	} else {
 	    if (width > height) {
-		layoutRow(canvas, depth, x, y, rowWidth, height, row, stack, nodeSum);
-		squarify(canvas, depth, x + rowWidth, y, width - rowWidth, height, children, nodeSum, stack,
-			new ArrayList<>());
+		layoutRowVertical(canvas, depth, x, y, rowWidth, height, row, stack, restSum);
+		squarify(canvas, depth, x + rowWidth, y, width - rowWidth, height, children, stack, new ArrayList<>());
 	    } else {
-		layoutRow(canvas, depth, x, y, width, rowWidth, row, stack, nodeSum);
-		squarify(canvas, depth, x, y + rowWidth, width, height - rowWidth, children, nodeSum, stack,
-			new ArrayList<>());
+		layoutRowHorizontal(canvas, depth, x, y, width, rowWidth, row, stack, restSum);
+		squarify(canvas, depth, x, y + rowWidth, width, height - rowWidth, children, stack, new ArrayList<>());
 	    }
 	}
     }
 
-    private void layoutRow(TreeMapCanvas<T> canvas, int depth, double x, double y, double width, double height,
-	    List<TreeMapNode> row, Stack<TreeMapNode> stack, double nodeSum) {
+    private double calcRowWidth(List<TreeMapNode> row, List<TreeMapNode> children, double rowLength, double width,
+	    double height) {
 	double rowSum = calcSum(row);
-	if (width > height) {
-	    double rowWidth = width * rowSum / nodeSum;
-	    double position = 0;
-	    for (TreeMapNode child : row) {
-		double step = height * (child.getValue()) / rowSum;
-		drawNode(canvas, depth - 1, x, position, rowWidth, step, child, stack);
-		position += step;
-	    }
-	} else {
-	    double rowWidth = height * rowSum / nodeSum;
-	    double position = 0;
-	    for (TreeMapNode child : row) {
-		double step = width * (child.getValue() / rowSum);
-		drawNode(canvas, depth - 1, position, y, step, rowWidth, child, stack);
-		position += step;
-	    }
+	double childrenSum = calcSum(children);
+	return width * height * rowSum / ((childrenSum + rowSum) * rowLength);
+    }
+
+    private void layoutRowHorizontal(TreeMapCanvas<T> canvas, int depth, double x, double y, double width,
+	    double height, List<TreeMapNode> rowEntries, Stack<TreeMapNode> stack, double nodeSum) {
+	double rowSum = calcSum(rowEntries);
+	double position = x;
+	for (TreeMapNode rowEntry : rowEntries) {
+	    double step = width * (rowEntry.getValue() / rowSum);
+	    drawNode(canvas, depth - 1, position, y, step, height, rowEntry, stack);
+	    position += step;
 	}
     }
 
-    private double worst(List<TreeMapNode> row, TreeMapNode r, double rowWidth) {
+    private void layoutRowVertical(TreeMapCanvas<T> canvas, int depth, double x, double y, double width, double height,
+	    List<TreeMapNode> rowEntries, Stack<TreeMapNode> stack, double nodeSum) {
+	double rowSum = calcSum(rowEntries);
+	double position = y;
+	for (TreeMapNode rowEntry : rowEntries) {
+	    double step = height * (rowEntry.getValue()) / rowSum;
+	    drawNode(canvas, depth - 1, x, position, width, step, rowEntry, stack);
+	    position += step;
+	}
+    }
+
+    private double worst(List<TreeMapNode> row, TreeMapNode r, double rowLength, double restSum, double totalArea) {
 	double worst = 0.0;
 	double rowSum = calcSum(row);
+	double rowWidth = totalArea * rowSum / ((restSum + rowSum) * rowLength);
 	if (r != null) {
-	    worst = Math.max(rowWidth * rowWidth * r.getValue() / (rowSum * rowSum),
-		    rowSum * rowSum / (rowWidth * rowWidth * r.getValue()));
+	    double elementLength = totalArea * r.getValue() / ((restSum + rowSum + r.getValue()) / rowLength);
+	    worst = Math.max(rowWidth / elementLength, elementLength / rowWidth);
 	}
 	for (TreeMapNode child : row) {
-	    double current = Math.max(rowWidth * rowWidth * child.getValue() / (rowSum * rowSum),
-		    rowSum * rowSum / (rowWidth * rowWidth * child.getValue()));
+	    double elementLength = totalArea * child.getValue()
+		    / ((restSum + rowSum + (r != null ? r.getValue() : 0.0)) * rowLength);
+	    double current = Math.max(rowWidth / elementLength, elementLength / rowWidth);
 	    worst = Math.max(current, worst);
 	}
 	return worst;
     }
 
-    private void drawBox(TreeMapCanvas<T> canvas, double x, double y, double width, double height, TreeMapNode node) {
+    private double drawBox(TreeMapCanvas<T> canvas, double x, double y, double width, double height, TreeMapNode node) {
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	gc.setStroke(axisColor.get());
 
@@ -132,6 +144,8 @@ public class SquarifiedTreeMapRenderer<T extends TreeMapNode> implements TreeMap
 	gc.setTextAlign(TextAlignment.LEFT);
 	gc.setTextBaseline(VPos.BOTTOM);
 	gc.fillText(node.getName(), x + 5.0, y + 5.0 + labelHeight);
+
+	return labelHeight + 10.0;
     }
 
     private double calcSum(List<TreeMapNode> children) {
