@@ -21,6 +21,10 @@
 			<artifactId>preferences</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.javafx</groupId>
+			<artifactId>tasks</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.testfx</groupId>
 			<artifactId>testfx-core</artifactId>
 		</dependency>

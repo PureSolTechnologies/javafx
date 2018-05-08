@@ -86,6 +86,16 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>reactive</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>tasks</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>utils</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -348,6 +358,7 @@
 		<module>perspectives</module>
 		<module>workspaces</module>
 		<module>charts</module>
+		<module>tasks</module>
 	</modules>
 
 </project>
