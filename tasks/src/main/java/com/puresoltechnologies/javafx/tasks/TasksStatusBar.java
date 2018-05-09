@@ -11,6 +11,7 @@ import io.reactivex.functions.Consumer;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.Tooltip;
@@ -40,10 +41,11 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Consumer<
 		    "/icons/FatCow_Icons16x16/application_view_list.png");
 	    progressBar.visibleProperty().bind(progressBar.progressProperty().greaterThan(0.0));
 	    openButton = new Button("Overview...", detailsView);
+	    openButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 
-	    setConstraints(taskNumlabel, 0, 0, 1, 1, HPos.RIGHT, VPos.BASELINE, Priority.NEVER, Priority.NEVER);
-	    setConstraints(progressBar, 1, 0, 1, 1, HPos.CENTER, VPos.BASELINE, Priority.ALWAYS, Priority.NEVER);
-	    setConstraints(openButton, 2, 0, 1, 1, HPos.LEFT, VPos.BASELINE, Priority.SOMETIMES, Priority.NEVER);
+	    setConstraints(taskNumlabel, 0, 0, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.NEVER, Priority.NEVER);
+	    setConstraints(progressBar, 1, 0, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+	    setConstraints(openButton, 2, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.NEVER, Priority.NEVER);
 
 	    getChildren().addAll(taskNumlabel, progressBar, openButton);
 
