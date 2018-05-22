@@ -31,14 +31,14 @@ import javafx.scene.paint.Color;
  * 
  * @author Rick-Rainer Ludwig
  */
-public class ProgressViewer extends AbstractViewer implements Consumer<TaskInfo> {
+public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskInfo> {
 
     private BorderPane borderPane;
     private Map<Task<?>, TaskProgressPane<?>> taskPanes = new HashMap<>();
     private VBox vbox;
     private Disposable disposable;
 
-    public ProgressViewer() {
+    public TaskProgressViewer() {
 	super("Progress", PartOpenMode.AUTO_AND_MANUAL);
     }
 
