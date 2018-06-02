@@ -1,6 +1,6 @@
-package com.puresoltechnologies.javafx.charts.renderer.axes;
+package com.puresoltechnologies.javafx.charts.axes;
 
-import com.puresoltechnologies.javafx.charts.renderer.Renderer;
+import com.puresoltechnologies.javafx.charts.Renderer;
 
 /**
  * General interface for axis renderers.

@@ -1,13 +1,12 @@
-package com.puresoltechnologies.javafx.charts.renderer.plots.ohlc;
+package com.puresoltechnologies.javafx.charts.plots.ohlc;
 
 import java.time.Instant;
 
+import com.puresoltechnologies.javafx.charts.axes.InstantAxisRenderer;
+import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
+import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
-import com.puresoltechnologies.javafx.charts.plots.ohlc.OHLCValue;
 import com.puresoltechnologies.javafx.charts.preferences.OHLCPlotProperties;
-import com.puresoltechnologies.javafx.charts.renderer.axes.InstantAxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.axes.NumberAxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;

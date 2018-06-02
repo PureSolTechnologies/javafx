@@ -1,12 +1,10 @@
-package com.puresoltechnologies.javafx.charts.renderer.axes;
+package com.puresoltechnologies.javafx.charts.axes;
 
 import java.util.List;
 
-import com.puresoltechnologies.javafx.charts.axes.Axis;
-import com.puresoltechnologies.javafx.charts.axes.AxisType;
+import com.puresoltechnologies.javafx.charts.AbstractRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
-import com.puresoltechnologies.javafx.charts.renderer.AbstractRenderer;
 import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
@@ -39,7 +37,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	super(canvas);
 	this.axis = axis;
 	this.plots = plots;
-	plots.forEach(plot -> plot.dataProperty().addListener(new ListChangeListener<Object>() {
+	plots.forEach(plot -> plot.data().addListener(new ListChangeListener<Object>() {
 	    @Override
 	    public void onChanged(Change<? extends Object> arg0) {
 		updateMinMax();

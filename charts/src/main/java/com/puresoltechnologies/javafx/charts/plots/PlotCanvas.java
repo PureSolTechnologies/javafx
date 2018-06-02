@@ -7,10 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
+import com.puresoltechnologies.javafx.charts.axes.AxisRendererFactory;
 import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
-import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRendererFactory;
-import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
@@ -89,10 +88,14 @@ public class PlotCanvas extends Canvas {
 	Axis<?> xAxis = plot.getXAxis();
 	switch (xAxis.getAxisType()) {
 	case X:
-	    xAxes.add(xAxis);
+	    if (!xAxes.contains(xAxis)) {
+		xAxes.add(xAxis);
+	    }
 	    break;
 	case ALT_X:
-	    altXAxes.add(xAxis);
+	    if (!altXAxes.contains(xAxis)) {
+		altXAxes.add(xAxis);
+	    }
 	    break;
 	default:
 	    throw new RuntimeException("Invalid X axis type '" + xAxis.getAxisType() + "' found.");
@@ -100,10 +103,14 @@ public class PlotCanvas extends Canvas {
 	Axis<?> yAxis = plot.getYAxis();
 	switch (yAxis.getAxisType()) {
 	case Y:
-	    yAxes.add(yAxis);
+	    if (!yAxes.contains(yAxis)) {
+		yAxes.add(yAxis);
+	    }
 	    break;
 	case ALT_Y:
-	    altYAxes.add(yAxis);
+	    if (!altYAxes.contains(yAxis)) {
+		altYAxes.add(yAxis);
+	    }
 	    break;
 	default:
 	    throw new RuntimeException("Invalid X axis type '" + yAxis.getAxisType() + "' found.");
@@ -119,7 +126,7 @@ public class PlotCanvas extends Canvas {
 	    }
 	    renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
 	}
-	plot.dataProperty().addListener(new ListChangeListener<Object>() {
+	plot.data().addListener(new ListChangeListener<Object>() {
 	    @Override
 	    public void onChanged(Change<?> change) {
 		draw();

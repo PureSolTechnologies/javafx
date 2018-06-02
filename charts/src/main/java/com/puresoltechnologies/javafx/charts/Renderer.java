@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.charts.renderer;
+package com.puresoltechnologies.javafx.charts;
 
 public interface Renderer {
 

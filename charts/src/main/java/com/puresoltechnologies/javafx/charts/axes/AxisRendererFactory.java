@@ -1,9 +1,8 @@
-package com.puresoltechnologies.javafx.charts.renderer.axes;
+package com.puresoltechnologies.javafx.charts.axes;
 
 import java.time.Instant;
 import java.util.List;
 
-import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.scene.canvas.Canvas;

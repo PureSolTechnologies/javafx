@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.charts.renderer.axes;
+package com.puresoltechnologies.javafx.charts.axes;
 
 import java.time.Instant;
 import java.time.ZoneId;
@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.puresoltechnologies.javafx.charts.axes.Axis;
-import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
@@ -81,6 +79,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 
     @Override
     public double calculatePos(double x, double y, double width, double height, Instant value) {
+	updateMinMax(); // XXX find something more efficient
 	long maxEpochSecond = max.getEpochSecond();
 	long minEpochSecond = min.getEpochSecond();
 	long currentEpochSecond = value.getEpochSecond();

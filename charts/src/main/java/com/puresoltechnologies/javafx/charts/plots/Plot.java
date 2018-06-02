@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 
-import javafx.beans.property.ListProperty;
 import javafx.beans.property.StringProperty;
+import javafx.collections.ObservableList;
 
 /**
  * 
@@ -40,6 +40,8 @@ public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D> {
 
     public Y getMaxY();
 
+    public ObservableList<D> data();
+
     /**
      * Returns the data to be plotted.
      * 
@@ -51,7 +53,5 @@ public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D> {
      * Returns the data to be plotted.
      */
     public void setData(List<D> data);
-
-    public ListProperty<D> dataProperty();
 
 }

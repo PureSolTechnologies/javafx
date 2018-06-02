@@ -1,11 +1,9 @@
-package com.puresoltechnologies.javafx.charts.renderer.axes;
+package com.puresoltechnologies.javafx.charts.axes;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.puresoltechnologies.javafx.charts.axes.Axis;
-import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
@@ -99,8 +97,8 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	case ALT_Y:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
 		for (Object value : plot.getData()) {
-		    Double i = ((AbstractPlot<?, Double, Object>) plot).getAxisY(value);
-		    possibleTicks.add(i);
+		    Number i = (Number) ((AbstractPlot<?, ?, Object>) plot).getAxisY(value);
+		    possibleTicks.add(i.doubleValue());
 		}
 	    }
 	    break;

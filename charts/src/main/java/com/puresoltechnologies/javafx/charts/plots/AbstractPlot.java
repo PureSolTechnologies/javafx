@@ -4,22 +4,20 @@ import java.util.Collections;
 import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
-import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.plots.PlotRenderer;
 
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.SimpleListProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 
 public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> implements Plot<X, Y, D> {
 
     private final StringProperty title = new SimpleStringProperty();
-    private final ListProperty<D> data = new SimpleListProperty<>();
+    private final ObservableList<D> data = FXCollections.observableArrayList();
     private final Axis<X> xAxis;
     private final Axis<Y> yAxis;
     private X minX = null;
@@ -57,12 +55,11 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 	setData(data);
     }
 
-    public abstract PlotRenderer getRenderer(Canvas canvas, AxisRenderer<X> xAxisRenderer,
+    protected abstract PlotRenderer getRenderer(Canvas canvas, AxisRenderer<X> xAxisRenderer,
 	    AxisRenderer<Y> yAxisRenderer);
 
     @SuppressWarnings("unchecked")
-    public PlotRenderer getGenericRenderer(PlotCanvas canvas, AxisRenderer<?> xAxisRenderer,
-	    AxisRenderer<?> yAxisRenderer) {
+    PlotRenderer getGenericRenderer(PlotCanvas canvas, AxisRenderer<?> xAxisRenderer, AxisRenderer<?> yAxisRenderer) {
 	return getRenderer(canvas, (AxisRenderer<X>) xAxisRenderer, (AxisRenderer<Y>) yAxisRenderer);
     }
 
@@ -95,12 +92,24 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 
     public abstract Y getAxisY(D date);
 
-    protected abstract void updateExtrema();
+    private final void updateExtrema() {
+	setMinX(null);
+	setMaxX(null);
+	setMinY(null);
+	setMaxY(null);
+	getData().forEach(value -> {
+	    X x = getAxisX(value);
+	    Y y = getAxisY(value);
+	    updateMinX(x);
+	    updateMaxX(x);
+	    updateMaxY(y);
+	    updateMinY(y);
+	});
+    }
 
     @Override
     public final boolean hasData() {
-	return (data.get() != null) //
-		&& (data.get().size() > 0) //
+	return (data.size() > 0) //
 		&& (getMinX() != null) //
 		&& (getMaxX() != null) //
 		&& (getMinY() != null) //
@@ -168,23 +177,18 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
     }
 
     @Override
+    public final ObservableList<D> data() {
+	return data;
+    }
+
+    @Override
     public final List<D> getData() {
-	List<D> list = data.get();
-	if (list != null) {
-	    return Collections.unmodifiableList(list);
-	} else {
-	    return null;
-	}
+	return Collections.unmodifiableList(data);
     }
 
     @Override
     public final void setData(List<D> data) {
-	this.data.set(FXCollections.observableList(data));
-    }
-
-    @Override
-    public final ListProperty<D> dataProperty() {
-	return data;
+	this.data.setAll(data);
     }
 
 }

@@ -1,9 +1,9 @@
-package com.puresoltechnologies.javafx.charts.renderer.plots.box;
+package com.puresoltechnologies.javafx.charts.plots.box;
 
+import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
+import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
+import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
-import com.puresoltechnologies.javafx.charts.renderer.axes.AxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.axes.NumberAxisRenderer;
-import com.puresoltechnologies.javafx.charts.renderer.plots.AbstractPlotRenderer;
 
 import javafx.scene.canvas.Canvas;
 
