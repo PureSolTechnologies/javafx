@@ -23,146 +23,146 @@ import javafx.beans.property.SimpleObjectProperty;
  */
 public class Preferences {
 
-    public static final String PREFERENCES_DIRECTORY_PROPERTY = Preferences.class.getPackageName() + ".directory";
-    private final Map<String, ObjectProperty<?>> preferencesValues = new HashMap<>();
-    private static Preferences instance = null;
+	public static final String PREFERENCES_DIRECTORY_PROPERTY = Preferences.class.getPackage().getName() + ".directory";
+	private final Map<String, ObjectProperty<?>> preferencesValues = new HashMap<>();
+	private static Preferences instance = null;
 
-    /**
-     * This method is used to initialize once the {@link Preferences} service.
-     * Without initialization, the service cannot be used.
-     * 
-     * @throws IOException
-     */
-    public static void initialize() throws IOException {
-	if (isInitialized()) {
-	    throw new IllegalStateException("Preferences were already initialized.");
+	/**
+	 * This method is used to initialize once the {@link Preferences} service.
+	 * Without initialization, the service cannot be used.
+	 * 
+	 * @throws IOException
+	 */
+	public static void initialize() throws IOException {
+		if (isInitialized()) {
+			throw new IllegalStateException("Preferences were already initialized.");
+		}
+		String directoryString = System.getProperty(PREFERENCES_DIRECTORY_PROPERTY);
+		if ((directoryString == null) || (directoryString.isEmpty())) {
+			directoryString = System.getProperty("user.home") + File.separator + ".javafx" + File.separator
+					+ "preferences";
+		}
+		File directory = new File(directoryString);
+		if (!directory.exists()) {
+			if (!directory.mkdirs()) {
+				throw new IOException("Could not create preferences directory '" + directoryString + "'.");
+			}
+		} else {
+			if (!directory.isDirectory()) {
+				throw new IOException("Preferences directory '" + directoryString + "' is not a directory.");
+			}
+		}
+		instance = new Preferences(directory);
 	}
-	String directoryString = System.getProperty(PREFERENCES_DIRECTORY_PROPERTY);
-	if ((directoryString == null) || (directoryString.isEmpty())) {
-	    directoryString = System.getProperty("user.home") + File.separator + ".javafx" + File.separator
-		    + "preferences";
+
+	public static void shutdown() {
+		if (!isInitialized()) {
+			throw new IllegalStateException("Preferences are not initialized.");
+		}
+		instance = null;
 	}
-	File directory = new File(directoryString);
-	if (!directory.exists()) {
-	    if (!directory.mkdirs()) {
-		throw new IOException("Could not create preferences directory '" + directoryString + "'.");
-	    }
-	} else {
-	    if (!directory.isDirectory()) {
-		throw new IOException("Preferences directory '" + directoryString + "' is not a directory.");
-	    }
+
+	public static boolean isInitialized() {
+		return instance != null;
 	}
-	instance = new Preferences(directory);
-    }
 
-    public static void shutdown() {
-	if (!isInitialized()) {
-	    throw new IllegalStateException("Preferences are not initialized.");
+	public static Preferences getInstance() {
+		if (instance == null) {
+			throw new IllegalStateException("Preferences are not initialized.");
+		}
+		return instance;
 	}
-	instance = null;
-    }
 
-    public static boolean isInitialized() {
-	return instance != null;
-    }
-
-    public static Preferences getInstance() {
-	if (instance == null) {
-	    throw new IllegalStateException("Preferences are not initialized.");
+	public static <T> ObjectProperty<T> getProperty(PropertyDefinition<T> definition) {
+		return instance.getValueProperty(definition);
 	}
-	return instance;
-    }
 
-    public static <T> ObjectProperty<T> getProperty(PropertyDefinition<T> definition) {
-	return instance.getValueProperty(definition);
-    }
+	private final File directory;
 
-    private final File directory;
-
-    public Preferences(File directory) {
-	this.directory = directory;
-    }
-
-    public <T> T getValue(PropertyDefinition<T> definition) {
-	return getValueProperty(definition).get();
-    }
-
-    public <T> ObjectProperty<T> getValueProperty(PropertyDefinition<T> definition) {
-	@SuppressWarnings("unchecked")
-	ObjectProperty<T> value = (ObjectProperty<T>) preferencesValues.get(definition.getId());
-	if (value == null) {
-	    T t = readValue(definition);
-	    if (t != null) {
-		value = new SimpleObjectProperty<>(t);
-	    } else {
-		value = new SimpleObjectProperty<>(definition.getDefaultValue());
-	    }
-	    preferencesValues.put(definition.getId(), value);
+	public Preferences(File directory) {
+		this.directory = directory;
 	}
-	return value;
-    }
 
-    private <T> T readValue(PropertyDefinition<T> definition) {
-	File file = new File(directory, definition.getId());
-	if (!file.exists()) {
-	    return null;
+	public <T> T getValue(PropertyDefinition<T> definition) {
+		return getValueProperty(definition).get();
 	}
-	PreferencesSerializer<T> serializer = findSerializer(definition);
-	try (FileInputStream fileInputStream = new FileInputStream(file)) {
-	    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-	    byte[] buffer = new byte[256];
-	    int size = -1;
-	    while ((size = fileInputStream.read(buffer)) != -1) {
-		byteArrayOutputStream.write(buffer, 0, size);
-	    }
-	    String string = new String(byteArrayOutputStream.toByteArray(), Charset.defaultCharset());
-	    return serializer.deserialize(definition, string);
-	} catch (IOException e) {
-	    return null;
-	}
-    }
 
-    public <T> T setValue(PropertyDefinition<T> definition, T newValue) {
-	writeValue(definition, newValue);
-	@SuppressWarnings("unchecked")
-	ObjectProperty<T> value = (ObjectProperty<T>) preferencesValues.get(definition.getId());
-	T oldValue = null;
-	if (value == null) {
-	    value = new SimpleObjectProperty<>(definition.getDefaultValue());
-	    preferencesValues.put(definition.getId(), value);
-	} else {
-	    oldValue = value.get();
-	    value.set(newValue);
+	public <T> ObjectProperty<T> getValueProperty(PropertyDefinition<T> definition) {
+		@SuppressWarnings("unchecked")
+		ObjectProperty<T> value = (ObjectProperty<T>) preferencesValues.get(definition.getId());
+		if (value == null) {
+			T t = readValue(definition);
+			if (t != null) {
+				value = new SimpleObjectProperty<>(t);
+			} else {
+				value = new SimpleObjectProperty<>(definition.getDefaultValue());
+			}
+			preferencesValues.put(definition.getId(), value);
+		}
+		return value;
 	}
-	return oldValue;
-    }
 
-    private <T> void writeValue(PropertyDefinition<T> definition, T value) {
-	File file = new File(directory, definition.getId());
-	if (file.exists()) {
-	    file.delete();
+	private <T> T readValue(PropertyDefinition<T> definition) {
+		File file = new File(directory, definition.getId());
+		if (!file.exists()) {
+			return null;
+		}
+		PreferencesSerializer<T> serializer = findSerializer(definition);
+		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			byte[] buffer = new byte[256];
+			int size = -1;
+			while ((size = fileInputStream.read(buffer)) != -1) {
+				byteArrayOutputStream.write(buffer, 0, size);
+			}
+			String string = new String(byteArrayOutputStream.toByteArray(), Charset.defaultCharset());
+			return serializer.deserialize(definition, string);
+		} catch (IOException e) {
+			return null;
+		}
 	}
-	PreferencesSerializer<T> serializer = findSerializer(definition);
-	try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
-	    String serialized = serializer.serialize(value);
-	    fileOutputStream.write(serialized.getBytes(Charset.defaultCharset()));
-	} catch (IOException e) {
-	    // intentionally left empty
-	}
-    }
 
-    private <T> PreferencesSerializer<T> findSerializer(PropertyDefinition<T> definition) {
-	@SuppressWarnings("rawtypes")
-	ServiceLoader<PreferencesSerializer> loader = ServiceLoader.load(PreferencesSerializer.class);
-	@SuppressWarnings("rawtypes")
-	Iterator<PreferencesSerializer> iterator = loader.iterator();
-	while (iterator.hasNext()) {
-	    @SuppressWarnings("unchecked")
-	    PreferencesSerializer<T> next = iterator.next();
-	    if (next.isSuitable(definition)) {
-		return next;
-	    }
+	public <T> T setValue(PropertyDefinition<T> definition, T newValue) {
+		writeValue(definition, newValue);
+		@SuppressWarnings("unchecked")
+		ObjectProperty<T> value = (ObjectProperty<T>) preferencesValues.get(definition.getId());
+		T oldValue = null;
+		if (value == null) {
+			value = new SimpleObjectProperty<>(definition.getDefaultValue());
+			preferencesValues.put(definition.getId(), value);
+		} else {
+			oldValue = value.get();
+			value.set(newValue);
+		}
+		return oldValue;
 	}
-	return null;
-    }
+
+	private <T> void writeValue(PropertyDefinition<T> definition, T value) {
+		File file = new File(directory, definition.getId());
+		if (file.exists()) {
+			file.delete();
+		}
+		PreferencesSerializer<T> serializer = findSerializer(definition);
+		try (FileOutputStream fileOutputStream = new FileOutputStream(file)) {
+			String serialized = serializer.serialize(value);
+			fileOutputStream.write(serialized.getBytes(Charset.defaultCharset()));
+		} catch (IOException e) {
+			// intentionally left empty
+		}
+	}
+
+	private <T> PreferencesSerializer<T> findSerializer(PropertyDefinition<T> definition) {
+		@SuppressWarnings("rawtypes")
+		ServiceLoader<PreferencesSerializer> loader = ServiceLoader.load(PreferencesSerializer.class);
+		@SuppressWarnings("rawtypes")
+		Iterator<PreferencesSerializer> iterator = loader.iterator();
+		while (iterator.hasNext()) {
+			@SuppressWarnings("unchecked")
+			PreferencesSerializer<T> next = iterator.next();
+			if (next.isSuitable(definition)) {
+				return next;
+			}
+		}
+		return null;
+	}
 }

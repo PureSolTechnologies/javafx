@@ -44,13 +44,12 @@ public class AboutDialog extends Dialog<Void> {
 	getDialogPane().setContent(tabPane);
 
 	ServiceLoader<AboutDialogContribution> loader = ServiceLoader.load(AboutDialogContribution.class);
-	loader.stream().forEach(contributor -> {
-	    AboutDialogContribution contrib = contributor.get();
-	    Tab tab = new Tab(contrib.getName());
-	    if (contrib.getImage().isPresent()) {
-		tab.setGraphic(new ImageView(contrib.getImage().get()));
+	loader.forEach(contributor -> {
+	    Tab tab = new Tab(contributor.getName());
+	    if (contributor.getImage().isPresent()) {
+		tab.setGraphic(new ImageView(contributor.getImage().get()));
 	    }
-	    tab.setContent(contrib.getContent());
+	    tab.setContent(contributor.getContent());
 	    tabPane.getTabs().add(tab);
 	});
 
