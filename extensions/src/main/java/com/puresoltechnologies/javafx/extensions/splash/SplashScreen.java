@@ -6,6 +6,8 @@ import java.util.function.Consumer;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
+import javafx.concurrent.Task;
+import javafx.concurrent.Worker;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.ProgressBar;
@@ -18,18 +20,20 @@ import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.BackgroundRepeat;
 import javafx.scene.layout.BackgroundSize;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
-public class SplashScreen extends Stage {
+public class SplashScreen {
 
-    private final Stage applicationStage;
+    private final Stage initStage;
     private final Consumer<Stage> startStage;
+    private final Scene scene;
+    private final BorderPane root = new BorderPane();
 
-    public SplashScreen(Stage applicationStage, Image splashImage, Consumer<Stage> startStage) {
+    public SplashScreen(Stage initStage, Image splashImage, Consumer<Stage> startStage) {
 	super();
-	this.applicationStage = applicationStage;
+	this.initStage = initStage;
 	this.startStage = startStage;
 	try {
 	    ImageView imageView = new ImageView(splashImage);
@@ -39,7 +43,6 @@ public class SplashScreen extends Stage {
 	    loadProgress.setPrefWidth(splashImage.getWidth() - 20);
 	    loadProgress.setProgress(0.5);
 
-	    BorderPane root = new BorderPane();
 	    BackgroundImage backgroundImage = new BackgroundImage(splashImage, BackgroundRepeat.NO_REPEAT,
 		    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
 		    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
@@ -50,41 +53,42 @@ public class SplashScreen extends Stage {
 	    root.setCenter(imageView);
 	    root.setBottom(loadProgress);
 
-	    Scene scene = new Scene(root, splashImage.getWidth(), splashImage.getHeight());
-	    setScene(scene);
+	    scene = new Scene(root, splashImage.getWidth(), splashImage.getHeight(), Color.TRANSPARENT);
+	    initStage.setScene(scene);
 
 	    final Rectangle2D bounds = Screen.getPrimary().getBounds();
-	    // setMinWidth(SPLASH_WIDTH);
-	    // setMinHeight(SPLASH_HEIGHT);
-	    setX(bounds.getMinX() + bounds.getWidth() / 2 - splashImage.getWidth() / 2);
-	    setY(bounds.getMinY() + bounds.getHeight() / 2 - splashImage.getHeight() / 2);
+	    initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - splashImage.getWidth() / 2);
+	    initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - splashImage.getHeight() / 2);
 	    Image chartUpColorSmall = ResourceUtils.getImage(this, "/icons/FatCow_Icons16x16/bug_fixing.png");
 	    Image chartUpColorBig = ResourceUtils.getImage(this, "/icons/FatCow_Icons32x32/bug_fixing.png");
-	    getIcons().addAll(chartUpColorSmall, chartUpColorBig);
-	    setTitle("ToolShed");
-
-	    initStyle(StageStyle.TRANSPARENT);
-	    setAlwaysOnTop(true);
+	    initStage.getIcons().addAll(chartUpColorSmall, chartUpColorBig);
+	    initStage.setTitle("ToolShed");
+	    initStage.setAlwaysOnTop(true);
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
     public void startApplication() {
-	applicationStage.hide();
-	show();
-	Thread thread = new Thread(() -> {
-	    try {
-		Thread.sleep(5000);
-		FXThreads.runOnFXThread(() -> {
-		    startStage.accept(applicationStage);
-		    applicationStage.show();
-		    hide();
-		});
-	    } catch (InterruptedException e) {
-		e.printStackTrace();
+	// startStage.accept(initStage);
+	initStage.show();
+	Task<Void> task = new Task<Void>() {
+	    @Override
+	    protected Void call() throws Exception {
+		try {
+		    Thread.sleep(5000);
+		} catch (InterruptedException e) {
+		    e.printStackTrace();
+		}
+		return null;
 	    }
+	};
+	task.stateProperty().addListener((observableValue, oldState, newState) -> {
+	    if (newState == Worker.State.SUCCEEDED) {
+		initStage.setAlwaysOnTop(false);
+		startStage.accept(initStage);
+	    } // todo add code to gracefully handle other task states.
 	});
-	thread.start();
+	FXThreads.runAsync(task);
     }
 }
