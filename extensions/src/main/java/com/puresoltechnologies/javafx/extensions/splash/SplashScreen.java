@@ -1,6 +1,9 @@
 package com.puresoltechnologies.javafx.extensions.splash;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
 import com.puresoltechnologies.javafx.utils.FXThreads;
@@ -30,6 +33,8 @@ public class SplashScreen {
     private final Consumer<Stage> startStage;
     private final Scene scene;
     private final BorderPane root = new BorderPane();
+
+    private final List<Task<?>> tasks = new ArrayList<>();
 
     public SplashScreen(Stage initStage, Image splashImage, Consumer<Stage> startStage) {
 	super();
@@ -75,10 +80,8 @@ public class SplashScreen {
 	Task<Void> task = new Task<Void>() {
 	    @Override
 	    protected Void call() throws Exception {
-		try {
-		    Thread.sleep(5000);
-		} catch (InterruptedException e) {
-		    e.printStackTrace();
+		for (Task<?> task : tasks) {
+		    task.run();
 		}
 		return null;
 	    }
@@ -90,5 +93,28 @@ public class SplashScreen {
 	    } // todo add code to gracefully handle other task states.
 	});
 	FXThreads.runAsync(task);
+    }
+
+    public void addTask(Runnable runnable) {
+	tasks.add(new Task<Void>() {
+	    @Override
+	    protected Void call() throws Exception {
+		runnable.run();
+		return null;
+	    }
+	});
+    }
+
+    public <T> void addTask(Callable<T> callable) {
+	tasks.add(new Task<T>() {
+	    @Override
+	    protected T call() throws Exception {
+		return callable.call();
+	    }
+	});
+    }
+
+    public <T> void addTask(Task<T> task) {
+	tasks.add(task);
     }
 }

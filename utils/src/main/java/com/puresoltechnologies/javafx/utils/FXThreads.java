@@ -10,14 +10,8 @@ import javafx.application.Platform;
 
 public class FXThreads {
 
-    private static ExecutorService threadPool = null;
-
-    public static void initialize() {
-	if (threadPool != null) {
-	    throw new IllegalStateException("FXThreads was initialized already.");
-	}
-	threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-    }
+    private static ExecutorService threadPool = Executors
+	    .newFixedThreadPool(Runtime.getRuntime().availableProcessors());
 
     public static void shutdown() throws InterruptedException {
 	if (threadPool == null) {
