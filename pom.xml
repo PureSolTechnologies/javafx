@@ -138,6 +138,26 @@
 				<version>2.1.12</version>
 			</dependency>
 			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-base</artifactId>
+				<version>11</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>11</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-controls</artifactId>
+				<version>11</version>
+			</dependency>
+			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-graphics</artifactId>
+				<version>11</version>
+			</dependency>
+			<dependency>
 				<groupId>org.testfx</groupId>
 				<artifactId>testfx-core</artifactId>
 				<version>${testfx.version}</version>
@@ -201,6 +221,10 @@
 								<aliase>CC0</aliase>
 							</aliases>
 						</knownLicense>
+						<knownLicense>
+							<name>GPLv2+CE</name>
+							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+						</knownLicense>
 					</knownLicenses>
 				</configuration>
 			</plugin>
@@ -211,8 +235,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.7.0</version>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>11</source>
+					<target>11</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
