@@ -7,7 +7,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<officalName>JavaFX-Extensions</officalName>
 		<streaming.version>1.2.0-SNAPSHOT</streaming.version>
-		<graphs.version>1.1.0-SNAPSHOT</graphs.version>
+		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
 		<testfx.version>4.0.12-alpha</testfx.version>
 	</properties>
 
@@ -135,7 +135,7 @@
 			<dependency>
 				<groupId>io.reactivex.rxjava2</groupId>
 				<artifactId>rxjava</artifactId>
-				<version>2.1.12</version>
+				<version>2.2.4</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
@@ -235,8 +235,8 @@
 				<artifactId>maven-compiler-plugin</artifactId>
 				<version>3.8.0</version>
 				<configuration>
-					<source>11</source>
-					<target>11</target>
+					<source>10</source>
+					<target>10</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
@@ -290,7 +290,7 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
