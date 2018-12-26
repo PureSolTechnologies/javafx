@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.puresoltechnologies.javafx.charts.ChartView;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesPage;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
@@ -28,7 +29,7 @@ public class OHLCPlotPreferencesPage implements PreferencesPage {
     @Override
     public Image getImage() {
 	try {
-	    return ResourceUtils.getImage(this, "/icons/FatCow_Icons16x16/chart_bar.png");
+	    return ResourceUtils.getImage(ChartView.class, "icons/FatCow_Icons16x16/chart_bar.png");
 	} catch (IOException e) {
 	    return null;
 	}

@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.PartStack;
+import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.geometry.Insets;
@@ -44,7 +45,7 @@ public class PartHeader extends HBox {
 	    getChildren().add(label);
 	    setMargin(label, new Insets(2.0));
 
-	    ImageView crossView = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
+	    ImageView crossView = ResourceUtils.getImageView(Perspective.class, "icons/FatCow_Icons16x16/cross.png");
 	    getChildren().add(crossView);
 	    setMargin(crossView, new Insets(2.0));
 

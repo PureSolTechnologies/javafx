@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.perspectives.menu;
 import java.io.IOException;
 import java.util.Optional;
 
+import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
 import com.puresoltechnologies.javafx.perspectives.dialogs.PartSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
@@ -18,7 +19,7 @@ public class ShowPartMenuItem extends MenuItem {
     private static final Image icon;
     static {
 	try {
-	    icon = ResourceUtils.getImage(ShowPartMenuItem.class, "/icons/FatCow_Icons16x16/watch_window.png");
+	    icon = ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/watch_window.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

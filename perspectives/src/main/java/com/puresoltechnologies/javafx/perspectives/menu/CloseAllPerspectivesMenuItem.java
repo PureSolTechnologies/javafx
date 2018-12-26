@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.perspectives.menu;
 
 import java.io.IOException;
 
+import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -15,7 +16,7 @@ public class CloseAllPerspectivesMenuItem extends MenuItem {
     private static final Image icon;
     static {
 	try {
-	    icon = ResourceUtils.getImage(CloseAllPerspectivesMenuItem.class, "/icons/FatCow_Icons16x16/delete.png");
+	    icon = ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/delete.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

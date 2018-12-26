@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.extensions.dialogs;
 
 import java.io.IOException;
 
+import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.extensions.fonts.FontFamilyListView;
 import com.puresoltechnologies.javafx.extensions.fonts.FontPostureComboBox;
@@ -50,8 +51,8 @@ public class FontSelectionDialog extends Dialog<FontDefinition> {
     private static final Image iconBig;
     static {
 	try {
-	    iconSmall = ResourceUtils.getImage(AboutMenuItem.class, "/icons/FatCow_Icons16x16/font.png");
-	    iconBig = ResourceUtils.getImage(AboutMenuItem.class, "/icons/FatCow_Icons32x32/font.png");
+	    iconSmall = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons16x16/font.png");
+	    iconBig = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons32x32/font.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

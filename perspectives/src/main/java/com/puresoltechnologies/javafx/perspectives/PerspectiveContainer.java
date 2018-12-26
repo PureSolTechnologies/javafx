@@ -39,7 +39,7 @@ public class PerspectiveContainer extends BorderPane {
 	super();
 	try {
 	    ImageView switchWidowsImage = ResourceUtils.getImageView(this,
-		    "/icons/FatCow_Icons16x16/switch_windows.png");
+		    "icons/FatCow_Icons16x16/switch_windows.png");
 	    openPerspectiveButton = new SplitMenuButton();
 	    openPerspectiveButton.setText("Open...");
 	    openPerspectiveButton.setGraphic(switchWidowsImage);
@@ -47,17 +47,17 @@ public class PerspectiveContainer extends BorderPane {
 	    openPerspectiveButton.setContentDisplay(toolBarContentDisplay.get());
 	    updateOpenPerspectiveButton();
 
-	    ImageView watchWidowImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/watch_window.png");
+	    ImageView watchWidowImage = ResourceUtils.getImageView(this, "icons/FatCow_Icons16x16/watch_window.png");
 	    Button showViewButton = new Button("Show Part...", watchWidowImage);
 	    showViewButton.setId("ShowViewButton");
 	    showViewButton.setContentDisplay(toolBarContentDisplay.get());
 
-	    ImageView resetPerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/undo.png");
+	    ImageView resetPerspectiveImage = ResourceUtils.getImageView(this, "icons/FatCow_Icons16x16/undo.png");
 	    Button resetButton = new Button("Reset", resetPerspectiveImage);
 	    resetPerspectiveImage.setId("resetPerspectiveButton");
 	    resetButton.setContentDisplay(toolBarContentDisplay.get());
 
-	    ImageView closePerspectiveImage = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
+	    ImageView closePerspectiveImage = ResourceUtils.getImageView(this, "icons/FatCow_Icons16x16/cross.png");
 	    Button closeButton = new Button("Close", closePerspectiveImage);
 	    closePerspectiveImage.setId("ClosePerspectiveButton");
 	    closeButton.setContentDisplay(toolBarContentDisplay.get());

@@ -4,8 +4,8 @@ import java.io.File;
 import java.io.IOException;
 
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.javafx.workspaces.Workspace;
 import com.puresoltechnologies.javafx.workspaces.WorkspaceSettings;
-import com.puresoltechnologies.javafx.workspaces.menu.SwitchWorkspaceMenuItem;
 
 import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -21,10 +21,8 @@ public class WorkspaceSelectionDialog extends Dialog<File> {
     private static final Image iconBig;
     static {
 	try {
-	    iconSmall = ResourceUtils.getImage(SwitchWorkspaceMenuItem.class,
-		    "/icons/FatCow_Icons16x16/arrow_switch.png");
-	    iconBig = ResourceUtils.getImage(SwitchWorkspaceMenuItem.class,
-		    "/icons/FatCow_Icons32x32/arrow_switch.png");
+	    iconSmall = ResourceUtils.getImage(Workspace.class, "icons/FatCow_Icons16x16/arrow_switch.png");
+	    iconBig = ResourceUtils.getImage(Workspace.class, "icons/FatCow_Icons32x32/arrow_switch.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

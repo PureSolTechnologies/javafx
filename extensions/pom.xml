@@ -26,12 +26,16 @@
 			<artifactId>testfx-core</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-junit</artifactId>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-web</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.testfx</groupId>
-			<artifactId>testfx-internal-java9</artifactId>
+			<artifactId>testfx-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.testfx</groupId>
+			<artifactId>testfx-junit</artifactId>
 		</dependency>
 	</dependencies>
 

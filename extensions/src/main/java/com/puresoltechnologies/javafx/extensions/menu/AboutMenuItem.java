@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.extensions.menu;
 
 import java.io.IOException;
 
+import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.extensions.dialogs.AboutDialog;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -15,7 +16,7 @@ public class AboutMenuItem extends MenuItem {
     private static final Image icon;
     static {
 	try {
-	    icon = ResourceUtils.getImage(AboutMenuItem.class, "/icons/FatCow_Icons16x16/information.png");
+	    icon = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons16x16/information.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

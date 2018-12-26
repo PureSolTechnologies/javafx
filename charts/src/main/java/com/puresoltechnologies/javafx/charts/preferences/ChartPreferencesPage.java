@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
+import com.puresoltechnologies.javafx.charts.ChartView;
 import com.puresoltechnologies.javafx.extensions.fonts.FontSelector;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesPage;
@@ -35,7 +36,7 @@ public class ChartPreferencesPage implements PreferencesPage {
     @Override
     public Image getImage() {
 	try {
-	    return ResourceUtils.getImage(this, "/icons/FatCow_Icons16x16/chart_stock.png");
+	    return ResourceUtils.getImage(ChartView.class, "icons/FatCow_Icons16x16/chart_stock.png");
 	} catch (IOException e) {
 	    return null;
 	}

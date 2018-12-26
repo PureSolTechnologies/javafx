@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.puresoltechnologies.javafx.extensions.ContentDisplayComboBox;
+import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveProperties;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesPage;
@@ -28,7 +29,7 @@ public class PerspectivesPreferencesPage implements PreferencesPage {
     @Override
     public Image getImage() {
 	try {
-	    return ResourceUtils.getImage(this, "/icons/FatCow_Icons16x16/switch_windows.png");
+	    return ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/switch_windows.png");
 	} catch (IOException e) {
 	    return null;
 	}

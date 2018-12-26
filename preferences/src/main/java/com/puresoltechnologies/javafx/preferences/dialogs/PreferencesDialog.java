@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.preferences.Preferences;
-import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.collections.ObservableList;
@@ -42,8 +41,8 @@ public class PreferencesDialog extends Dialog<Void> {
     private static final Image iconBig;
     static {
 	try {
-	    iconSmall = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons16x16/setting_tools.png");
-	    iconBig = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons32x32/setting_tools.png");
+	    iconSmall = ResourceUtils.getImage(Preferences.class, "icons/FatCow_Icons16x16/setting_tools.png");
+	    iconBig = ResourceUtils.getImage(Preferences.class, "icons/FatCow_Icons32x32/setting_tools.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

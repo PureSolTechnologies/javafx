@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.function.Consumer;
 
+import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -64,8 +65,9 @@ public class SplashScreen {
 	    final Rectangle2D bounds = Screen.getPrimary().getBounds();
 	    initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - splashImage.getWidth() / 2);
 	    initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - splashImage.getHeight() / 2);
-	    Image chartUpColorSmall = ResourceUtils.getImage(this, "/icons/FatCow_Icons16x16/bug_fixing.png");
-	    Image chartUpColorBig = ResourceUtils.getImage(this, "/icons/FatCow_Icons32x32/bug_fixing.png");
+	    Image chartUpColorSmall = ResourceUtils.getImage(StatusBar.class,
+		    "icons/FatCow_Icons16x16/information.png");
+	    Image chartUpColorBig = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons32x32/information.png");
 	    initStage.getIcons().addAll(chartUpColorSmall, chartUpColorBig);
 	    initStage.setTitle("ToolShed");
 	    initStage.setAlwaysOnTop(true);

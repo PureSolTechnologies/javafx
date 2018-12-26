@@ -12,8 +12,19 @@ import javafx.scene.image.Image;
  */
 public interface Perspective extends PerspectiveElement {
 
+    /**
+     * This method returns the name of the perspective as it is to be presented
+     * inside the UI for the user.
+     * 
+     * @return
+     */
     public String getName();
 
+    /**
+     * This is a mandatory icon image to be assigned to this perpective.
+     * 
+     * @return
+     */
     public Image getImage();
 
     public void reset();

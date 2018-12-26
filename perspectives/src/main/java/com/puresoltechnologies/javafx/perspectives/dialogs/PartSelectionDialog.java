@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ServiceLoader;
 
+import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
@@ -30,8 +31,8 @@ public class PartSelectionDialog extends Dialog<Part> {
 	private static final Image iconBig;
 	static {
 		try {
-			iconSmall = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons16x16/watch_window.png");
-			iconBig = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons32x32/watch_window.png");
+			iconSmall = ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/watch_window.png");
+			iconBig = ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons32x32/watch_window.png");
 		} catch (IOException e) {
 			throw new RuntimeException(e);
 		}

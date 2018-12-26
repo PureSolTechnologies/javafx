@@ -6,9 +6,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<officalName>JavaFX-Extensions</officalName>
-		<streaming.version>1.2.0-SNAPSHOT</streaming.version>
+		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
 		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
-		<testfx.version>4.0.12-alpha</testfx.version>
+		<testfx.version>4.0.15-alpha</testfx.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
@@ -104,6 +104,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>perspectives</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>preferences</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -120,6 +125,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>utils</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>workspaces</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -158,16 +168,15 @@
 				<version>11</version>
 			</dependency>
 			<dependency>
+				<groupId>org.openjfx</groupId>
+				<artifactId>javafx-web</artifactId>
+				<version>11</version>
+			</dependency>
+			<dependency>
 				<groupId>org.testfx</groupId>
 				<artifactId>testfx-core</artifactId>
 				<version>${testfx.version}</version>
 				<scope>test</scope>
-				<exclusions>
-					<exclusion>
-						<groupId>org.testfx</groupId>
-						<artifactId>testfx-internal-java8</artifactId>
-					</exclusion>
-				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.testfx</groupId>
@@ -176,15 +185,33 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.testfx</groupId>
-				<artifactId>testfx-internal-java9</artifactId>
-				<version>${testfx.version}</version>
+				<groupId>org.junit.platform</groupId>
+				<artifactId>junit-platform-launcher</artifactId>
+				<version>1.1.1</version>
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.12</version>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-api</artifactId>
+				<version>5.1.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-engine</artifactId>
+				<version>5.1.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.jupiter</groupId>
+				<artifactId>junit-jupiter-params</artifactId>
+				<version>5.1.1</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.junit.vintage</groupId>
+				<artifactId>junit-vintage-engine</artifactId>
+				<version>5.1.1</version>
 				<scope>test</scope>
 			</dependency>
 		</dependencies>
@@ -393,6 +420,7 @@
 		<module>workspaces</module>
 		<module>charts</module>
 		<module>tasks</module>
+		<module>showroom</module>
 	</modules>
 
 </project>

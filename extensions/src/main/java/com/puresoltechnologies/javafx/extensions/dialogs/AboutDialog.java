@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.extensions.dialogs;
 import java.io.IOException;
 import java.util.ServiceLoader;
 
+import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -24,8 +25,8 @@ public class AboutDialog extends Dialog<Void> {
     private static final Image iconBig;
     static {
 	try {
-	    iconSmall = ResourceUtils.getImage(AboutMenuItem.class, "/icons/FatCow_Icons16x16/information.png");
-	    iconBig = ResourceUtils.getImage(AboutMenuItem.class, "/icons/FatCow_Icons32x32/information.png");
+	    iconSmall = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons16x16/information.png");
+	    iconBig = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons32x32/information.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

@@ -6,5 +6,9 @@ module com.puresoltechnologies.javafx.workspaces {
     requires javafx.controls;
 
     exports com.puresoltechnologies.javafx.workspaces;
+    exports com.puresoltechnologies.javafx.workspaces.dialogs;
+    exports com.puresoltechnologies.javafx.workspaces.menu;
 
+    opens com.puresoltechnologies.javafx.workspaces.icons.FatCow_Icons16x16;
+    opens com.puresoltechnologies.javafx.workspaces.icons.FatCow_Icons32x32;
 }

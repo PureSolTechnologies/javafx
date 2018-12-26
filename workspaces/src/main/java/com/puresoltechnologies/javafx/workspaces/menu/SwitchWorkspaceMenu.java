@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.List;
 
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.javafx.workspaces.Workspace;
 import com.puresoltechnologies.javafx.workspaces.WorkspaceSettings;
 
 import javafx.scene.Node;
@@ -20,7 +21,7 @@ public class SwitchWorkspaceMenu extends Menu {
     private static final Image icon;
     static {
 	try {
-	    icon = ResourceUtils.getImage(SwitchWorkspaceMenuItem.class, "/icons/FatCow_Icons16x16/arrow_switch.png");
+	    icon = ResourceUtils.getImage(Workspace.class, "icons/FatCow_Icons16x16/arrow_switch.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

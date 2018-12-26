@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.preferences.menu;
 
 import java.io.IOException;
 
+import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesDialog;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -15,7 +16,7 @@ public class PreferencesMenuItem extends MenuItem {
     private static final Image icon;
     static {
 	try {
-	    icon = ResourceUtils.getImage(PreferencesMenuItem.class, "/icons/FatCow_Icons16x16/setting_tools.png");
+	    icon = ResourceUtils.getImage(Preferences.class, "icons/FatCow_Icons16x16/setting_tools.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

@@ -19,4 +19,5 @@ module com.puresoltechnologies.javafx.charts {
     exports com.puresoltechnologies.javafx.charts.plots.xy;
     exports com.puresoltechnologies.javafx.charts.tree;
 
+    opens com.puresoltechnologies.javafx.charts.icons.FatCow_Icons16x16;
 }

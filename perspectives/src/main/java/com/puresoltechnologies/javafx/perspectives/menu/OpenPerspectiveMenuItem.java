@@ -18,7 +18,7 @@ public class OpenPerspectiveMenuItem extends MenuItem {
     private static final Image icon;
     static {
 	try {
-	    icon = ResourceUtils.getImage(OpenPerspectiveMenuItem.class, "/icons/FatCow_Icons16x16/switch_windows.png");
+	    icon = ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/switch_windows.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

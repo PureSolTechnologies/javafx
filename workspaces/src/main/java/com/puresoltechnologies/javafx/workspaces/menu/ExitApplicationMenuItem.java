@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.workspaces.menu;
 import java.io.IOException;
 
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.javafx.workspaces.Workspace;
 import com.puresoltechnologies.javafx.workspaces.WorkspaceSettings;
 
 import javafx.scene.Node;
@@ -16,7 +17,7 @@ public class ExitApplicationMenuItem extends MenuItem {
     private static final Image icon;
     static {
 	try {
-	    icon = ResourceUtils.getImage(ExitApplicationMenuItem.class, "/icons/FatCow_Icons16x16/door_out.png");
+	    icon = ResourceUtils.getImage(Workspace.class, "icons/FatCow_Icons16x16/door_out.png");
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

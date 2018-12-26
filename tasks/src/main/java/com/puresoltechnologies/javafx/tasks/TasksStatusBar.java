@@ -38,7 +38,7 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Consumer<
 	    taskNumlabel = new Label("0 tasks");
 	    progressBar = new ProgressBar(0.0);
 	    ImageView detailsView = ResourceUtils.getImageView(this,
-		    "/icons/FatCow_Icons16x16/application_view_list.png");
+		    "icons/FatCow_Icons16x16/application_view_list.png");
 	    progressBar.visibleProperty().bind(progressBar.progressProperty().greaterThan(0.0));
 	    openButton = new Button("Overview...", detailsView);
 	    openButton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);

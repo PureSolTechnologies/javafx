@@ -41,7 +41,7 @@ public class TaskProgressPane<T> extends GridPane {
 	    progressBar = new ProgressBar(0.0);
 	    progressBar.setMaxWidth(Double.MAX_VALUE);
 	    progressBar.progressProperty().bind(task.progressProperty());
-	    ImageView crossView = ResourceUtils.getImageView(this, "/icons/FatCow_Icons16x16/cross.png");
+	    ImageView crossView = ResourceUtils.getImageView(this, "icons/FatCow_Icons16x16/cross.png");
 	    abortButton = new Button("Abort...", crossView);
 	    abortButton.setOnAction(event -> {
 		task.cancel();
