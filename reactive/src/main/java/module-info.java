@@ -1,6 +1,6 @@
 module com.puresoltechnologies.javafx.reactive {
 
-    requires io.reactivex.rxjava2;
+    requires transitive io.reactivex.rxjava2;
 
     exports com.puresoltechnologies.javafx.reactive;
 

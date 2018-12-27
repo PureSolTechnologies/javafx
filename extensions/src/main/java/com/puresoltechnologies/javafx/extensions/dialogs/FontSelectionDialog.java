@@ -8,7 +8,6 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontFamilyListView;
 import com.puresoltechnologies.javafx.extensions.fonts.FontPostureComboBox;
 import com.puresoltechnologies.javafx.extensions.fonts.FontSizeComboBox;
 import com.puresoltechnologies.javafx.extensions.fonts.FontWeightListView;
-import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
 import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 

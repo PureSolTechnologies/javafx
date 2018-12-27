@@ -1,5 +1,6 @@
 module com.puresoltechnologies.javafx.showcase {
 
+    requires com.puresoltechnologies.javafx.charts;
     requires com.puresoltechnologies.javafx.extensions;
     requires com.puresoltechnologies.javafx.perspectives;
     requires com.puresoltechnologies.javafx.preferences;
@@ -7,6 +8,9 @@ module com.puresoltechnologies.javafx.showcase {
     requires com.puresoltechnologies.javafx.tasks;
     requires com.puresoltechnologies.javafx.utils;
     requires com.puresoltechnologies.javafx.workspaces;
+
+    requires com.puresoltechnologies.graphs.graph;
+    requires com.puresoltechnologies.streaming.iterators;
 
     requires javafx.controls;
     requires javafx.graphics;

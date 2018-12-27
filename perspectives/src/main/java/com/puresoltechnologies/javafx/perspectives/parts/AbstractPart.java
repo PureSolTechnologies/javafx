@@ -16,8 +16,6 @@ import javafx.scene.image.Image;
 
 public abstract class AbstractPart implements Part {
 
-    private static final long serialVersionUID = 1609387557187949696L;
-
     private PartStack parent = null;
     private final UUID id = UUID.randomUUID();
     private final StringProperty title = new SimpleStringProperty();

@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.extensions.StatusBar;
-import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.collections.ObservableList;

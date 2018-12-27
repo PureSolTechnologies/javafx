@@ -8,8 +8,6 @@ package com.puresoltechnologies.javafx.perspectives.parts;
  */
 public abstract class AbstractEditor extends AbstractPart implements EditorPart {
 
-    private static final long serialVersionUID = 3352125016364928485L;
-
     public AbstractEditor(String title, PartOpenMode openMode) {
 	super(title, openMode);
     }

@@ -3,7 +3,7 @@ package com.puresoltechnologies.javafx.preferences;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class PreferencesSerializerTest {
 

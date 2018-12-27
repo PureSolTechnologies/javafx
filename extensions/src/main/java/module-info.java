@@ -1,7 +1,7 @@
 module com.puresoltechnologies.javafx.extensions {
 
     requires com.puresoltechnologies.javafx.utils;
-    requires javafx.controls;
+    requires transitive javafx.controls;
 
     exports com.puresoltechnologies.javafx.extensions;
     exports com.puresoltechnologies.javafx.extensions.dialogs;

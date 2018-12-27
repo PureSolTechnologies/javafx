@@ -11,8 +11,6 @@ import javafx.scene.layout.BorderPane;
 
 public abstract class AbstractPerspective implements Perspective {
 
-    private static final long serialVersionUID = 2759295790738773633L;
-
     private BorderPane borderPane = null;
     private PerspectiveElement element = null;
 

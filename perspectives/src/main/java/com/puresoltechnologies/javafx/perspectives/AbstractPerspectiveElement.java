@@ -4,8 +4,6 @@ import java.util.UUID;
 
 public abstract class AbstractPerspectiveElement implements PerspectiveElement {
 
-    private static final long serialVersionUID = 2392435422868206813L;
-
     private PerspectiveElement parent = null;
     private PerspectiveHandler perspectiveHandler = null;
     private final UUID id = UUID.randomUUID();

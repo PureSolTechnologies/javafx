@@ -33,14 +33,6 @@
 			<groupId>com.puresoltechnologies.streaming</groupId>
 			<artifactId>iterators</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-core</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.testfx</groupId>
-			<artifactId>testfx-junit</artifactId>
-		</dependency>
 	</dependencies>
 
 </project>
