@@ -25,7 +25,7 @@ public class OpenPerspectiveMenuItem extends MenuItem {
     }
 
     public OpenPerspectiveMenuItem() {
-	super("Open Perspective...", new ImageView(icon));
+	super("_Open Perspective...", new ImageView(icon));
 	initialize();
     }
 

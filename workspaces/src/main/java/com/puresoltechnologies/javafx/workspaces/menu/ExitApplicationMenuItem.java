@@ -25,7 +25,7 @@ public class ExitApplicationMenuItem extends MenuItem {
     private final Stage stage;
 
     public ExitApplicationMenuItem(Stage stage) {
-	super("Exit", new ImageView(icon));
+	super("E_xit", new ImageView(icon));
 	this.stage = stage;
 	initialize();
     }

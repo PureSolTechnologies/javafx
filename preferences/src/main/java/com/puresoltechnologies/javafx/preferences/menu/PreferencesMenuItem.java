@@ -23,7 +23,7 @@ public class PreferencesMenuItem extends MenuItem {
     }
 
     public PreferencesMenuItem() {
-	super("Preferences...", new ImageView(icon));
+	super("_Preferences...", new ImageView(icon));
 	initialize();
     }
 

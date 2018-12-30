@@ -7,7 +7,7 @@ import javafx.scene.control.MenuItem;
 public class PerspectiveMenu extends Menu {
 
     public PerspectiveMenu() {
-	super("Perspective");
+	super("_Perspective");
 	initialize();
     }
 

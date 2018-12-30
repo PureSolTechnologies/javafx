@@ -23,7 +23,7 @@ public class ResetPerspectiveMenuItem extends MenuItem {
     }
 
     public ResetPerspectiveMenuItem() {
-	super("Reset Perspective", new ImageView(icon));
+	super("_Reset Perspective", new ImageView(icon));
 	initialize();
     }
 

@@ -26,7 +26,7 @@ public class ShowPartMenuItem extends MenuItem {
     }
 
     public ShowPartMenuItem() {
-	super("Show Part...", new ImageView(icon));
+	super("Show _Part...", new ImageView(icon));
 	initialize();
     }
 

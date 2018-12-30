@@ -39,6 +39,7 @@ public class ShowRoom extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+	FXThreads.initialize();
 	Image splashImage = ResourceUtils.getImage(ShowRoom.class, "splash/splash.jpeg");
 	splashScreen = new SplashScreen(stage, splashImage, applicationStage -> {
 	    try {
@@ -77,7 +78,6 @@ public class ShowRoom extends Application {
 		+ "\\____/|_| |_|\\___/ \\_/\\_/   \\_| \\_\\___/ \\___/|_| |_| |_|\n" //
 		+ "\n" //
 		+ "(c) PureSol Technologies\n"));
-
 	splashScreen.addTask(() -> {
 	    Preferences.initialize();
 	    return null;
@@ -94,16 +94,16 @@ public class ShowRoom extends Application {
 	SwitchWorkspaceMenu switchWorkspaceMenu = new SwitchWorkspaceMenu(stage);
 	RestartApplicationMenuItem restartApplicationMenuItem = new RestartApplicationMenuItem(stage);
 	ExitApplicationMenuItem exitApplicationMenuItem = new ExitApplicationMenuItem(stage);
-	Menu fileMenu = new Menu("File");
+	Menu fileMenu = new Menu("_File");
 	fileMenu.getItems().addAll(switchWorkspaceMenu, restartApplicationMenuItem, exitApplicationMenuItem);
 	// Window Menu
 	ShowPartMenuItem showViewItem = new ShowPartMenuItem();
 	PreferencesMenuItem preferencesItem = new PreferencesMenuItem();
-	Menu windowMenu = new Menu("Window");
+	Menu windowMenu = new Menu("_Window");
 	windowMenu.getItems().addAll(showViewItem, new PerspectiveMenu(), new SeparatorMenuItem(), preferencesItem);
 	// Help Menu
 	AboutMenuItem aboutItem = new AboutMenuItem();
-	Menu helpMenu = new Menu("Help");
+	Menu helpMenu = new Menu("_Help");
 	helpMenu.getItems().addAll(aboutItem);
 	// Menu Bar
 	MenuBar menuBar = new MenuBar();

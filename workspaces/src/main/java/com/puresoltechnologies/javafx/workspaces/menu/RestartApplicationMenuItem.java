@@ -25,7 +25,7 @@ public class RestartApplicationMenuItem extends MenuItem {
     private final Stage stage;
 
     public RestartApplicationMenuItem(Stage stage) {
-	super("Restart", new ImageView(icon));
+	super("_Restart", new ImageView(icon));
 	this.stage = stage;
 	initialize();
     }

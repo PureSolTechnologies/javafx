@@ -29,7 +29,7 @@ public class SwitchWorkspaceMenu extends Menu {
     private final Stage stage;
 
     public SwitchWorkspaceMenu(Stage stage) {
-	super("Switch Workspace", new ImageView(icon));
+	super("Switch _Workspace", new ImageView(icon));
 	this.stage = stage;
 	initialize();
     }

@@ -28,7 +28,7 @@ public class SwitchWorkspaceMenuItem extends MenuItem {
     private final Stage stage;
 
     public SwitchWorkspaceMenuItem(Stage stage) {
-	super("Switch Workspace...", new ImageView(icon));
+	super("Switch _Workspace...", new ImageView(icon));
 	this.stage = stage;
 	initialize();
     }
