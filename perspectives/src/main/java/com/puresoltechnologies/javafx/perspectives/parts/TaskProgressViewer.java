@@ -17,6 +17,8 @@ import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.BorderStroke;
@@ -33,10 +35,12 @@ import javafx.scene.paint.Color;
  */
 public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskInfo> {
 
-    private BorderPane borderPane;
-    private Map<Task<?>, TaskProgressPane<?>> taskPanes = new HashMap<>();
-    private VBox vbox;
+    private final Map<Task<?>, TaskProgressPane<?>> taskPanes = new HashMap<>();
     private Disposable disposable;
+
+    private final BorderPane borderPane = new BorderPane();
+    private final VBox vBox = new VBox();
+    private final ScrollPane scrollPane = new ScrollPane(vBox);
 
     public TaskProgressViewer() {
 	super("Progress", PartOpenMode.AUTO_AND_MANUAL);
@@ -49,11 +53,9 @@ public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskI
 
     @Override
     public void initialize() {
-	borderPane = new BorderPane();
-	vbox = new VBox();
-
-	borderPane.setCenter(vbox);
-	disposable = ReactiveFX.getStore().subscribe(TasksTopics.TASK_INFO, this);
+	borderPane.setCenter(scrollPane);
+	scrollPane.setFitToWidth(true);
+	disposable = ReactiveFX.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
     }
 
     @Override
@@ -71,26 +73,31 @@ public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskI
     @Override
     public void accept(TaskInfo taskInfo) throws Exception {
 	Task<?> task = taskInfo.getTask();
-	if (taskInfo.getTask().getState() == State.SCHEDULED) {
-	    TaskProgressPane<?> pane;
-	    if (taskInfo.getImage().isPresent()) {
-		pane = new TaskProgressPane<>(taskInfo.getImage().get(), taskInfo.getTask());
-	    } else {
-		pane = new TaskProgressPane<>(taskInfo.getTask());
+	State state = task.getState();
+	if (state == State.READY) {
+	    if (!taskPanes.containsKey(task)) {
+		TaskProgressPane<?> pane;
+		Optional<Image> image = taskInfo.getImage();
+		if (image.isPresent()) {
+		    pane = new TaskProgressPane<>(task, image.get());
+		} else {
+		    pane = new TaskProgressPane<>(task);
+		}
+		pane.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
+			new CornerRadii(0.0, 0.0, 0.0, 0.0, false), //
+			new BorderWidths(1.0, 0.0, 1.0, 0.0, false, false, false, false), //
+			new Insets(5, 5, 5, 5))));
+		FXThreads.runOnFXThread(() -> {
+		    vBox.getChildren().add(pane);
+		    taskPanes.put(task, pane);
+		});
 	    }
-	    pane.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
-		    new CornerRadii(0.0, 0.0, 0.0, 0.0, false), //
-		    new BorderWidths(1.0, 0.0, 1.0, 0.0, false, false, false, false), //
-		    new Insets(5, 5, 5, 5))));
-	    FXThreads.runOnFXThread(() -> {
-		vbox.getChildren().add(pane);
-		taskPanes.put(task, pane);
-	    });
-	} else if ((taskInfo.getTask().getState() == State.SUCCEEDED) || (taskInfo.getTask().getState() == State.FAILED)
-		|| (taskInfo.getTask().getState() == State.CANCELLED)) {
+	} else if (state == State.SCHEDULED) {
+	    // TODO
+	} else if ((state == State.SUCCEEDED) || (state == State.FAILED) || (state == State.CANCELLED)) {
 	    TaskProgressPane<?> pane = taskPanes.get(task);
 	    FXThreads.runOnFXThread(() -> {
-		vbox.getChildren().remove(pane);
+		vBox.getChildren().remove(pane);
 		taskPanes.remove(task);
 	    });
 	}

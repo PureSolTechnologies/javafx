@@ -24,16 +24,16 @@ public class TaskProgressPane<T> extends GridPane {
     private final Button abortButton;
 
     public TaskProgressPane(Task<T> task) {
-	this(null, task);
+	this(task, null);
     }
 
-    public TaskProgressPane(Image image, Task<T> task) {
+    public TaskProgressPane(Task<T> task, Image image) {
 	super();
 	try {
 	    this.image = image;
 	    this.task = task;
 
-	    Label titleLabel = new Label();
+	    Label titleLabel = new Label(task.getTitle());
 	    titleLabel.setFont(FXDefaultFonts.boldFont);
 	    titleLabel.textProperty().bind(task.titleProperty());
 

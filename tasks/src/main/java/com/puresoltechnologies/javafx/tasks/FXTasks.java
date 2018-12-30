@@ -16,12 +16,12 @@ public class FXTasks {
 
     public static <T> void run(Task<T> task) {
 	TaskInfo taskInfo = new TaskInfo(task);
-	ReactiveFX.getStore().publish(TasksTopics.TASK_INFO, taskInfo);
+	ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	task.stateProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_INFO, new TaskInfo(task));
+	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task));
 	});
 	task.progressProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_INFO, new TaskInfo(task));
+	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task));
 	});
 	registerNewTask(task);
 	FXThreads.runAsync(task);
@@ -29,12 +29,12 @@ public class FXTasks {
 
     public static <T> void run(Task<T> task, Image image) {
 	TaskInfo taskInfo = new TaskInfo(task, image);
-	ReactiveFX.getStore().publish(TasksTopics.TASK_INFO, taskInfo);
+	ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	task.stateProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_INFO, new TaskInfo(task, image));
+	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task, image));
 	});
 	task.progressProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_INFO, new TaskInfo(task));
+	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task));
 	});
 	registerNewTask(task);
 	FXThreads.runAsync(task);

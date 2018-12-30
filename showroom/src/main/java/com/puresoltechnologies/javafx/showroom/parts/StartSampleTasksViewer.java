@@ -20,10 +20,10 @@ import javafx.scene.layout.Priority;
 
 public class StartSampleTasksViewer extends AbstractViewer {
 
-    private GridPane gridPane = new GridPane();
-    private TextField nameField = new TextField();
-    private Spinner<Integer> timeSpinner = new Spinner<>(1, 60, 5);
-    private Button startButton = new Button("Start Sample Task...");
+    private final GridPane gridPane = new GridPane();
+    private final TextField nameField = new TextField();
+    private final Spinner<Integer> timeSpinner = new Spinner<>(1, 60, 5);
+    private final Button startButton = new Button("Start Sample Task...");
 
     public StartSampleTasksViewer() {
 	super("Create Sample Tasks", PartOpenMode.AUTO_AND_MANUAL);
@@ -41,6 +41,7 @@ public class StartSampleTasksViewer extends AbstractViewer {
 	GridPane.setConstraints(nameField, 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
 
 	Label timeLabel = new Label("Time:");
+	timeSpinner.setEditable(true);
 	GridPane.setConstraints(timeLabel, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.NEVER);
 	GridPane.setConstraints(timeSpinner, 1, 1, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
 
@@ -57,6 +58,10 @@ public class StartSampleTasksViewer extends AbstractViewer {
 	String title = nameField.getText();
 	int time = timeSpinner.getValue();
 	Task<Void> task = new Task<>() {
+
+	    {
+		updateTitle(title);
+	    }
 
 	    @Override
 	    protected Void call() throws Exception {
