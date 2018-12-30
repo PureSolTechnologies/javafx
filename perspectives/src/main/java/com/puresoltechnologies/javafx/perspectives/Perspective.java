@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.perspectives;
 
+import java.util.Optional;
+
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 
 import javafx.scene.image.Image;
@@ -25,7 +27,7 @@ public interface Perspective extends PerspectiveElement {
      * 
      * @return
      */
-    public Image getImage();
+    public Optional<Image> getImage();
 
     public void reset();
 

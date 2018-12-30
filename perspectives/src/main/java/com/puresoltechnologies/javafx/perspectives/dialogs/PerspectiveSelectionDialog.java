@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.ServiceLoader;
 
 import com.puresoltechnologies.javafx.perspectives.Perspective;
@@ -76,8 +77,9 @@ public class PerspectiveSelectionDialog extends Dialog<Perspective> {
 		    super.updateItem(t, bln);
 		    if (t != null) {
 			setText(t.getName());
-			if (t.getImage() != null) {
-			    setGraphic(new ImageView(t.getImage()));
+			Optional<Image> image = t.getImage();
+			if (image.isPresent()) {
+			    setGraphic(new ImageView(image.get()));
 			}
 		    }
 		}

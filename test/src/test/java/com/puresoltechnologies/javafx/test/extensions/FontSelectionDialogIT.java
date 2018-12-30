@@ -41,10 +41,14 @@ public class FontSelectionDialogIT extends ApplicationTest {
 	    System.err.println(font.getStyle());
 	    dialog.setFont(FontDefinition.of(font));
 	    Optional<FontDefinition> selected = dialog.showAndWait();
-	    font = selected.get().toFont();
-	    System.err.println(font.getFamily());
-	    System.err.println(font.getName());
-	    System.err.println(font.getStyle());
+	    if (selected.isPresent()) {
+		font = selected.get().toFont();
+		System.err.println(font.getFamily());
+		System.err.println(font.getName());
+		System.err.println(font.getStyle());
+	    } else {
+		System.err.println("No default font selected!");
+	    }
 	});
 	int count = 0;
 	while ((dialogProperty.get() == null) || ((!dialogProperty.get().isShowing()) && (count < 10))) {

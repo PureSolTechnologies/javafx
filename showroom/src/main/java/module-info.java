@@ -22,6 +22,11 @@ module com.puresoltechnologies.javafx.showcase {
     opens com.puresoltechnologies.javafx.showroom.splash;
 
     provides com.puresoltechnologies.javafx.perspectives.Perspective
-	    with com.puresoltechnologies.javafx.showroom.perspectives.StartPerspective;
+	    with com.puresoltechnologies.javafx.showroom.perspectives.ChartsPerspective,
+	    com.puresoltechnologies.javafx.showroom.perspectives.StartPerspective,
+	    com.puresoltechnologies.javafx.showroom.perspectives.TasksPerspective;
+    provides com.puresoltechnologies.javafx.perspectives.parts.Part
+	    with com.puresoltechnologies.javafx.showroom.parts.StartSampleTasksViewer,
+	    com.puresoltechnologies.javafx.showroom.parts.SampleTaskResultsViewer;
     // provides com.puresoltechnologies.javafx.perspectives.parts.Part with ;
 }

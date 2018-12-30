@@ -248,19 +248,8 @@ public class PartStack extends AbstractPerspectiveElement {
 
     @Override
     public final void addElement(PerspectiveElement element) {
-	if (!Part.class.isAssignableFrom(element.getClass())) {
-	    throw new IllegalArgumentException("Part stacks can only contain parts. Type '"
-		    + element.getClass().getName() + "' is not supported.");
-	}
-	Part part = (Part) element;
-	PartHeader button = new PartHeader(this, part);
-	headerButtons.put(part.getId(), button);
-	parts.add(part);
-	FXThreads.proceedOnFXThread(() -> {
-	    ObservableList<Node> items = toolBar.getItems();
-	    items.add(items.size() - 1, button);
-	    setActive(part.getId());
-	});
+	ObservableList<Node> items = toolBar.getItems();
+	addElement(items.size() - 1, element);
     }
 
     @Override
@@ -274,6 +263,7 @@ public class PartStack extends AbstractPerspectiveElement {
 	headerButtons.put(part.getId(), button);
 	parts.add(part);
 	FXThreads.proceedOnFXThread(() -> {
+	    part.initialize();
 	    ObservableList<Node> items = toolBar.getItems();
 	    items.add(index, button);
 	    setActive(part.getId());

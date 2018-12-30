@@ -8,8 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.dialogs.PartSelectionDialog;
+import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXThreads;
@@ -22,6 +22,7 @@ import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitMenuButton;
 import javafx.scene.control.ToolBar;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
@@ -80,6 +81,10 @@ public class PerspectiveContainer extends BorderPane {
 	items.clear();
 	perspectives.forEach(perspective -> {
 	    MenuItem item = new MenuItem(perspective.getName());
+	    Optional<Image> image = perspective.getImage();
+	    if (image.isPresent()) {
+		item.setGraphic(new ImageView(image.get()));
+	    }
 	    item.setOnAction(event -> {
 		PerspectiveContainer.this.selectPerspective(perspective.getId());
 		event.consume();
