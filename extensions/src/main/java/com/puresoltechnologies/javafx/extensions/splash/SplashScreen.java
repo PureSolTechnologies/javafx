@@ -12,18 +12,16 @@ import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.geometry.HPos;
 import javafx.geometry.Rectangle2D;
+import javafx.geometry.VPos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundImage;
-import javafx.scene.layout.BackgroundPosition;
-import javafx.scene.layout.BackgroundRepeat;
-import javafx.scene.layout.BackgroundSize;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -33,7 +31,9 @@ public class SplashScreen {
     private final Stage initStage;
     private final Consumer<Stage> startStage;
     private final Scene scene;
-    private final BorderPane root = new BorderPane();
+    private final GridPane root = new GridPane();
+    private final ProgressBar loadProgress;
+    private final Label amountLabel = new Label();
 
     private final List<Task<?>> tasks = new ArrayList<>();
 
@@ -44,27 +44,26 @@ public class SplashScreen {
 	try {
 	    ImageView imageView = new ImageView(splashImage);
 
-	    ProgressBar loadProgress = new ProgressBar();
-	    loadProgress.setMinWidth(splashImage.getWidth() - 20);
-	    loadProgress.setPrefWidth(splashImage.getWidth() - 20);
-	    loadProgress.setProgress(0.5);
+	    loadProgress = new ProgressBar();
+	    loadProgress.setMinHeight(16);
+	    loadProgress.setPrefHeight(16);
+	    loadProgress.setMinWidth(splashImage.getWidth());
+	    loadProgress.setPrefWidth(splashImage.getWidth());
 
-	    BackgroundImage backgroundImage = new BackgroundImage(splashImage, BackgroundRepeat.NO_REPEAT,
-		    BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER,
-		    new BackgroundSize(BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true));
-	    Background background = new Background(backgroundImage);
-	    root.setBackground(background);
-	    root.setEffect(new DropShadow());
+	    GridPane.setConstraints(imageView, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+	    GridPane.setConstraints(loadProgress, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS,
+		    Priority.NEVER);
+	    GridPane.setConstraints(amountLabel, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.SOMETIMES,
+		    Priority.NEVER);
 
-	    root.setCenter(imageView);
-	    root.setBottom(loadProgress);
+	    root.getChildren().addAll(imageView, loadProgress, amountLabel);
 
-	    scene = new Scene(root, splashImage.getWidth(), splashImage.getHeight(), Color.TRANSPARENT);
+	    scene = new Scene(root, Color.TRANSPARENT);
 	    initStage.setScene(scene);
 
 	    final Rectangle2D bounds = Screen.getPrimary().getBounds();
-	    initStage.setX(bounds.getMinX() + bounds.getWidth() / 2 - splashImage.getWidth() / 2);
-	    initStage.setY(bounds.getMinY() + bounds.getHeight() / 2 - splashImage.getHeight() / 2);
+	    initStage.setX((bounds.getMinX() + (bounds.getWidth() / 2)) - (splashImage.getWidth() / 2));
+	    initStage.setY((bounds.getMinY() + (bounds.getHeight() / 2)) - (splashImage.getHeight() / 2));
 	    Image chartUpColorSmall = ResourceUtils.getImage(StatusBar.class,
 		    "icons/FatCow_Icons16x16/information.png");
 	    Image chartUpColorBig = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons32x32/information.png");
@@ -82,8 +81,13 @@ public class SplashScreen {
 	Task<Void> task = new Task<Void>() {
 	    @Override
 	    protected Void call() throws Exception {
-		for (Task<?> task : tasks) {
+		int taskNum = tasks.size();
+		for (int taskId = 0; taskId < taskNum; taskId++) {
+		    int num = taskId + 1;
+		    FXThreads.proceedOnFXThread(() -> amountLabel.setText("(" + (num + 1) + "/" + taskNum + ")"));
+		    Task<?> task = tasks.get(taskId);
 		    task.run();
+		    FXThreads.proceedOnFXThread(() -> loadProgress.setProgress(((double) num) / taskNum));
 		}
 		return null;
 	    }

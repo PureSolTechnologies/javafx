@@ -19,10 +19,10 @@ public class PerspectiveService {
     }
 
     public static void shutdown() {
-	instance.container.removeAllPerspectives();
 	if (instance == null) {
 	    throw new IllegalStateException("CryptoCurrenciesClient is not initialized.");
 	}
+	instance.container.removeAllPerspectives();
 	instance = null;
     }
 

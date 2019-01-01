@@ -40,7 +40,7 @@ public class ShowRoom extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 	FXThreads.initialize();
-	Image splashImage = ResourceUtils.getImage(ShowRoom.class, "splash/splash.jpeg");
+	Image splashImage = ResourceUtils.getImage(ShowRoom.class, "splash/splash.png");
 	splashScreen = new SplashScreen(stage, splashImage, applicationStage -> {
 	    try {
 		applicationStage.setTitle("Tool Shed");
@@ -63,11 +63,19 @@ public class ShowRoom extends Application {
 
 		PerspectiveService.openPerspective(new StartPerspective());
 
-		Scene scene = new Scene(root, 1280, 960);
+		Scene scene = new Scene(root, 800, 600);
 		applicationStage.setScene(scene);
 		applicationStage.show();
 	    } catch (IOException e) {
 		throw new RuntimeException(e);
+	    }
+	});
+	splashScreen.addTask(() -> {
+	    try {
+		Thread.sleep(1000);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
 	    }
 	});
 	splashScreen.addTask(() -> System.out.println("Starting...\n" //
@@ -79,11 +87,35 @@ public class ShowRoom extends Application {
 		+ "\n" //
 		+ "(c) PureSol Technologies\n"));
 	splashScreen.addTask(() -> {
+	    try {
+		Thread.sleep(1000);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	});
+	splashScreen.addTask(() -> {
 	    Preferences.initialize();
 	    return null;
 	});
 	splashScreen.addTask(() -> PerspectiveService.initialize());
+	splashScreen.addTask(() -> {
+	    try {
+		Thread.sleep(1000);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	});
 	splashScreen.addTask(() -> ReactiveFX.initialize());
+	splashScreen.addTask(() -> {
+	    try {
+		Thread.sleep(1000);
+	    } catch (InterruptedException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	    }
+	});
 
 	splashScreen.startApplication();
 
