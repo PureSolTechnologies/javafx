@@ -70,52 +70,21 @@ public class ShowRoom extends Application {
 		throw new RuntimeException(e);
 	    }
 	});
-	splashScreen.addTask(() -> {
-	    try {
-		Thread.sleep(1000);
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	});
-	splashScreen.addTask(() -> System.out.println("Starting...\n" //
-		+ "/  ___| |                   | ___ \\                     \n" //
-		+ "\\ `--.| |__   _____      __ | |_/ /___   ___  _ __ ___  \n" //
-		+ " `--. \\ '_ \\ / _ \\ \\ /\\ / / |    // _ \\ / _ \\| '_ ` _ \\ \n" //
-		+ "/\\__/ / | | | (_) \\ V  V /  | |\\ \\ (_) | (_) | | | | | |\n" //
-		+ "\\____/|_| |_|\\___/ \\_/\\_/   \\_| \\_\\___/ \\___/|_| |_| |_|\n" //
+	splashScreen.addTask("Show startup message", () -> System.out.println("Starting...\n" //
+		+ "      _                  _______  __  ____  _                     ____                       \n" //
+		+ "     | | __ ___   ____ _|  ___\\ \\/ / / ___|| |__   _____      __ |  _ \\ ___   ___  _ __ ___  \n" //
+		+ "  _  | |/ _` \\ \\ / / _` | |_   \\  /  \\___ \\| '_ \\ / _ \\ \\ /\\ / / | |_) / _ \\ / _ \\| '_ ` _ \\ \n" //
+		+ " | |_| | (_| |\\ V / (_| |  _|  /  \\   ___) | | | | (_) \\ V  V /  |  _ < (_) | (_) | | | | | |\n" //
+		+ "  \\___/ \\__,_| \\_/ \\__,_|_|   /_/\\_\\ |____/|_| |_|\\___/ \\_/\\_/   |_| \\_\\___/ \\___/|_| |_| |_|\n" //
 		+ "\n" //
-		+ "(c) PureSol Technologies\n"));
-	splashScreen.addTask(() -> {
-	    try {
-		Thread.sleep(1000);
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	});
-	splashScreen.addTask(() -> {
+		+ "(c) PureSol Technologies\n" //
+		+ "\n"));
+	splashScreen.addTask("Initialize preferences", () -> {
 	    Preferences.initialize();
 	    return null;
 	});
-	splashScreen.addTask(() -> PerspectiveService.initialize());
-	splashScreen.addTask(() -> {
-	    try {
-		Thread.sleep(1000);
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	});
-	splashScreen.addTask(() -> ReactiveFX.initialize());
-	splashScreen.addTask(() -> {
-	    try {
-		Thread.sleep(1000);
-	    } catch (InterruptedException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	    }
-	});
+	splashScreen.addTask("Initialize perspectives", () -> PerspectiveService.initialize());
+	splashScreen.addTask("Initialize reactive Java", () -> ReactiveFX.initialize());
 
 	splashScreen.startApplication();
 

@@ -4,7 +4,7 @@ import com.puresoltechnologies.javafx.perspectives.parts.Part;
 
 /**
  * This is the central service for perspectives in JavaFX.
- * 
+ *
  * @author Rick-Rainer Ludwig
  */
 public class PerspectiveService {
@@ -13,14 +13,14 @@ public class PerspectiveService {
 
     public static void initialize() {
 	if (instance != null) {
-	    throw new IllegalStateException("CryptoCurrenciesClient was initialized already.");
+	    throw new IllegalStateException("PerspectiveService was initialized already.");
 	}
 	instance = new PerspectiveService();
     }
 
     public static void shutdown() {
 	if (instance == null) {
-	    throw new IllegalStateException("CryptoCurrenciesClient is not initialized.");
+	    throw new IllegalStateException("PerspectiveService is not initialized.");
 	}
 	instance.container.removeAllPerspectives();
 	instance = null;

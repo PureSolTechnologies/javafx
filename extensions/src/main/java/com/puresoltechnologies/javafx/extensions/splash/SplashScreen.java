@@ -12,6 +12,7 @@ import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker;
+import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Rectangle2D;
 import javafx.geometry.VPos;
@@ -32,8 +33,9 @@ public class SplashScreen {
     private final Consumer<Stage> startStage;
     private final Scene scene;
     private final GridPane root = new GridPane();
-    private final ProgressBar loadProgress;
+    private final ProgressBar loadProgress = new ProgressBar();
     private final Label amountLabel = new Label();
+    private final Label titleLabel = new Label();
 
     private final List<Task<?>> tasks = new ArrayList<>();
 
@@ -43,20 +45,23 @@ public class SplashScreen {
 	this.startStage = startStage;
 	try {
 	    ImageView imageView = new ImageView(splashImage);
+	    GridPane.setFillWidth(imageView, true);
+	    GridPane.setFillHeight(imageView, true);
 
-	    loadProgress = new ProgressBar();
 	    loadProgress.setMinHeight(16);
 	    loadProgress.setPrefHeight(16);
-	    loadProgress.setMinWidth(splashImage.getWidth());
-	    loadProgress.setPrefWidth(splashImage.getWidth());
 
+	    root.getChildren().addAll(imageView, loadProgress, amountLabel, titleLabel);
 	    GridPane.setConstraints(imageView, 0, 0, 2, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-	    GridPane.setConstraints(loadProgress, 0, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS,
+	    GridPane.setConstraints(loadProgress, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
+	    GridPane.setFillWidth(loadProgress, true);
+	    GridPane.setFillHeight(loadProgress, true);
+	    GridPane.setConstraints(amountLabel, 1, 1, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES,
 		    Priority.NEVER);
-	    GridPane.setConstraints(amountLabel, 1, 1, 1, 1, HPos.CENTER, VPos.CENTER, Priority.SOMETIMES,
-		    Priority.NEVER);
+	    GridPane.setConstraints(titleLabel, 0, 2, 2, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.NEVER);
 
-	    root.getChildren().addAll(imageView, loadProgress, amountLabel);
+	    Bounds cellBounds = root.getCellBounds(0, 1);
+	    loadProgress.setPrefWidth(cellBounds.getWidth());
 
 	    scene = new Scene(root, Color.TRANSPARENT);
 	    initStage.setScene(scene);
@@ -78,14 +83,19 @@ public class SplashScreen {
     public void startApplication() {
 	// startStage.accept(initStage);
 	initStage.show();
-	Task<Void> task = new Task<Void>() {
+	Task<Void> task = new Task<>() {
 	    @Override
 	    protected Void call() throws Exception {
 		int taskNum = tasks.size();
 		for (int taskId = 0; taskId < taskNum; taskId++) {
 		    int num = taskId + 1;
-		    FXThreads.proceedOnFXThread(() -> amountLabel.setText("(" + (num + 1) + "/" + taskNum + ")"));
 		    Task<?> task = tasks.get(taskId);
+		    FXThreads.proceedOnFXThread(() -> {
+			amountLabel.setText("(" + num + "/" + taskNum + ")");
+			titleLabel.setText(task.getTitle());
+			Bounds cellBounds = root.getCellBounds(0, 1);
+			loadProgress.setPrefWidth(cellBounds.getWidth());
+		    });
 		    task.run();
 		    FXThreads.proceedOnFXThread(() -> loadProgress.setProgress(((double) num) / taskNum));
 		}
@@ -101,8 +111,12 @@ public class SplashScreen {
 	FXThreads.runAsync(task);
     }
 
-    public void addTask(Runnable runnable) {
+    public void addTask(String title, Runnable runnable) {
 	tasks.add(new Task<Void>() {
+	    {
+		updateTitle(title);
+	    }
+
 	    @Override
 	    protected Void call() throws Exception {
 		runnable.run();
@@ -111,8 +125,12 @@ public class SplashScreen {
 	});
     }
 
-    public <T> void addTask(Callable<T> callable) {
+    public <T> void addTask(String title, Callable<T> callable) {
 	tasks.add(new Task<T>() {
+	    {
+		updateTitle(title);
+	    }
+
 	    @Override
 	    protected T call() throws Exception {
 		return callable.call();
