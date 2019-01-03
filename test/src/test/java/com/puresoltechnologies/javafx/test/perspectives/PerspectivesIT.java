@@ -7,7 +7,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.testfx.framework.junit5.ApplicationExtension;
 import org.testfx.framework.junit5.ApplicationTest;
 
-import com.puresoltechnologies.javafx.perspectives.PerspectiveContainer;
+import com.puresoltechnologies.javafx.perspectives.PerspectivePane;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
 
 import javafx.scene.Scene;
@@ -17,7 +17,7 @@ import javafx.stage.Stage;
 @ExtendWith(ApplicationExtension.class)
 public class PerspectivesIT extends ApplicationTest {
 
-    PerspectiveContainer perspectiveContainer;
+    PerspectivePane perspectiveContainer;
 
     @BeforeAll
     public static void initialize() {
@@ -31,7 +31,7 @@ public class PerspectivesIT extends ApplicationTest {
 
     @Override
     public void start(Stage stage) {
-	perspectiveContainer = PerspectiveService.getContainer();
+	perspectiveContainer = PerspectiveService.getMainContainer();
 	perspectiveContainer.setId("perspectiveContainer");
 	Scene scene = new Scene(perspectiveContainer, 800, 600);
 	stage.setScene(scene);

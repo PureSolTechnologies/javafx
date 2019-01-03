@@ -22,7 +22,7 @@ public class PerspectiveService {
 	if (instance == null) {
 	    throw new IllegalStateException("PerspectiveService is not initialized.");
 	}
-	instance.container.removeAllPerspectives();
+	instance.mainContainer.removeAllPerspectives();
 	instance = null;
     }
 
@@ -30,37 +30,37 @@ public class PerspectiveService {
 	return instance;
     }
 
-    public static PerspectiveContainer getContainer() {
-	return instance.container;
+    public static PerspectivePane getMainContainer() {
+	return instance.mainContainer;
     }
 
     public static void openPart(Part part) {
-	Perspective currentPerspective = instance.container.getCurrentPerspective();
+	Perspective currentPerspective = instance.mainContainer.getCurrentPerspective();
 	currentPerspective.openPart(part);
     }
 
     public static void openPerspective(Perspective perspective) {
-	instance.container.addPerspective(perspective);
+	instance.mainContainer.addPerspective(perspective);
     }
 
     public static void resetPerspective() {
-	Perspective currentPerspective = instance.container.getCurrentPerspective();
+	Perspective currentPerspective = instance.mainContainer.getCurrentPerspective();
 	currentPerspective.reset();
     }
 
     public static void closePerspective() {
-	Perspective currentPerspective = instance.container.getCurrentPerspective();
-	instance.container.removePerspective(currentPerspective);
+	Perspective currentPerspective = instance.mainContainer.getCurrentPerspective();
+	instance.mainContainer.removePerspective(currentPerspective);
     }
 
     public static void closeAllPerspectives() {
-	instance.container.removeAllPerspectives();
+	instance.mainContainer.removeAllPerspectives();
     }
 
-    private final PerspectiveContainer container;
+    private final PerspectivePane mainContainer;
 
     public PerspectiveService() {
-	this.container = new PerspectiveContainer();
+	this.mainContainer = new PerspectivePane();
     }
 
 }

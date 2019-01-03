@@ -11,9 +11,9 @@ import javafx.scene.layout.BorderPane;
 
 public abstract class AbstractPerspective implements Perspective {
 
-    private BorderPane borderPane = null;
     private PerspectiveElement element = null;
 
+    private final BorderPane borderPane = new BorderPane();
     private final UUID id = UUID.randomUUID();
     private final PerspectiveHandler perspectiveHandler;
     private final String name;
@@ -22,6 +22,7 @@ public abstract class AbstractPerspective implements Perspective {
 	super();
 	this.perspectiveHandler = new PerspectiveHandler(this);
 	this.name = name;
+	createNewContent();
     }
 
     private void createNewContent() {
@@ -67,10 +68,6 @@ public abstract class AbstractPerspective implements Perspective {
 
     @Override
     public final Node getContent() {
-	if (borderPane == null) {
-	    borderPane = new BorderPane();
-	    createNewContent();
-	}
 	return borderPane;
     }
 

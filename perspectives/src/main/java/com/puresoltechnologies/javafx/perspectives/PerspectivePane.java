@@ -26,7 +26,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
-public class PerspectiveContainer extends BorderPane {
+public class PerspectivePane extends BorderPane {
 
     private static final ObjectProperty<ContentDisplay> toolBarContentDisplay = Preferences
 	    .getProperty(PerspectiveProperties.perspectiveToolbarContentDisplay);
@@ -35,8 +35,9 @@ public class PerspectiveContainer extends BorderPane {
     private final SplitMenuButton openPerspectiveButton;
     private final List<Perspective> perspectives = new ArrayList<>();
     private Perspective currentPerspective = null;
+    private final PerspectiveContainerPane perspectiveContainerPane = new PerspectiveContainerPane();
 
-    PerspectiveContainer() {
+    PerspectivePane() {
 	super();
 	try {
 	    ImageView switchWidowsImage = ResourceUtils.getImageView(this,
@@ -71,6 +72,7 @@ public class PerspectiveContainer extends BorderPane {
 	    toolBar = new ToolBar();
 	    toolBar.getItems().addAll(openPerspectiveButton, showViewButton, resetButton, closeButton);
 	    setTop(toolBar);
+	    setCenter(perspectiveContainerPane);
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
@@ -86,7 +88,7 @@ public class PerspectiveContainer extends BorderPane {
 		item.setGraphic(new ImageView(image.get()));
 	    }
 	    item.setOnAction(event -> {
-		PerspectiveContainer.this.selectPerspective(perspective.getId());
+		PerspectivePane.this.selectPerspective(perspective.getId());
 		event.consume();
 	    });
 	    openPerspectiveButton.getItems().add(item);
@@ -111,7 +113,7 @@ public class PerspectiveContainer extends BorderPane {
     private void resetCurrentPerspective() {
 	if (currentPerspective != null) {
 	    currentPerspective.reset();
-	    setCenter(currentPerspective.getContent());
+	    perspectiveContainerPane.setRootElement(currentPerspective.getRootElement());
 	}
     }
 
@@ -134,7 +136,7 @@ public class PerspectiveContainer extends BorderPane {
 	currentPerspective = perspective;
 	FXThreads.proceedOnFXThread(() -> {
 	    updateOpenPerspectiveButton();
-	    setCenter(currentPerspective.getContent());
+	    perspectiveContainerPane.setRootElement(currentPerspective.getRootElement());
 	});
     }
 
@@ -143,7 +145,7 @@ public class PerspectiveContainer extends BorderPane {
 	perspectives.clear();
 	currentPerspective = null;
 	FXThreads.proceedOnFXThread(() -> {
-	    setCenter(null);
+	    perspectiveContainerPane.setRootElement(null);
 	    updateOpenPerspectiveButton();
 	});
     }
@@ -154,10 +156,10 @@ public class PerspectiveContainer extends BorderPane {
 	FXThreads.proceedOnFXThread(() -> {
 	    if (perspectives.size() > 0) {
 		currentPerspective = perspectives.get(perspectives.size() - 1);
-		setCenter(currentPerspective.getContent());
+		perspectiveContainerPane.setRootElement(currentPerspective.getRootElement());
 	    } else {
 		currentPerspective = null;
-		setCenter(null);
+		perspectiveContainerPane.setRootElement(null);
 	    }
 	    updateOpenPerspectiveButton();
 	});
@@ -174,9 +176,9 @@ public class PerspectiveContainer extends BorderPane {
 	}
 	if (perspectives.size() > 0) {
 	    currentPerspective = perspectives.get(perspectives.size() - 1);
-	    setCenter(currentPerspective.getContent());
+	    perspectiveContainerPane.setRootElement(currentPerspective.getRootElement());
 	} else {
-	    setCenter(null);
+	    perspectiveContainerPane.setRootElement(null);
 	}
     }
 
@@ -200,7 +202,7 @@ public class PerspectiveContainer extends BorderPane {
 	    Perspective perspective = iterator.next();
 	    if (perspective.getId().equals(perspectiveId)) {
 		currentPerspective = perspective;
-		setCenter(currentPerspective.getContent());
+		perspectiveContainerPane.setRootElement(currentPerspective.getRootElement());
 	    }
 	}
     }

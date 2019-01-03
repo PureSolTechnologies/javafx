@@ -5,7 +5,7 @@ import java.io.IOException;
 import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.extensions.menu.AboutMenuItem;
 import com.puresoltechnologies.javafx.extensions.splash.SplashScreen;
-import com.puresoltechnologies.javafx.perspectives.PerspectiveContainer;
+import com.puresoltechnologies.javafx.perspectives.PerspectivePane;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
 import com.puresoltechnologies.javafx.perspectives.menu.PerspectiveMenu;
 import com.puresoltechnologies.javafx.perspectives.menu.ShowPartMenuItem;
@@ -34,7 +34,7 @@ import javafx.stage.Stage;
 
 public class ShowRoom extends Application {
 
-    private PerspectiveContainer perspectiveContainer;
+    private PerspectivePane perspectiveContainer;
     private SplashScreen splashScreen;
 
     @Override
@@ -51,7 +51,7 @@ public class ShowRoom extends Application {
 		Image chartUpColorBig = ResourceUtils.getImage(this, "icons/FatCow_Icons32x32/setup_slide_show.png");
 		applicationStage.getIcons().addAll(chartUpColorSmall, chartUpColorBig);
 
-		perspectiveContainer = PerspectiveService.getContainer();
+		perspectiveContainer = PerspectiveService.getMainContainer();
 		BorderPane root = new BorderPane();
 		addMenu(applicationStage, root);
 		root.setCenter(perspectiveContainer);
