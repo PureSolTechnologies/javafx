@@ -40,6 +40,75 @@ public class PartStack extends AbstractPerspectiveElement {
     private static final ObjectProperty<ContentDisplay> toolBarContentDisplay = Preferences
 	    .getProperty(PerspectiveProperties.partHeaderToolbarContentDisplay);
 
+    class DropAreas {
+
+	private final Polygon top;
+	private final Polygon right;
+	private final Polygon lower;
+	private final Polygon left;
+	private final Rectangle innerRectangle;
+
+	DropAreas(PartStack partStack) {
+	    double width = borderPane.getWidth();
+	    double height = borderPane.getHeight();
+	    double leftInnerPosition = width * DRAG_EDGE_FRACTION;
+	    double rightInnerPosition = width * (1.0 - DRAG_EDGE_FRACTION);
+	    double topInnerPosition = height * DRAG_EDGE_FRACTION;
+	    double lowerInnerPosition = height * (1.0 - DRAG_EDGE_FRACTION);
+	    // shapes
+	    top = new Polygon(0.0, 0.0, width, 0.0, rightInnerPosition, topInnerPosition, leftInnerPosition,
+		    topInnerPosition);
+	    right = new Polygon(width, 0.0, width, height, rightInnerPosition, lowerInnerPosition, rightInnerPosition,
+		    topInnerPosition);
+	    lower = new Polygon(0.0, height, leftInnerPosition, lowerInnerPosition, rightInnerPosition,
+		    lowerInnerPosition, width, height);
+	    left = new Polygon(0.0, 0.0, leftInnerPosition, topInnerPosition, leftInnerPosition, lowerInnerPosition,
+		    0.0, height);
+	    innerRectangle = new Rectangle(leftInnerPosition, topInnerPosition,
+		    (1.0 - (2.0 * DRAG_EDGE_FRACTION)) * width, (1.0 - (2.0 * DRAG_EDGE_FRACTION)) * height);
+	}
+
+	public Polygon getTop() {
+	    return top;
+	}
+
+	public Polygon getRight() {
+	    return right;
+	}
+
+	public Polygon getLower() {
+	    return lower;
+	}
+
+	public Polygon getLeft() {
+	    return left;
+	}
+
+	public Rectangle getInnerRectangle() {
+	    return innerRectangle;
+	}
+
+	public boolean isLeft(DragEvent dragEvent) {
+	    return left.contains(dragEvent.getX(), dragEvent.getY());
+	}
+
+	public boolean isRight(DragEvent dragEvent) {
+	    return right.contains(dragEvent.getX(), dragEvent.getY());
+	}
+
+	public boolean isTop(DragEvent dragEvent) {
+	    return top.contains(dragEvent.getX(), dragEvent.getY());
+	}
+
+	public boolean isLower(DragEvent dragEvent) {
+	    return lower.contains(dragEvent.getX(), dragEvent.getY());
+	}
+
+	public boolean isInnerRectangle(DragEvent dragEvent) {
+	    return innerRectangle.contains(dragEvent.getX(), dragEvent.getY());
+	}
+    }
+
     private final PartHeaderToolBar toolBar;
     private final HBox headerToolBar;
     private final List<Part> parts = new ArrayList<>();
@@ -117,33 +186,18 @@ public class PartStack extends AbstractPerspectiveElement {
 	children.remove(children.size() - 1);
 	boolean success = false;
 	if (event.getDragboard().hasContent(PartDragDataFormat.get())) {
-	    double width = borderPane.getWidth();
-	    double height = borderPane.getHeight();
-	    double leftInnerPosition = width * DRAG_EDGE_FRACTION;
-	    double rightInnerPosition = width * (1.0 - DRAG_EDGE_FRACTION);
-	    double topInnerPosition = height * DRAG_EDGE_FRACTION;
-	    double lowerInnerPosition = height * (1.0 - DRAG_EDGE_FRACTION);
-	    // shapes
-	    Polygon top = new Polygon(0.0, 0.0, width, 0.0, rightInnerPosition, topInnerPosition, leftInnerPosition,
-		    topInnerPosition);
-	    Polygon right = new Polygon(width, 0.0, width, height, rightInnerPosition, lowerInnerPosition,
-		    rightInnerPosition, topInnerPosition);
-	    Polygon lower = new Polygon(0.0, height, leftInnerPosition, lowerInnerPosition, rightInnerPosition,
-		    lowerInnerPosition, width, height);
-	    Polygon left = new Polygon(0.0, 0.0, leftInnerPosition, topInnerPosition, leftInnerPosition,
-		    lowerInnerPosition, 0.0, height);
-	    Rectangle innerRectangle = new Rectangle(leftInnerPosition, topInnerPosition,
-		    (1.0 - 2.0 * DRAG_EDGE_FRACTION) * width, (1.0 - 2.0 * DRAG_EDGE_FRACTION) * height);
+	    DropAreas dropAreas = new DropAreas(this);
+
 	    PartDragData dragData = (PartDragData) event.getDragboard().getContent(PartDragDataFormat.get());
-	    if (top.contains(event.getX(), event.getY())) {
+	    if (dropAreas.isTop(event)) {
 		getPerspectiveHandler().movePartToNewTop(dragData.getPartStackId(), dragData.getPartId(), getId());
-	    } else if (right.contains(event.getX(), event.getY())) {
+	    } else if (dropAreas.isRight(event)) {
 		getPerspectiveHandler().movePartToNewRight(dragData.getPartStackId(), dragData.getPartId(), getId());
-	    } else if (lower.contains(event.getX(), event.getY())) {
+	    } else if (dropAreas.isLower(event)) {
 		getPerspectiveHandler().movePartToNewLower(dragData.getPartStackId(), dragData.getPartId(), getId());
-	    } else if (left.contains(event.getX(), event.getY())) {
+	    } else if (dropAreas.isLeft(event)) {
 		getPerspectiveHandler().movePartToNewLeft(dragData.getPartStackId(), dragData.getPartId(), getId());
-	    } else if (innerRectangle.contains(event.getX(), event.getY())) {
+	    } else if (dropAreas.isInnerRectangle(event)) {
 		getPerspectiveHandler().movePartToStack(dragData.getPartStackId(), dragData.getPartId(), getId());
 	    }
 
@@ -157,67 +211,28 @@ public class PartStack extends AbstractPerspectiveElement {
 	double height = canvas.getHeight();
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	gc.clearRect(0.0, 0.0, width, height);
-	// drawDragAreas(gc, width, height, leftInnerPosition, rightInnerPosition,
-	// topInnerPosition, lowerInnerPosition);
-	drawDragResults(gc, event, width, height);
+	DropAreas dropAreas = new DropAreas(this);
+	drawDragResults(gc, event, width, height, dropAreas);
     }
 
-    private void drawDragAreas(GraphicsContext gc, double width, double height) {
-	double leftInnerPosition = width * DRAG_EDGE_FRACTION;
-	double rightInnerPosition = width * (1.0 - DRAG_EDGE_FRACTION);
-	double topInnerPosition = height * DRAG_EDGE_FRACTION;
-	double lowerInnerPosition = height * (1.0 - DRAG_EDGE_FRACTION);
-	gc.setGlobalAlpha(0.25);
-	// edges
-	gc.setFill(Color.RED);
-	gc.fillPolygon(new double[] { 0.0, width, rightInnerPosition, leftInnerPosition },
-		new double[] { 0.0, 0.0, topInnerPosition, topInnerPosition }, 4);
-	gc.setFill(Color.GREEN);
-	gc.fillPolygon(new double[] { width, width, rightInnerPosition, rightInnerPosition },
-		new double[] { 0.0, height, lowerInnerPosition, topInnerPosition }, 4);
-	gc.setFill(Color.BLUE);
-	gc.fillPolygon(new double[] { 0.0, leftInnerPosition, rightInnerPosition, width },
-		new double[] { height, lowerInnerPosition, lowerInnerPosition, height }, 4);
-	gc.setFill(Color.YELLOW);
-	gc.fillPolygon(new double[] { 0.0, leftInnerPosition, leftInnerPosition, 0.0 },
-		new double[] { 0.0, topInnerPosition, lowerInnerPosition, height }, 4);
-	// box
-	gc.setFill(Color.MOCCASIN);
-	gc.fillRect(leftInnerPosition, topInnerPosition, (1.0 - 2.0 * DRAG_EDGE_FRACTION) * width,
-		(1.0 - 2.0 * DRAG_EDGE_FRACTION) * height);
-    }
-
-    private void drawDragResults(GraphicsContext gc, DragEvent event, double width, double height) {
+    private void drawDragResults(GraphicsContext gc, DragEvent event, double width, double height,
+	    DropAreas dropAreas) {
 	gc.setGlobalAlpha(0.5);
 	gc.setStroke(Color.GRAY);
 	gc.setLineWidth(2.0);
 	gc.setLineDashes(4.0, 4.0);
-	double leftInnerPosition = width * DRAG_EDGE_FRACTION;
-	double rightInnerPosition = width * (1.0 - DRAG_EDGE_FRACTION);
-	double topInnerPosition = height * DRAG_EDGE_FRACTION;
-	double lowerInnerPosition = height * (1.0 - DRAG_EDGE_FRACTION);
-	// shapes
-	Polygon top = new Polygon(0.0, 0.0, width, 0.0, rightInnerPosition, topInnerPosition, leftInnerPosition,
-		topInnerPosition);
-	Polygon right = new Polygon(width, 0.0, width, height, rightInnerPosition, lowerInnerPosition,
-		rightInnerPosition, topInnerPosition);
-	Polygon lower = new Polygon(0.0, height, leftInnerPosition, lowerInnerPosition, rightInnerPosition,
-		lowerInnerPosition, width, height);
-	Polygon left = new Polygon(0.0, 0.0, leftInnerPosition, topInnerPosition, leftInnerPosition, lowerInnerPosition,
-		0.0, height);
-	Rectangle innerRectangle = new Rectangle(leftInnerPosition, topInnerPosition,
-		(1.0 - 2.0 * DRAG_EDGE_FRACTION) * width, (1.0 - 2.0 * DRAG_EDGE_FRACTION) * height);
+
 	gc.setGlobalAlpha(0.5);
 	gc.setStroke(Color.GRAY);
-	if (top.contains(event.getX(), event.getY())) {
+	if (dropAreas.isTop(event)) {
 	    gc.strokeRect(0.0, 0.0, width, height / 2.0);
-	} else if (right.contains(event.getX(), event.getY())) {
+	} else if (dropAreas.isRight(event)) {
 	    gc.strokeRect(width / 2.0, 0.0, width / 2.0, height);
-	} else if (lower.contains(event.getX(), event.getY())) {
+	} else if (dropAreas.isLower(event)) {
 	    gc.strokeRect(0.0, height / 2.0, width, height / 2.0);
-	} else if (left.contains(event.getX(), event.getY())) {
+	} else if (dropAreas.isLeft(event)) {
 	    gc.strokeRect(0.0, 0.0, width / 2.0, height);
-	} else if (innerRectangle.contains(event.getX(), event.getY())) {
+	} else if (dropAreas.isInnerRectangle(event)) {
 	    gc.strokeRect(0.0, 0.0, width, height);
 	}
     }
