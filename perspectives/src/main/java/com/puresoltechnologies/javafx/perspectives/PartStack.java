@@ -33,15 +33,22 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 
+/**
+ * This perspective element is providing functionality to stack multiple
+ * {@link Part} objects into an element with tabs.
+ *
+ * @author Rick-Rainer Ludwig
+ */
 public class PartStack extends AbstractPerspectiveElement {
-
-    private static final double DRAG_EDGE_FRACTION = 0.2;
 
     private static final ObjectProperty<ContentDisplay> toolBarContentDisplay = Preferences
 	    .getProperty(PerspectiveProperties.partHeaderToolbarContentDisplay);
 
     class DropAreas {
-
+	private final double width;
+	private final double height;
+	private final double toolBarHeight;
+	private final double contentHeight;
 	private final Polygon top;
 	private final Polygon right;
 	private final Polygon lower;
@@ -49,23 +56,52 @@ public class PartStack extends AbstractPerspectiveElement {
 	private final Rectangle innerRectangle;
 
 	DropAreas(PartStack partStack) {
-	    double width = borderPane.getWidth();
-	    double height = borderPane.getHeight();
-	    double leftInnerPosition = width * DRAG_EDGE_FRACTION;
-	    double rightInnerPosition = width * (1.0 - DRAG_EDGE_FRACTION);
-	    double topInnerPosition = height * DRAG_EDGE_FRACTION;
-	    double lowerInnerPosition = height * (1.0 - DRAG_EDGE_FRACTION);
+	    width = borderPane.getWidth();
+	    height = borderPane.getHeight();
+	    toolBarHeight = toolBarBox.getHeight();
+	    contentHeight = borderPane.getHeight() - toolBarHeight;
+
+	    double leftInnerPosition;
+	    double rightInnerPosition;
+	    double topInnerPosition;
+	    double lowerInnerPosition;
+	    if (width > contentHeight) {
+		topInnerPosition = toolBarHeight + (contentHeight * 0.5);
+		lowerInnerPosition = topInnerPosition;
+		leftInnerPosition = contentHeight * 0.5;
+		rightInnerPosition = width - (contentHeight * 0.5);
+	    } else {
+		leftInnerPosition = width * 0.5;
+		rightInnerPosition = leftInnerPosition;
+		topInnerPosition = toolBarHeight + (width * 0.5);
+		lowerInnerPosition = height - (width * 0.5);
+	    }
 	    // shapes
-	    top = new Polygon(0.0, 0.0, width, 0.0, rightInnerPosition, topInnerPosition, leftInnerPosition,
-		    topInnerPosition);
-	    right = new Polygon(width, 0.0, width, height, rightInnerPosition, lowerInnerPosition, rightInnerPosition,
-		    topInnerPosition);
+	    top = new Polygon(0.0, toolBarHeight, width, toolBarHeight, rightInnerPosition, topInnerPosition,
+		    leftInnerPosition, topInnerPosition);
+	    right = new Polygon(width, toolBarHeight, width, height, rightInnerPosition, lowerInnerPosition,
+		    rightInnerPosition, topInnerPosition);
 	    lower = new Polygon(0.0, height, leftInnerPosition, lowerInnerPosition, rightInnerPosition,
 		    lowerInnerPosition, width, height);
-	    left = new Polygon(0.0, 0.0, leftInnerPosition, topInnerPosition, leftInnerPosition, lowerInnerPosition,
-		    0.0, height);
-	    innerRectangle = new Rectangle(leftInnerPosition, topInnerPosition,
-		    (1.0 - (2.0 * DRAG_EDGE_FRACTION)) * width, (1.0 - (2.0 * DRAG_EDGE_FRACTION)) * height);
+	    left = new Polygon(0.0, toolBarHeight, leftInnerPosition, topInnerPosition, leftInnerPosition,
+		    lowerInnerPosition, 0.0, height);
+	    innerRectangle = new Rectangle(0, 0, width, toolBarHeight);
+	}
+
+	public double getWidth() {
+	    return width;
+	}
+
+	public double getHeight() {
+	    return height;
+	}
+
+	public double getToolBarHeight() {
+	    return toolBarHeight;
+	}
+
+	public double getContentHeight() {
+	    return contentHeight;
 	}
 
 	public Polygon getTop() {
@@ -109,19 +145,17 @@ public class PartStack extends AbstractPerspectiveElement {
 	}
     }
 
-    private final PartHeaderToolBar toolBar;
-    private final HBox headerToolBar;
+    private final HBox toolBarBox = new HBox();
+    private final PartHeaderToolBar toolBar = new PartHeaderToolBar(toolBarBox);
     private final List<Part> parts = new ArrayList<>();
     private final Map<UUID, PartHeader> headerButtons = new HashMap<>();
-    private final BorderPane borderPane;
+    private final BorderPane borderPane = new BorderPane();
 
     public PartStack() {
 	super();
-	borderPane = new BorderPane();
+	toolBarBox.setAlignment(Pos.CENTER_RIGHT);
+
 	borderPane.setId(UUID.randomUUID().toString());
-	headerToolBar = new HBox();
-	headerToolBar.setAlignment(Pos.CENTER_RIGHT);
-	toolBar = new PartHeaderToolBar(headerToolBar);
 	borderPane.setTop(toolBar);
 	borderPane.setOnDragEntered(event -> {
 	    onDragEntered(event);
@@ -165,7 +199,6 @@ public class PartStack extends AbstractPerspectiveElement {
 	    if (canvas instanceof Canvas) {
 		drawDragCanvas((Canvas) canvas, event);
 	    }
-
 	}
 	event.consume();
     }
@@ -207,16 +240,48 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     private void drawDragCanvas(Canvas canvas, DragEvent event) {
-	double width = canvas.getWidth();
-	double height = canvas.getHeight();
 	GraphicsContext gc = canvas.getGraphicsContext2D();
-	gc.clearRect(0.0, 0.0, width, height);
 	DropAreas dropAreas = new DropAreas(this);
-	drawDragResults(gc, event, width, height, dropAreas);
+	gc.clearRect(0.0, 0.0, dropAreas.getWidth(), dropAreas.getToolBarHeight() + dropAreas.getContentHeight());
+	drawDropAreas(gc, event, dropAreas);
+	drawDragResults(gc, event, dropAreas);
     }
 
-    private void drawDragResults(GraphicsContext gc, DragEvent event, double width, double height,
-	    DropAreas dropAreas) {
+    private void drawDropAreas(GraphicsContext gc, DragEvent event, DropAreas dropAreas) {
+	gc.setGlobalAlpha(0.25);
+	// edges
+	gc.setFill(Color.RED);
+	drawPolygon(gc, dropAreas.getLeft());
+	gc.setFill(Color.GREEN);
+	drawPolygon(gc, dropAreas.getRight());
+	gc.setFill(Color.BLUE);
+	drawPolygon(gc, dropAreas.getTop());
+	gc.setFill(Color.YELLOW);
+	drawPolygon(gc, dropAreas.getLower());
+	// box
+	gc.setFill(Color.MOCCASIN);
+	Rectangle innerRectangle = dropAreas.getInnerRectangle();
+	gc.fillRect(innerRectangle.getX(), innerRectangle.getY(), innerRectangle.getWidth(),
+		innerRectangle.getHeight());
+    }
+
+    private void drawPolygon(GraphicsContext gc, Polygon polygon) {
+	ObservableList<Double> points = polygon.getPoints();
+	int numPoints = points.size() / 2;
+	double[] x = new double[numPoints];
+	double[] y = new double[numPoints];
+	for (int i = 0; i < (numPoints * 2); i++) {
+	    Double point = points.get(i);
+	    if ((i % 2) == 0) {
+		x[i / 2] = point;
+	    } else {
+		y[i / 2] = point;
+	    }
+	}
+	gc.fillPolygon(x, y, numPoints);
+    }
+
+    private void drawDragResults(GraphicsContext gc, DragEvent event, DropAreas dropAreas) {
 	gc.setGlobalAlpha(0.5);
 	gc.setStroke(Color.GRAY);
 	gc.setLineWidth(2.0);
@@ -224,16 +289,20 @@ public class PartStack extends AbstractPerspectiveElement {
 
 	gc.setGlobalAlpha(0.5);
 	gc.setStroke(Color.GRAY);
+	double width = dropAreas.getWidth();
+	double height = dropAreas.getHeight();
+	double toolBarHeight = dropAreas.getToolBarHeight();
+	double contentHeight = dropAreas.getContentHeight();
 	if (dropAreas.isTop(event)) {
-	    gc.strokeRect(0.0, 0.0, width, height / 2.0);
+	    gc.strokeRect(0.0, toolBarHeight, width, contentHeight / 2.0);
 	} else if (dropAreas.isRight(event)) {
-	    gc.strokeRect(width / 2.0, 0.0, width / 2.0, height);
+	    gc.strokeRect(width / 2.0, toolBarHeight, width / 2.0, contentHeight);
 	} else if (dropAreas.isLower(event)) {
-	    gc.strokeRect(0.0, height / 2.0, width, height / 2.0);
+	    gc.strokeRect(0.0, toolBarHeight + (contentHeight / 2.0), width, contentHeight / 2.0);
 	} else if (dropAreas.isLeft(event)) {
-	    gc.strokeRect(0.0, 0.0, width / 2.0, height);
+	    gc.strokeRect(0.0, toolBarHeight, width / 2.0, contentHeight);
 	} else if (dropAreas.isInnerRectangle(event)) {
-	    gc.strokeRect(0.0, 0.0, width, height);
+	    gc.strokeRect(0.0, 0.0, width, toolBarHeight);
 	}
     }
 
@@ -317,7 +386,7 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     public final void setActive(UUID partId) {
-	headerToolBar.getChildren().clear();
+	toolBarBox.getChildren().clear();
 	if (partId != null) {
 	    Iterator<Part> iterator = parts.iterator();
 	    while (iterator.hasNext()) {
@@ -333,8 +402,7 @@ public class PartStack extends AbstractPerspectiveElement {
 			    if (Labeled.class.isAssignableFrom(item.getClass())) {
 				((Labeled) item).setContentDisplay(toolBarContentDisplay.get());
 			    }
-			    headerToolBar.getChildren().add(item);
-
+			    toolBarBox.getChildren().add(item);
 			});
 		    }
 		    break;
