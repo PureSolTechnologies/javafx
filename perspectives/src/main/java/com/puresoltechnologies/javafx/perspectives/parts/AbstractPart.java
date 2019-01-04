@@ -107,4 +107,5 @@ public abstract class AbstractPart implements Part {
 	// Intentionally left empty, as this is an implementation which should be
 	// provided only in cases where it is needed.
     }
+
 }

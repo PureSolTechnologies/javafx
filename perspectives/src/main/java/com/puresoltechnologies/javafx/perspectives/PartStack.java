@@ -20,18 +20,22 @@ import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Labeled;
 import javafx.scene.control.ToolBar;
 import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 /**
  * This perspective element is providing functionality to stack multiple
@@ -218,22 +222,30 @@ public class PartStack extends AbstractPerspectiveElement {
 	ObservableList<Node> children = borderPane.getChildren();
 	children.remove(children.size() - 1);
 	boolean success = false;
-	if (event.getDragboard().hasContent(PartDragDataFormat.get())) {
+	Dragboard dragboard = event.getDragboard();
+	if (dragboard.hasContent(PartDragDataFormat.get())) {
 	    DropAreas dropAreas = new DropAreas(this);
-
-	    PartDragData dragData = (PartDragData) event.getDragboard().getContent(PartDragDataFormat.get());
+	    PerspectiveHandler perspectiveHandler = getPerspectiveHandler();
+	    PartDragData dragData = (PartDragData) dragboard.getContent(PartDragDataFormat.get());
+	    UUID partStackId = dragData.getPartStackId();
+	    UUID partId = dragData.getPartId();
+	    UUID id = getId();
 	    if (dropAreas.isTop(event)) {
-		getPerspectiveHandler().movePartToNewTop(dragData.getPartStackId(), dragData.getPartId(), getId());
+		perspectiveHandler.movePartToNewTop(partStackId, partId, id);
+		success = true;
 	    } else if (dropAreas.isRight(event)) {
-		getPerspectiveHandler().movePartToNewRight(dragData.getPartStackId(), dragData.getPartId(), getId());
+		perspectiveHandler.movePartToNewRight(partStackId, partId, id);
+		success = true;
 	    } else if (dropAreas.isLower(event)) {
-		getPerspectiveHandler().movePartToNewLower(dragData.getPartStackId(), dragData.getPartId(), getId());
+		perspectiveHandler.movePartToNewLower(partStackId, partId, id);
+		success = true;
 	    } else if (dropAreas.isLeft(event)) {
-		getPerspectiveHandler().movePartToNewLeft(dragData.getPartStackId(), dragData.getPartId(), getId());
+		perspectiveHandler.movePartToNewLeft(partStackId, partId, id);
+		success = true;
 	    } else if (dropAreas.isInnerRectangle(event)) {
-		getPerspectiveHandler().movePartToStack(dragData.getPartStackId(), dragData.getPartId(), getId());
+		perspectiveHandler.movePartToStack(partStackId, partId, id);
+		success = true;
 	    }
-
 	}
 	event.setDropCompleted(success);
 	event.consume();
@@ -343,13 +355,13 @@ public class PartStack extends AbstractPerspectiveElement {
 		    + element.getClass().getName() + "' is not supported.");
 	}
 	Part part = (Part) element;
-	PartHeader button = new PartHeader(this, part);
-	headerButtons.put(part.getId(), button);
+	PartHeader header = new PartHeader(this, part);
+	headerButtons.put(part.getId(), header);
 	parts.add(part);
 	FXThreads.proceedOnFXThread(() -> {
 	    part.initialize();
 	    ObservableList<Node> items = toolBar.getItems();
-	    items.add(index, button);
+	    items.add(index, header);
 	    setActive(part.getId());
 	});
     }
@@ -417,6 +429,28 @@ public class PartStack extends AbstractPerspectiveElement {
 
     public boolean hasParts() {
 	return !parts.isEmpty();
+    }
+
+    public void closeOtherParts(Part part) {
+	parts.stream().filter(p -> p != part).forEach(p -> closePart(p));
+    }
+
+    public void closeAll() {
+	parts.forEach(part -> closePart(part));
+    }
+
+    public void detach(Part part) {
+	removeElement(part);
+	PerspectiveContainerPane perspectiveContainerPane = new PerspectiveContainerPane();
+	PartStack partStack = new PartStack();
+	partStack.addElement(part);
+	perspectiveContainerPane.setRootElement(partStack);
+
+	Scene scene = new Scene(perspectiveContainerPane);
+
+	Stage stage = new Stage(StageStyle.DECORATED);
+	stage.setScene(scene);
+	stage.show();
     }
 
 }

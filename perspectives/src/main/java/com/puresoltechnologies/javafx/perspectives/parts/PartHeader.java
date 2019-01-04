@@ -8,11 +8,15 @@ import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.geometry.Insets;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
@@ -27,9 +31,14 @@ import javafx.scene.paint.Color;
 public class PartHeader extends HBox {
 
     private boolean active = false;
+    private final PartStack partStack;
+    private final Part part;
+    private final ContextMenu contextMenu = new ContextMenu();
 
     public PartHeader(PartStack partStack, Part part) {
 	super();
+	this.partStack = partStack;
+	this.part = part;
 	try {
 	    setManaged(true);
 	    setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
@@ -45,9 +54,27 @@ public class PartHeader extends HBox {
 	    getChildren().add(label);
 	    setMargin(label, new Insets(2.0));
 
-	    ImageView crossView = ResourceUtils.getImageView(Perspective.class, "icons/FatCow_Icons16x16/cross.png");
+	    Image crossImage = ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/cross.png");
+	    ImageView crossView = new ImageView(crossImage);
 	    getChildren().add(crossView);
 	    setMargin(crossView, new Insets(2.0));
+
+	    Image detachImage = ResourceUtils.getImage(Perspective.class,
+		    "icons/FatCow_Icons16x16/extract_foreground_objects.png");
+
+	    MenuItem closeItem = new MenuItem("Close", new ImageView(crossImage));
+	    closeItem.setOnAction(event -> close());
+	    MenuItem closeOthersItem = new MenuItem("Close Others");
+	    closeOthersItem.setOnAction(event -> closeOthers());
+	    SeparatorMenuItem separatorMenuItem = new SeparatorMenuItem();
+	    MenuItem closeAllItem = new MenuItem("Close All");
+	    closeAllItem.setOnAction(event -> closeAll());
+	    SeparatorMenuItem separatorMenuItem2 = new SeparatorMenuItem();
+	    MenuItem detachItem = new MenuItem("Detach", new ImageView(detachImage));
+	    detachItem.setOnAction(event -> detach());
+	    // Add MenuItem to ContextMenu
+	    contextMenu.getItems().addAll(closeItem, closeOthersItem, separatorMenuItem, closeAllItem,
+		    separatorMenuItem2, detachItem);
 
 	    setOnDragDetected(event -> {
 		/* drag was detected, start a drag-and-drop gesture */
@@ -62,15 +89,38 @@ public class PartHeader extends HBox {
 		event.consume();
 	    });
 	    setOnMouseClicked(event -> {
-		partStack.setActive(part.getId());
-		event.consume();
+		if (event.getButton() == MouseButton.PRIMARY) {
+		    partStack.setActive(part.getId());
+		    event.consume();
+		}
 	    });
 	    crossView.setOnMouseClicked(event -> {
-		partStack.closePart(part);
+		if (event.getButton() == MouseButton.PRIMARY) {
+		    partStack.closePart(part);
+		}
+	    });
+	    setOnContextMenuRequested(event -> {
+		contextMenu.show(this, event.getScreenX(), event.getScreenY());
 	    });
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
+    }
+
+    private void close() {
+	partStack.closePart(part);
+    }
+
+    private void closeOthers() {
+	partStack.closeOtherParts(part);
+    }
+
+    private void closeAll() {
+	partStack.closeAll();
+    }
+
+    private void detach() {
+	partStack.detach(part);
     }
 
     public void setActive(boolean active) {

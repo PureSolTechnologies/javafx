@@ -30,7 +30,7 @@ import javafx.scene.paint.Color;
 
 /**
  * This part is used to show all running tasks and their progresses.
- * 
+ *
  * @author Rick-Rainer Ludwig
  */
 public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskInfo> {
