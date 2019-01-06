@@ -38,8 +38,8 @@ public abstract class AbstractPerspectiveElement implements PerspectiveElement {
     /**
      * This method is not final, as children might need to overwrite it to propagate
      * this setting to its children in a special way.
-     * 
-     * @param perspectiveHandler
+     *
+     * @param perspectiveHandler is the {@link PerspectiveHandler} to be set.
      */
     protected void setPerspectiveHandler(PerspectiveHandler perspectiveHandler) {
 	this.perspectiveHandler = perspectiveHandler;

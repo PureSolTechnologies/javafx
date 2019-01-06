@@ -19,6 +19,8 @@ public interface Part extends PerspectiveElement, AutoCloseable {
 
     /**
      * This method returns the title of the part.
+     *
+     * @return A {@link String} with the {@link Part}'s title is returned.
      */
     String getTitle();
 
@@ -38,7 +40,7 @@ public interface Part extends PerspectiveElement, AutoCloseable {
      * This method tells whether or not this part is allowed to be opened by a user
      * interaction like the Show View Dialog.
      *
-     * @return
+     * @return The {@link PartOpenMode} is returned.
      */
     PartOpenMode getOpenMode();
 

@@ -9,6 +9,7 @@
 		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
 		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
+		<jdk.version>11.0.1</jdk.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
@@ -181,6 +182,22 @@
 				<version>2.2.4</version>
 			</dependency>
 			<dependency>
+				<groupId>net.java.jdk</groupId>
+				<artifactId>openjdk</artifactId>
+				<version>${jdk.version}</version>
+				<classifier>linux-x64</classifier>
+				<type>tar.gz</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>net.java.jdk</groupId>
+				<artifactId>openjdk</artifactId>
+				<version>${jdk.version}</version>
+				<classifier>windows-x64</classifier>
+				<type>zip</type>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-base</artifactId>
 				<version>11</version>
@@ -285,6 +302,13 @@
 						<knownLicense>
 							<name>GPLv2+CE</name>
 							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+						</knownLicense>
+						<knownLicense>
+							<name><![CDATA[OPENJDK COMMUNITY TCK AND EA TCK LICENSE AGREEMENT V 3.0]]></name>
+							<url>https://openjdk.java.net/legal/OCTLA-JDK9+.pdf</url>
+							<approvedDependencies>
+								<approvedDependency>net.java.jdk:openjdk:.*</approvedDependency>
+							</approvedDependencies>
 						</knownLicense>
 					</knownLicenses>
 				</configuration>

@@ -359,7 +359,6 @@ public class PartStack extends AbstractPerspectiveElement {
 	headerButtons.put(part.getId(), header);
 	parts.add(part);
 	FXThreads.proceedOnFXThread(() -> {
-	    part.initialize();
 	    ObservableList<Node> items = toolBar.getItems();
 	    items.add(index, header);
 	    setActive(part.getId());

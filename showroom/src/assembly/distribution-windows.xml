@@ -1,0 +1,37 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.0.0 http://maven.apache.org/xsd/assembly-2.0.0.xsd">
+	<id>distribution-windows-x84</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>lib</outputDirectory>
+			<unpack>false</unpack>
+			<outputFileNameMapping>${artifact.groupId}.${artifact.artifactId}-${artifact.version}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+			<excludes>
+				<exclude>net.java.jdk:openjdk:*</exclude>
+			</excludes>
+		</dependencySet>
+		<dependencySet>
+			<outputDirectory>bin</outputDirectory>
+			<unpack>true</unpack>
+			<includes>
+				<include>net.java.jdk:openjdk:zip:windows-x64</include>
+			</includes>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<fileSet>
+			<directory>src/main/resources/bin</directory>
+			<outputDirectory>bin</outputDirectory>
+			<filtered>true</filtered>
+			<fileMode>755</fileMode>
+			<includes>
+				<include>*.bat</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>

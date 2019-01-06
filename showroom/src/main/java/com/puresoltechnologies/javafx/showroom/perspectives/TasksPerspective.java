@@ -9,8 +9,8 @@ import com.puresoltechnologies.javafx.perspectives.PartStack;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveElement;
 import com.puresoltechnologies.javafx.perspectives.parts.TaskProgressViewer;
 import com.puresoltechnologies.javafx.showroom.ShowRoom;
-import com.puresoltechnologies.javafx.showroom.parts.StartSampleTasksViewer;
 import com.puresoltechnologies.javafx.showroom.parts.SampleTaskResultsViewer;
+import com.puresoltechnologies.javafx.showroom.parts.StartSampleTasksViewer;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.geometry.Orientation;
@@ -43,11 +43,9 @@ public class TasksPerspective extends AbstractPerspective {
 	mainSplit.addElement(subSplit);
 	mainSplit.addElement(bottomStack);
 
-	StartSampleTasksViewer createSampleTasksViewer = new StartSampleTasksViewer();
-	leftStack.addElement(createSampleTasksViewer);
-	SampleTaskResultsViewer SampleTaskResultsViewer = new SampleTaskResultsViewer();
-	rightStack.addElement(SampleTaskResultsViewer);
-	bottomStack.addElement(new TaskProgressViewer());
+	leftStack.addElement(StartSampleTasksViewer.class);
+	rightStack.addElement(SampleTaskResultsViewer.class);
+	bottomStack.addElement(TaskProgressViewer.class);
 
 	return mainSplit;
     }

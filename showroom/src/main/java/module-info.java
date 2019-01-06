@@ -1,4 +1,4 @@
-module com.puresoltechnologies.javafx.showcase {
+module com.puresoltechnologies.javafx.showroom {
 
     requires com.puresoltechnologies.javafx.charts;
     requires com.puresoltechnologies.javafx.extensions;
@@ -16,6 +16,7 @@ module com.puresoltechnologies.javafx.showcase {
     requires javafx.graphics;
 
     exports com.puresoltechnologies.javafx.showroom;
+    exports com.puresoltechnologies.javafx.showroom.parts;
 
     opens com.puresoltechnologies.javafx.showroom.icons.FatCow_Icons16x16;
     opens com.puresoltechnologies.javafx.showroom.icons.FatCow_Icons32x32;

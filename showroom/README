@@ -1,0 +1,7 @@
+JLink:
+ bin/jdk-11.0.1/bin/jlink.exe --output test --launcher showroom=com.puresoltechnologies.javafx.showroom/com.puresoltechnologies.javafx.showroom.ShowRoom --module-path "bin/jdk-11.0.1/jmods;lib" --add-modules "com.puresoltechnologies.javafx.showroom"
+ bin/jdk-11.0.1/bin/jlink.exe --output test --launcher showroom=com.puresoltechnologies.javafx.showroom/com.puresoltechnologies.javafx.showroom.ShowRoom --no-header-files --no-man-pages --compress=2 --strip-debug --module-path "bin/jdk-11.0.1/jmods" --module-path "lib" --add-modules "com.puresoltechnologies.javafx.extensions,com.puresoltechnologies.javafx.perspectives,com.puresoltechnologies.javafx.preferences,com.puresoltechnologies.javafx.reactive,com.puresoltechnologies.javafx.utils,com.puresoltechnologies.javafx.workspaces,java.base,javafx.base,javafx.controls,javafx.graphics"
+ 
+ JDeps:
+ jdeps --module-path lib --list-deps .\lib\com.puresoltechnologies.javafx.showroom-0.1.0-SNAPSHOT.jar
+ 

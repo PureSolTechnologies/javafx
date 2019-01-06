@@ -8,7 +8,7 @@ import javafx.scene.image.Image;
 
 /**
  * This is the interface for a Perspective.
- * 
+ *
  * @author Rick-Rainer Ludwig
  *
  */
@@ -17,22 +17,23 @@ public interface Perspective extends PerspectiveElement {
     /**
      * This method returns the name of the perspective as it is to be presented
      * inside the UI for the user.
-     * 
-     * @return
+     *
+     * @return The name is returned as string.
      */
-    public String getName();
+    String getName();
 
     /**
      * This is a mandatory icon image to be assigned to this perpective.
-     * 
-     * @return
+     *
+     * @return An {@link Optional} {@link Image} is returned to represent this
+     *         perspective graphically.
      */
-    public Optional<Image> getImage();
+    Optional<Image> getImage();
 
-    public void reset();
+    void reset();
 
-    public PerspectiveElement getRootElement();
+    PerspectiveElement getRootElement();
 
-    public void openPart(Part part);
+    void openPart(Part part);
 
 }
