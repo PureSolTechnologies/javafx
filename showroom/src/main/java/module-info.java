@@ -2,7 +2,7 @@ module com.puresoltechnologies.javafx.showroom {
 
     requires com.puresoltechnologies.javafx.charts;
     requires com.puresoltechnologies.javafx.extensions;
-    requires com.puresoltechnologies.javafx.perspectives;
+    requires transitive com.puresoltechnologies.javafx.perspectives;
     requires com.puresoltechnologies.javafx.preferences;
     requires com.puresoltechnologies.javafx.reactive;
     requires com.puresoltechnologies.javafx.tasks;
@@ -28,6 +28,9 @@ module com.puresoltechnologies.javafx.showroom {
 	    com.puresoltechnologies.javafx.showroom.perspectives.TasksPerspective;
     provides com.puresoltechnologies.javafx.perspectives.parts.Part
 	    with com.puresoltechnologies.javafx.showroom.parts.StartSampleTasksViewer,
-	    com.puresoltechnologies.javafx.showroom.parts.SampleTaskResultsViewer;
-    // provides com.puresoltechnologies.javafx.perspectives.parts.Part with ;
+	    com.puresoltechnologies.javafx.showroom.parts.SampleTaskResultsViewer,
+	    com.puresoltechnologies.javafx.showroom.parts.BoxPlotSampleViewer,
+	    com.puresoltechnologies.javafx.showroom.parts.TimeseriesPlotSampleViewer,
+	    com.puresoltechnologies.javafx.showroom.parts.XYPlotSampleViewer,
+	    com.puresoltechnologies.javafx.showroom.parts.OhlcPlotSampleViewer;
 }

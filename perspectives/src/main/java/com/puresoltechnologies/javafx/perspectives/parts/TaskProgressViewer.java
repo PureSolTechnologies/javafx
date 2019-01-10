@@ -1,15 +1,18 @@
 package com.puresoltechnologies.javafx.perspectives.parts;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
+import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.tasks.TaskInfo;
 import com.puresoltechnologies.javafx.tasks.TaskProgressPane;
 import com.puresoltechnologies.javafx.tasks.TasksTopics;
 import com.puresoltechnologies.javafx.utils.FXThreads;
+import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
@@ -44,6 +47,11 @@ public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskI
 
     public TaskProgressViewer() {
 	super("Progress", PartOpenMode.AUTO_AND_MANUAL);
+	try {
+	    setImage(ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/progressbar.png"));
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     }
 
     @Override

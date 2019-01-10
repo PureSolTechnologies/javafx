@@ -43,7 +43,7 @@ public class ShowRoom extends Application {
 	Image splashImage = ResourceUtils.getImage(ShowRoom.class, "splash/splash.png");
 	splashScreen = new SplashScreen(stage, splashImage, applicationStage -> {
 	    try {
-		applicationStage.setTitle("Tool Shed");
+		applicationStage.setTitle("JavaFX Show Room");
 		applicationStage.setResizable(true);
 		applicationStage.centerOnScreen();
 

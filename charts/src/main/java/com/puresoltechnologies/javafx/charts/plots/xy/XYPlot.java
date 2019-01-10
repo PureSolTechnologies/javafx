@@ -13,6 +13,10 @@ import javafx.scene.canvas.Canvas;
 public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D>
 	extends AbstractPlot<X, Y, D> {
 
+    public XYPlot(String title, NumberAxis<X> xAxis, NumberAxis<Y> yAxis) {
+	super(title, xAxis, yAxis);
+    }
+
     public XYPlot(String title, NumberAxis<X> xAxis, NumberAxis<Y> yAxis, List<D> data) {
 	super(title, xAxis, yAxis, data);
     }

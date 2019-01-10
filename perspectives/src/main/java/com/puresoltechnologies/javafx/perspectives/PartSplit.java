@@ -13,9 +13,13 @@ import javafx.scene.control.SplitPane;
 
 public class PartSplit extends AbstractPerspectiveElement {
 
-    private List<PerspectiveElement> elements = new ArrayList<>();
+    private final List<PerspectiveElement> elements = new ArrayList<>();
     private final SplitPane splitPane;
 
+    /**
+     * This is the default constructor. The default orientation is
+     * {@link Orientation#HORIZONTAL}
+     */
     public PartSplit() {
 	this(Orientation.HORIZONTAL);
     }
