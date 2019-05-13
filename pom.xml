@@ -9,7 +9,7 @@
 		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
 		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
-		<jdk.version>11.0.1</jdk.version>
+		<jdk.version>11.0.2</jdk.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
