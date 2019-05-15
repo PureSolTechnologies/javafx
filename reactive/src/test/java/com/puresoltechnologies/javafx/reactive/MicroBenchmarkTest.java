@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.text.DecimalFormat;
 import java.util.Collection;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openjdk.jmh.results.RunResult;
 import org.openjdk.jmh.runner.Runner;
@@ -19,6 +20,7 @@ public class MicroBenchmarkTest {
     private static final double REFERENCE_SCORE = 10.0;
 
     @Test
+    @Disabled
     public void launchReactiveBechmark() throws RunnerException {
 	Options opt = new OptionsBuilder().include(MicroBenchmark.class.getSimpleName()).build();
 	Collection<RunResult> runResults = new Runner(opt).run();

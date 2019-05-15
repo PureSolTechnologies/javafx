@@ -12,14 +12,16 @@ public class FXThreads {
 
     private static ExecutorService threadPool = null;
 
-    public static void initialize() {
+    public static synchronized void initialize() {
 	if (threadPool != null) {
 	    throw new IllegalStateException("FXThreads was already initialized.");
 	}
-	threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+	if (threadPool == null) {
+	    threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+	}
     }
 
-    public static void shutdown() throws InterruptedException {
+    public static synchronized void shutdown() throws InterruptedException {
 	if (threadPool == null) {
 	    throw new IllegalStateException("FXThreads was not initialized.");
 	}

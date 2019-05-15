@@ -17,5 +17,9 @@
 			<groupId>com.puresoltechnologies.javafx</groupId>
 			<artifactId>utils</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs-annotations</artifactId>
+		</dependency>
 	</dependencies>
 </project>

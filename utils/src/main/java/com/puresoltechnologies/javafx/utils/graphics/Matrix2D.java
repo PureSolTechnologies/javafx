@@ -2,9 +2,11 @@ package com.puresoltechnologies.javafx.utils.graphics;
 
 import java.util.Arrays;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 /**
  * https://en.wikipedia.org/wiki/Matrix_(mathematics)
- * 
+ *
  * @author Rick-Rainer Ludwig
  */
 public class Matrix2D {
@@ -15,6 +17,7 @@ public class Matrix2D {
 
     private final double[] elements;
 
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public Matrix2D(double[] elements) {
 	if (elements == null) {
 	    throw new IllegalArgumentException("elements must not be null.");
@@ -26,7 +29,7 @@ public class Matrix2D {
     }
 
     public double get(int i, int j) {
-	return elements[i * 3 + j];
+	return elements[(i * 3) + j];
     }
 
     public Matrix2D move(double x, double y) {
@@ -49,7 +52,7 @@ public class Matrix2D {
 	double[] newElements = new double[] { 0.0, 0.0, 0.0 };
 	for (int i = 0; i < 3; i++) {
 	    for (int j = 0; j < 3; j++) {
-		newElements[i] += vector.get(j) * newElements[i * 3 + j];
+		newElements[i] += vector.get(j) * newElements[(i * 3) + j];
 	    }
 	}
 	return new Vector2D(newElements);
@@ -59,7 +62,7 @@ public class Matrix2D {
 	double[] newElements = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 	for (int i = 0; i < 3; i++) {
 	    for (int j = 0; j < 3; j++) {
-		newElements[i * 3 + j] += newElements[j * 3 + i] + vector.get(i, j);
+		newElements[(i * 3) + j] += newElements[(j * 3) + i] + vector.get(i, j);
 	    }
 	}
 	return new Matrix2D(newElements);

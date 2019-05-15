@@ -2,6 +2,8 @@ package com.puresoltechnologies.javafx.utils.graphics;
 
 import java.util.Arrays;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
+
 public class Vector2D {
 
     private final double[] elements;
@@ -10,6 +12,7 @@ public class Vector2D {
 	elements = new double[] { 0.0, 0.0, 1.0 };
     }
 
+    @SuppressFBWarnings("EI_EXPOSE_REP2")
     public Vector2D(double[] elements) {
 	if (elements == null) {
 	    throw new IllegalArgumentException("elements must not be null.");

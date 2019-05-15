@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.extensions.fonts;
 
 import java.io.Serializable;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
@@ -30,6 +31,7 @@ public class FontDefinition implements Serializable {
     private final FontWeight weight;
     private final double size;
     private final FontPosture posture;
+    @SuppressFBWarnings("SE_BAD_FIELD")
     private final Color color;
 
     public FontDefinition(String family, FontWeight weight, double size, FontPosture posture, Color color) {
