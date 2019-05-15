@@ -8,8 +8,10 @@
 		<officalName>JavaFX-Extensions</officalName>
 		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
 		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
+		<openjfx.version>11</openjfx.version>
 		<testfx.version>4.0.15-alpha</testfx.version>
 		<jdk.version>11.0.1</jdk.version>
+		<jmh.version>1.21</jmh.version>
 	</properties>
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
@@ -198,24 +200,36 @@
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
+				<groupId>org.openjdk.jmh</groupId>
+				<artifactId>jmh-core</artifactId>
+				<version>${jmh.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjdk.jmh</groupId>
+				<artifactId>jmh-generator-annprocess</artifactId>
+				<version>${jmh.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-base</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-controls</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-graphics</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-web</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.testfx</groupId>
@@ -304,11 +318,19 @@
 							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
 						</knownLicense>
 						<knownLicense>
+							<name><![CDATA[GNU General Public License (GPL), version 2, with the Classpath exception]]></name>
+							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+						</knownLicense>
+						<knownLicense>
 							<name><![CDATA[OPENJDK COMMUNITY TCK AND EA TCK LICENSE AGREEMENT V 3.0]]></name>
 							<url>https://openjdk.java.net/legal/OCTLA-JDK9+.pdf</url>
 							<approvedDependencies>
 								<approvedDependency>net.java.jdk:openjdk:.*</approvedDependency>
 							</approvedDependencies>
+						</knownLicense>
+						<knownLicense>
+							<name>The MIT License</name>
+							<url>http://www.opensource.org/licenses/mit-license.php</url>
 						</knownLicense>
 					</knownLicenses>
 				</configuration>
