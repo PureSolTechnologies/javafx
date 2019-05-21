@@ -169,7 +169,7 @@ public class PerspectivePane extends BorderPane {
 	Iterator<Perspective> iterator = perspectives.iterator();
 	while (iterator.hasNext()) {
 	    Perspective perspective = iterator.next();
-	    if (perspective.getId().equals(perspectiveId)) {
+	    if (perspective.getId().toString().equals(perspectiveId)) {
 		closeAllParts(perspective);
 		iterator.remove();
 	    }

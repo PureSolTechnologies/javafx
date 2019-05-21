@@ -220,12 +220,6 @@
 				<scope>test</scope>
 			</dependency>
 			<dependency>
-				<groupId>org.junit.vintage</groupId>
-				<artifactId>junit-vintage-engine</artifactId>
-				<version>5.3.2</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
 				<groupId>org.openjdk.jmh</groupId>
 				<artifactId>jmh-core</artifactId>
 				<version>${org.openjdk.jmh.version}</version>
@@ -367,10 +361,6 @@
 								<dependencyConvergence>
 									<uniqueVersions>true</uniqueVersions>
 								</dependencyConvergence>
-								<reactorModuleConvergence>
-									<message>The reactor is not valid</message>
-									<ignoreModuleDependencies>true</ignoreModuleDependencies>
-								</reactorModuleConvergence>
 								<requireJavaVersion>
 									<version>[9,)</version>
 								</requireJavaVersion>

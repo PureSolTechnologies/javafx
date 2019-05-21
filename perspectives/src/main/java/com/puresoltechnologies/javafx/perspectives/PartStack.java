@@ -302,7 +302,7 @@ public class PartStack extends AbstractPerspectiveElement {
 	gc.setGlobalAlpha(0.5);
 	gc.setStroke(Color.GRAY);
 	double width = dropAreas.getWidth();
-	double height = dropAreas.getHeight();
+	// double height = dropAreas.getHeight();
 	double toolBarHeight = dropAreas.getToolBarHeight();
 	double contentHeight = dropAreas.getContentHeight();
 	if (dropAreas.isTop(event)) {

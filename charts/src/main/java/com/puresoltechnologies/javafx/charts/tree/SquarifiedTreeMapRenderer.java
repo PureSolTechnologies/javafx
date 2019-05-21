@@ -44,7 +44,7 @@ public class SquarifiedTreeMapRenderer<T extends TreeMapNode> implements TreeMap
 	stack.push(node);
 	double titleHeight = drawBox(canvas, x, y, width, height, node);
 	List<TreeMapNode> children = node.getChildren();
-	Collections.sort(children, (l, r) -> -Double.valueOf(l.getValue()).compareTo(r.getValue()));
+	Collections.sort(children, (l, r) -> Double.compare(l.getValue(), r.getValue()) * -1);
 	squarify(canvas, depth, x, y + titleHeight, width, height - titleHeight, children, stack, new ArrayList<>());
 	stack.pop();
     }
@@ -84,7 +84,7 @@ public class SquarifiedTreeMapRenderer<T extends TreeMapNode> implements TreeMap
 	    double height) {
 	double rowSum = calcSum(row);
 	double childrenSum = calcSum(children);
-	return width * height * rowSum / ((childrenSum + rowSum) * rowLength);
+	return (width * height * rowSum) / ((childrenSum + rowSum) * rowLength);
     }
 
     private void layoutRowHorizontal(TreeMapCanvas<T> canvas, int depth, double x, double y, double width,
@@ -103,7 +103,7 @@ public class SquarifiedTreeMapRenderer<T extends TreeMapNode> implements TreeMap
 	double rowSum = calcSum(rowEntries);
 	double position = y;
 	for (TreeMapNode rowEntry : rowEntries) {
-	    double step = height * (rowEntry.getValue()) / rowSum;
+	    double step = (height * (rowEntry.getValue())) / rowSum;
 	    drawNode(canvas, depth - 1, x, position, width, step, rowEntry, stack);
 	    position += step;
 	}
@@ -112,13 +112,13 @@ public class SquarifiedTreeMapRenderer<T extends TreeMapNode> implements TreeMap
     private double worst(List<TreeMapNode> row, TreeMapNode r, double rowLength, double restSum, double totalArea) {
 	double worst = 0.0;
 	double rowSum = calcSum(row);
-	double rowWidth = totalArea * rowSum / ((restSum + rowSum) * rowLength);
+	double rowWidth = (totalArea * rowSum) / ((restSum + rowSum) * rowLength);
 	if (r != null) {
-	    double elementLength = totalArea * r.getValue() / ((restSum + rowSum + r.getValue()) / rowLength);
+	    double elementLength = (totalArea * r.getValue()) / ((restSum + rowSum + r.getValue()) / rowLength);
 	    worst = Math.max(rowWidth / elementLength, elementLength / rowWidth);
 	}
 	for (TreeMapNode child : row) {
-	    double elementLength = totalArea * child.getValue()
+	    double elementLength = (totalArea * child.getValue())
 		    / ((restSum + rowSum + (r != null ? r.getValue() : 0.0)) * rowLength);
 	    double current = Math.max(rowWidth / elementLength, elementLength / rowWidth);
 	    worst = Math.max(current, worst);
