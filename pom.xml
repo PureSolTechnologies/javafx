@@ -42,6 +42,7 @@
 		<module>workspaces</module>
 		<module>charts</module>
 		<module>tasks</module>
+		<module>testing</module>
 		<module>test</module>
 		<module>showroom</module>
 	</modules>
@@ -74,7 +75,6 @@
 		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
 		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
 		<openjfx.version>11</openjfx.version>
-		<testfx.version>4.0.15-alpha</testfx.version>
 		<jdk.version>11.0.2</jdk.version>
 		<org.openjdk.jmh.version>1.21</org.openjdk.jmh.version>
 	</properties>
@@ -109,6 +109,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>tasks</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>testing</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -176,18 +181,6 @@
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-web</artifactId>
 				<version>${openjfx.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.testfx</groupId>
-				<artifactId>testfx-core</artifactId>
-				<version>${testfx.version}</version>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.testfx</groupId>
-				<artifactId>testfx-junit5</artifactId>
-				<version>${testfx.version}</version>
-				<scope>test</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.junit.platform</groupId>
