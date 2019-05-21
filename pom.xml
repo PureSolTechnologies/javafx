@@ -63,10 +63,22 @@
 	</ciManagement>
 
 	<distributionManagement>
+		<repository>
+			<id>senorics-releases</id>
+			<name>Senorics's Releases Repository</name>
+			<url>http://10.10.2.80:8081/repository/senorics-libs-releases/</url>
+			<uniqueVersion>false</uniqueVersion>
+		</repository>
+		<snapshotRepository>
+			<id>senorics-snapshots</id>
+			<name>Senorics's Snapshots Repository</name>
+			<url>http://10.10.2.80:8081/repository/senorics-libs-snapshots/</url>
+			<uniqueVersion>true</uniqueVersion>
+		</snapshotRepository>
 		<site>
-			<id>FTPPureSolTechnologiesCom</id>
-			<name>FTPPureSolTechnologiesCom</name>
-			<url>ftp://puresol-technologies.com/opensource.puresol-technologies.com/projects/javafx/${project.version}</url>
+			<id>senorics-sites</id>
+			<name>Senorics's Sites Repository</name>
+			<url>dav:http://10.10.2.80:8081/repository/senorics-sites/senosoft</url>
 		</site>
 	</distributionManagement>
 

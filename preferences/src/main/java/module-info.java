@@ -15,6 +15,7 @@ module com.puresoltechnologies.javafx.preferences {
 	    com.puresoltechnologies.javafx.preferences.serializers.ColorPreferenceSerializer,
 	    com.puresoltechnologies.javafx.preferences.serializers.DoublePreferenceSerializer,
 	    com.puresoltechnologies.javafx.preferences.serializers.EnumerationPreferenceSerializer,
+	    com.puresoltechnologies.javafx.preferences.serializers.FilePreferenceSerializer,
 	    com.puresoltechnologies.javafx.preferences.serializers.FloatPreferenceSerializer,
 	    com.puresoltechnologies.javafx.preferences.serializers.FontDefinitionPreferenceSerializer,
 	    com.puresoltechnologies.javafx.preferences.serializers.IntegerPreferenceSerializer,
