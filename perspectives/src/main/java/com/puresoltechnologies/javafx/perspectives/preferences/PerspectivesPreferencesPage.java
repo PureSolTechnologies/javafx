@@ -8,6 +8,7 @@ import com.puresoltechnologies.javafx.extensions.ContentDisplayComboBox;
 import com.puresoltechnologies.javafx.perspectives.Perspective;
 import com.puresoltechnologies.javafx.perspectives.PerspectiveProperties;
 import com.puresoltechnologies.javafx.preferences.Preferences;
+import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesDialog;
 import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesPage;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -18,8 +19,8 @@ import javafx.scene.layout.Pane;
 
 public class PerspectivesPreferencesPage implements PreferencesPage {
 
-    private ContentDisplayComboBox containerToolbarContentComboBox;
-    private ContentDisplayComboBox partHeaderToolbarContentComboBox;
+    private final ContentDisplayComboBox containerToolbarContentComboBox = new ContentDisplayComboBox();
+    private final ContentDisplayComboBox partHeaderToolbarContentComboBox = new ContentDisplayComboBox();
 
     @Override
     public String getName() {
@@ -41,18 +42,16 @@ public class PerspectivesPreferencesPage implements PreferencesPage {
     }
 
     @Override
-    public Pane getPane() {
+    public Pane createPane(PreferencesDialog preferencesDialog) {
 	GridPane gridPane = new GridPane();
 	gridPane.setHgap(10.0);
 	gridPane.setVgap(10.0);
 	Label containerToolbarContentLabel = new Label("Perspective toolbar content:");
 	GridPane.setConstraints(containerToolbarContentLabel, 0, 0);
-	containerToolbarContentComboBox = new ContentDisplayComboBox();
 	GridPane.setConstraints(containerToolbarContentComboBox, 1, 0);
 
 	Label partHeaderToolbarContentLabel = new Label("Part header toolbar content:");
 	GridPane.setConstraints(partHeaderToolbarContentLabel, 0, 1);
-	partHeaderToolbarContentComboBox = new ContentDisplayComboBox();
 	GridPane.setConstraints(partHeaderToolbarContentComboBox, 1, 1);
 
 	gridPane.getChildren().addAll(containerToolbarContentLabel, containerToolbarContentComboBox,

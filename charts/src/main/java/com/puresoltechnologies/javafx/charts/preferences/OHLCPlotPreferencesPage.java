@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.ChartView;
 import com.puresoltechnologies.javafx.preferences.Preferences;
+import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesDialog;
 import com.puresoltechnologies.javafx.preferences.dialogs.PreferencesPage;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -41,7 +42,7 @@ public class OHLCPlotPreferencesPage implements PreferencesPage {
     }
 
     @Override
-    public Pane getPane() {
+    public Pane createPane(PreferencesDialog preferencesDialog) {
 	GridPane gridPane = new GridPane();
 	gridPane.setHgap(10.0);
 	gridPane.setVgap(10.0);

@@ -113,7 +113,7 @@ public class PreferencesDialog extends Dialog<Void> {
 	treeView.setRoot(rootItem);
 	treeView.setShowRoot(false);
 	treeView.setEditable(false);
-	treeView.setCellFactory((TreeView<PreferencesPageNode> p) -> new TreeCell<PreferencesPageNode>() {
+	treeView.setCellFactory((TreeView<PreferencesPageNode> p) -> new TreeCell<>() {
 	    @Override
 	    public void updateItem(PreferencesPageNode item, boolean empty) {
 		super.updateItem(item, empty);
@@ -151,7 +151,7 @@ public class PreferencesDialog extends Dialog<Void> {
 	if (preferencesPage != null) {
 	    imageView.setImage(preferencesPage.getImage());
 	    name.setText(preferencesPage.getName());
-	    preferencesPane.setCenter(preferencesPage.getPane());
+	    preferencesPane.setCenter(preferencesPage.createPane(this));
 	    preferencesPage.load(Preferences.getInstance());
 	    currentPreferencesPage = preferencesPage;
 	    restoreDefaultsButton.setDisable(false);
@@ -177,10 +177,10 @@ public class PreferencesDialog extends Dialog<Void> {
 	    }
 	}
 	if (child == null) {
-	    child = new TreeItem<PreferencesPageNode>(new PreferencesPageNode(path.get(i)));
+	    child = new TreeItem<>(new PreferencesPageNode(path.get(i)));
 	    children.add(child);
 	}
-	if (i == path.size() - 1) {
+	if (i == (path.size() - 1)) {
 	    if (child.getValue().getPreferencesPage() != null) {
 		throw new IllegalStateException("Multiple pages on one node are not supported.");
 	    }
