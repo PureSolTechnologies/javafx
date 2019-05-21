@@ -61,7 +61,7 @@ public class SampleTaskResultsViewer extends AbstractViewer implements Consumer<
 	State state = task.getState();
 	if ((state == State.SUCCEEDED) || (state == State.FAILED) || (state == State.CANCELLED)) {
 	    String report = text.getText();
-	    report += "'" + task.getTitle() + "' finished.\n";
+	    report += "'" + task.getTitle() + "' finished with: " + state.name() + ".\n";
 	    text.setText(report);
 	}
     }

@@ -1,16 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<officalName>JavaFX-Extensions</officalName>
-		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
-		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
-		<testfx.version>4.0.15-alpha</testfx.version>
-		<jdk.version>11.0.2</jdk.version>
-	</properties>
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
 	<artifactId>parent</artifactId>
@@ -19,14 +9,12 @@
 
 	<name>${officalName} - ${project.artifactId}</name>
 	<description>PureSol Technologies' commons libraries</description>
-	<inceptionYear>2018</inceptionYear>
 	<url>http://opensource.puresol-technologies.com/javafx</url>
-
+	<inceptionYear>2018</inceptionYear>
 	<organization>
 		<name>PureSol Technologies</name>
 		<url>http://puresol-technologies.com</url>
 	</organization>
-
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
@@ -34,13 +22,6 @@
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
-
-	<scm>
-		<developerConnection>scm:git:https://github.com/PureSolTechnologies/javafx</developerConnection>
-		<connection>scm:git:https://github.com/PureSolTechnologies/javafx</connection>
-		<url>https://github.com/PureSolTechnologies/javafx.git</url>
-		<tag>HEAD</tag>
-	</scm>
 
 	<developers>
 		<developer>
@@ -52,89 +33,51 @@
 		</developer>
 	</developers>
 
+	<modules>
+		<module>utils</module>
+		<module>reactive</module>
+		<module>extensions</module>
+		<module>preferences</module>
+		<module>perspectives</module>
+		<module>workspaces</module>
+		<module>charts</module>
+		<module>tasks</module>
+		<module>test</module>
+		<module>showroom</module>
+	</modules>
+
+	<scm>
+		<developerConnection>scm:git:https://github.com/PureSolTechnologies/javafx</developerConnection>
+		<connection>scm:git:https://github.com/PureSolTechnologies/javafx</connection>
+		<url>https://github.com/PureSolTechnologies/javafx.git</url>
+		<tag>HEAD</tag>
+	</scm>
 	<issueManagement>
 		<system>Redmine</system>
 		<url>https://bugs.puresol-technologies.net/projects/javafx</url>
 	</issueManagement>
-
 	<ciManagement>
 		<system>PureSol Technologies Jenkins</system>
 		<url>http://ci.puresol-technologies.net/job/javafx</url>
 	</ciManagement>
-
 	<distributionManagement>
-		<repository>
-			<id>senorics-releases</id>
-			<name>Senorics's Releases Repository</name>
-			<url>http://10.10.2.80:8081/repository/senorics-libs-releases/</url>
-			<uniqueVersion>false</uniqueVersion>
-		</repository>
-		<snapshotRepository>
-			<id>senorics-snapshots</id>
-			<name>Senorics's Snapshots Repository</name>
-			<url>http://10.10.2.80:8081/repository/senorics-libs-snapshots/</url>
-			<uniqueVersion>true</uniqueVersion>
-		</snapshotRepository>
 		<site>
-			<id>senorics-sites</id>
-			<name>Senorics's Sites Repository</name>
-			<url>dav:http://10.10.2.80:8081/repository/senorics-sites/senosoft</url>
+			<id>FTPPureSolTechnologiesCom</id>
+			<name>FTPPureSolTechnologiesCom</name>
+			<url>ftp://puresol-technologies.com/opensource.puresol-technologies.com/projects/javafx/${project.version}</url>
 		</site>
 	</distributionManagement>
 
-	<repositories />
-	<pluginRepositories />
-
-	<profiles>
-		<profile>
-			<id>release</id>
-			<build>
-				<plugins>
-					<plugin>
-						<artifactId>maven-gpg-plugin</artifactId>
-						<version>1.6</version>
-						<executions>
-							<execution>
-								<id>sign-artifacts</id>
-								<phase>verify</phase>
-								<goals>
-									<goal>sign</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>it</id>
-			<build>
-				<plugins>
-					<plugin>
-						<groupId>org.apache.maven.plugins</groupId>
-						<artifactId>maven-failsafe-plugin</artifactId>
-						<version>3.0.0-M3</version>
-						<executions>
-							<execution>
-								<goals>
-									<goal>integration-test</goal>
-									<goal>verify</goal>
-								</goals>
-							</execution>
-						</executions>
-						<configuration>
-							<forkCount>1</forkCount>
-							<reuseForks>false</reuseForks>
-							<argLine><![CDATA[--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED]]></argLine>
-							<includes>
-								<include>**/*IT.java</include>
-							</includes>
-						</configuration>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-	</profiles>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<officalName>JavaFX-Extensions</officalName>
+		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
+		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
+		<openjfx.version>11</openjfx.version>
+		<testfx.version>4.0.15-alpha</testfx.version>
+		<jdk.version>11.0.2</jdk.version>
+		<org.openjdk.jmh.version>1.21</org.openjdk.jmh.version>
+	</properties>
 
 	<dependencyManagement>
 		<dependencies>
@@ -189,6 +132,11 @@
 				<version>${streaming.version}</version>
 			</dependency>
 			<dependency>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-annotations</artifactId>
+				<version>3.1.12</version>
+			</dependency>
+			<dependency>
 				<groupId>io.reactivex.rxjava2</groupId>
 				<artifactId>rxjava</artifactId>
 				<version>2.2.4</version>
@@ -197,37 +145,37 @@
 				<groupId>net.java.jdk</groupId>
 				<artifactId>openjdk</artifactId>
 				<version>${jdk.version}</version>
-				<classifier>linux-x64</classifier>
 				<type>tar.gz</type>
+				<classifier>linux-x64</classifier>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
 				<groupId>net.java.jdk</groupId>
 				<artifactId>openjdk</artifactId>
 				<version>${jdk.version}</version>
-				<classifier>windows-x64</classifier>
 				<type>zip</type>
+				<classifier>windows-x64</classifier>
 				<scope>runtime</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-base</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-controls</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-graphics</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
 				<artifactId>javafx-web</artifactId>
-				<version>11</version>
+				<version>${openjfx.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.testfx</groupId>
@@ -277,158 +225,103 @@
 				<version>5.3.2</version>
 				<scope>test</scope>
 			</dependency>
+			<dependency>
+				<groupId>org.openjdk.jmh</groupId>
+				<artifactId>jmh-core</artifactId>
+				<version>${org.openjdk.jmh.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.openjdk.jmh</groupId>
+				<artifactId>jmh-generator-annprocess</artifactId>
+				<version>${org.openjdk.jmh.version}</version>
+				<scope>test</scope>
+			</dependency>
 		</dependencies>
 	</dependencyManagement>
 
+	<repositories />
+	<pluginRepositories />
+
 	<build>
-		<plugins>
-			<plugin>
-				<groupId>com.puresoltechnologies.maven.plugins</groupId>
-				<artifactId>license-maven-plugin</artifactId>
-				<version>1.2.1</version>
-				<executions>
-					<execution>
-						<phase>validate</phase>
-						<goals>
-							<goal>validate</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<recursive>true</recursive>
-					<skipOptionals>true</skipOptionals>
-					<skipProvidedScope>true</skipProvidedScope>
-					<skipTestScope>true</skipTestScope>
-					<knownLicenses>
-						<knownLicense>
-							<name>The Apache Software License, Version 2.0</name>
-							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-						</knownLicense>
-						<knownLicense>
-							<name>CC0 1.0 Universal</name>
-							<url>https://creativecommons.org/publicdomain/zero/1.0/</url>
-							<aliases>
-								<aliase>CC0</aliase>
-							</aliases>
-						</knownLicense>
-						<knownLicense>
-							<name>GPLv2+CE</name>
-							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
-						</knownLicense>
-						<knownLicense>
-							<name><![CDATA[OPENJDK COMMUNITY TCK AND EA TCK LICENSE AGREEMENT V 3.0]]></name>
-							<url>https://openjdk.java.net/legal/OCTLA-JDK9+.pdf</url>
-							<approvedDependencies>
-								<approvedDependency>net.java.jdk:openjdk:.*</approvedDependency>
-							</approvedDependencies>
-						</knownLicense>
-					</knownLicenses>
-				</configuration>
-			</plugin>
-			<!-- plugin> <groupId>org.codehaus.mojo</groupId> <artifactId>findbugs-maven-plugin</artifactId> 
-				<version>3.0.4</version> <executions> <execution> <phase>verify</phase> <goals> 
-				<goal>check</goal> </goals> </execution> </executions> </plugin -->
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.0</version>
-				<configuration>
-					<source>10</source>
-					<target>10</target>
-					<encoding>UTF-8</encoding>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jar-plugin</artifactId>
-				<version>3.1.1</version>
-				<configuration>
-					<archive>
-						<index>true</index>
-						<manifestEntries>
-							<Specification-Title>${project.name}</Specification-Title>
-							<Specification-Version>${project.version}</Specification-Version>
-							<Specification-Vendor>${project.organization.name}</Specification-Vendor>
-							<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
-							<Implementation-Version>${project.version}</Implementation-Version>
-							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-							<Vendor-URL>${project.organization.url}</Vendor-URL>
-							<Project-URL>${project.url}</Project-URL>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-source-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>attach-sources</id>
-						<goals>
-							<goal>jar-no-fork</goal>
-						</goals>
-						<configuration>
-							<archive>
-								<index>true</index>
-								<manifestEntries>
-									<Specification-Title>${project.name}</Specification-Title>
-									<Specification-Version>${project.version}</Specification-Version>
-									<Specification-Vendor>${project.organization.name}</Specification-Vendor>
-									<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
-									<Implementation-Version>${project.version}</Implementation-Version>
-									<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
-									<Vendor-URL>${project.organization.url}</Vendor-URL>
-									<Project-URL>${project.url}</Project-URL>
-								</manifestEntries>
-							</archive>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.0.1</version>
-				<executions>
-					<execution>
-						<id>attach-javadocs</id>
-						<goals>
-							<goal>jar</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.sonatype.plugins</groupId>
-				<artifactId>nexus-staging-maven-plugin</artifactId>
-				<version>1.6.8</version>
-				<extensions>true</extensions>
-				<configuration>
-					<serverId>ossrh</serverId>
-					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
-					<autoReleaseAfterClose>true</autoReleaseAfterClose>
-				</configuration>
-			</plugin>
-			<plugin>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.6</version>
-			</plugin>
-			<plugin>
-				<artifactId>maven-surefire-report-plugin</artifactId>
-				<version>2.20</version>
-			</plugin>
-		</plugins>
-		<extensions>
-			<extension>
-				<groupId>org.apache.maven.wagon</groupId>
-				<artifactId>wagon-ftp</artifactId>
-				<version>3.0.0</version>
-			</extension>
-		</extensions>
 		<pluginManagement>
 			<plugins>
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
 				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>3.0.0-M1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.0.0-M2</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-gpg-plugin</artifactId>
+					<version>1.6</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>3.0.0-M1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.1.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-javadoc-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.7.1</version>
+					<configuration>
+						<locales>en</locales>
+					</configuration>
+				</plugin>
+				<plugin>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.0.1</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M3</version>
+				</plugin>
+				<plugin>
+					<artifactId>maven-surefire-report-plugin</artifactId>
+					<version>3.0.0-M3</version>
+				</plugin>
+				<plugin>
+					<groupId>com.github.spotbugs</groupId>
+					<artifactId>spotbugs-maven-plugin</artifactId>
+					<version>3.1.11</version>
+				</plugin>
+				<plugin>
+					<groupId>com.puresoltechnologies.maven.plugins</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>1.2.1</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>tidy-maven-plugin</artifactId>
+					<version>1.1.0</version>
+				</plugin>
+				<plugin><!--This plugin's configuration is used to store Eclipse m2e 
+						settings only. It has no influence on the Maven build itself. -->
 					<groupId>org.eclipse.m2e</groupId>
 					<artifactId>lifecycle-mapping</artifactId>
 					<version>1.0.0</version>
@@ -460,6 +353,208 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<dependencyConvergence>
+									<uniqueVersions>true</uniqueVersions>
+								</dependencyConvergence>
+								<reactorModuleConvergence>
+									<message>The reactor is not valid</message>
+									<ignoreModuleDependencies>true</ignoreModuleDependencies>
+								</reactorModuleConvergence>
+								<requireJavaVersion>
+									<version>[9,)</version>
+								</requireJavaVersion>
+								<requireMavenVersion>
+									<version>[3.6.0,)</version>
+								</requireMavenVersion>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>com.puresoltechnologies.maven.plugins</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>validate</phase>
+						<goals>
+							<goal>validate</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<recursive>true</recursive>
+					<skipOptionals>true</skipOptionals>
+					<skipProvidedScope>true</skipProvidedScope>
+					<skipTestScope>true</skipTestScope>
+					<knownLicenses>
+						<knownLicense>
+							<name>The Apache Software License, Version 2.0</name>
+							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+						</knownLicense>
+						<knownLicense>
+							<name>CC0 1.0 Universal</name>
+							<url>https://creativecommons.org/publicdomain/zero/1.0/</url>
+							<aliases>
+								<aliase>CC0</aliase>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name>GPLv2+CE</name>
+							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+						</knownLicense>
+						<knownLicense>
+							<name>GNU LESSER GENERAL PUBLIC LICENSE, Version 2.1</name>
+							<url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html</url>
+						</knownLicense>
+						<knownLicense>
+							<name><![CDATA[GNU General Public License (GPL), version 2, with the Classpath exception]]></name>
+							<url>http://openjdk.java.net/legal/gplv2+ce.html</url>
+						</knownLicense>
+						<knownLicense>
+							<name><![CDATA[OPENJDK COMMUNITY TCK AND EA TCK LICENSE AGREEMENT V 3.0]]></name>
+							<url>https://openjdk.java.net/legal/OCTLA-JDK9+.pdf</url>
+							<approvedDependencies>
+								<approvedDependency>net.java.jdk:openjdk:.*</approvedDependency>
+							</approvedDependencies>
+						</knownLicense>
+						<knownLicense>
+							<name>The MIT License</name>
+							<url>http://www.opensource.org/licenses/mit-license.php</url>
+						</knownLicense>
+					</knownLicenses>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>com.github.spotbugs</groupId>
+				<artifactId>spotbugs-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<configuration>
+							<effort>Max</effort>
+							<threshold>Low</threshold>
+							<xmlOutput>true</xmlOutput>
+							<xmlOutputDirectory>target/site</xmlOutputDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<configuration>
+					<source>10</source>
+					<target>10</target>
+					<encoding>UTF-8</encoding>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<configuration>
+					<archive>
+						<index>true</index>
+						<manifestEntries>
+							<Specification-Title>${project.name}</Specification-Title>
+							<Specification-Version>${project.version}</Specification-Version>
+							<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+							<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
+							<Implementation-Version>${project.version}</Implementation-Version>
+							<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+							<Vendor-URL>${project.organization.url}</Vendor-URL>
+							<Project-URL>${project.url}</Project-URL>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+						<configuration>
+							<archive>
+								<index>true</index>
+								<manifestEntries>
+									<Specification-Title>${project.name}</Specification-Title>
+									<Specification-Version>${project.version}</Specification-Version>
+									<Specification-Vendor>${project.organization.name}</Specification-Vendor>
+									<Implementation-Title>${project.groupId}:${project.artifactId}</Implementation-Title>
+									<Implementation-Version>${project.version}</Implementation-Version>
+									<Implementation-Vendor>${project.organization.name}</Implementation-Vendor>
+									<Vendor-URL>${project.organization.url}</Vendor-URL>
+									<Project-URL>${project.url}</Project-URL>
+								</manifestEntries>
+							</archive>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.sonatype.plugins</groupId>
+				<artifactId>nexus-staging-maven-plugin</artifactId>
+				<version>1.6.8</version>
+				<extensions>true</extensions>
+				<configuration>
+					<serverId>ossrh</serverId>
+					<nexusUrl>https://oss.sonatype.org/</nexusUrl>
+					<autoReleaseAfterClose>true</autoReleaseAfterClose>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-site-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-report-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>tidy-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+		<extensions>
+			<extension>
+				<groupId>org.apache.maven.wagon</groupId>
+				<artifactId>wagon-ftp</artifactId>
+				<version>3.0.0</version>
+			</extension>
+		</extensions>
 	</build>
 
 	<reporting>
@@ -481,17 +576,54 @@
 		</plugins>
 	</reporting>
 
-	<modules>
-		<module>utils</module>
-		<module>reactive</module>
-		<module>extensions</module>
-		<module>preferences</module>
-		<module>perspectives</module>
-		<module>workspaces</module>
-		<module>charts</module>
-		<module>tasks</module>
-		<module>test</module>
-		<module>showroom</module>
-	</modules>
-
+	<profiles>
+		<profile>
+			<id>release</id>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-gpg-plugin</artifactId>
+						<version>1.6</version>
+						<executions>
+							<execution>
+								<id>sign-artifacts</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>sign</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>it</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-failsafe-plugin</artifactId>
+						<version>3.0.0-M3</version>
+						<executions>
+							<execution>
+								<goals>
+									<goal>integration-test</goal>
+									<goal>verify</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<forkCount>1</forkCount>
+							<reuseForks>false</reuseForks>
+							<argLine><![CDATA[--add-exports javafx.graphics/com.sun.javafx.application=ALL-UNNAMED]]></argLine>
+							<includes>
+								<include>**/*IT.java</include>
+							</includes>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 </project>

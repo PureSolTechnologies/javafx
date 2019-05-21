@@ -34,7 +34,7 @@ import javafx.stage.Stage;
 
 public class ShowRoom extends Application {
 
-    private PerspectivePane perspectiveContainer;
+    private PerspectivePane perspectivePane;
     private SplashScreen splashScreen;
 
     @Override
@@ -51,10 +51,10 @@ public class ShowRoom extends Application {
 		Image chartUpColorBig = ResourceUtils.getImage(this, "icons/FatCow_Icons32x32/setup_slide_show.png");
 		applicationStage.getIcons().addAll(chartUpColorSmall, chartUpColorBig);
 
-		perspectiveContainer = PerspectiveService.getMainContainer();
+		perspectivePane = PerspectiveService.getMainContainer();
 		BorderPane root = new BorderPane();
 		addMenu(applicationStage, root);
-		root.setCenter(perspectiveContainer);
+		root.setCenter(perspectivePane);
 		StatusBar statusBar = new StatusBar();
 		HBox stretch = new HBox();
 		HBox.setHgrow(stretch, Priority.ALWAYS);

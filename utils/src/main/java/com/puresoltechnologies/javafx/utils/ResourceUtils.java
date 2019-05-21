@@ -9,7 +9,7 @@ import javafx.scene.image.ImageView;
 /**
  * This class is used to load resources easier and to provide them in a JavaFX
  * convenient form.
- * 
+ *
  * @author Rick-Rainer Ludwig
  *
  */
@@ -18,39 +18,36 @@ public class ResourceUtils {
     /**
      * This method reads the image from the given resource path relative to the
      * given class.
-     * 
-     * @param object
-     *            is the class to specify the classloader.
-     * @param imageResource
-     *            is the resource path of the image to be loaded.
+     *
+     * @param object        is the class to specify the classloader.
+     * @param imageResource is the resource path of the image to be loaded.
      * @return A {@link Image} object is returned. containing the picture.
-     * @throws IOException
-     *             is thrown in case of I/O issues.
+     * @throws IOException is thrown in case of I/O issues.
      */
     public static Image getImage(Object object, String imageResource) throws IOException {
 	return getImage(object.getClass(), imageResource);
     }
 
     public static Image getImage(Class<?> clazz, String imageResource) throws IOException {
-	try (InputStream perspectivesImage = clazz.getResourceAsStream(imageResource)) {
-	    if (perspectivesImage == null) {
-		return null;
-	    }
+	InputStream perspectivesImage = clazz.getResourceAsStream(imageResource);
+	if (perspectivesImage == null) {
+	    return null;
+	}
+	try {
 	    return new Image(perspectivesImage);
+	} finally {
+	    perspectivesImage.close();
 	}
     }
 
     /**
      * This method reads the image from the given resource path relative to the
      * given class.
-     * 
-     * @param object
-     *            is the class to specify the classloader.
-     * @param imageResource
-     *            is the resource path of the image to be loaded.
+     *
+     * @param object        is the class to specify the classloader.
+     * @param imageResource is the resource path of the image to be loaded.
      * @return A {@link ImageView} object is returned. containing the picture.
-     * @throws IOException
-     *             is thrown in case of I/O issues.
+     * @throws IOException is thrown in case of I/O issues.
      */
     public static ImageView getImageView(Object object, String imageResource) throws IOException {
 	return getImageView(object.getClass(), imageResource);

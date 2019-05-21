@@ -2,6 +2,7 @@ module com.puresoltechnologies.javafx.extensions {
 
     requires com.puresoltechnologies.javafx.utils;
     requires transitive javafx.controls;
+    requires com.github.spotbugs.annotations;
 
     exports com.puresoltechnologies.javafx.extensions;
     exports com.puresoltechnologies.javafx.extensions.dialogs;
