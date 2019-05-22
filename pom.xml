@@ -385,6 +385,9 @@
 						<knownLicense>
 							<name>The Apache Software License, Version 2.0</name>
 							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+							<aliases>
+								<aliase>The Apache License, Version 2.0</aliase>
+							</aliases>
 						</knownLicense>
 						<knownLicense>
 							<name>CC0 1.0 Universal</name>
@@ -392,6 +395,10 @@
 							<aliases>
 								<aliase>CC0</aliase>
 							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name>Eclipse Public License v2.0</name>
+							<url>http://www.eclipse.org/legal/epl-v20.html</url>
 						</knownLicense>
 						<knownLicense>
 							<name>GPLv2+CE</name>
@@ -440,8 +447,8 @@
 			<plugin>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>10</source>
-					<target>10</target>
+					<source>11</source>
+					<target>11</target>
 					<encoding>UTF-8</encoding>
 				</configuration>
 			</plugin>
