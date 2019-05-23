@@ -34,5 +34,7 @@ module com.puresoltechnologies.javafx.showroom {
 	    com.puresoltechnologies.javafx.showroom.parts.BoxPlotSampleViewer,
 	    com.puresoltechnologies.javafx.showroom.parts.TimeseriesPlotSampleViewer,
 	    com.puresoltechnologies.javafx.showroom.parts.XYPlotSampleViewer,
-	    com.puresoltechnologies.javafx.showroom.parts.OhlcPlotSampleViewer;
+	    com.puresoltechnologies.javafx.showroom.parts.OhlcPlotSampleViewer,
+	    com.puresoltechnologies.javafx.showroom.parts.WizardExamplePart,
+	    com.puresoltechnologies.javafx.showroom.parts.StepInterfaceExamplePart;
 }
