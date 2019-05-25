@@ -49,7 +49,7 @@ public class PartSelectionDialog extends Dialog<Part> {
 	ListView<Part> listView = new ListView<>();
 	listView.setEditable(false);
 	listView.setCellFactory(p -> {
-	    ListCell<Part> cell = new ListCell<Part>() {
+	    ListCell<Part> cell = new ListCell<>() {
 		@Override
 		protected void updateItem(Part t, boolean bln) {
 		    super.updateItem(t, bln);
@@ -63,7 +63,7 @@ public class PartSelectionDialog extends Dialog<Part> {
 		}
 	    };
 	    cell.setOnMouseClicked(event -> {
-		if (event.getClickCount() == 2 && (!cell.isEmpty())) {
+		if ((event.getClickCount() == 2) && (!cell.isEmpty())) {
 		    Part part = cell.getItem();
 		    setResult(part);
 		    close();

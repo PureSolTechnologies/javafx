@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 
 public class SplashScreen {
 
+    private int delay = 0;
     private final Stage initStage;
     private final Consumer<Stage> startStage;
     private final Scene scene;
@@ -80,6 +81,14 @@ public class SplashScreen {
 	}
     }
 
+    public int getDelay() {
+	return delay;
+    }
+
+    public void setDelay(int delay) {
+	this.delay = delay;
+    }
+
     public void startApplication() {
 	// startStage.accept(initStage);
 	initStage.show();
@@ -97,6 +106,9 @@ public class SplashScreen {
 			loadProgress.setPrefWidth(cellBounds.getWidth());
 		    });
 		    task.run();
+		    if (delay > 0) {
+			Thread.sleep(delay);
+		    }
 		    FXThreads.proceedOnFXThread(() -> loadProgress.setProgress(((double) num) / taskNum));
 		}
 		return null;
@@ -104,6 +116,7 @@ public class SplashScreen {
 	};
 	task.stateProperty().addListener((observableValue, oldState, newState) -> {
 	    if (newState == Worker.State.SUCCEEDED) {
+		root.setVisible(false);
 		initStage.setAlwaysOnTop(false);
 		startStage.accept(initStage);
 	    } // todo add code to gracefully handle other task states.

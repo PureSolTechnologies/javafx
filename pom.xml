@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
@@ -35,14 +37,16 @@
 
 	<modules>
 		<module>utils</module>
-		<module>reactive</module>
 		<module>extensions</module>
-		<module>preferences</module>
-		<module>perspectives</module>
-		<module>workspaces</module>
 		<module>charts</module>
+		<module>services</module>
+		<module>preferences</module>
+		<module>workspaces</module>
+		<module>reactive</module>
 		<module>tasks</module>
+		<module>perspectives</module>
 		<module>testing</module>
+		<module>rcp</module>
 		<module>test</module>
 		<module>showroom</module>
 	</modules>
@@ -72,15 +76,18 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<officalName>JavaFX-Extensions</officalName>
+		<!-- Versions -->
 		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
 		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
 		<openjfx.version>11</openjfx.version>
 		<jdk.version>11.0.2</jdk.version>
+		<org.slf4j.version>1.7.26</org.slf4j.version>
 		<org.openjdk.jmh.version>1.21</org.openjdk.jmh.version>
 	</properties>
 
 	<dependencyManagement>
 		<dependencies>
+			<!-- Self -->
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>charts</artifactId>
@@ -103,7 +110,17 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>rcp</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>reactive</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>services</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
@@ -126,6 +143,7 @@
 				<artifactId>workspaces</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<!-- PureSol Technologies -->
 			<dependency>
 				<groupId>com.puresoltechnologies.graphs</groupId>
 				<artifactId>trees</artifactId>
@@ -136,6 +154,7 @@
 				<artifactId>iterators</artifactId>
 				<version>${streaming.version}</version>
 			</dependency>
+			<!-- 3rd party -->
 			<dependency>
 				<groupId>com.github.spotbugs</groupId>
 				<artifactId>spotbugs-annotations</artifactId>
@@ -223,6 +242,11 @@
 				<artifactId>jmh-generator-annprocess</artifactId>
 				<version>${org.openjdk.jmh.version}</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${org.slf4j.version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>

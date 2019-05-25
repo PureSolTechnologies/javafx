@@ -71,7 +71,7 @@ public class PerspectiveSelectionDialog extends Dialog<Perspective> {
 	Collections.sort(items, (l, r) -> l.getName().compareTo(r.getName()));
 	listView.setItems(FXCollections.observableArrayList(items));
 	listView.setCellFactory(p -> {
-	    ListCell<Perspective> cell = new ListCell<Perspective>() {
+	    ListCell<Perspective> cell = new ListCell<>() {
 		@Override
 		protected void updateItem(Perspective t, boolean bln) {
 		    super.updateItem(t, bln);
@@ -85,7 +85,7 @@ public class PerspectiveSelectionDialog extends Dialog<Perspective> {
 		}
 	    };
 	    cell.setOnMouseClicked(event -> {
-		if (event.getClickCount() == 2 && (!cell.isEmpty())) {
+		if ((event.getClickCount() == 2) && (!cell.isEmpty())) {
 		    Perspective perspesctive = cell.getItem();
 		    setResult(perspesctive);
 		    close();

@@ -16,6 +16,7 @@ module com.puresoltechnologies.javafx.showroom {
     requires javafx.graphics;
 
     requires java.management;
+    requires com.puresoltechnologies.javafx.services;
 
     exports com.puresoltechnologies.javafx.showroom;
     exports com.puresoltechnologies.javafx.showroom.parts;

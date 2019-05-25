@@ -3,6 +3,9 @@ package com.puresoltechnologies.javafx.utils;
 import java.io.IOException;
 import java.io.InputStream;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
@@ -14,6 +17,8 @@ import javafx.scene.image.ImageView;
  *
  */
 public class ResourceUtils {
+
+    private static final Logger logger = LoggerFactory.getLogger(ResourceUtils.class);
 
     /**
      * This method reads the image from the given resource path relative to the
@@ -31,6 +36,7 @@ public class ResourceUtils {
     public static Image getImage(Class<?> clazz, String imageResource) throws IOException {
 	InputStream perspectivesImage = clazz.getResourceAsStream(imageResource);
 	if (perspectivesImage == null) {
+	    logger.warn("Could not load image '" + imageResource + "'.");
 	    return null;
 	}
 	try {

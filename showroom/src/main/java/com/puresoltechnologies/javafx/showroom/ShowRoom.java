@@ -12,6 +12,9 @@ import com.puresoltechnologies.javafx.perspectives.menu.ShowPartMenuItem;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.javafx.services.ServiceException;
+import com.puresoltechnologies.javafx.services.Services;
+import com.puresoltechnologies.javafx.services.menu.ServiceControlMenuItem;
 import com.puresoltechnologies.javafx.showroom.perspectives.StartPerspective;
 import com.puresoltechnologies.javafx.tasks.TasksStatusBar;
 import com.puresoltechnologies.javafx.utils.FXThreads;
@@ -35,13 +38,12 @@ import javafx.stage.Stage;
 public class ShowRoom extends Application {
 
     private PerspectivePane perspectivePane;
-    private SplashScreen splashScreen;
 
     @Override
     public void start(Stage stage) throws Exception {
 	FXThreads.initialize();
 	Image splashImage = ResourceUtils.getImage(ShowRoom.class, "splash/splash.png");
-	splashScreen = new SplashScreen(stage, splashImage, applicationStage -> {
+	SplashScreen splashScreen = new SplashScreen(stage, splashImage, applicationStage -> {
 	    try {
 		applicationStage.setTitle("JavaFX Show Room");
 		applicationStage.setResizable(true);
@@ -70,6 +72,7 @@ public class ShowRoom extends Application {
 		throw new RuntimeException(e);
 	    }
 	});
+	splashScreen.setDelay(250);
 	splashScreen.addTask("Show startup message", () -> System.out.println("Starting...\n" //
 		+ "      _                  _______  __  ____  _                     ____                       \n" //
 		+ "     | | __ ___   ____ _|  ___\\ \\/ / / ___|| |__   _____      __ |  _ \\ ___   ___  _ __ ___  \n" //
@@ -85,6 +88,14 @@ public class ShowRoom extends Application {
 	});
 	splashScreen.addTask("Initialize perspectives", () -> PerspectiveService.initialize());
 	splashScreen.addTask("Initialize reactive Java", () -> ReactiveFX.initialize());
+	splashScreen.addTask("Initialize services", () -> {
+	    try {
+		Services.initialize();
+	    } catch (ServiceException e) {
+		throw new RuntimeException("Could not initialize servies.", e);
+	    }
+	});
+	splashScreen.addTask("Start services", () -> Services.shutdown());
 
 	splashScreen.startApplication();
 
@@ -92,23 +103,33 @@ public class ShowRoom extends Application {
 
     private void addMenu(Stage stage, BorderPane root) {
 	// File Menu
-	SwitchWorkspaceMenu switchWorkspaceMenu = new SwitchWorkspaceMenu(stage);
-	RestartApplicationMenuItem restartApplicationMenuItem = new RestartApplicationMenuItem(stage);
-	ExitApplicationMenuItem exitApplicationMenuItem = new ExitApplicationMenuItem(stage);
 	Menu fileMenu = new Menu("_File");
-	fileMenu.getItems().addAll(switchWorkspaceMenu, restartApplicationMenuItem, exitApplicationMenuItem);
+	fileMenu.getItems().addAll( //
+		new SwitchWorkspaceMenu(stage), //
+		new RestartApplicationMenuItem(stage), //
+		new ExitApplicationMenuItem(stage) //
+	);
 	// Window Menu
-	ShowPartMenuItem showViewItem = new ShowPartMenuItem();
-	PreferencesMenuItem preferencesItem = new PreferencesMenuItem();
 	Menu windowMenu = new Menu("_Window");
-	windowMenu.getItems().addAll(showViewItem, new PerspectiveMenu(), new SeparatorMenuItem(), preferencesItem);
+	windowMenu.getItems().addAll( //
+		new ShowPartMenuItem(), //
+		new PerspectiveMenu(), //
+		new SeparatorMenuItem(), //
+		new PreferencesMenuItem() //
+	);
+	// Tools Menu
+	Menu toolsMenu = new Menu("_Tools");
+	toolsMenu.getItems().addAll( //
+		new ServiceControlMenuItem() //
+	);
 	// Help Menu
-	AboutMenuItem aboutItem = new AboutMenuItem();
 	Menu helpMenu = new Menu("_Help");
-	helpMenu.getItems().addAll(aboutItem);
+	helpMenu.getItems().addAll( //
+		new AboutMenuItem() //
+	);
 	// Menu Bar
 	MenuBar menuBar = new MenuBar();
-	menuBar.getMenus().addAll(fileMenu, windowMenu, helpMenu);
+	menuBar.getMenus().addAll(fileMenu, windowMenu, toolsMenu, helpMenu);
 	root.setTop(menuBar);
 
     }

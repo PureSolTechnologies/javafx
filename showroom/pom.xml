@@ -19,11 +19,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.javafx</groupId>
-			<artifactId>perspectives</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.puresoltechnologies.javafx</groupId>
-			<artifactId>workspaces</artifactId>
+			<artifactId>rcp</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>net.java.jdk</groupId>

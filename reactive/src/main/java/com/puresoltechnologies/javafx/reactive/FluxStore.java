@@ -3,12 +3,17 @@ package com.puresoltechnologies.javafx.reactive;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
 public class FluxStore {
+
+    private static final Logger logger = LoggerFactory.getLogger(FluxStore.class);
 
     private final Map<Topic<?>, Subject<?>> subjects = new HashMap<>();
     private final Map<Topic<?>, Object> last = new HashMap<>();
@@ -31,7 +36,8 @@ public class FluxStore {
 		observer.accept(initialValue);
 		return subject.subscribe(observer);
 	    } catch (Exception e) {
-		e.printStackTrace(System.err);
+		logger.warn(
+			"Could not subscribe observer '" + observer.getClass() + "' to topic '" + topic.getId() + "'.");
 		return null;
 	    }
 	} else {
