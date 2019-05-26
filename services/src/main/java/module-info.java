@@ -5,6 +5,7 @@ module com.puresoltechnologies.javafx.services {
 
     requires javafx.graphics;
     requires javafx.controls;
+    requires slf4j.api;
 
     exports com.puresoltechnologies.javafx.services;
     exports com.puresoltechnologies.javafx.services.dialogs;

@@ -1,11 +1,16 @@
 package com.puresoltechnologies.javafx.services;
 
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * This is the class to handle all service implementations. It is used as
@@ -16,7 +21,10 @@ import java.util.stream.Collectors;
  */
 public final class Services {
 
+    private static final Logger logger = LoggerFactory.getLogger(Services.class);
+
     private static final List<Service> orderedServices = new ArrayList<>();
+    private static final Map<Class<? extends Service>, Service> classMapping = new HashMap<>();
     private static final List<Service> reversedServices = new ArrayList<>();
     private static final List<Class<? extends Service>> startedServices = new ArrayList<>();
     private static boolean initialized = false;
@@ -27,14 +35,19 @@ public final class Services {
      * @throws ServiceException
      */
     public static synchronized void initialize() throws ServiceException {
+	logger.info("Initializing Services...");
 	ServiceLoader<Service> serviceLoader = ServiceLoader.load(Service.class);
 
-	List<Service> unsortedServices = serviceLoader.stream() //
-		.map(provider -> provider.get()) //
-		.collect(Collectors.toList());
-	List<Class<? extends Service>> assignedServiceClasses = new ArrayList<>();
+	List<Service> unsortedServices = new ArrayList<>();
+	Iterator<Service> loaderIterator = serviceLoader.iterator();
+	while (loaderIterator.hasNext()) {
+	    Service service = loaderIterator.next();
+	    logger.info("Found service '" + service.getName() + "'.");
+	    unsortedServices.add(service);
+	}
 
-	while (unsortedServices.size() == 0) {
+	List<Class<? extends Service>> assignedServiceClasses = new ArrayList<>();
+	while (unsortedServices.size() > 0) {
 	    Iterator<Service> unsortedServicesIterator = unsortedServices.iterator();
 	    boolean progress = false;
 	    while (unsortedServicesIterator.hasNext()) {
@@ -47,8 +60,10 @@ public final class Services {
 		    }
 		}
 		if (dependenciesResolved) {
+		    logger.info("Registering Service '" + service.getName() + "'...");
 		    orderedServices.add(service);
 		    reversedServices.add(0, service);
+		    classMapping.put(service.getClass(), service);
 		    unsortedServicesIterator.remove();
 		    assignedServiceClasses.add(service.getClass());
 		    progress = true;
@@ -76,6 +91,7 @@ public final class Services {
 	}
 	orderedServices.forEach(service -> service.construct());
 	initialized = true;
+	logger.info("Services initialized.");
     }
 
     public static boolean isStarted(Class<? extends Service> serviceClass) {
@@ -133,10 +149,20 @@ public final class Services {
      * This method is used to shutdown this class and all Services found via SPI.
      */
     public static synchronized void shutdown() {
+	logger.info("Stopping Services...");
+	stopAllServices();
 	initialized = false;
-	Collections.reverse(orderedServices);
-	orderedServices.forEach(service -> service.destroy());
+	reversedServices.forEach(service -> service.destroy());
 	orderedServices.clear();
+	reversedServices.clear();
+	classMapping.clear();
+	logger.info("Services stopped.");
+    }
+
+    public static Set<ServiceInformation> getServices() {
+	return orderedServices.stream() //
+		.map(ServiceInformation::new) //
+		.collect(Collectors.toSet());
     }
 
 }

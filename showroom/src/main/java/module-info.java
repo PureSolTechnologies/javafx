@@ -20,6 +20,7 @@ module com.puresoltechnologies.javafx.showroom {
 
     exports com.puresoltechnologies.javafx.showroom;
     exports com.puresoltechnologies.javafx.showroom.parts;
+    exports com.puresoltechnologies.javafx.showroom.services;
 
     opens com.puresoltechnologies.javafx.showroom.icons.FatCow_Icons16x16;
     opens com.puresoltechnologies.javafx.showroom.icons.FatCow_Icons32x32;
@@ -38,4 +39,7 @@ module com.puresoltechnologies.javafx.showroom {
 	    com.puresoltechnologies.javafx.showroom.parts.OhlcPlotSampleViewer,
 	    com.puresoltechnologies.javafx.showroom.parts.WizardExamplePart,
 	    com.puresoltechnologies.javafx.showroom.parts.StepInterfaceExamplePart;
+    provides com.puresoltechnologies.javafx.services.Service
+	    with com.puresoltechnologies.javafx.showroom.services.ShowRoomService;
+
 }

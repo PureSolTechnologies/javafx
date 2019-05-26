@@ -95,7 +95,7 @@ public class ShowRoom extends Application {
 		throw new RuntimeException("Could not initialize servies.", e);
 	    }
 	});
-	splashScreen.addTask("Start services", () -> Services.shutdown());
+	splashScreen.addTask("Start services", () -> Services.startAllServices());
 
 	splashScreen.startApplication();
 

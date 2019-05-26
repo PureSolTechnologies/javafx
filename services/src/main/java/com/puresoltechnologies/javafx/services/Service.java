@@ -8,7 +8,19 @@ import java.util.Set;
  */
 public interface Service {
 
+    /**
+     * Returns the dependencies of this service.
+     * 
+     * @return
+     */
     Set<Class<? extends Service>> getDependencies();
+
+    /**
+     * This method returns the name of the service.
+     * 
+     * @return
+     */
+    String getName();
 
     /**
      * This method is called once after the Service was discovered during startup
