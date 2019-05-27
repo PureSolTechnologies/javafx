@@ -449,6 +449,9 @@
 						<knownLicense>
 							<name>The MIT License</name>
 							<url>http://www.opensource.org/licenses/mit-license.php</url>
+							<aliases>
+								<aliase>MIT License</aliase>
+							</aliases>
 						</knownLicense>
 					</knownLicenses>
 				</configuration>
