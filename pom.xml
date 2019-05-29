@@ -64,6 +64,20 @@
 		<url>http://ci.puresol-technologies.net/job/javafx</url>
 	</ciManagement>
 	<distributionManagement>
+		<repository>
+			<id>release-repository</id>
+			<name>Release Repository</name>
+			<layout>default</layout>
+			<uniqueVersion>true</uniqueVersion>
+			<url>${release.repository.url}</url>
+		</repository>
+		<snapshotRepository>
+			<id>snapshot-repository</id>
+			<name>Snapshot Repository</name>
+			<layout>default</layout>
+			<uniqueVersion>true</uniqueVersion>
+			<url>${snapshot.repository.url}</url>
+		</snapshotRepository>
 		<site>
 			<id>FTPPureSolTechnologiesCom</id>
 			<name>FTPPureSolTechnologiesCom</name>
