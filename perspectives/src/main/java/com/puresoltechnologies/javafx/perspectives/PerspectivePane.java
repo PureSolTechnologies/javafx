@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.puresoltechnologies.javafx.extensions.toolbar.DraggableToolBar;
+import com.puresoltechnologies.javafx.extensions.toolbar.ToolBarDockPane;
 import com.puresoltechnologies.javafx.perspectives.dialogs.PartSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
@@ -21,17 +23,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SplitMenuButton;
-import javafx.scene.control.ToolBar;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
 
-public class PerspectivePane extends BorderPane {
+public class PerspectivePane extends ToolBarDockPane {
 
     private static final ObjectProperty<ContentDisplay> toolBarContentDisplay = Preferences
 	    .getProperty(PerspectiveProperties.perspectiveToolbarContentDisplay);
 
-    private final ToolBar toolBar;
+    private final DraggableToolBar toolBar;
     private final SplitMenuButton openPerspectiveButton;
     private final List<Perspective> perspectives = new ArrayList<>();
     private Perspective currentPerspective = null;
@@ -69,7 +69,7 @@ public class PerspectivePane extends BorderPane {
 	    resetButton.setOnAction(event -> resetCurrentPerspective());
 	    closeButton.setOnAction(event -> closeCurrentPerspective());
 
-	    toolBar = new ToolBar();
+	    toolBar = new DraggableToolBar();
 	    toolBar.getItems().addAll(openPerspectiveButton, showViewButton, resetButton, closeButton);
 	    setTop(toolBar);
 	    setCenter(perspectiveContainerPane);

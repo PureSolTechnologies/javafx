@@ -9,6 +9,8 @@ module com.puresoltechnologies.javafx.perspectives {
     requires io.reactivex.rxjava2;
     requires transitive javafx.controls;
     requires transitive javafx.graphics;
+    requires transitive javafx.web;
+    requires slf4j.api;
 
     exports com.puresoltechnologies.javafx.perspectives;
     exports com.puresoltechnologies.javafx.perspectives.dialogs;
@@ -17,7 +19,8 @@ module com.puresoltechnologies.javafx.perspectives {
     exports com.puresoltechnologies.javafx.perspectives.preferences;
 
     provides com.puresoltechnologies.javafx.perspectives.parts.Part
-	    with com.puresoltechnologies.javafx.perspectives.parts.TaskProgressViewer;
+	    with com.puresoltechnologies.javafx.perspectives.parts.TaskProgressViewer, //
+	    com.puresoltechnologies.javafx.perspectives.parts.BrowserPart;
     provides com.puresoltechnologies.javafx.preferences.dialogs.PreferencesPage
 	    with com.puresoltechnologies.javafx.perspectives.preferences.PerspectivesPreferencesPage;
 

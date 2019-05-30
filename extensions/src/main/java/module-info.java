@@ -4,6 +4,7 @@ module com.puresoltechnologies.javafx.extensions {
     requires transitive javafx.controls;
     requires com.github.spotbugs.annotations;
     requires javafx.graphics;
+    requires slf4j.api;
 
     exports com.puresoltechnologies.javafx.extensions;
     exports com.puresoltechnologies.javafx.extensions.dialogs;
@@ -13,7 +14,9 @@ module com.puresoltechnologies.javafx.extensions {
     exports com.puresoltechnologies.javafx.extensions.properties;
     exports com.puresoltechnologies.javafx.extensions.splash;
     exports com.puresoltechnologies.javafx.extensions.stepinterface;
+    exports com.puresoltechnologies.javafx.extensions.toolbar;
 
+    opens com.puresoltechnologies.javafx.extensions.icons;
     opens com.puresoltechnologies.javafx.extensions.icons.FatCow_Icons16x16;
     opens com.puresoltechnologies.javafx.extensions.icons.FatCow_Icons32x32;
 

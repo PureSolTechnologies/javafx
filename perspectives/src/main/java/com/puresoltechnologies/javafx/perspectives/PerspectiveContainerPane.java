@@ -12,8 +12,7 @@ public class PerspectiveContainerPane extends BorderPane {
 
     PerspectiveContainerPane(PerspectiveElement rootElement) {
 	super();
-	this.rootElement = rootElement;
-	setCenter(rootElement.getContent());
+	setRootElement(rootElement);
     }
 
     void setRootElement(PerspectiveElement perspectiveElement) {

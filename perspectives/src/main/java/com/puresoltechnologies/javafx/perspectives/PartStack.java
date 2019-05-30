@@ -176,76 +176,82 @@ public class PartStack extends AbstractPerspectiveElement {
     }
 
     private void onDragEntered(DragEvent event) {
+	if (!event.getDragboard().hasContent(PartDragDataFormat.get())) {
+	    return;
+	}
 	if (event.getGestureSource() == this) {
 	    event.consume();
 	    return;
 	}
-	if (event.getDragboard().hasContent(PartDragDataFormat.get())) {
-	    event.acceptTransferModes(TransferMode.MOVE);
-	    double width = borderPane.getWidth();
-	    double height = borderPane.getHeight();
-	    Canvas canvas = new Canvas(width, height);
-	    borderPane.getChildren().add(canvas);
-	    drawDragCanvas(canvas, event);
-	}
+	event.acceptTransferModes(TransferMode.MOVE);
+	double width = borderPane.getWidth();
+	double height = borderPane.getHeight();
+	Canvas canvas = new Canvas(width, height);
+	borderPane.getChildren().add(canvas);
+	drawDragCanvas(canvas, event);
 	event.consume();
     }
 
     private void onDragOver(DragEvent event) {
+	if (!event.getDragboard().hasContent(PartDragDataFormat.get())) {
+	    return;
+	}
 	if (event.getGestureSource() == this) {
 	    event.consume();
 	    return;
 	}
-	if (event.getDragboard().hasContent(PartDragDataFormat.get())) {
-	    event.acceptTransferModes(TransferMode.MOVE);
-	    ObservableList<Node> children = borderPane.getChildren();
-	    Node canvas = children.get(children.size() - 1);
-	    if (canvas instanceof Canvas) {
-		drawDragCanvas((Canvas) canvas, event);
-	    }
+	event.acceptTransferModes(TransferMode.MOVE);
+	ObservableList<Node> children = borderPane.getChildren();
+	Node canvas = children.get(children.size() - 1);
+	if (canvas instanceof Canvas) {
+	    drawDragCanvas((Canvas) canvas, event);
 	}
 	event.consume();
     }
 
     private void onDragExisted(DragEvent event) {
+	if (!event.getDragboard().hasContent(PartDragDataFormat.get())) {
+	    return;
+	}
 	ObservableList<Node> children = borderPane.getChildren();
 	children.remove(children.size() - 1);
 	event.consume();
     }
 
     private void onDragDropped(DragEvent event) {
+	if (!event.getDragboard().hasContent(PartDragDataFormat.get())) {
+	    return;
+	}
 	if (event.getGestureSource() == this) {
 	    event.consume();
 	    return;
 	}
+	Dragboard dragboard = event.getDragboard();
 	/* data dropped */
 	ObservableList<Node> children = borderPane.getChildren();
 	children.remove(children.size() - 1);
 	boolean success = false;
-	Dragboard dragboard = event.getDragboard();
-	if (dragboard.hasContent(PartDragDataFormat.get())) {
-	    DropAreas dropAreas = new DropAreas(this);
-	    PerspectiveHandler perspectiveHandler = getPerspectiveHandler();
-	    PartDragData dragData = (PartDragData) dragboard.getContent(PartDragDataFormat.get());
-	    UUID partStackId = dragData.getPartStackId();
-	    UUID partId = dragData.getPartId();
-	    UUID id = getId();
-	    if (dropAreas.isTop(event)) {
-		perspectiveHandler.movePartToNewTop(partStackId, partId, id);
-		success = true;
-	    } else if (dropAreas.isRight(event)) {
-		perspectiveHandler.movePartToNewRight(partStackId, partId, id);
-		success = true;
-	    } else if (dropAreas.isLower(event)) {
-		perspectiveHandler.movePartToNewLower(partStackId, partId, id);
-		success = true;
-	    } else if (dropAreas.isLeft(event)) {
-		perspectiveHandler.movePartToNewLeft(partStackId, partId, id);
-		success = true;
-	    } else if (dropAreas.isInnerRectangle(event)) {
-		perspectiveHandler.movePartToStack(partStackId, partId, id);
-		success = true;
-	    }
+	DropAreas dropAreas = new DropAreas(this);
+	PerspectiveHandler perspectiveHandler = getPerspectiveHandler();
+	PartDragData dragData = (PartDragData) dragboard.getContent(PartDragDataFormat.get());
+	UUID partStackId = dragData.getPartStackId();
+	UUID partId = dragData.getPartId();
+	UUID id = getId();
+	if (dropAreas.isTop(event)) {
+	    perspectiveHandler.movePartToNewTop(partStackId, partId, id);
+	    success = true;
+	} else if (dropAreas.isRight(event)) {
+	    perspectiveHandler.movePartToNewRight(partStackId, partId, id);
+	    success = true;
+	} else if (dropAreas.isLower(event)) {
+	    perspectiveHandler.movePartToNewLower(partStackId, partId, id);
+	    success = true;
+	} else if (dropAreas.isLeft(event)) {
+	    perspectiveHandler.movePartToNewLeft(partStackId, partId, id);
+	    success = true;
+	} else if (dropAreas.isInnerRectangle(event)) {
+	    perspectiveHandler.movePartToStack(partStackId, partId, id);
+	    success = true;
 	}
 	event.setDropCompleted(success);
 	event.consume();

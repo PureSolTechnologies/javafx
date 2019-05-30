@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.utils;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -60,7 +61,11 @@ public class ResourceUtils {
     }
 
     public static ImageView getImageView(Class<?> clazz, String imageResource) throws IOException {
-	try (InputStream perspectivesImage = clazz.getResourceAsStream(imageResource)) {
+	InputStream imageStream = clazz.getResourceAsStream(imageResource);
+	if (imageStream == null) {
+	    throw new FileNotFoundException("Resource '" + imageResource + "' was not found.");
+	}
+	try (InputStream perspectivesImage = imageStream) {
 	    return new ImageView(new Image(perspectivesImage));
 	}
     }

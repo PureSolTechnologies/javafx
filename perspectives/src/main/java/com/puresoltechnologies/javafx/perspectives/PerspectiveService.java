@@ -59,7 +59,7 @@ public class PerspectiveService {
 
     private final PerspectivePane mainContainer;
 
-    public PerspectiveService() {
+    private PerspectiveService() {
 	this.mainContainer = new PerspectivePane();
     }
 
