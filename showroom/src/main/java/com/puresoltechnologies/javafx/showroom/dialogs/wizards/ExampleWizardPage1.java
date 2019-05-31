@@ -1,0 +1,35 @@
+package com.puresoltechnologies.javafx.showroom.dialogs.wizards;
+
+import com.puresoltechnologies.javafx.extensions.dialogs.wizard.AbstractWizardPage;
+
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.Node;
+import javafx.scene.control.CheckBox;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
+
+public class ExampleWizardPage1 extends AbstractWizardPage<ExampleWizardData> {
+
+    private final GridPane gridPane = new GridPane();
+
+    public ExampleWizardPage1(ExampleWizardData data) {
+	super("Step 1", "Description for Step 1");
+
+	CheckBox proceedCheckBox = new CheckBox("Can proceed");
+	GridPane.setConstraints(proceedCheckBox, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES,
+		Priority.NEVER);
+
+	CheckBox finishCheckBox = new CheckBox("Can finish");
+	GridPane.setConstraints(finishCheckBox, 0, 1, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.NEVER);
+
+	gridPane.getChildren().addAll(proceedCheckBox, finishCheckBox);
+	canProceedProperty().bind(proceedCheckBox.selectedProperty());
+	canFinishProperty().bind(finishCheckBox.selectedProperty());
+    }
+
+    @Override
+    public Node getNode() {
+	return gridPane;
+    }
+}

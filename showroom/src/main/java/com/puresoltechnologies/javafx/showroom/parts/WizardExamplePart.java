@@ -6,6 +6,9 @@ import com.puresoltechnologies.javafx.extensions.dialogs.wizard.WizardDialog;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
+import com.puresoltechnologies.javafx.showroom.dialogs.wizards.ExampleWizardData;
+import com.puresoltechnologies.javafx.showroom.dialogs.wizards.ExampleWizardPage1;
+import com.puresoltechnologies.javafx.showroom.dialogs.wizards.ExampleWizardPage2;
 
 import javafx.scene.Node;
 import javafx.scene.control.Button;
@@ -39,8 +42,12 @@ public class WizardExamplePart extends AbstractViewer {
     }
 
     private void startWizard() {
-	WizardDialog<String> wizardDIalog = new WizardDialog<>();
-	wizardDIalog.showAndWait();
+	WizardDialog<ExampleWizardData> wizardDialog = new WizardDialog<>(ExampleWizardData::new);
+	wizardDialog.setTitle("Wizard Example");
+	ExampleWizardData data = new ExampleWizardData();
+	wizardDialog.addPage(new ExampleWizardPage1(data));
+	wizardDialog.addPage(new ExampleWizardPage2(data));
+	wizardDialog.showAndWait();
     }
 
     @Override

@@ -72,7 +72,7 @@ public class ShowRoom extends Application {
 		throw new RuntimeException(e);
 	    }
 	});
-	splashScreen.setDelay(250);
+//	splashScreen.setDelay(250);
 	splashScreen.addTask("Show startup message", () -> System.out.println("Starting...\n" //
 		+ "      _                  _______  __  ____  _                     ____                       \n" //
 		+ "     | | __ ___   ____ _|  ___\\ \\/ / / ___|| |__   _____      __ |  _ \\ ___   ___  _ __ ___  \n" //
