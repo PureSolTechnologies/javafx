@@ -5,6 +5,7 @@ import java.util.Optional;
 import com.puresoltechnologies.javafx.extensions.dialogs.wizard.WizardDialog;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
+import com.puresoltechnologies.javafx.perspectives.parts.PartContentType;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.showroom.dialogs.wizards.ExampleWizardData;
 import com.puresoltechnologies.javafx.showroom.dialogs.wizards.ExampleWizardPage1;
@@ -20,7 +21,7 @@ public class WizardExamplePart extends AbstractViewer {
     private final VBox content = new VBox(startWizard);
 
     public WizardExamplePart() {
-	super("Wizard Dialog Example", PartOpenMode.AUTO_AND_MANUAL);
+	super("Wizard Dialog Example", PartOpenMode.AUTO_AND_MANUAL, PartContentType.ONE_PER_PERSPECTIVE);
     }
 
     @Override

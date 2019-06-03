@@ -44,6 +44,15 @@ public interface Part extends PerspectiveElement, AutoCloseable {
      */
     PartOpenMode getOpenMode();
 
+    /**
+     * This method tells the system how many instances of the part are allowed in
+     * the whole system or the perspective.
+     *
+     * @return A {@link PartContentType} value is returned signaling how many
+     *         instances are allowed.
+     */
+    PartContentType getContentType();
+
     void initialize();
 
     /**

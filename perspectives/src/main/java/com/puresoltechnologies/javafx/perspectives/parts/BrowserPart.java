@@ -27,7 +27,7 @@ public class BrowserPart extends AbstractViewer {
     private final GridPane gridPane = new GridPane();
 
     public BrowserPart() {
-	super("Browser", PartOpenMode.AUTO_AND_MANUAL);
+	super("Browser", PartOpenMode.AUTO_AND_MANUAL, PartContentType.MULTIPLE_PER_PERSPECTIVE);
 	try {
 	    setImage(ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/web_layout.png"));
 	} catch (IOException e) {

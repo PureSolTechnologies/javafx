@@ -21,11 +21,13 @@ public abstract class AbstractPart implements Part {
     private final StringProperty title = new SimpleStringProperty();
     private final ObjectProperty<Image> image = new SimpleObjectProperty<>();
     private final PartOpenMode openMode;
+    private final PartContentType contentType;
 
-    public AbstractPart(String title, PartOpenMode openMode) {
+    public AbstractPart(String title, PartOpenMode openMode, PartContentType contentType) {
 	super();
 	this.title.set(title);
 	this.openMode = openMode;
+	this.contentType = contentType;
     }
 
     @Override
@@ -66,6 +68,11 @@ public abstract class AbstractPart implements Part {
     @Override
     public final PartOpenMode getOpenMode() {
 	return openMode;
+    }
+
+    @Override
+    public final PartContentType getContentType() {
+	return contentType;
     }
 
     @Override

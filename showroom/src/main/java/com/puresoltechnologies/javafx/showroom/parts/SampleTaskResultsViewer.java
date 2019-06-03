@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
+import com.puresoltechnologies.javafx.perspectives.parts.PartContentType;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.tasks.TaskInfo;
@@ -27,7 +28,7 @@ public class SampleTaskResultsViewer extends AbstractViewer implements Consumer<
     private final Button clearButton = new Button("Clear");
 
     public SampleTaskResultsViewer() {
-	super("Sample Task Results", PartOpenMode.AUTO_AND_MANUAL);
+	super("Sample Task Results", PartOpenMode.AUTO_AND_MANUAL, PartContentType.ONE_PER_PERSPECTIVE);
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
+import com.puresoltechnologies.javafx.perspectives.parts.PartContentType;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.showroom.tasks.SampleTask;
 import com.puresoltechnologies.javafx.showroom.tasks.SampleTaskType;
@@ -32,7 +33,7 @@ public class StartSampleTasksViewer extends AbstractViewer {
     private final Button startButton = new Button("Start Sample Task...");
 
     public StartSampleTasksViewer() {
-	super("Create Sample Tasks", PartOpenMode.AUTO_AND_MANUAL);
+	super("Create Sample Tasks", PartOpenMode.AUTO_AND_MANUAL, PartContentType.ONE_PER_PERSPECTIVE);
     }
 
     @Override

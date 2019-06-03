@@ -46,7 +46,7 @@ public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskI
     private final ScrollPane scrollPane = new ScrollPane(vBox);
 
     public TaskProgressViewer() {
-	super("Progress", PartOpenMode.AUTO_AND_MANUAL);
+	super("Progress", PartOpenMode.AUTO_AND_MANUAL, PartContentType.ONE_PER_PERSPECTIVE);
 	try {
 	    setImage(ResourceUtils.getImage(Perspective.class, "icons/FatCow_Icons16x16/progressbar.png"));
 	} catch (IOException e) {
