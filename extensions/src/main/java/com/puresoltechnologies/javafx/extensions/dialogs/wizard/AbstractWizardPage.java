@@ -49,6 +49,10 @@ public abstract class AbstractWizardPage<T> implements WizardPage<T> {
 	this.data = data;
     }
 
+    public T getData() {
+	return data;
+    }
+
     @Override
     public final String getTitle() {
 	return title;
