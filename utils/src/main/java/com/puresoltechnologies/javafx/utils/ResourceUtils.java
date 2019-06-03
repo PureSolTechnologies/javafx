@@ -65,8 +65,10 @@ public class ResourceUtils {
 	if (imageStream == null) {
 	    throw new FileNotFoundException("Resource '" + imageResource + "' was not found.");
 	}
-	try (InputStream perspectivesImage = imageStream) {
-	    return new ImageView(new Image(perspectivesImage));
+	try {
+	    return new ImageView(new Image(imageStream));
+	} finally {
+	    imageStream.close();
 	}
     }
 
