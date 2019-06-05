@@ -99,7 +99,7 @@ public class SplashScreen {
 		for (int taskId = 0; taskId < taskNum; taskId++) {
 		    int num = taskId + 1;
 		    Task<?> task = tasks.get(taskId);
-		    FXThreads.proceedOnFXThread(() -> {
+		    FXThreads.runOnFXThread(() -> {
 			amountLabel.setText("(" + num + "/" + taskNum + ")");
 			titleLabel.setText(task.getTitle());
 			Bounds cellBounds = root.getCellBounds(0, 1);
@@ -109,7 +109,8 @@ public class SplashScreen {
 		    if (delay > 0) {
 			Thread.sleep(delay);
 		    }
-		    FXThreads.proceedOnFXThread(() -> loadProgress.setProgress(((double) num) / taskNum));
+		    task.get();
+		    FXThreads.runOnFXThread(() -> loadProgress.setProgress(((double) num) / taskNum));
 		}
 		return null;
 	    }

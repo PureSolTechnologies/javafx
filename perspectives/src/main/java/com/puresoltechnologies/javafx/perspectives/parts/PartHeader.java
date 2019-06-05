@@ -78,7 +78,6 @@ public class PartHeader extends HBox {
 
 	    setOnDragDetected(event -> {
 		/* drag was detected, start a drag-and-drop gesture */
-		/* allow any transfer mode */
 		Dragboard db = startDragAndDrop(TransferMode.MOVE);
 
 		/* Put a string on a dragboard */
