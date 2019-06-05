@@ -18,6 +18,9 @@ public class SimpleTest extends OpenJFXTest {
 	label.setId("test.label");
 	Button button = new Button("Click me!");
 	button.setId("test.button");
+	button.setOnAction(event -> {
+	    System.out.println("button click!");
+	});
 	vBox.getChildren().addAll(label, button);
 	return vBox;
     }
@@ -28,6 +31,7 @@ public class SimpleTest extends OpenJFXTest {
 	assertNotNull(label);
 	Button button = (Button) findNodeById("test.button");
 	assertNotNull(button);
+	clickMouse(button);
 	Thread.sleep(3000);
     }
 
