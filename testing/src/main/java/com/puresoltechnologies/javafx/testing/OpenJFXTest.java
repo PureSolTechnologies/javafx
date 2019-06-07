@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.testing;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public abstract class OpenJFXTest {
 		latch.countDown();
 	    }
 	});
-	latch.await(10, TimeUnit.SECONDS);
+	assertTrue(latch.await(10, TimeUnit.SECONDS));
     }
 
     @AfterAll
@@ -62,7 +63,7 @@ public abstract class OpenJFXTest {
 		latch.countDown();
 	    }
 	});
-	latch.await(10, TimeUnit.SECONDS);
+	assertTrue(latch.await(10, TimeUnit.SECONDS));
     }
 
     @AfterEach
