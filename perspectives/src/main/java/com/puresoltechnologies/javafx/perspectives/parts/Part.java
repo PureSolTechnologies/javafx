@@ -49,8 +49,12 @@ public interface Part extends PerspectiveElement, AutoCloseable {
     /**
      * This method is called after the part was opened by a user interaction to
      * implement some user interaction to retrieve needed input parameters.
+     *
+     * @return <code>true</code> is returned, if the initialization was successful
+     *         and the part is to be created and shown. <code>false</code> is
+     *         returned if creation is to be aborted.
      */
-    void manualInitialization();
+    boolean manualInitialization();
 
     @Override
     void close();

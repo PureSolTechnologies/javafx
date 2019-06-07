@@ -10,9 +10,9 @@ import java.util.UUID;
 
 import com.puresoltechnologies.javafx.extensions.toolbar.DraggableToolBar;
 import com.puresoltechnologies.javafx.extensions.toolbar.ToolBarDockPane;
-import com.puresoltechnologies.javafx.perspectives.dialogs.PartSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.dialogs.PerspectiveSelectionDialog;
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.perspectives.tasks.OpenPartTask;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
@@ -65,7 +65,10 @@ public class PerspectivePane extends ToolBarDockPane {
 	    closeButton.setContentDisplay(toolBarContentDisplay.get());
 
 	    openPerspectiveButton.setOnAction(event -> openNewPerspective());
-	    showViewButton.setOnAction(event -> showView());
+	    showViewButton.setOnAction(event -> {
+		FXThreads.runOnFXThread(new OpenPartTask());
+		event.consume();
+	    });
 	    resetButton.setOnAction(event -> resetCurrentPerspective());
 	    closeButton.setOnAction(event -> closeCurrentPerspective());
 
@@ -99,14 +102,6 @@ public class PerspectivePane extends ToolBarDockPane {
 	Optional<Perspective> perspective = new PerspectiveSelectionDialog().showAndWait();
 	if (perspective.isPresent()) {
 	    addPerspective(perspective.get());
-	}
-    }
-
-    private void showView() {
-	Optional<Part> part = new PartSelectionDialog().showAndWait();
-	if (part.isPresent()) {
-	    PerspectiveService.openPart(part.get());
-	    part.get().manualInitialization();
 	}
     }
 

@@ -103,9 +103,10 @@ public abstract class AbstractPart implements Part {
     }
 
     @Override
-    public void manualInitialization() {
+    public boolean manualInitialization() {
 	// Intentionally left empty, as this is an implementation which should be
 	// provided only in cases where it is needed.
+	return true;
     }
 
 }

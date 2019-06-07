@@ -1,12 +1,10 @@
 package com.puresoltechnologies.javafx.perspectives.menu;
 
 import java.io.IOException;
-import java.util.Optional;
 
 import com.puresoltechnologies.javafx.perspectives.Perspective;
-import com.puresoltechnologies.javafx.perspectives.PerspectiveService;
-import com.puresoltechnologies.javafx.perspectives.dialogs.PartSelectionDialog;
-import com.puresoltechnologies.javafx.perspectives.parts.Part;
+import com.puresoltechnologies.javafx.perspectives.tasks.OpenPartTask;
+import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.scene.Node;
@@ -42,11 +40,7 @@ public class ShowPartMenuItem extends MenuItem {
 
     private void initialize() {
 	setOnAction(event -> {
-	    Optional<Part> part = new PartSelectionDialog().showAndWait();
-	    if (part.isPresent()) {
-		PerspectiveService.openPart(part.get());
-		part.get().manualInitialization();
-	    }
+	    FXThreads.runOnFXThread(new OpenPartTask());
 	    event.consume();
 	});
     }
