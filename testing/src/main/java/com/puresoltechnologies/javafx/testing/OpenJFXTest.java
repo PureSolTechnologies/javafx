@@ -18,7 +18,6 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
 import javafx.scene.shape.Rectangle;
@@ -27,10 +26,20 @@ import javafx.stage.Stage;
 public abstract class OpenJFXTest {
 
     private static Robot robot;
-    private Stage stage;
-    private Scene scene;
 
-    protected abstract Parent getRootNode();
+    private Stage stage;
+
+    protected abstract Stage start();
+
+    protected abstract void stop();
+
+    public Stage getStage() {
+	return stage;
+    }
+
+    public void setStage(Stage stage) {
+	this.stage = stage;
+    }
 
     @BeforeAll
     public static void startJavaFX() throws InterruptedException {
@@ -55,9 +64,8 @@ public abstract class OpenJFXTest {
 	CountDownLatch latch = new CountDownLatch(1);
 	Platform.runLater(() -> {
 	    try {
-		stage = new Stage();
-		scene = new Scene(getRootNode(), 320, 200);
-		stage.setScene(scene);
+		Stage stage = start();
+		setStage(stage);
 		stage.show();
 	    } finally {
 		latch.countDown();
@@ -70,7 +78,6 @@ public abstract class OpenJFXTest {
     public void destroyStage() {
 	Platform.runLater(() -> {
 	    stage.hide();
-	    scene = null;
 	    stage = null;
 	});
     }
@@ -123,7 +130,7 @@ public abstract class OpenJFXTest {
     }
 
     protected Node findNodeById(String id) {
-	return findNode(scene.getRoot(), node -> id.equals(node.getId()));
+	return findNode(stage.getScene().getRoot(), node -> id.equals(node.getId()));
     }
 
     protected void clickMouse(Node node) {

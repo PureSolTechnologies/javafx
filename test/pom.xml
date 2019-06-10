@@ -18,6 +18,14 @@
 			<artifactId>rcp</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.puresoltechnologies.javafx</groupId>
+			<artifactId>showroom</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.javafx</groupId>
+			<artifactId>testing</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter-api</artifactId>
 		</dependency>

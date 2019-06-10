@@ -4,15 +4,18 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class SimpleTest extends OpenJFXTest {
 
     @Override
-    protected Parent getRootNode() {
+    protected Stage start() {
+
 	VBox vBox = new VBox();
 	Label label = new Label("Test");
 	label.setId("test.label");
@@ -22,7 +25,18 @@ public class SimpleTest extends OpenJFXTest {
 	    System.out.println("button click!");
 	});
 	vBox.getChildren().addAll(label, button);
-	return vBox;
+
+	Stage stage = new Stage(StageStyle.DECORATED);
+	Scene scene = new Scene(vBox, 320, 200);
+	stage.setScene(scene);
+
+	return stage;
+    }
+
+    @Override
+    protected void stop() {
+	// TODO Auto-generated method stub
+
     }
 
     @Test

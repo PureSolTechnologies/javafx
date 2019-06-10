@@ -89,8 +89,8 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<officalName>JavaFX-Extensions</officalName>
 		<!-- Versions -->
-		<streaming.version>2.0.0-SNAPSHOT</streaming.version>
-		<graphs.version>2.0.0-SNAPSHOT</graphs.version>
+		<streaming.version>2.0.0</streaming.version>
+		<graphs.version>2.0.1</graphs.version>
 		<openjfx.version>11</openjfx.version>
 		<jdk.version>11.0.2</jdk.version>
 		<org.slf4j.version>1.7.26</org.slf4j.version>
@@ -133,6 +133,11 @@
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>services</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>showroom</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
