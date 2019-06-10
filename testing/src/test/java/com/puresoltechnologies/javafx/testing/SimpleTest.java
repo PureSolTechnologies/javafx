@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -15,7 +16,6 @@ public class SimpleTest extends OpenJFXTest {
 
     @Override
     protected Stage start() {
-
 	VBox vBox = new VBox();
 	Label label = new Label("Test");
 	label.setId("test.label");
@@ -36,16 +36,16 @@ public class SimpleTest extends OpenJFXTest {
     @Override
     protected void stop() {
 	// TODO Auto-generated method stub
-
     }
 
     @Test
     public void test() throws InterruptedException {
+
 	Label label = (Label) findNodeById("test.label");
 	assertNotNull(label);
 	Button button = (Button) findNodeById("test.button");
 	assertNotNull(button);
-	clickMouse(button);
+	selectById(Button.class, "test.button").click(MouseButton.PRIMARY);
 	Thread.sleep(3000);
     }
 
