@@ -129,6 +129,7 @@ public class ShowRoom extends Application {
 	);
 	// Menu Bar
 	MenuBar menuBar = new MenuBar();
+	menuBar.setId("menu.main");
 	menuBar.getMenus().addAll(fileMenu, windowMenu, toolsMenu, helpMenu);
 	root.setTop(menuBar);
 

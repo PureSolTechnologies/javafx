@@ -2,8 +2,13 @@ package com.puresoltechnologies.javafx.testing;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
+import com.puresoltechnologies.javafx.testing.select.NodeSelection;
+
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +18,11 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 public class SimpleTest extends OpenJFXTest {
+
+    @BeforeAll
+    public static void setupTest() {
+	ReplayTimings.setSpeed(Speed.MEDIUM);
+    }
 
     @Override
     protected Stage start() {
@@ -41,11 +51,12 @@ public class SimpleTest extends OpenJFXTest {
     @Test
     public void test() throws InterruptedException {
 
-	Label label = (Label) findNodeById("test.label");
+	NodeSelection<Parent> nodeSelection = nodeSelection();
+	Label label = (Label) nodeSelection.findNodeById("test.label");
 	assertNotNull(label);
-	Button button = (Button) findNodeById("test.button");
+	Button button = (Button) nodeSelection.findNodeById("test.button");
 	assertNotNull(button);
-	selectById(Button.class, "test.button").click(MouseButton.PRIMARY);
+	nodeSelection.selectById(Button.class, "test.button").click(MouseButton.PRIMARY);
 	Thread.sleep(3000);
     }
 

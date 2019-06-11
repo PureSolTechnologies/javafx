@@ -11,12 +11,13 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import com.puresoltechnologies.javafx.testing.select.NodeSelection;
+import com.puresoltechnologies.javafx.testing.select.NodeSelectionImpl;
 
 import javafx.application.Platform;
 import javafx.scene.Parent;
 import javafx.stage.Stage;
 
-public abstract class OpenJFXTest implements NodeSelection<Parent> {
+public abstract class OpenJFXTest {
 
     @BeforeAll
     public static void startJavaFX() throws InterruptedException {
@@ -77,8 +78,11 @@ public abstract class OpenJFXTest implements NodeSelection<Parent> {
 	return stage.getScene().getRoot();
     }
 
-    @Override
     public Parent getNode() {
 	return getParentNode();
+    }
+
+    public NodeSelection<Parent> nodeSelection() {
+	return new NodeSelectionImpl<>(getParentNode());
     }
 }

@@ -5,7 +5,9 @@ import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.showroom.ShowRoom;
 import com.puresoltechnologies.javafx.testing.OpenJFXTest;
+import com.puresoltechnologies.javafx.testing.select.NodeSelection;
 
+import javafx.scene.control.MenuBar;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -40,6 +42,8 @@ public class SimpleTest extends OpenJFXTest {
 
     @Test
     public void test() {
+	NodeSelection<MenuBar> menu = nodeSelection().selectById(MenuBar.class, "menu.main");
+
     }
 
 }
