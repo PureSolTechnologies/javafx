@@ -6,13 +6,10 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
-import com.puresoltechnologies.javafx.testing.select.NodeSelection;
 
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -51,12 +48,11 @@ public class SimpleTest extends OpenJFXTest {
     @Test
     public void test() throws InterruptedException {
 
-	NodeSelection<Parent> nodeSelection = nodeSelection();
-	Label label = (Label) nodeSelection.findNodeById("test.label");
+	Label label = (Label) findNodeById("test.label");
 	assertNotNull(label);
-	Button button = (Button) nodeSelection.findNodeById("test.button");
+	Button button = (Button) findNodeById("test.button");
 	assertNotNull(button);
-	nodeSelection.selectById(Button.class, "test.button").click(MouseButton.PRIMARY);
+	click("#test.button");
 	Thread.sleep(3000);
     }
 

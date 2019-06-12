@@ -2,124 +2,54 @@ package com.puresoltechnologies.javafx.testing.select;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
-public interface NodeSearch<N extends Node> {
+public interface NodeSearch {
 
-    N getNode();
-
-    default List<Node> findAllNodes() {
-	N rootNode = getNode();
-	if (Parent.class.isAssignableFrom(rootNode.getClass())) {
-	    List<Node> nodes = new ArrayList<>();
-	    addAllChildren((Parent) rootNode, nodes);
-	    return nodes;
-	} else {
-	    throw new IllegalStateException("Only javafx.scene.Parent nodes can have children.");
-	}
+    default List<Node> findNodes(Predicate<Node> filter) {
+	return Stage.getWindows().stream() //
+		.map(window -> findNodesInScene(window.getScene(), filter)) //
+		.flatMap(nodeList -> nodeList.stream()) //
+		.collect(Collectors.toList());
     }
 
-    private void addAllChildren(Parent parent, List<Node> nodes) {
+    default List<Node> findNodesInScene(Scene scene, Predicate<Node> filter) {
+	List<Node> nodes = new ArrayList<>();
+	Parent rootNode = scene.getRoot();
+	addAllChildren(rootNode, nodes, filter);
+	return nodes;
+    }
+
+    private void addAllChildren(Parent parent, List<Node> nodes, Predicate<Node> filter) {
 	for (Node node : parent.getChildrenUnmodifiable()) {
-	    nodes.add(node);
-	    if (node instanceof Parent) {
-		addAllChildren((Parent) node, nodes);
-	    }
-	}
-    }
-
-    default List<Node> findNodes(NodeFilter<Node> filter) {
-	N rootNode = getNode();
-	if (Parent.class.isAssignableFrom(rootNode.getClass())) {
-	    List<Node> nodes = new ArrayList<>();
-	    addAllChildren((Parent) rootNode, nodes, filter);
-	    return nodes;
-	} else {
-	    throw new IllegalStateException("Only javafx.scene.Parent nodes can have children.");
-	}
-    }
-
-    private void addAllChildren(Parent parent, List<Node> nodes, NodeFilter<Node> filter) {
-	for (Node node : parent.getChildrenUnmodifiable()) {
-	    if (filter.keep(node)) {
+	    if (filter.test(node)) {
 		nodes.add(node);
 	    }
-	    if (node instanceof Parent) {
+	    if (Parent.class.isAssignableFrom(node.getClass())) {
 		addAllChildren((Parent) node, nodes, filter);
 	    }
 	}
     }
 
-    default Node findNode(NodeFilter<Node> filter) {
-	N rootNode = getNode();
-	if (Parent.class.isAssignableFrom(rootNode.getClass())) {
-	    return findNode((Parent) rootNode, filter);
-	} else {
-	    throw new IllegalStateException("Only javafx.scene.Parent nodes can have children.");
+    default Node findNode(Predicate<Node> filter) {
+	List<Node> nodes = findNodes(filter);
+	if (nodes.isEmpty()) {
+	    return null;
 	}
-    }
-
-    private Node findNode(Parent parent, NodeFilter<Node> filter) {
-	for (Node node : parent.getChildrenUnmodifiable()) {
-	    if (filter.keep(node)) {
-		return node;
-	    }
-	    if (node instanceof Parent) {
-		Node foundNode = findNode((Parent) node, filter);
-		if (foundNode != null) {
-		    return foundNode;
-		}
-	    }
+	if (nodes.size() > 1) {
+	    throw new IllegalStateException("Multiple nodes were found.");
 	}
-	return null;
+	return nodes.get(0);
     }
 
     default Node findNodeById(String id) {
-	N rootNode = getNode();
-	if (Parent.class.isAssignableFrom(rootNode.getClass())) {
-	    return findNode((Parent) rootNode, node -> id.equals(node.getId()));
-	} else {
-	    throw new IllegalStateException("Only javafx.scene.Parent nodes can have children.");
-	}
-    }
-
-    default <S extends Node> S findNode(Class<S> clazz, NodeFilter<S> filter) {
-	N rootNode = getNode();
-	if (Parent.class.isAssignableFrom(rootNode.getClass())) {
-	    return findNode((Parent) rootNode, clazz, filter);
-	} else {
-	    throw new IllegalStateException("Only javafx.scene.Parent nodes can have children.");
-	}
-    }
-
-    private <S extends Node> S findNode(Parent parent, Class<S> clazz, NodeFilter<S> filter) {
-	for (Node node : parent.getChildrenUnmodifiable()) {
-	    if (clazz.equals(node.getClass())) {
-		@SuppressWarnings("unchecked")
-		S s = (S) node;
-		if (filter.keep(s)) {
-		    return s;
-		}
-	    }
-	    if (node instanceof Parent) {
-		S foundNode = findNode((Parent) node, clazz, filter);
-		if (foundNode != null) {
-		    return foundNode;
-		}
-	    }
-	}
-	return null;
-    }
-
-    default <S extends Node> S findNodeById(Class<S> clazz, String id) {
-	N rootNode = getNode();
-	if (Parent.class.isAssignableFrom(rootNode.getClass())) {
-	    return findNode((Parent) rootNode, clazz, node -> id.equals(node.getId()));
-	} else {
-	    throw new IllegalStateException("Only javafx.scene.Parent nodes can have children.");
-	}
+	return findNode(node -> id.equals(node.getId()));
     }
 
 }

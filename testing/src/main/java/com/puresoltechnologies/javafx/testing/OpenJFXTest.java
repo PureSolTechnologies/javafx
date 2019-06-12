@@ -10,14 +10,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
-import com.puresoltechnologies.javafx.testing.select.NodeSelection;
-import com.puresoltechnologies.javafx.testing.select.NodeSelectionImpl;
+import com.puresoltechnologies.javafx.testing.mouse.MouseInteraction;
+import com.puresoltechnologies.javafx.testing.select.NodeSearch;
 
 import javafx.application.Platform;
-import javafx.scene.Parent;
 import javafx.stage.Stage;
 
-public abstract class OpenJFXTest {
+public abstract class OpenJFXTest implements NodeSearch, MouseInteraction {
 
     @BeforeAll
     public static void startJavaFX() throws InterruptedException {
@@ -55,11 +54,17 @@ public abstract class OpenJFXTest {
     }
 
     @AfterEach
-    public void destroyStage() {
+    public void destroyStage() throws InterruptedException {
+	CountDownLatch latch = new CountDownLatch(1);
 	Platform.runLater(() -> {
-	    stage.hide();
-	    stage = null;
+	    try {
+		stop();
+		stage = null;
+	    } finally {
+		latch.countDown();
+	    }
 	});
+	assertTrue(latch.await(10, TimeUnit.SECONDS));
     }
 
     protected abstract Stage start();
@@ -74,15 +79,4 @@ public abstract class OpenJFXTest {
 	this.stage = stage;
     }
 
-    public final Parent getParentNode() {
-	return stage.getScene().getRoot();
-    }
-
-    public Parent getNode() {
-	return getParentNode();
-    }
-
-    public NodeSelection<Parent> nodeSelection() {
-	return new NodeSelectionImpl<>(getParentNode());
-    }
 }

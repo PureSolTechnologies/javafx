@@ -103,14 +103,19 @@ public class ShowRoom extends Application {
 
     private void addMenu(Stage stage, BorderPane root) {
 	// File Menu
+	ExitApplicationMenuItem exitApplicationMenuItem = new ExitApplicationMenuItem(stage);
+	exitApplicationMenuItem.setId("menu.main.file.exit");
+
 	Menu fileMenu = new Menu("_File");
+	fileMenu.setId("menu.main.file");
 	fileMenu.getItems().addAll( //
 		new SwitchWorkspaceMenu(stage), //
 		new RestartApplicationMenuItem(stage), //
-		new ExitApplicationMenuItem(stage) //
+		exitApplicationMenuItem //
 	);
 	// Window Menu
 	Menu windowMenu = new Menu("_Window");
+	windowMenu.setId("menu.main.window");
 	windowMenu.getItems().addAll( //
 		new ShowPartMenuItem(), //
 		new PerspectiveMenu(), //
@@ -119,11 +124,13 @@ public class ShowRoom extends Application {
 	);
 	// Tools Menu
 	Menu toolsMenu = new Menu("_Tools");
+	windowMenu.setId("menu.main.tools");
 	toolsMenu.getItems().addAll( //
 		new ServiceControlMenuItem() //
 	);
 	// Help Menu
 	Menu helpMenu = new Menu("_Help");
+	windowMenu.setId("menu.main.help");
 	helpMenu.getItems().addAll( //
 		new AboutMenuItem() //
 	);

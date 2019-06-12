@@ -16,9 +16,7 @@ public class FXThreads {
 	if (threadPool != null) {
 	    throw new IllegalStateException("FXThreads was already initialized.");
 	}
-	if (threadPool == null) {
-	    threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-	}
+	threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     }
 
     public static synchronized void shutdown() throws InterruptedException {

@@ -3,10 +3,11 @@ package com.puresoltechnologies.javafx.testing.mouse;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import com.puresoltechnologies.javafx.testing.OpenJFXRobot;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
-import com.puresoltechnologies.javafx.testing.select.NodeSelection;
+import com.puresoltechnologies.javafx.testing.select.NodeSearch;
 import com.puresoltechnologies.javafx.testing.utils.CoordinateUtils;
 
 import javafx.application.Platform;
@@ -22,32 +23,43 @@ import javafx.scene.robot.Robot;
  * @author Rick-Rainer Ludwig
  *
  */
-public interface MouseInteraction<N extends Node> {
+public interface MouseInteraction extends NodeSearch {
 
-    N getNode();
+    default void click(String id) {
+	click(id, MouseButton.PRIMARY);
+    }
 
-    default void click(MouseButton mouseButton) {
-	N node = getNode();
+    default void click(String id, MouseButton mouseButton) {
+	if (id.startsWith("#")) {
+	    Node node = findNodeById(id.substring(1));
+	    click(node, mouseButton);
+	}
+    }
+
+    default void click(Node node) {
+	click(node, MouseButton.PRIMARY);
+    }
+
+    default void click(Node node, MouseButton mouseButton) {
 	Point2D coordinates = CoordinateUtils.getScreenCenterCoordinates(node);
 	click(coordinates, mouseButton);
     }
 
     default void click(Point2D coordinates, MouseButton mouseButton) {
-	moveTo(coordinates);
-	CountDownLatch latch = new CountDownLatch(1);
-	Platform.runLater(() -> {
-	    try {
-		Robot robot = OpenJFXRobot.getRobot();
-		Thread.sleep(ReplayTimings.getMouseClickDelay());
-		robot.mouseClick(mouseButton);
-	    } catch (InterruptedException e) {
-		fail(e);
-	    } finally {
-		latch.countDown();
-	    }
-	});
 	try {
-	    latch.await();
+	    moveTo(coordinates);
+	    Thread.sleep(ReplayTimings.getMouseClickDelay());
+	    CountDownLatch latch = new CountDownLatch(1);
+	    Platform.runLater(() -> {
+		try {
+		    Robot robot = OpenJFXRobot.getRobot();
+		    robot.mouseClick(mouseButton);
+		} finally {
+		    latch.countDown();
+		}
+	    });
+	    latch.await(10, TimeUnit.SECONDS);
+	    Thread.sleep(ReplayTimings.getMouseClickDelay());
 	} catch (InterruptedException e) {
 	    fail("Await timed out.", e);
 	}
