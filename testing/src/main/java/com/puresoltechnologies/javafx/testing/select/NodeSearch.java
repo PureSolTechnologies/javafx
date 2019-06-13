@@ -2,19 +2,25 @@ package com.puresoltechnologies.javafx.testing.select;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import org.awaitility.Awaitility;
 
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public interface NodeSearch {
 
     default List<Node> findNodes(Predicate<Node> filter) {
-	return Stage.getWindows().stream() //
-		.map(window -> findNodesInScene(window.getScene(), filter)) //
+	return Window.getWindows().stream() //
+		.map(window -> {
+		    System.out.println("window: " + window.getClass().getName());
+		    return findNodesInScene(window.getScene(), filter);
+		}) //
 		.flatMap(nodeList -> nodeList.stream()) //
 		.collect(Collectors.toList());
     }
@@ -27,6 +33,7 @@ public interface NodeSearch {
     }
 
     private void addAllChildren(Parent parent, List<Node> nodes, Predicate<Node> filter) {
+	System.out.println(parent.getClass().getName());
 	for (Node node : parent.getChildrenUnmodifiable()) {
 	    if (filter.test(node)) {
 		nodes.add(node);
@@ -46,6 +53,20 @@ public interface NodeSearch {
 	    throw new IllegalStateException("Multiple nodes were found.");
 	}
 	return nodes.get(0);
+    }
+
+    default Node waitForNode(Predicate<Node> filter) {
+	Node node = Awaitility.await() //
+		.pollDelay(100, TimeUnit.MILLISECONDS) //
+		.atMost(10, TimeUnit.SECONDS) //
+		.until(() -> {
+		    try {
+			return findNode(filter);
+		    } catch (IllegalStateException e) {
+			return null;
+		    }
+		}, n -> n != null);
+	return node;
     }
 
     default Node findNodeById(String id) {
