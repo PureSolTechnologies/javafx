@@ -27,8 +27,12 @@ public class FluxStore {
 	subject.onNext(message);
     }
 
+    public <T> Subject<T> forSubject(Topic<T> topic) {
+	return assurePresenceOfTopic(topic);
+    }
+
     public <T> Disposable subscribe(Topic<T> topic, Consumer<T> observer) {
-	Subject<T> subject = assurePresenceOfTopic(topic);
+	Subject<T> subject = forSubject(topic);
 	@SuppressWarnings("unchecked")
 	T initialValue = (T) last.get(topic);
 	if (initialValue != null) {

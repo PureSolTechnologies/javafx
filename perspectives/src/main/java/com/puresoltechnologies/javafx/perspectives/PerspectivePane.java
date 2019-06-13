@@ -206,7 +206,8 @@ public class PerspectivePane extends ToolBarDockPane {
 	return currentPerspective;
     }
 
-    public void showView(Part part) {
-	// TODO Auto-generated method stub
+    public void setActive(UUID id) {
+	Part part = currentPerspective.findPartById(id);
+	((PartStack) part.getParent()).setActive(id);
     }
 }

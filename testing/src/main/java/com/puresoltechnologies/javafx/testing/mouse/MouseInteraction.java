@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.testing.mouse;
 
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
 import java.util.concurrent.CountDownLatch;
@@ -17,8 +18,7 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
 
 /**
- * This interface is used as mix-in for {@link NodeSelection}s with mouse
- * interaction.
+ * This interface is used as mix-in for mouse interaction.
  *
  * @author Rick-Rainer Ludwig
  *
@@ -58,7 +58,7 @@ public interface MouseInteraction extends NodeSearch {
 		    latch.countDown();
 		}
 	    });
-	    latch.await(10, TimeUnit.SECONDS);
+	    assertTrue(latch.await(10, TimeUnit.SECONDS));
 	    Thread.sleep(ReplayTimings.getMouseClickDelay());
 	} catch (InterruptedException e) {
 	    fail("Await timed out.", e);

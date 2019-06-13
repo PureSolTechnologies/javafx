@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.perspectives;
 
+import java.util.UUID;
+
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 
 /**
@@ -34,6 +36,18 @@ public class PerspectiveService {
 	return instance.mainContainer;
     }
 
+    public static Perspective getCurrentPerspective() {
+	return instance.mainContainer.getCurrentPerspective();
+    }
+
+    /**
+     * Opens the instantiated part.
+     * <p>
+     * <b>Be aware:</b> The {@link Part#initialize()} is called by this method and
+     * must not be called before.
+     *
+     * @param part is the un-initialized part to be opened.
+     */
     public static void openPart(Part part) {
 	Perspective currentPerspective = instance.mainContainer.getCurrentPerspective();
 	currentPerspective.openPart(part);
@@ -57,10 +71,13 @@ public class PerspectiveService {
 	instance.mainContainer.removeAllPerspectives();
     }
 
+    public static void setActive(UUID id) {
+	instance.mainContainer.setActive(id);
+    }
+
     private final PerspectivePane mainContainer;
 
     private PerspectiveService() {
 	this.mainContainer = new PerspectivePane();
     }
-
 }

@@ -1,8 +1,11 @@
 package com.puresoltechnologies.javafx.perspectives;
 
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.function.Predicate;
 
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 
@@ -120,6 +123,24 @@ public abstract class AbstractPerspective implements Perspective {
 	    openPart(element.getElements().get(0), part);
 	} else if (element instanceof PartStack) {
 	    ((PartStack) element).openPart(part);
+	}
+    }
+
+    @Override
+    public Set<Part> findPart(Predicate<Part> filter) {
+	Set<Part> parts = new HashSet<>();
+	findPart(element, filter, parts);
+	return parts;
+    }
+
+    private void findPart(PerspectiveElement parent, Predicate<Part> filter, Set<Part> parts) {
+	for (PerspectiveElement element : parent.getElements()) {
+	    if (PartStack.class.isAssignableFrom(element.getClass())) {
+		PartStack partStack = (PartStack) element;
+		partStack.getParts().stream().filter(filter).forEach(part -> parts.add(part));
+	    } else {
+		findPart(element, filter, parts);
+	    }
 	}
     }
 

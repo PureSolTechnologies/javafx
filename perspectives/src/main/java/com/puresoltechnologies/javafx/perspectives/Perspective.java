@@ -1,6 +1,10 @@
 package com.puresoltechnologies.javafx.perspectives;
 
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.function.Predicate;
 
 import com.puresoltechnologies.javafx.perspectives.parts.Part;
 
@@ -35,5 +39,20 @@ public interface Perspective extends PerspectiveElement {
     PerspectiveElement getRootElement();
 
     void openPart(Part part);
+
+    Set<Part> findPart(Predicate<Part> filter);
+
+    default Part findPartById(UUID id) {
+	Set<Part> parts = findPart(part -> part.getId().equals(id));
+	Iterator<Part> partsIterator = parts.iterator();
+	if (!partsIterator.hasNext()) {
+	    return null;
+	}
+	Part part = partsIterator.next();
+	if (!partsIterator.hasNext()) {
+	    throw new IllegalStateException("Multiple parts with id '" + id + " were found.");
+	}
+	return part;
+    }
 
 }

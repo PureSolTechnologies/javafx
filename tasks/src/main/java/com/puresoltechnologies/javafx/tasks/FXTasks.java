@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.tasks;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.puresoltechnologies.javafx.reactive.FluxStore;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 
@@ -14,30 +15,28 @@ public class FXTasks {
 
     private static final List<Task<?>> runningTasks = new ArrayList<>();
 
-    public static <T> void run(Task<T> task) {
+    public static <T> Task<T> run(Task<T> task) {
 	TaskInfo taskInfo = new TaskInfo(task);
-	ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
-	task.stateProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task));
-	});
-	task.progressProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task));
-	});
-	registerNewTask(task);
-	FXThreads.runAsync(task);
+	return run(task, taskInfo);
     }
 
-    public static <T> void run(Task<T> task, Image image) {
+    public static <T> Task<T> run(Task<T> task, Image image) {
 	TaskInfo taskInfo = new TaskInfo(task, image);
-	ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
+	return run(task, taskInfo);
+    }
+
+    private static <T> Task<T> run(Task<T> task, TaskInfo taskInfo) {
+	FluxStore fluxStore = ReactiveFX.getStore();
+	fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	task.stateProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task, image));
+	    fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	});
 	task.progressProperty().addListener((observable, oldValue, newValue) -> {
-	    ReactiveFX.getStore().publish(TasksTopics.TASK_STATUS_UPDATE, new TaskInfo(task));
+	    fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	});
 	registerNewTask(task);
 	FXThreads.runAsync(task);
+	return task;
     }
 
     private static void registerNewTask(Task<?> task) {
