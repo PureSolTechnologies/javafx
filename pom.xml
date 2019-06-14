@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
@@ -440,7 +438,16 @@
 							<name>The Apache Software License, Version 2.0</name>
 							<url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
 							<aliases>
+								<aliase>Apache 2</aliase>
+								<aliase>Apache 2.0</aliase>
 								<aliase>The Apache License, Version 2.0</aliase>
+							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name>The 2-Clause BSD License</name>
+							<url>http://www.opensource.org/licenses/bsd-license.php</url>
+							<aliases>
+								<aliase>New BSD License</aliase>
 							</aliases>
 						</knownLicense>
 						<knownLicense>
