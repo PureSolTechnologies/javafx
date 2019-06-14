@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<internationalization>
+    <translations>
+        <entry>
+            <key>Copy Translation</key>
+            <value>
+                <source>Copy Translation</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.TranslationCopyDialog.java</file>
+                    <line>33</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>Cancel</key>
+            <value>
+                <source>Cancel</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.TranslationCopyDialog.java</file>
+                    <line>28</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>OK</key>
+            <value>
+                <source>OK</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.TranslationCopyDialog.java</file>
+                    <line>27</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>from:</key>
+            <value>
+                <source>from:</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.TranslationCopyDialog.java</file>
+                    <line>52</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>to:</key>
+            <value>
+                <source>to:</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.TranslationCopyDialog.java</file>
+                    <line>54</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+    </translations>
+</internationalization>

@@ -19,6 +19,10 @@
 		</dependency>
 		<dependency>
 			<groupId>com.puresoltechnologies.javafx</groupId>
+			<artifactId>i18n</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.puresoltechnologies.javafx</groupId>
 			<artifactId>perspectives</artifactId>
 		</dependency>
 		<dependency>

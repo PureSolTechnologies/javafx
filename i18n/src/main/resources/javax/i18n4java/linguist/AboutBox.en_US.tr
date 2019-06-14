@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>author:</key>
+            <value>author:</value>
+        </entry>
+        <entry>
+            <key>OK</key>
+            <value>OK</value>
+        </entry>
+        <entry>
+            <key>Copyright</key>
+            <value>Copyright</value>
+        </entry>
+        <entry>
+            <key>email:</key>
+            <value>email:</value>
+        </entry>
+        <entry>
+            <key>License</key>
+            <value>License</value>
+        </entry>
+        <entry>
+            <key>About</key>
+            <value>About</value>
+        </entry>
+    </translations>
+</translations>

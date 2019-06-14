@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>Classes</key>
+            <value>Klassen</value>
+        </entry>
+        <entry>
+            <key>Error</key>
+            <value>Fehler</value>
+        </entry>
+        <entry>
+            <key>IO error in file reading.</key>
+            <value>EA-Fehler beim Lesen der Datei.</value>
+        </entry>
+        <entry>
+            <key>Changes were made.\nDo you want to save?</key>
+            <value>Es wurden Änderungen durchgeführt.\nSollen diese gespeichert werden?</value>
+        </entry>
+        <entry>
+            <key>Save</key>
+            <value>Speichern</value>
+        </entry>
+        <entry>
+            <key>File not found</key>
+            <value>Datei nicht gefunden</value>
+        </entry>
+    </translations>
+</translations>

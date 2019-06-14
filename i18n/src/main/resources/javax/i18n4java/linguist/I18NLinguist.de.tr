@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>ctrl S</key>
+            <value>ctrl S</value>
+        </entry>
+        <entry>
+            <key>Options</key>
+            <value>Optionen</value>
+        </entry>
+        <entry>
+            <key>I18NFile could not be saved!</key>
+            <value>I18N-Datei konnte nicht gespeichert werden!</value>
+        </entry>
+        <entry>
+            <key>Error</key>
+            <value>Fehler</value>
+        </entry>
+        <entry>
+            <key>About...</key>
+            <value>Über...</value>
+        </entry>
+        <entry>
+            <key>Error while choosing file.</key>
+            <value>Fehler bei der Auswahl der Datei.</value>
+        </entry>
+        <entry>
+            <key>Clear</key>
+            <value>Säubern</value>
+        </entry>
+        <entry>
+            <key>ctrl Q</key>
+            <value>ctrl Q</value>
+        </entry>
+        <entry>
+            <key>Update...</key>
+            <value>Aktualisieren...</value>
+        </entry>
+        <entry>
+            <key>IO error in file reading.</key>
+            <value>EA-Fehler beim Lesen der Datei.</value>
+        </entry>
+        <entry>
+            <key>Save...</key>
+            <value>Freigeben...</value>
+        </entry>
+        <entry>
+            <key>File was not found.</key>
+            <value>Datei wurde nicht gefunden.</value>
+        </entry>
+        <entry>
+            <key>Tools</key>
+            <value>Werkzeuge</value>
+        </entry>
+        <entry>
+            <key>ctrl O</key>
+            <value>ctrl O</value>
+        </entry>
+        <entry>
+            <key>File</key>
+            <value>Datei</value>
+        </entry>
+        <entry>
+            <key>Release...</key>
+            <value>Freigabe...</value>
+        </entry>
+        <entry>
+            <key>Language...</key>
+            <value>Sprache...</value>
+        </entry>
+        <entry>
+            <key>Open...</key>
+            <value>Öffnen...</value>
+        </entry>
+        <entry>
+            <key>Help</key>
+            <value>Hilfe</value>
+        </entry>
+        <entry>
+            <key>Quit</key>
+            <value>Beenden</value>
+        </entry>
+    </translations>
+</translations>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<internationalization>
+    <translations>
+        <entry>
+            <key>.*</key>
+            <value>
+                <source>.*</source>
+                <translations>
+                    <entry>
+                        <key>en_US</key>
+                        <value>.*</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>Name = &quot;&quot;.I18NJavaParser.java</file>
+                    <line>67</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+    </translations>
+</internationalization>

@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<internationalization>
+    <translations>
+        <entry>
+            <key>email:</key>
+            <value>
+                <source>email:</source>
+                <translations>
+                    <entry>
+                        <key>en_US</key>
+                        <value></value>
+                    </entry>
+                </translations>
+            </value>
+        </entry>
+        <entry>
+            <key>Classes</key>
+            <value>
+                <source>Classes</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.FilesTranslationPanel.java</file>
+                    <line>81</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>Save</key>
+            <value>
+                <source>Save</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.FilesTranslationPanel.java</file>
+                    <line>121</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>IO error in file reading.</key>
+            <value>
+                <source>IO error in file reading.</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.FilesTranslationPanel.java</file>
+                    <line>154</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>File not found</key>
+            <value>
+                <source>File not found</source>
+                <translations>
+                    <entry>
+                        <key>en_US</key>
+                        <value>File not found</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>javax.i18n4java.linguist.FilesTranslationPanel.java</file>
+                    <line>170</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>Changes were made.\nDo you want to save?</key>
+            <value>
+                <source>Changes were made.\nDo you want to save?</source>
+                <translations/>
+                <locations>
+                    <file>javax.i18n4java.linguist.FilesTranslationPanel.java</file>
+                    <line>121</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+        <entry>
+            <key>Error</key>
+            <value>
+                <source>Error</source>
+                <translations>
+                    <entry>
+                        <key>en_US</key>
+                        <value>Error</value>
+                    </entry>
+                </translations>
+                <locations>
+                    <file>javax.i18n4java.linguist.FilesTranslationPanel.java</file>
+                    <line>154</line>
+                    <lineCount>1</lineCount>
+                </locations>
+            </value>
+        </entry>
+    </translations>
+</internationalization>

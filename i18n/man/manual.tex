@@ -1,0 +1,171 @@
+\documentclass[a4paper,10pt]{report}
+\usepackage{color}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{makeidx}
+\usepackage{nomencl}
+\usepackage[margin=10pt,font=small,labelfont=bf,labelsep=newline,singlelinecheck=false]{caption}
+\usepackage[german,polutonikogreek,english]{babel}
+\usepackage{german}
+\usepackage{ifthen}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\TITLE}{The ``complete'' I18n4Java manual}
+\newcommand{\SUBTITLE}{Users, Administrators and Developers Guide to 
+I18n4Java}
+\newcommand{\AUTHOR}{Rick-Rainer Ludwig}
+\newcommand{\DATE}{\today}
+\newcommand{\VERSION}{1.0.0}
+\newcommand{\COMPANY}{PureSol Technologies}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newenvironment{definition}[2]
+{
+  \index{#1}
+  \vspace{1ex}
+  Definition \textbf{#1}:
+  \begin{flushright}
+    \begin{minipage}{0.9\textwidth}
+      #2
+    \end{minipage}
+  \end{flushright}
+}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\bibliographystyle{unsrt}
+
+%\renewcommand{\nomname}{\chapter{Glossary and Register}}
+\makenomenclature
+
+%\renewcommand{\indexname}{\chapter{Index}}
+\makeindex
+
+\newenvironment{story}[1]{
+  {
+    \sffamily\small
+    \list{}
+         {
+           \leftmargin1cm
+           \rightmargin1cm
+         }
+       \item\relax\textit{#1}
+         \endlist
+  }
+}
+
+\newenvironment{person}[1]
+{\textsc{#1}\index{#1}}
+
+\newenvironment{term}[1]
+{\textit{#1}\index{#1}}
+
+\renewenvironment{quote}[3] {
+  \index{#2}
+  \begin{flushright}
+    \begin{minipage}{0.75\textwidth}
+      \sffamily
+      \small
+      \begin{flushright}
+	\textit{``#1''}\\-- \person{#2}
+	\ifthenelse{\equal{#3}{}}
+	{}
+	{#3}
+      \end{flushright}
+    \end{minipage}
+  \end{flushright}
+}
+
+%%%%%%%%%%%%%%%%%
+%%% Farben... %%%
+\definecolor{red}{rgb}{1.0,0.0,0.0}
+\definecolor{blue}{rgb}{0.0,0.0,1.0}
+\definecolor{green}{rgb}{0.0,1.0,0.0}
+%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\pagestyle{headings}
+
+\newcommand{\bs}{\textbackslash}
+
+\begin{titlepage}
+	{
+	\centering
+	\textbf{\Huge \TITLE}\\[1cm]
+	\textbf{\Large \SUBTITLE}\\[2cm]
+	\textbf{\AUTHOR}\\
+	\textbf{(c) by \COMPANY}\\[1cm]
+	\textbf{version: \VERSION}\\
+	\textbf{date: \DATE}\\[1cm]
+	}
+        This is the ``official'' manual for KickStart.
+\end{titlepage}
+
+\tableofcontents
+\listoffigures
+\listoftables
+
+\chapter{About I18n4Java}
+I18n4Java is a new approach to do internationalization (in short i18n) in Java. The standard approach by using property files to store strings in specified keys and to change the files for different language output has a serious flaws:
+
+ \textbf{The original message is not shown.} It's wise to see the string in the source code. With the whole string in sight, one knows the context, the size and the message format and the needed parameters and their types.
+
+I18n4Java tries to make this right. All original string in the original development language are written within the source. The Java MessageFormat facilities are used to parameterize the string with localization already included. Translators get the whole freedom with this approach to translate all string within the right context and with the possibility to reorder the parameters to get a grammatically correct translation in any language. The MessageFormat approach could be used before with the properties file approach, too, but the string were not cleanly located within the source code and it was hard and time consuming to get all information about the string to be displayed to know the size of the output, the number and format of all parameters and also the position and the context within the application. I18n4Java solves these issues.
+
+
+\chapter{Installation}
+The library \texttt{i18n4java.jar} is just copied to an appropriate position and the path is added to \texttt{CLASSPATH}. Afterwards I18n4Java can be used.
+
+\chapter{Configuration}
+A file \texttt{i18n4java.properties} is put into the root directory of the source project. Within the files some keys are defined to specify the behavior of
+all I18N4Java related processing tools.
+
+\chapter{Use in Source Code}
+As soon as the library of I18n4Java is included in \texttt{CLASSPATH} a translator can be get by a simple call of
+
+\texttt{private static final Translator translator =}
+
+\texttt{Translator.getTranslator(<class>.class);}
+
+
+Translations can be retreived by 
+
+\texttt{translator.i18n(``<message with parameters>'',}
+
+\texttt{<param1>, <param2>...);}
+
+
+That's almost all of it! The rest can be done graphically with I18nLinguist, which is the tool to scan the sources, to do the translations and to release the translations into language files. The Translator automatically translates into the language which is administrated in the underlaying OS. With 
+
+{\center
+\texttt{Translator.setDefault(<locale>);}
+}
+
+the current language can be changed.
+
+% GLOSSARY
+\nomenclature{\textbf{ASCII}\index{ASCII}}{American Standard Code for
+Information Interchange - Code table for a number to character mapping}
+\nomenclature{\textbf{Design Patterns}\index{Design Patterns}}{Design Patterns
+(in german: Entwurfsmuster) are generalized approaches to repeating
+programming issues. For the most issues there is a fitting approach to solve
+the issue with a generalized design. Design patterns are well known with
+generalized names and software which implements and documents these patterns
+are very easy mainanable. Other programmers have a good chance to understand
+the code and the design of the software in short time. (see:
+\cite{book:head_first_design_patterns,book:design_patterns})}
+\nomenclature{\textbf{Refactoring}\textbf{Refactoring}}{Refactoring is the
+process of permanent code improvement even after implementing functionality.
+This process is essential to keep the software code in a clean state for later
+use. Without Refactoring the code will get out of shape and the implementation
+process for new functionallity will become more expensive. Therefore,
+Refactoring is a way to keep code maintanable. (see:
+\cite{book:the_pragmatic_programmer,book:refactoring})}
+
+\printnomenclature % <-- new version since 4.1!
+
+\bibliography{refs/books}
+
+\printindex
+
+\end{document}

@@ -1,0 +1,6 @@
+Only classes provided in this package should be used in foreign projects. All
+other classes are used internally and should not matter in usage of project
+I18N4Java.
+
+Rick-Rainer Ludwig
+2011-02-05

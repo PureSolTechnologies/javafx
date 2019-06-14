@@ -36,6 +36,7 @@
 	<modules>
 		<module>utils</module>
 		<module>extensions</module>
+		<module>i18n</module>
 		<module>charts</module>
 		<module>services</module>
 		<module>preferences</module>
@@ -112,6 +113,11 @@
 			</dependency>
 			<dependency>
 				<groupId>com.puresoltechnologies.javafx</groupId>
+				<artifactId>i18n</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>com.puresoltechnologies.javafx</groupId>
 				<artifactId>perspectives</artifactId>
 				<version>${project.version}</version>
 			</dependency>
@@ -183,6 +189,11 @@
 				<version>2.2.4</version>
 			</dependency>
 			<dependency>
+				<groupId>javax.xml.bind</groupId>
+				<artifactId>jaxb-api</artifactId>
+				<version>2.3.1</version>
+			</dependency>
+			<dependency>
 				<groupId>net.java.jdk</groupId>
 				<artifactId>openjdk</artifactId>
 				<version>${jdk.version}</version>
@@ -203,6 +214,12 @@
 				<artifactId>awaitility</artifactId>
 				<version>3.1.6</version>
 				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.glassfish.jaxb</groupId>
+				<artifactId>jaxb-runtime</artifactId>
+				<version>2.3.1</version>
+				<scope>runtime</scope>
 			</dependency>
 			<dependency>
 				<groupId>org.openjfx</groupId>
@@ -441,6 +458,7 @@
 								<aliase>Apache 2</aliase>
 								<aliase>Apache 2.0</aliase>
 								<aliase>The Apache License, Version 2.0</aliase>
+								<aliase>Apache License, Version 2.0</aliase>
 							</aliases>
 						</knownLicense>
 						<knownLicense>
@@ -456,6 +474,19 @@
 							<aliases>
 								<aliase>CC0</aliase>
 							</aliases>
+						</knownLicense>
+						<knownLicense>
+							<name>CDDL/GPLv2+CE</name>
+							<url>https://oss.oracle.com/licenses/CDDL+GPL-1.1</url>
+							<aliases>
+								<aliase>CDDL 1.1</aliase>
+								<aliase>GPL2 w/ CPE</aliase>
+								<aliase>CDDL+GPL License</aliase>
+								<aliase>Dual license consisting of the CDDL v1.1 and GPL v2</aliase>
+							</aliases>
+							<approvedDependencies>
+								<approvedDependency>javax.activation:activation:1.1</approvedDependency>
+							</approvedDependencies>
 						</knownLicense>
 						<knownLicense>
 							<name>Eclipse Public License v2.0</name>

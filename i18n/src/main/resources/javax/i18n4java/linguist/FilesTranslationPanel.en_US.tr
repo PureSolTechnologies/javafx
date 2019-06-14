@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>Error</key>
+            <value>Error</value>
+        </entry>
+        <entry>
+            <key>File not found</key>
+            <value>File not found</value>
+        </entry>
+    </translations>
+</translations>

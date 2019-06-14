@@ -1,0 +1,5 @@
+All classes in here except of I18nLinguist are only package private and 
+should not be used outside. 
+
+Rick-Rainer Ludwig
+2011-02-05

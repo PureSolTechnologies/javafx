@@ -1,0 +1,9 @@
+\begin{thenomenclature} 
+
+ \nomgroup{A}
+
+  \item [{\textbf{ASCII}\index{ASCII}}]\begingroup American Standard Code for Information Interchange - Code table for a number to character mapping\nomeqref {3.0}\nompageref{6}
+  \item [{\textbf{Design Patterns}\index{Design Patterns}}]\begingroup Design Patterns (in german: Entwurfsmuster) are generalized approaches to repeating programming issues. For the most issues there is a fitting approach to solve the issue with a generalized design. Design patterns are well known with generalized names and software which implements and documents these patterns are very easy mainanable. Other programmers have a good chance to understand the code and the design of the software in short time. (see: \cite{book:head_first_design_patterns,book:design_patterns})\nomeqref {3.0}\nompageref{6}
+  \item [{\textbf{Refactoring}\textbf{Refactoring}}]\begingroup Refactoring is the process of permanent code improvement even after implementing functionality. This process is essential to keep the software code in a clean state for later use. Without Refactoring the code will get out of shape and the implementation process for new functionallity will become more expensive. Therefore, Refactoring is a way to keep code maintanable. (see: \cite{book:the_pragmatic_programmer,book:refactoring})\nomeqref {3.0}\nompageref{6}
+
+\end{thenomenclature}

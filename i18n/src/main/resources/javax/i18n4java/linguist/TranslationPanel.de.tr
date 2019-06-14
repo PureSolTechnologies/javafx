@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>Reservoir</key>
+            <value>Reservoir</value>
+        </entry>
+        <entry>
+            <key>Source</key>
+            <value>Quelle</value>
+        </entry>
+        <entry>
+            <key>Location(s):</key>
+            <value>Fundort(e):</value>
+        </entry>
+        <entry>
+            <key>Translation:</key>
+            <value>Übersetzung:</value>
+        </entry>
+    </translations>
+</translations>

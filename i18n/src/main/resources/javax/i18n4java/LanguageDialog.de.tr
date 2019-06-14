@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<translations>
+    <translations>
+        <entry>
+            <key>Cancel</key>
+            <value>Abbrechen</value>
+        </entry>
+        <entry>
+            <key>OK</key>
+            <value>OK</value>
+        </entry>
+        <entry>
+            <key>Translation</key>
+            <value>Übersetzung</value>
+        </entry>
+        <entry>
+            <key>Language:</key>
+            <value>Sprache:</value>
+        </entry>
+    </translations>
+</translations>

@@ -1,0 +1,24 @@
+\begin{thebibliography}{1}
+
+\bibitem{book:head_first_design_patterns}
+Eric Freeman \&~Elisabeth Freeman.
+\newblock {\em Head First Design Patterns}.
+\newblock O'Reilly, 1st edition, Oct 2004.
+
+\bibitem{book:design_patterns}
+Erich Gamma \& Richard Helm \& Ralph Johnson \&~John Vlissides.
+\newblock {\em Design Patterns -- Elements of Reusable Object-Oriented
+  Software}.
+\newblock Addison-Wesley, 36th edition, July 2008.
+
+\bibitem{book:the_pragmatic_programmer}
+Andrew Hunt \&~David Thomas.
+\newblock {\em The Pragmatic Programmer}.
+\newblock Addison-Wesley, 22nd edition, January 2008.
+
+\bibitem{book:refactoring}
+Martin Fowler.
+\newblock {\em Refactoring -- Improving the Design of Existing Code}.
+\newblock Addison-Wesley, 22nd edition, August 2008.
+
+\end{thebibliography}
