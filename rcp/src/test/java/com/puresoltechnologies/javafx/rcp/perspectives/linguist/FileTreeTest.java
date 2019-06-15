@@ -26,7 +26,7 @@
  *
  ****************************************************************************/
 
-package com.puresoltechnologies.javafx.i18n.linguist;
+package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -34,6 +34,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
+
+import com.puresoltechnologies.javafx.rcp.perspectives.linguist.FileTree;
 
 public class FileTreeTest {
 

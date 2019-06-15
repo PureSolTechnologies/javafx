@@ -1,6 +1,6 @@
 /****************************************************************************
  *
- *   Status.java
+ *   FileTreeCellRenderer.java
  *   -------------------
  *   copyright            : (c) 2009-2011 by PureSol-Technologies
  *   author               : Rick-Rainer Ludwig
@@ -25,9 +25,26 @@
  * limitations under the License.
  *
  ****************************************************************************/
+ 
+package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
-package com.puresoltechnologies.javafx.i18n.linguist;
+import java.awt.Component;
 
-enum Status {
-	EMPTY, ONGOING, FINISHED;
+import javax.swing.JTree;
+import javax.swing.tree.TreeCellRenderer;
+
+class FileTreeCellRenderer implements TreeCellRenderer {
+
+	public FileTreeCellRenderer() {
+		super();
+	}
+
+	@Override
+	public Component getTreeCellRendererComponent(JTree tree, Object value,
+			boolean selected, boolean expanded, boolean leaf, int row,
+			boolean hasFocus) {
+		FileTree fileTree = (FileTree) value;
+		return new StatusComponent(fileTree.getName(), selected, hasFocus,
+				fileTree.getStatus());
+	}
 }

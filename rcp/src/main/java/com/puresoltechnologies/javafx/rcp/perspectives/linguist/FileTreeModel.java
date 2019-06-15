@@ -26,7 +26,7 @@
  *
  ****************************************************************************/
 
-package com.puresoltechnologies.javafx.i18n.linguist;
+package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
 import java.io.File;
 import java.io.IOException;

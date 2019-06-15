@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.i18n.linguist;
+package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
