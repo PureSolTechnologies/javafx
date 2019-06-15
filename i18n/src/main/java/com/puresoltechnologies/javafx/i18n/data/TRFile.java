@@ -25,7 +25,7 @@
  * limitations under the License.
  *
  ****************************************************************************/
- 
+
 package com.puresoltechnologies.javafx.i18n.data;
 
 import java.io.File;
@@ -41,104 +41,91 @@ import javax.xml.bind.Unmarshaller;
 
 public class TRFile {
 
-	/**
-	 * This method calculates the resource path to a context translation file.
-	 * The language information from the locale is used to invoke another
-	 * getTrResource method to get the name.
-	 * 
-	 * @see I18NFile#getResource(File)
-	 * @param context
-	 *            is the context name to use. In normal case its
-	 *            class.getName().
-	 * @param locale
-	 *            is a locale as language specifier to be used.
-	 * @return A String is returned with a path to the translation file. String
-	 *         is used and not(!) File to due the issue that resources within
-	 *         JARs are to be specified with normal '/' slash separators.
-	 */
-	public static String getResourceName(String context, Locale locale) {
-		if ((locale.getLanguage() != null) && (!locale.getLanguage().isEmpty())) {
-			if ((locale.getCountry() != null)
-					&& (!locale.getCountry().isEmpty())) {
-				return getResourceName(context, locale.getLanguage() + "_"
-						+ locale.getCountry());
-			} else {
-				return getResourceName(context, locale.getLanguage());
-			}
-		} else {
-			throw new RuntimeException("Locale '" + locale.toString()
-					+ "' is not valid!");
-		}
+    /**
+     * This method calculates the resource path to a context translation file. The
+     * language information from the locale is used to invoke another getTrResource
+     * method to get the name.
+     *
+     * @see I18NFile#getResource(File)
+     * @param context is the context name to use. In normal case its
+     *                class.getName().
+     * @param locale  is a locale as language specifier to be used.
+     * @return A String is returned with a path to the translation file. String is
+     *         used and not(!) File to due the issue that resources within JARs are
+     *         to be specified with normal '/' slash separators.
+     */
+    public static String getResourceName(String context, Locale locale) {
+	if ((locale.getLanguage() != null) && (!locale.getLanguage().isEmpty())) {
+	    if ((locale.getCountry() != null) && (!locale.getCountry().isEmpty())) {
+		return getResourceName(context, locale.getLanguage() + "_" + locale.getCountry());
+	    } else {
+		return getResourceName(context, locale.getLanguage());
+	    }
+	} else {
+	    throw new RuntimeException("Locale '" + locale.toString() + "' is not valid!");
 	}
+    }
 
-	/**
-	 * This method calculates the resource path to a context translation file.
-	 * 
-	 * @param context
-	 *            is the context name to use. In normal case its
-	 *            class.getName().
-	 * @param language
-	 *            is the language to look for.
-	 * @return A String is returned with a path to the translation file. String
-	 *         is used and not(!) File to due the issue that resources within
-	 *         JARs are to be specified with normal '/' slash separators.
-	 */
-	private static String getResourceName(String context, String language) {
-		return "/" + context.replaceAll("\\.", "/") + "." + language + ".tr";
-	}
+    /**
+     * This method calculates the resource path to a context translation file.
+     *
+     * @param context  is the context name to use. In normal case its
+     *                 class.getName().
+     * @param language is the language to look for.
+     * @return A String is returned with a path to the translation file. String is
+     *         used and not(!) File to due the issue that resources within JARs are
+     *         to be specified with normal '/' slash separators.
+     */
+    private static String getResourceName(String context, String language) {
+	return "/" + context.replaceAll("\\.", "/") + "." + language + ".tr";
+    }
 
-	public static void write(File file, SingleLanguageTranslations translations)
-			throws IOException {
-		try {
-			if (!file.getParentFile().exists()) {
-				file.getParentFile().mkdirs();
-			}
-			translations = (SingleLanguageTranslations) translations.clone();
-			translations.removeLineBreaks();
-			JAXBContext context = JAXBContext.newInstance(translations
-					.getClass());
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT,
-					Boolean.TRUE);
-			marshaller.marshal(translations, file);
-		} catch (JAXBException e) {
-			throw new IOException(e);
+    public static void write(File file, SingleLanguageTranslations translations) throws IOException {
+	try {
+	    File directory = file.getParentFile();
+	    if (!directory.exists()) {
+		if (!directory.mkdirs()) {
+		    throw new IOException("Directory '" + directory + "' not created.");
 		}
+	    }
+	    translations = (SingleLanguageTranslations) translations.clone();
+	    translations.removeLineBreaks();
+	    JAXBContext context = JAXBContext.newInstance(translations.getClass());
+	    Marshaller marshaller = context.createMarshaller();
+	    marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+	    marshaller.marshal(translations, file);
+	} catch (JAXBException e) {
+	    throw new IOException(e);
 	}
+    }
 
-	public static SingleLanguageTranslations read(File file) throws IOException {
-		try {
-			if (!file.exists()) {
-				throw new FileNotFoundException("File " + file.getPath()
-						+ " could not be found!");
-			}
-			JAXBContext context = JAXBContext
-					.newInstance(SingleLanguageTranslations.class);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			SingleLanguageTranslations translations = (SingleLanguageTranslations) unmarshaller
-					.unmarshal(file);
-			translations.addLineBreaks();
-			return translations;
-		} catch (JAXBException e) {
-			throw new IOException(e);
-		}
+    public static SingleLanguageTranslations read(File file) throws IOException {
+	try {
+	    if (!file.exists()) {
+		throw new FileNotFoundException("File " + file.getPath() + " could not be found!");
+	    }
+	    JAXBContext context = JAXBContext.newInstance(SingleLanguageTranslations.class);
+	    Unmarshaller unmarshaller = context.createUnmarshaller();
+	    SingleLanguageTranslations translations = (SingleLanguageTranslations) unmarshaller.unmarshal(file);
+	    translations.addLineBreaks();
+	    return translations;
+	} catch (JAXBException e) {
+	    throw new IOException(e);
 	}
+    }
 
-	public static SingleLanguageTranslations read(InputStream inputStream)
-			throws IOException {
-		try {
-			if (inputStream == null) {
-				throw new IOException("Input stream was not available!");
-			}
-			JAXBContext context = JAXBContext
-					.newInstance(SingleLanguageTranslations.class);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			SingleLanguageTranslations translations = (SingleLanguageTranslations) unmarshaller
-					.unmarshal(inputStream);
-			translations.addLineBreaks();
-			return translations;
-		} catch (JAXBException e) {
-			throw new IOException(e);
-		}
+    public static SingleLanguageTranslations read(InputStream inputStream) throws IOException {
+	try {
+	    if (inputStream == null) {
+		throw new IOException("Input stream was not available!");
+	    }
+	    JAXBContext context = JAXBContext.newInstance(SingleLanguageTranslations.class);
+	    Unmarshaller unmarshaller = context.createUnmarshaller();
+	    SingleLanguageTranslations translations = (SingleLanguageTranslations) unmarshaller.unmarshal(inputStream);
+	    translations.addLineBreaks();
+	    return translations;
+	} catch (JAXBException e) {
+	    throw new IOException(e);
 	}
+    }
 }

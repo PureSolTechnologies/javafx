@@ -30,7 +30,6 @@ package com.puresoltechnologies.javafx.i18n;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.lang.ref.WeakReference;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -64,9 +63,7 @@ import com.puresoltechnologies.javafx.i18n.utils.I18N4Java;
  *
  * @author Rick-Rainer Ludwig
  */
-public class Translator implements Serializable {
-
-    private static final long serialVersionUID = -2918229155516838530L;
+public class Translator {
 
     /**
      * This variable contains the current default locale for the translator.
@@ -167,8 +164,8 @@ public class Translator implements Serializable {
      */
     private static void resetAllInstances() {
 	synchronized (instancesLock) {
-	    for (String context : instances.keySet()) {
-		instances.get(context).reset();
+	    for (Translator translator : instances.values()) {
+		translator.reset();
 	    }
 	}
     }
@@ -332,9 +329,10 @@ public class Translator implements Serializable {
 	boolean found = false;
 	for (Iterator<WeakReference<LanguageChangeListener>> iterator = listeners.iterator(); iterator.hasNext();) {
 	    WeakReference<LanguageChangeListener> ref = iterator.next();
-	    if (ref.get() == null) {
+	    LanguageChangeListener l = ref.get();
+	    if (l == null) {
 		iterator.remove();
-	    } else if (ref.get().equals(listener)) {
+	    } else if (l.equals(listener)) {
 		found = true;
 	    }
 	}
@@ -346,9 +344,10 @@ public class Translator implements Serializable {
     public void removeLanguageChangeListener(LanguageChangeListener listener) {
 	for (Iterator<WeakReference<LanguageChangeListener>> iterator = listeners.iterator(); iterator.hasNext();) {
 	    WeakReference<LanguageChangeListener> ref = iterator.next();
-	    if (ref.get() == null) {
+	    LanguageChangeListener l = ref.get();
+	    if (l == null) {
 		iterator.remove();
-	    } else if (ref.get().equals(listener)) {
+	    } else if (l.equals(listener)) {
 		iterator.remove();
 	    }
 	}
@@ -357,10 +356,11 @@ public class Translator implements Serializable {
     private void translationChanged() {
 	for (Iterator<WeakReference<LanguageChangeListener>> iterator = listeners.iterator(); iterator.hasNext();) {
 	    WeakReference<LanguageChangeListener> ref = iterator.next();
-	    if (ref.get() == null) {
+	    LanguageChangeListener l = ref.get();
+	    if (l == null) {
 		iterator.remove();
 	    } else {
-		ref.get().translationChanged(this);
+		l.translationChanged(this);
 	    }
 	}
     }

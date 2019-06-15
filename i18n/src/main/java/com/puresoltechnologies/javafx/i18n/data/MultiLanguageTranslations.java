@@ -33,6 +33,7 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Locale;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -167,8 +168,8 @@ public class MultiLanguageTranslations implements Cloneable {
     }
 
     public void removeLocations() {
-	for (String source : translations.keySet()) {
-	    translations.get(source).clearLocations();
+	for (LanguageSet languageSet : translations.values()) {
+	    languageSet.clearLocations();
 	}
     }
 
@@ -203,8 +204,9 @@ public class MultiLanguageTranslations implements Cloneable {
 
     public void removeSourcesWithoutLocation() {
 	ArrayList<String> toRemove = new ArrayList<>();
-	for (String source : translations.keySet()) {
-	    LanguageSet languageSet = translations.get(source);
+	for (Entry<String, LanguageSet> entry : translations.entrySet()) {
+	    String source = entry.getKey();
+	    LanguageSet languageSet = entry.getValue();
 	    if (languageSet.getLocations().size() == 0) {
 		toRemove.add(source);
 	    }

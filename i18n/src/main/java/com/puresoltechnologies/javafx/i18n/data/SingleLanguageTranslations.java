@@ -137,26 +137,18 @@ public class SingleLanguageTranslations implements Cloneable {
 	    translationsField = cloned.getClass().getDeclaredField("translations");
 	    translationsField.setAccessible(true);
 	    translationsField.set(cloned, new ConcurrentHashMap<String, String>());
-	    for (String source : this.translations.keySet()) {
-		cloned.translations.put(source, this.translations.get(source));
-	    }
+	    cloned.translations.putAll(this.translations);
 	    return cloned;
-	} catch (SecurityException e) {
-	    throw new RuntimeException(e);
-	} catch (NoSuchFieldException e) {
-	    throw new RuntimeException(e);
-	} catch (IllegalArgumentException e) {
-	    throw new RuntimeException(e);
-	} catch (IllegalAccessException e) {
-	    throw new RuntimeException(e);
-	} catch (CloneNotSupportedException e) {
+	} catch (SecurityException | NoSuchFieldException | IllegalArgumentException | IllegalAccessException
+		| CloneNotSupportedException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
     public void removeLineBreaks() {
-	for (String source : translations.keySet()) {
-	    String translation = translations.get(source);
+	for (Entry<String, String> entry : translations.entrySet()) {
+	    String source = entry.getKey();
+	    String translation = entry.getValue();
 	    translations.remove(source);
 	    source = source.replaceAll("\\n", "\\\\n");
 	    translation = translation.replaceAll("\\n", "\\\\n");
