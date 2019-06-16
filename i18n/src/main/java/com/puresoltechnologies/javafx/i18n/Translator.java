@@ -41,8 +41,6 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import javax.swing.JComponent;
-
 import com.puresoltechnologies.javafx.i18n.data.SingleLanguageTranslations;
 import com.puresoltechnologies.javafx.i18n.data.TRFile;
 import com.puresoltechnologies.javafx.i18n.utils.I18N4Java;
@@ -120,7 +118,6 @@ public class Translator {
     public static synchronized void setDefault(Locale locale) {
 	defaultLocale = locale;
 	Locale.setDefault(locale);
-	JComponent.setDefaultLocale(locale);
 	resetAllInstances();
     }
 

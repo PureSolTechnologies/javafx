@@ -1,91 +1,56 @@
 package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
-import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.Locale;
-
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import com.puresoltechnologies.javafx.i18n.LocaleChooser;
 import com.puresoltechnologies.javafx.i18n.Translator;
 
-class TranslationCopyDialog extends JDialog implements ActionListener {
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 
-	private static final long serialVersionUID = 2407043456239419407L;
+public class TranslationCopyDialog extends Dialog<Void> {
 
-	private static final Translator translator = Translator
-			.getTranslator(TranslationCopyDialog.class);
+    private static final Translator translator = Translator.getTranslator(TranslationCopyDialog.class);
 
-	private final LocaleChooser sourceTranslations = new LocaleChooser();
-	private final LocaleChooser targetTranslations = new LocaleChooser();
-	private final JButton okButton = new JButton(translator.i18n("OK"));
-	private final JButton cancelButton = new JButton(translator.i18n("Cancel"));
+    private final LocaleChooser sourceTranslations = new LocaleChooser();
+    private final LocaleChooser targetTranslations = new LocaleChooser();
 
-	private boolean finishedByOK = false;
+    private final boolean finishedByOK = false;
 
-	public TranslationCopyDialog(JFrame parent) {
-		super(parent, translator.i18n("Copy Translation"), true);
-		initUI();
-	}
+    public TranslationCopyDialog() {
+	super();
+	setTitle(translator.i18n("Copy Translation"));
+	initUI();
+    }
 
-	private void initUI() {
-		JPanel panel = new JPanel();
-		panel.setLayout(new BorderLayout());
-		setContentPane(panel);
+    private void initUI() {
+	DialogPane dialogPane = getDialogPane();
 
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-		buttonPanel.add(okButton);
-		okButton.addActionListener(this);
-		buttonPanel.add(cancelButton);
-		cancelButton.addActionListener(this);
-		panel.add(buttonPanel, BorderLayout.SOUTH);
+	BorderPane pane = new BorderPane();
+	dialogPane.setContent(pane);
 
-		JPanel listPanel = new JPanel();
-		listPanel.setLayout(new BoxLayout(listPanel, BoxLayout.PAGE_AXIS));
-		listPanel.add(new JLabel(translator.i18n("from:")));
-		listPanel.add(sourceTranslations);
-		listPanel.add(new JLabel(translator.i18n("to:")));
-		listPanel.add(targetTranslations);
-		panel.add(listPanel, BorderLayout.CENTER);
-		pack();
-	}
+	dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
-	private void ok() {
-		finishedByOK = true;
-		dispose();
-	}
+	HBox listPane = new HBox();
+	listPane.getChildren().addAll(new Label(translator.i18n("from:")), sourceTranslations,
+		new Label(translator.i18n("to:")), targetTranslations);
+	pane.setCenter(listPane);
+    }
 
-	private void cancel() {
-		finishedByOK = false;
-		dispose();
-	}
+    public boolean isFinishedByOK() {
+	return finishedByOK;
+    }
 
-	public boolean isFinishedByOK() {
-		return finishedByOK;
-	}
+    public Locale getSource() {
+	return sourceTranslations.getValue();
+    }
 
-	public Locale getSource() {
-		return sourceTranslations.getSelectedLocale();
-	}
+    public Locale getTarget() {
+	return targetTranslations.getValue();
+    }
 
-	public Locale getTarget() {
-		return targetTranslations.getSelectedLocale();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == okButton) {
-			ok();
-		} else if (e.getSource() == cancelButton) {
-			cancel();
-		}
-	}
 }

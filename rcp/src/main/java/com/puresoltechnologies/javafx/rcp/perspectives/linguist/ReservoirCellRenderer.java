@@ -28,71 +28,59 @@
 
 package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
-import java.awt.Component;
 import java.util.Locale;
-
-import javax.swing.JList;
-import javax.swing.ListCellRenderer;
 
 import com.puresoltechnologies.javafx.i18n.data.LanguageSet;
 import com.puresoltechnologies.javafx.i18n.data.MultiLanguageTranslations;
 
-class ReservoirCellRenderer implements ListCellRenderer {
+class ReservoirCellRenderer {
 
-	private MultiLanguageTranslations translationsHash;
-	private Locale selectedLocale = Locale.getDefault();
+    private MultiLanguageTranslations translationsHash;
+    private Locale selectedLocale = Locale.getDefault();
 
-	public ReservoirCellRenderer() {
-		super();
+    public ReservoirCellRenderer() {
+	super();
+    }
+
+    public ReservoirCellRenderer(MultiLanguageTranslations translationsHash) {
+	super();
+	this.translationsHash = translationsHash;
+    }
+
+    /**
+     * @return the translationsHash
+     */
+    public MultiLanguageTranslations getTranslationsHash() {
+	return translationsHash;
+    }
+
+    /**
+     * @param translationsHash the translationsHash to set
+     */
+    public void setTranslationsHash(MultiLanguageTranslations translationsHash) {
+	this.translationsHash = translationsHash;
+    }
+
+    /**
+     * @return the locale
+     */
+    public Locale getSelectedLocale() {
+	return selectedLocale;
+    }
+
+    public void setSelectedLocale(Locale locale) {
+	this.selectedLocale = locale;
+    }
+
+    public StatusComponent getListCellRendererComponent(String source, boolean isSelected, boolean cellHasFocus) {
+	LanguageSet languageSet = translationsHash.getTranslations(source);
+	if (languageSet == null) {
+	    return new StatusComponent(source, isSelected, cellHasFocus, Status.EMPTY);
 	}
-
-	public ReservoirCellRenderer(MultiLanguageTranslations translationsHash) {
-		super();
-		this.translationsHash = translationsHash;
+	String translation = languageSet.get(selectedLocale);
+	if ((translation != null) && (!translation.isEmpty())) {
+	    return new StatusComponent(source, isSelected, cellHasFocus, Status.FINISHED);
 	}
-
-	/**
-	 * @return the translationsHash
-	 */
-	public MultiLanguageTranslations getTranslationsHash() {
-		return translationsHash;
-	}
-
-	/**
-	 * @param translationsHash
-	 *            the translationsHash to set
-	 */
-	public void setTranslationsHash(MultiLanguageTranslations translationsHash) {
-		this.translationsHash = translationsHash;
-	}
-
-	/**
-	 * @return the locale
-	 */
-	public Locale getSelectedLocale() {
-		return selectedLocale;
-	}
-
-	public void setSelectedLocale(Locale locale) {
-		this.selectedLocale = locale;
-	}
-
-	@Override
-	public Component getListCellRendererComponent(JList list, Object value,
-			int index, boolean isSelected, boolean cellHasFocus) {
-		String source = (String) value;
-
-		LanguageSet languageSet = translationsHash.getTranslations(source);
-		if (languageSet == null) {
-			return new StatusComponent(source, isSelected, cellHasFocus,
-					Status.EMPTY);
-		}
-		String translation = languageSet.get(selectedLocale);
-		if ((translation != null) && (!translation.isEmpty())) {
-			return new StatusComponent(source, isSelected, cellHasFocus,
-					Status.FINISHED);
-		}
-		return new StatusComponent(source, isSelected, cellHasFocus,
-				Status.EMPTY);
-	}
+	return new StatusComponent(source, isSelected, cellHasFocus, Status.EMPTY);
+    }
 }

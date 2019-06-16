@@ -38,7 +38,7 @@ class FileTree implements Comparable<FileTree> {
     /**
      * This method is static to express the functional character of the method and
      * to avoid accidental usage of non static fields.
-     * 
+     *
      * @param currentNode
      * @param file
      * @return

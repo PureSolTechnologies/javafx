@@ -29,55 +29,28 @@
 package com.puresoltechnologies.javafx.i18n;
 
 import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
-
-import javax.swing.JComboBox;
 
 import com.puresoltechnologies.javafx.i18n.utils.I18N4Java;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.ComboBox;
+
 /**
  * This class provides a combobox with all available locales for choosing.
- * 
+ *
  * @author Rick-Rainer Ludwig
- * 
+ *
  */
-public class LocaleChooser extends JComboBox {
+public class LocaleChooser extends ComboBox<Locale> {
 
-	private static final long serialVersionUID = -5751261750747502182L;
+    private final ObservableList<Locale> availableLocales = FXCollections.observableArrayList();
 
-	private final List<Locale> availableLocales = I18N4Java
-			.getAvailableLocales();
-
-	public LocaleChooser() {
-		super();
-		insertLocales();
-	}
-
-	private void insertLocales() {
-		Collections.sort(availableLocales, new Comparator<Locale>() {
-			@Override
-			public int compare(Locale arg0, Locale arg1) {
-				return arg0.toString().compareTo(arg1.toString());
-			}
-		});
-		for (Locale locale : availableLocales) {
-			addItem(locale.toString() + " - " + locale.getDisplayLanguage()
-					+ " / " + locale.getDisplayCountry());
-		}
-	}
-
-	public Locale getSelectedLocale() {
-		return availableLocales.get(getSelectedIndex());
-	}
-
-	public void setSelectedLocale(Locale locale) {
-		for (int index = 0; index < availableLocales.size(); index++) {
-			if (availableLocales.get(index).equals(locale)) {
-				setSelectedIndex(index);
-				break;
-			}
-		}
-	}
+    public LocaleChooser() {
+	super();
+	setItems(availableLocales);
+	availableLocales.addAll(I18N4Java.getAvailableLocales());
+	Collections.sort(availableLocales, (arg0, arg1) -> arg0.toString().compareTo(arg1.toString()));
+    }
 }

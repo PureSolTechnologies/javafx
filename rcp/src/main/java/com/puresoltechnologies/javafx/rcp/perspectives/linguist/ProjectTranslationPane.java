@@ -28,20 +28,18 @@
 
 package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.border.TitledBorder;
-
 import com.puresoltechnologies.javafx.i18n.LocaleChooser;
 import com.puresoltechnologies.javafx.i18n.Translator;
+
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.BorderPane;
 
 /**
  * This class provides a complete panel for editing translations for a whole
@@ -53,13 +51,9 @@ import com.puresoltechnologies.javafx.i18n.Translator;
  * @author Rick-Rainer Ludwig
  *
  */
-class ProjectTranslationPanel extends JPanel implements ActionListener {
+public class ProjectTranslationPane extends BorderPane {
 
-    private static final long serialVersionUID = 1L;
-
-    private static final Translator translator = Translator.getTranslator(ProjectTranslationPanel.class);
-
-    private final TitledBorder languageBorder = BorderFactory.createTitledBorder("Language");
+    private static final Translator translator = Translator.getTranslator(ProjectTranslationPane.class);
 
     // GUI elements...
     private final LocaleChooser localeChooser = new LocaleChooser();
@@ -71,7 +65,7 @@ class ProjectTranslationPanel extends JPanel implements ActionListener {
      *
      * @see openDirectory
      */
-    public ProjectTranslationPanel() {
+    public ProjectTranslationPane() {
 	super();
 	initUI();
     }
@@ -82,7 +76,7 @@ class ProjectTranslationPanel extends JPanel implements ActionListener {
      *
      * @param directory is the project directory to be opened.
      */
-    public ProjectTranslationPanel(File directory) {
+    public ProjectTranslationPane(File directory) {
 	this();
 	openDirectory(directory);
     }
@@ -91,17 +85,19 @@ class ProjectTranslationPanel extends JPanel implements ActionListener {
      * This method initializes the UI.
      */
     private void initUI() {
-	BorderLayout borderLayout = new BorderLayout();
-	borderLayout.setHgap(5);
-	borderLayout.setVgap(5);
-	setLayout(borderLayout);
+	localeChooser.setValue(Locale.getDefault());
+	localeChooser.valueProperty().addListener((oldValue, newValue, component) -> {
+	    try {
+		translationPanel.setSelectedLocale(newValue);
+	    } catch (IOException e) {
+		Alert alert = new Alert(AlertType.ERROR,
+			translator.i18n("The panel could not be updated for the new language!"), ButtonType.OK);
+		alert.showAndWait();
+	    }
+	});
 
-	localeChooser.setSelectedLocale(Locale.getDefault());
-	localeChooser.setBorder(languageBorder);
-	localeChooser.addActionListener(this);
-
-	add(localeChooser, BorderLayout.NORTH);
-	add(translationPanel, BorderLayout.CENTER);
+	setTop(new TitledPane("Language", localeChooser));
+	setCenter(translationPanel);
     }
 
     /**
@@ -129,19 +125,6 @@ class ProjectTranslationPanel extends JPanel implements ActionListener {
 
     public File getDirectory() {
 	return translationPanel.getDirectory();
-    }
-
-    @Override
-    public void actionPerformed(ActionEvent o) {
-	if (o.getSource() == localeChooser) {
-	    try {
-		translationPanel.setSelectedLocale(localeChooser.getSelectedLocale());
-	    } catch (IOException e) {
-		JOptionPane.showMessageDialog(getParent(),
-			translator.i18n("The panel could not be updated for the new language!"),
-			translator.i18n("Error"), JOptionPane.ERROR_MESSAGE);
-	    }
-	}
     }
 
     public void removeObsoletePhrases() {

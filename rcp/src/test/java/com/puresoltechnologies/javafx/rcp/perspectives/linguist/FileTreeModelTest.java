@@ -35,13 +35,9 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JDialog;
-import javax.swing.JTree;
-
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.i18n.proc.I18NProjectConfiguration;
-import com.puresoltechnologies.javafx.rcp.perspectives.linguist.FileTreeModel;
 
 public class FileTreeModelTest {
 
@@ -93,14 +89,6 @@ public class FileTreeModelTest {
     public void testGetChildCount() throws Exception {
 	FileTreeModel model = new FileTreeModel(FILES, new I18NProjectConfiguration(new File(".")));
 	assertEquals(3, model.getChildCount(model.getFileTree()));
-    }
-
-    public static void main(String args[]) throws Exception {
-	JDialog dlg = new JDialog();
-	dlg.setTitle("Test FileTreeModel");
-	dlg.getContentPane().add(new JTree(new FileTreeModel(FILES, new I18NProjectConfiguration(new File(".")))));
-	dlg.pack();
-	dlg.setVisible(true);
     }
 
 }

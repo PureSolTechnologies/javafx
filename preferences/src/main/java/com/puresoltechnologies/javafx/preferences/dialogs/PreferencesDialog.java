@@ -15,6 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.Tooltip;
@@ -60,7 +61,8 @@ public class PreferencesDialog extends Dialog<Void> {
 	setTitle("Preferences");
 	setHeaderText("Preferences of Trader.");
 	setGraphic(new ImageView(iconBig));
-	Stage stage = (Stage) getDialogPane().getScene().getWindow();
+	DialogPane dialogPane = getDialogPane();
+	Stage stage = (Stage) dialogPane.getScene().getWindow();
 	stage.getIcons().addAll(iconSmall, iconBig);
 	setResizable(true);
 
@@ -97,10 +99,10 @@ public class PreferencesDialog extends Dialog<Void> {
 	buttonBox.getChildren().addAll(restoreDefaultsButton, applyButton);
 	preferencesPane.setBottom(buttonBox);
 
-	getDialogPane().setContent(splitPane);
+	dialogPane.setContent(splitPane);
 
 	ButtonType buttonTypeCancel = new ButtonType("Close", ButtonData.CANCEL_CLOSE);
-	ObservableList<ButtonType> buttonTypes = getDialogPane().getButtonTypes();
+	ObservableList<ButtonType> buttonTypes = dialogPane.getButtonTypes();
 	buttonTypes.addAll(buttonTypeCancel);
 
 	initializeTreeView();

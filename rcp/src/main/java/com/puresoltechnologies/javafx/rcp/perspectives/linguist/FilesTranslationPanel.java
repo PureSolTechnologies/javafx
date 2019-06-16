@@ -28,40 +28,38 @@
 
 package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
-import java.awt.BorderLayout;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTree;
 import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 
 import com.puresoltechnologies.javafx.i18n.Translator;
 import com.puresoltechnologies.javafx.i18n.data.I18NFile;
 import com.puresoltechnologies.javafx.i18n.proc.I18NProjectConfiguration;
 import com.puresoltechnologies.javafx.i18n.utils.FileSearch;
 
-class FilesTranslationPanel extends JPanel implements TreeSelectionListener {
+import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeView;
+import javafx.scene.layout.BorderPane;
+
+class FilesTranslationPanel extends BorderPane {
 
     private static final long serialVersionUID = 1L;
 
     private static final Translator translator = Translator.getTranslator(FilesTranslationPanel.class);
 
     // GUI elements...
-    private final FileTreeModel fileTreeModel = new FileTreeModel();
-    private final JTree fileTree = new JTree(fileTreeModel);
+    private final TreeView<FileTree> fileTree = new TreeView<>();
     private final TranslationPanel translationPanel = new TranslationPanel();
 
-    private I18NProjectConfiguration configuration = null;
-    private File i18nFile = null;
+    private final I18NProjectConfiguration configuration = null;
+    private final File i18nFile = null;
 
     public FilesTranslationPanel() {
 	super();
@@ -69,18 +67,24 @@ class FilesTranslationPanel extends JPanel implements TreeSelectionListener {
     }
 
     private void initializeDesktop() {
-	BorderLayout borderLayout = new BorderLayout();
-	borderLayout.setHgap(5);
-	borderLayout.setVgap(5);
-	setLayout(borderLayout);
+	fileTree.setCellFactory((view) -> new TreeCell<>() {
+	    @Override
+	    protected void updateItem(FileTree file, boolean empty) {
+		super.updateItem(file, empty);
+		if (empty) {
+		    setText("");
+		    setGraphic(null);
+		} else {
+		    new StatusComponent(file.getName(), isSelected(), isFocused(), fileTree.getStatus());
+		}
+	    }
+	});
+	fileTree.selectionModelProperty().addListener((oldValue, newValue, component) -> {
+	});
 
-	fileTree.setCellRenderer(new FileTreeCellRenderer());
-	fileTree.setBorder(BorderFactory.createTitledBorder("Classes"));
-	fileTree.addTreeSelectionListener(this);
+	setCenter(new SplitPane(new ScrollPane(fileTree), translationPanel));
 
-	add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, new JScrollPane(fileTree), translationPanel));
-
-	add(new JLabel("Some project statistics"), BorderLayout.SOUTH);
+	setBottom(new Label("Some project statistics"));
     }
 
     /**
@@ -102,7 +106,7 @@ class FilesTranslationPanel extends JPanel implements TreeSelectionListener {
      * change was performed, the user is asked for saving the file or not. If the
      * used chooses cancel the file is not saved and this method returns false to
      * signal to abort the current process.
-     * 
+     *
      * @return True is returned if the process was satisfied and the calling method
      *         can proceed normally. False is returned in case the used chose cancel
      *         to abort the current process.

@@ -28,57 +28,52 @@
 
 package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
+import javafx.scene.control.Label;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+class StatusComponent extends HBox {
 
-class StatusComponent extends JPanel {
+    public StatusComponent(String text, boolean selected, boolean focus, Status status) {
+	super();
 
-	private static final long serialVersionUID = 9057595345044306838L;
+	setOpacity(0.0);
 
-	public StatusComponent(String text, boolean selected, boolean focus,
-			Status status) {
-		super();
+	Label label = new Label(text);
 
-		setOpaque(false);
-		BoxLayout layout = new BoxLayout(this, BoxLayout.LINE_AXIS);
-		setLayout(layout);
-
-		JLabel label = new JLabel(text);
-		label.setHorizontalAlignment(JLabel.LEFT);
-		label.setVerticalAlignment(JLabel.VERTICAL);
-
-		if (focus) {
-			setBorder(BorderFactory.createLineBorder(Color.BLACK));
-		}
-		switch (status) {
-		case EMPTY:
-			label.setForeground(new Color(127, 0, 0));
-			if (selected) {
-				setOpaque(true);
-				setBackground(new Color(255, 192, 192));
-			}
-			break;
-		case ONGOING:
-			label.setForeground(new Color(127, 127, 0));
-			if (selected) {
-				setOpaque(true);
-				setBackground(new Color(255, 255, 192));
-			}
-			break;
-		case FINISHED:
-			label.setForeground(new Color(0, 127, 0));
-			if (selected) {
-				setOpaque(true);
-				setBackground(new Color(192, 255, 192));
-			}
-			break;
-		}
-		add(label, BorderLayout.CENTER);
+	if (focus) {
+	    setBorder(new Border(new BorderStroke(Color.BLACK, BorderStrokeStyle.SOLID, null, BorderWidths.FULL)));
 	}
+	switch (status) {
+	case EMPTY:
+	    label.setTextFill(Color.DARKRED);
+	    if (selected) {
+		setOpacity(1.0);
+		setBackground(new Background(new BackgroundFill(Color.ORANGERED, null, null)));
+	    }
+	    break;
+	case ONGOING:
+	    label.setTextFill(Color.ORANGE);
+	    if (selected) {
+		setOpacity(1.0);
+		setBackground(new Background(new BackgroundFill(Color.YELLOW, null, null)));
+	    }
+	    break;
+	case FINISHED:
+	    label.setTextFill(Color.DARKGREEN);
+	    if (selected) {
+		setOpacity(1.0);
+		setBackground(new Background(new BackgroundFill(Color.LIGHTGREEN, null, null)));
+	    }
+	    break;
+	}
+	getChildren().add(label);
+    }
 
 }

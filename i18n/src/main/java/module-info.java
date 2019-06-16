@@ -6,6 +6,6 @@ module com.puresoltechnologies.javafx.i18n {
     exports com.puresoltechnologies.javafx.i18n.utils;
 
     requires java.xml.bind;
-    requires java.desktop;
+    requires javafx.controls;
 
 }

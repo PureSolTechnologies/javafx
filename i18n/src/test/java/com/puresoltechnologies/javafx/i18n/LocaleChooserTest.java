@@ -17,14 +17,14 @@ public class LocaleChooserTest {
     @Test
     public void testDefaultValues() {
 	LocaleChooser chooser = new LocaleChooser();
-	assertEquals(new Locale("ar"), chooser.getSelectedLocale());
+	assertEquals(new Locale("ar"), chooser.getValue());
     }
 
     @Test
     public void testSettersAndGetters() {
 	LocaleChooser chooser = new LocaleChooser();
-	chooser.setSelectedLocale(new Locale("en", "US"));
-	assertEquals(new Locale("en", "US"), chooser.getSelectedLocale());
+	chooser.setValue(new Locale("en", "US"));
+	assertEquals(new Locale("en", "US"), chooser.getValue());
     }
 
 }

@@ -28,28 +28,26 @@
 
 package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
 
-import java.awt.BorderLayout;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Locale;
-import java.util.Vector;
 
-import javax.swing.BorderFactory;
-import javax.swing.BoxLayout;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JSplitPane;
-import javax.swing.JTextArea;
-import javax.swing.event.CaretEvent;
-import javax.swing.event.CaretListener;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
-
-import com.puresoltechnologies.javafx.i18n.Translator;
 import com.puresoltechnologies.javafx.i18n.data.LanguageSet;
 import com.puresoltechnologies.javafx.i18n.data.MultiLanguageTranslations;
 import com.puresoltechnologies.javafx.i18n.data.SourceLocation;
+
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SplitPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TitledPane;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.VBox;
 
 /**
  * This panel provides all GUI elements and functionality to edit a single I18n
@@ -58,19 +56,16 @@ import com.puresoltechnologies.javafx.i18n.data.SourceLocation;
  * @author Rick-Rainer Ludwig
  *
  */
-class TranslationPanel extends JPanel implements ListSelectionListener, CaretListener {
-
-    private static final long serialVersionUID = 1L;
-
-    private static final Translator translator = Translator.getTranslator(TranslationPanel.class);
+class TranslationPanel extends BorderPane {
 
     // GUI elements...
     private final ReservoirCellRenderer reservoirCellRenderer = new ReservoirCellRenderer();
-    private final JLabel localeLabel = new JLabel();
-    private final JList reservoir = new JList();
-    private final JTextArea source = new JTextArea();
-    private final JTextArea translation = new JTextArea();
-    private final JTextArea location = new JTextArea();
+    private final Label localeLabel = new Label();
+    private final ObservableList<String> sourceList = FXCollections.observableArrayList();
+    private final ListView<String> reservoir = new ListView<>();
+    private final TextArea source = new TextArea();
+    private final TextArea translation = new TextArea();
+    private final TextArea location = new TextArea();
 
     // fields...
     private MultiLanguageTranslations translations = null;
@@ -86,40 +81,46 @@ class TranslationPanel extends JPanel implements ListSelectionListener, CaretLis
     }
 
     private void initializeDesktop() {
-	BorderLayout borderLayout = new BorderLayout();
-	borderLayout.setHgap(5);
-	borderLayout.setVgap(5);
-	setLayout(borderLayout);
-
-	JPanel panel = new JPanel();
-	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+	VBox panel = new VBox();
 
 	localeLabel.setText(selectedLocale.toString());
-	panel.add(localeLabel);
+	panel.getChildren().add(localeLabel);
 
 	/* Reservoir */
-	reservoir.setCellRenderer(reservoirCellRenderer);
-	reservoir.setBorder(BorderFactory.createTitledBorder("Reservoir"));
-	reservoir.addListSelectionListener(this);
-	panel.add(new JScrollPane(reservoir));
+	reservoir.setCellFactory((view) -> new ListCell<>() {
+
+	    @Override
+	    public void updateItem(String item, boolean empty) {
+		super.updateItem(item, empty);
+		if (empty) {
+		    setText("");
+		    setGraphic(null);
+		} else {
+		    setGraphic(reservoirCellRenderer.getListCellRendererComponent(item, isSelected(), isFocused()));
+		}
+	    }
+	});
+	reservoir.getSelectionModel().selectedItemProperty().addListener((oldValue, newValue, component) -> {
+	    /*
+	     * Reservoir selection was changed. The source field needs to be updated.
+	     */
+	    changedSource();
+	});
+	reservoir.setItems(sourceList);
+	panel.getChildren().add(new ScrollPane(new TitledPane("Reservoir", reservoir)));
 
 	/* Source */
 	source.setEditable(false);
-	source.setBorder(BorderFactory.createTitledBorder("Source"));
-	panel.add(new JScrollPane(source));
+	panel.getChildren().add(new ScrollPane(new TitledPane("Source:", source)));
 
 	/* Translation */
-	translation.setBorder(BorderFactory.createTitledBorder("Translation:"));
-	translation.addCaretListener(this);
-	panel.add(new JScrollPane(translation));
+	panel.getChildren().add(new ScrollPane(new TitledPane("Translation:", translation)));
 
 	/* Location */
 	location.setEditable(false);
-	location.setBorder(BorderFactory.createTitledBorder("Location(s):"));
-	panel.add(new JScrollPane(location));
+	panel.getChildren().add(new ScrollPane(new TitledPane("Location(s):", location)));
 
-	add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, new JLabel("<html>Some file<br/>statistics</html>")),
-		BorderLayout.CENTER);
+	setCenter(new SplitPane(panel, new Label("<html>Some file<br/>statistics</html>")));
     }
 
     /**
@@ -136,7 +137,6 @@ class TranslationPanel extends JPanel implements ListSelectionListener, CaretLis
 	this.selectedLocale = selectedLocale;
 	localeLabel.setText(selectedLocale.toString());
 	reservoirCellRenderer.setSelectedLocale(selectedLocale);
-	reservoir.repaint();
 	updateTranslation();
     }
 
@@ -168,18 +168,18 @@ class TranslationPanel extends JPanel implements ListSelectionListener, CaretLis
     }
 
     private void changedSource() {
-	setSource((String) reservoir.getSelectedValue());
+	setSource(reservoir.getSelectionModel().getSelectedItem());
     }
 
     private void updateReservoir() {
 	if (translations == null) {
-	    reservoir.removeAll();
+	    sourceList.clear();
 	    return;
 	} else {
-	    Vector<String> listData = new Vector<>(translations.getSources());
+	    List<String> listData = new ArrayList<>(translations.getSources());
 	    Collections.sort(listData);
 	    reservoirCellRenderer.setTranslationsHash(translations);
-	    reservoir.setListData(listData);
+	    sourceList.addAll(listData);
 	}
 	setSource(null);
     }
@@ -227,25 +227,6 @@ class TranslationPanel extends JPanel implements ListSelectionListener, CaretLis
     public void removeObsoletePhrases() {
 	translations.removeSourcesWithoutLocation();
 	updateReservoir();
-    }
-
-    @Override
-    public void valueChanged(ListSelectionEvent o) {
-	if (o.getSource() == this.reservoir) {
-	    /*
-	     * Reservoir selection was changed. The source field needs to be updated.
-	     */
-	    changedSource();
-	}
-    }
-
-    @Override
-    public void caretUpdate(CaretEvent o) {
-	if (o.getSource() == translation) {
-	    /*
-	     * The text field was changed, maybe...
-	     */
-	}
     }
 
 }
