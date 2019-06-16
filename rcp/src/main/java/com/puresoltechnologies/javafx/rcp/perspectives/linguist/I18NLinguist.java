@@ -46,10 +46,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 
-import com.puresoltechnologies.javafx.i18n.KeyStrokeUpdater;
 import com.puresoltechnologies.javafx.i18n.LanguageDialog;
-import com.puresoltechnologies.javafx.i18n.TranslationUpdater;
 import com.puresoltechnologies.javafx.i18n.Translator;
 import com.puresoltechnologies.javafx.i18n.data.I18NFile;
 import com.puresoltechnologies.javafx.i18n.data.LanguageSet;
@@ -72,24 +71,21 @@ public class I18NLinguist extends JFrame implements ActionListener, WindowListen
 
     private static final Translator translator = Translator.getTranslator(I18NLinguist.class);
 
-    private final TranslationUpdater translationUpdater = new TranslationUpdater();
-    private final KeyStrokeUpdater keyStrokeUpdater = new KeyStrokeUpdater();
-
     // menu items...
-    private final JMenuItem update = new JMenuItem();
-    private final JMenuItem release = new JMenuItem();
-    private final JMenuItem clear = new JMenuItem();
-    private final JMenuItem open = new JMenuItem();
-    private final JMenuItem save = new JMenuItem();
-    private final JMenuItem quit = new JMenuItem();
-    private final JMenuItem copyTranslation = new JMenuItem();
-    private final JMenuItem language = new JMenuItem();
+    private final JMenuItem update = new JMenuItem("Update");
+    private final JMenuItem release = new JMenuItem("Release");
+    private final JMenuItem clear = new JMenuItem("Clear");
+    private final JMenuItem open = new JMenuItem("Open...");
+    private final JMenuItem save = new JMenuItem("Save...");
+    private final JMenuItem quit = new JMenuItem("Quit");
+    private final JMenuItem copyTranslation = new JMenuItem("Copy Translation...");
+    private final JMenuItem language = new JMenuItem("Language...");
 
     // buttons...
-    private final JButton openButton = new JButton();
-    private final JButton updateButton = new JButton();
-    private final JButton releaseButton = new JButton();
-    private final JButton clearButton = new JButton();
+    private final JButton openButton = new JButton("Open...");
+    private final JButton updateButton = new JButton("Update");
+    private final JButton releaseButton = new JButton("Release");
+    private final JButton clearButton = new JButton("Clear");
 
     // other GUI elements...
     private final ProjectTranslationPanel translationPanel = new ProjectTranslationPanel();
@@ -115,14 +111,10 @@ public class I18NLinguist extends JFrame implements ActionListener, WindowListen
 	JMenuBar menuBar = new JMenuBar();
 	setJMenuBar(menuBar);
 
-	JMenu fileMenu = new JMenu();
-	translationUpdater.i18n("File", translator, fileMenu);
-	JMenu toolsMenu = new JMenu();
-	translationUpdater.i18n("Tools", translator, toolsMenu);
-	JMenu optionsMenu = new JMenu();
-	translationUpdater.i18n("Options", translator, optionsMenu);
-	JMenu helpMenu = new JMenu();
-	translationUpdater.i18n("Help", translator, helpMenu);
+	JMenu fileMenu = new JMenu("File");
+	JMenu toolsMenu = new JMenu("Tools");
+	JMenu optionsMenu = new JMenu("Options");
+	JMenu helpMenu = new JMenu("Help");
 
 	menuBar.add(fileMenu);
 	menuBar.add(toolsMenu);
@@ -130,40 +122,33 @@ public class I18NLinguist extends JFrame implements ActionListener, WindowListen
 	menuBar.add(helpMenu);
 
 	fileMenu.add(open);
-	translationUpdater.i18n("Open...", translator, open);
-	keyStrokeUpdater.i18n("ctrl O", translator, open);
+
+	open.setAccelerator(KeyStroke.getKeyStroke("ctrl O"));
 	open.addActionListener(this);
 
 	fileMenu.add(save);
-	translationUpdater.i18n("Save...", translator, save);
-	keyStrokeUpdater.i18n("ctrl S", translator, save);
+	save.setAccelerator(KeyStroke.getKeyStroke("ctrl S"));
 	save.addActionListener(this);
 
 	fileMenu.addSeparator();
 
 	fileMenu.add(quit);
-	translationUpdater.i18n("Quit", translator, quit);
-	keyStrokeUpdater.i18n("ctrl Q", translator, quit);
+	quit.setAccelerator(KeyStroke.getKeyStroke("ctrl Q"));
 	quit.addActionListener(this);
 
 	toolsMenu.add(update);
-	translationUpdater.i18n("Update", translator, update);
 	update.addActionListener(this);
 
 	toolsMenu.add(release);
-	translationUpdater.i18n("Release", translator, release);
 	release.addActionListener(this);
 
 	toolsMenu.add(clear);
-	translationUpdater.i18n("Clear", translator, clear);
 	clear.addActionListener(this);
 
 	toolsMenu.add(copyTranslation);
-	translationUpdater.i18n("Copy Translation...", translator, copyTranslation);
 	copyTranslation.addActionListener(this);
 
 	optionsMenu.add(language);
-	translationUpdater.i18n("Language...", translator, language);
 	language.addActionListener(this);
     }
 
@@ -175,19 +160,15 @@ public class I18NLinguist extends JFrame implements ActionListener, WindowListen
     private void initializeToolBar() {
 	JToolBar tools = new JToolBar();
 	tools.add(openButton);
-	translationUpdater.i18n("Open...", translator, openButton);
 	openButton.addActionListener(this);
 
 	tools.add(updateButton);
-	translationUpdater.i18n("Update", translator, updateButton);
 	updateButton.addActionListener(this);
 
 	tools.add(releaseButton);
-	translationUpdater.i18n("Release", translator, releaseButton);
 	releaseButton.addActionListener(this);
 
 	tools.add(clearButton);
-	translationUpdater.i18n("Clear", translator, clearButton);
 	clearButton.addActionListener(this);
 
 	add(tools, BorderLayout.NORTH);

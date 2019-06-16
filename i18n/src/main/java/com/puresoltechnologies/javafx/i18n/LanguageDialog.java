@@ -25,7 +25,7 @@
  * limitations under the License.
  *
  ****************************************************************************/
- 
+
 package com.puresoltechnologies.javafx.i18n;
 
 import java.awt.BorderLayout;
@@ -50,85 +50,72 @@ import javax.swing.KeyStroke;
  * The whole translation environment is reset and repainted with new
  * translations to see the effect. The dialog is non-modal and therefore, the
  * language can be changed on the fly during the normal work process.
- * 
- * To make the application able to react accordingly, all elements which need to
- * be updated on the fly need to be added to the updating process by object of
- * the classes TranslationUpdater and KeyStrokeUpdater.
- * 
+ *
  * @author Rick-Rainer Ludwig
- * 
+ *
  */
 public class LanguageDialog extends JDialog implements ActionListener {
 
-	private static final long serialVersionUID = -5526911970098174813L;
+    private static final long serialVersionUID = -5526911970098174813L;
 
-	private static final Translator translator = Translator
-			.getTranslator(LanguageDialog.class);
+    private static final Translator translator = Translator.getTranslator(LanguageDialog.class);
 
-	private final TranslationUpdater translationUpdater = new TranslationUpdater();
+    private final JLabel label = new JLabel("Language:");
+    private final LocaleChooser languages = new LocaleChooser();
+    private final JButton ok = new JButton("OK");
+    private final JButton cancel = new JButton("Cancel");
+    private final Locale startLocale;
 
-	private final JLabel label = new JLabel();
-	private final LocaleChooser languages = new LocaleChooser();
-	private final JButton ok = new JButton();
-	private final JButton cancel = new JButton();
-	private final Locale startLocale;
+    public LanguageDialog(JFrame frame) {
+	super(frame, "Translation", false);
+	startLocale = Translator.getDefault();
+	initUI();
+    }
 
-	public LanguageDialog(JFrame frame) {
-		super(frame, "Translation", false);
-		translationUpdater.i18n("Translation", translator, this);
-		startLocale = Translator.getDefault();
-		initUI();
+    private void initUI() {
+	getRootPane().registerKeyboardAction(this, "ESC", KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
+		JRootPane.WHEN_IN_FOCUSED_WINDOW);
+
+	Container panel = getContentPane();
+	panel.setLayout(new BorderLayout());
+
+	JPanel languagePanel = new JPanel();
+	languagePanel.setLayout(new BoxLayout(languagePanel, BoxLayout.PAGE_AXIS));
+
+	languagePanel.add(label);
+
+	languagePanel.add(languages);
+	languages.addActionListener(this);
+	languages.setSelectedLocale(startLocale);
+
+	JPanel buttonPanel = new JPanel();
+	buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+
+	buttonPanel.add(ok);
+	ok.addActionListener(this);
+	getRootPane().setDefaultButton(ok);
+
+	buttonPanel.add(cancel);
+	cancel.addActionListener(this);
+
+	panel.add(languagePanel, BorderLayout.CENTER);
+	panel.add(buttonPanel, BorderLayout.SOUTH);
+	pack();
+	setLocationRelativeTo(getParent());
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+	if (e.getSource() == ok) {
+	    setVisible(false);
+	} else if (e.getSource() == cancel) {
+	    Translator.setDefault(startLocale);
+	    setVisible(false);
+	} else if (e.getSource() == languages) {
+	    Translator.setDefault(languages.getSelectedLocale());
+	} else if (e.getSource() == getRootPane()) {
+	    setVisible(false);
 	}
-
-	private void initUI() {
-		getRootPane().registerKeyboardAction(this, "ESC",
-				KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
-				JRootPane.WHEN_IN_FOCUSED_WINDOW);
-
-		Container panel = getContentPane();
-		panel.setLayout(new BorderLayout());
-
-		JPanel languagePanel = new JPanel();
-		languagePanel.setLayout(new BoxLayout(languagePanel,
-				BoxLayout.PAGE_AXIS));
-
-		languagePanel.add(label);
-		translationUpdater.i18n("Language:", translator, label);
-
-		languagePanel.add(languages);
-		languages.addActionListener(this);
-		languages.setSelectedLocale(startLocale);
-
-		JPanel buttonPanel = new JPanel();
-		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-		buttonPanel.add(ok);
-		translationUpdater.i18n("OK", translator, ok);
-		ok.addActionListener(this);
-		getRootPane().setDefaultButton(ok);
-
-		buttonPanel.add(cancel);
-		translationUpdater.i18n("Cancel", translator, cancel);
-		cancel.addActionListener(this);
-
-		panel.add(languagePanel, BorderLayout.CENTER);
-		panel.add(buttonPanel, BorderLayout.SOUTH);
-		pack();
-		setLocationRelativeTo(getParent());
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		if (e.getSource() == ok) {
-			setVisible(false);
-		} else if (e.getSource() == cancel) {
-			Translator.setDefault(startLocale);
-			setVisible(false);
-		} else if (e.getSource() == languages) {
-			Translator.setDefault(languages.getSelectedLocale());
-		} else if (e.getSource() == getRootPane()) {
-			setVisible(false);
-		}
-	}
+    }
 
 }

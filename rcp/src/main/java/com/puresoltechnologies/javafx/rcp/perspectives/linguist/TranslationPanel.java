@@ -46,7 +46,6 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import com.puresoltechnologies.javafx.i18n.TranslationUpdater;
 import com.puresoltechnologies.javafx.i18n.Translator;
 import com.puresoltechnologies.javafx.i18n.data.LanguageSet;
 import com.puresoltechnologies.javafx.i18n.data.MultiLanguageTranslations;
@@ -55,210 +54,198 @@ import com.puresoltechnologies.javafx.i18n.data.SourceLocation;
 /**
  * This panel provides all GUI elements and functionality to edit a single I18n
  * file.
- * 
+ *
  * @author Rick-Rainer Ludwig
- * 
+ *
  */
-class TranslationPanel extends JPanel implements ListSelectionListener,
-		CaretListener {
+class TranslationPanel extends JPanel implements ListSelectionListener, CaretListener {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private static final Translator translator = Translator
-			.getTranslator(TranslationPanel.class);
+    private static final Translator translator = Translator.getTranslator(TranslationPanel.class);
 
-	private final TranslationUpdater translationUpdater = new TranslationUpdater();
+    // GUI elements...
+    private final ReservoirCellRenderer reservoirCellRenderer = new ReservoirCellRenderer();
+    private final JLabel localeLabel = new JLabel();
+    private final JList reservoir = new JList();
+    private final JTextArea source = new JTextArea();
+    private final JTextArea translation = new JTextArea();
+    private final JTextArea location = new JTextArea();
 
-	// GUI elements...
-	private final ReservoirCellRenderer reservoirCellRenderer = new ReservoirCellRenderer();
-	private final JLabel localeLabel = new JLabel();
-	private final JList reservoir = new JList();
-	private final JTextArea source = new JTextArea();
-	private final JTextArea translation = new JTextArea();
-	private final JTextArea location = new JTextArea();
+    // fields...
+    private MultiLanguageTranslations translations = null;
 
-	// fields...
-	private MultiLanguageTranslations translations = null;
+    private boolean changed = false;
+    private String oldSource = "";
+    private String oldTranslation = "";
+    private Locale selectedLocale = Locale.getDefault();
 
-	private boolean changed = false;
-	private String oldSource = "";
-	private String oldTranslation = "";
-	private Locale selectedLocale = Locale.getDefault();
+    public TranslationPanel() {
+	super();
+	initializeDesktop();
+    }
 
-	public TranslationPanel() {
-		super();
-		initializeDesktop();
+    private void initializeDesktop() {
+	BorderLayout borderLayout = new BorderLayout();
+	borderLayout.setHgap(5);
+	borderLayout.setVgap(5);
+	setLayout(borderLayout);
+
+	JPanel panel = new JPanel();
+	panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+
+	localeLabel.setText(selectedLocale.toString());
+	panel.add(localeLabel);
+
+	/* Reservoir */
+	reservoir.setCellRenderer(reservoirCellRenderer);
+	reservoir.setBorder(BorderFactory.createTitledBorder("Reservoir"));
+	reservoir.addListSelectionListener(this);
+	panel.add(new JScrollPane(reservoir));
+
+	/* Source */
+	source.setEditable(false);
+	source.setBorder(BorderFactory.createTitledBorder("Source"));
+	panel.add(new JScrollPane(source));
+
+	/* Translation */
+	translation.setBorder(BorderFactory.createTitledBorder("Translation:"));
+	translation.addCaretListener(this);
+	panel.add(new JScrollPane(translation));
+
+	/* Location */
+	location.setEditable(false);
+	location.setBorder(BorderFactory.createTitledBorder("Location(s):"));
+	panel.add(new JScrollPane(location));
+
+	add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, new JLabel("<html>Some file<br/>statistics</html>")),
+		BorderLayout.CENTER);
+    }
+
+    /**
+     * @return the selectedLocale
+     */
+    public Locale getSelectedLocale() {
+	return selectedLocale;
+    }
+
+    /**
+     * @param selectedLocale the selectedLocale to set
+     */
+    public void setSelectedLocale(Locale selectedLocale) {
+	this.selectedLocale = selectedLocale;
+	localeLabel.setText(selectedLocale.toString());
+	reservoirCellRenderer.setSelectedLocale(selectedLocale);
+	reservoir.repaint();
+	updateTranslation();
+    }
+
+    public void setChanged(boolean changed) {
+	this.changed = changed;
+    }
+
+    public boolean hasChanged() {
+	updateTranslationHash();
+	return changed;
+    }
+
+    public void setTranslations(MultiLanguageTranslations translations) {
+	this.translations = translations;
+	updateTranslationHash();
+	changed = false;
+	updateReservoir();
+    }
+
+    public MultiLanguageTranslations getTranslations() {
+	return translations;
+    }
+
+    private void updateTranslationHash() {
+	if ((!oldSource.isEmpty()) && (!oldTranslation.equals(translation.getText()))) {
+	    translations.add(oldSource, selectedLocale, translation.getText());
+	    changed = true;
 	}
+    }
 
-	private void initializeDesktop() {
-		BorderLayout borderLayout = new BorderLayout();
-		borderLayout.setHgap(5);
-		borderLayout.setVgap(5);
-		setLayout(borderLayout);
+    private void changedSource() {
+	setSource((String) reservoir.getSelectedValue());
+    }
 
-		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-
-		localeLabel.setText(selectedLocale.toString());
-		panel.add(localeLabel);
-
-		/* Reservoir */
-		reservoir.setCellRenderer(reservoirCellRenderer);
-		reservoir.setBorder(translationUpdater.i18n("Reservoir", translator,
-				reservoir, BorderFactory.createTitledBorder("")));
-		reservoir.addListSelectionListener(this);
-		panel.add(new JScrollPane(reservoir));
-
-		/* Source */
-		source.setEditable(false);
-		source.setBorder(translationUpdater.i18n("Source", translator, source,
-				BorderFactory.createTitledBorder("")));
-		panel.add(new JScrollPane(source));
-
-		/* Translation */
-		translation.setBorder(translationUpdater.i18n("Translation:",
-				translator, translation, BorderFactory.createTitledBorder("")));
-		translation.addCaretListener(this);
-		panel.add(new JScrollPane(translation));
-
-		/* Location */
-		location.setEditable(false);
-		location.setBorder(translationUpdater.i18n("Location(s):", translator,
-				location, BorderFactory.createTitledBorder("")));
-		panel.add(new JScrollPane(location));
-
-		add(new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, panel, new JLabel(
-				"<html>Some file<br/>statistics</html>")), BorderLayout.CENTER);
+    private void updateReservoir() {
+	if (translations == null) {
+	    reservoir.removeAll();
+	    return;
+	} else {
+	    Vector<String> listData = new Vector<>(translations.getSources());
+	    Collections.sort(listData);
+	    reservoirCellRenderer.setTranslationsHash(translations);
+	    reservoir.setListData(listData);
 	}
+	setSource(null);
+    }
 
-	/**
-	 * @return the selectedLocale
-	 */
-	public Locale getSelectedLocale() {
-		return selectedLocale;
-	}
+    private void setSource(String text) {
+	source.setText(text != null ? text : "");
+	updateTranslation();
+	updateLocation();
+    }
 
-	/**
-	 * @param selectedLocale
-	 *            the selectedLocale to set
-	 */
-	public void setSelectedLocale(Locale selectedLocale) {
-		this.selectedLocale = selectedLocale;
-		localeLabel.setText(selectedLocale.toString());
-		reservoirCellRenderer.setSelectedLocale(selectedLocale);
-		reservoir.repaint();
-		updateTranslation();
+    private void updateTranslation() {
+	if ((translations == null) || (source.getText().isEmpty())) {
+	    translation.setText("");
+	    translation.setEditable(false);
+	    return;
 	}
+	translation.setEditable(true);
+	updateTranslationHash();
+	oldSource = source.getText();
+	if (translations.has(oldSource, selectedLocale)) {
+	    oldTranslation = translations.get(oldSource, selectedLocale);
+	} else {
+	    oldTranslation = "";
+	}
+	translation.setText(oldTranslation);
+    }
 
-	public void setChanged(boolean changed) {
-		this.changed = changed;
+    private void updateLocation() {
+	if ((translations == null) || (source.getText().isEmpty())) {
+	    location.setText("");
+	    return;
 	}
+	LanguageSet languageSet = translations.get(source.getText());
+	if (languageSet == null) {
+	    location.setText("");
+	    return;
+	}
+	StringBuilder locations = new StringBuilder();
+	for (SourceLocation location : languageSet.getLocations()) {
+	    locations.append(location.toString()).append("\n");
+	}
+	location.setText(locations.toString());
+    }
 
-	public boolean hasChanged() {
-		updateTranslationHash();
-		return changed;
-	}
+    public void removeObsoletePhrases() {
+	translations.removeSourcesWithoutLocation();
+	updateReservoir();
+    }
 
-	public void setTranslations(MultiLanguageTranslations translations) {
-		this.translations = translations;
-		updateTranslationHash();
-		changed = false;
-		updateReservoir();
+    @Override
+    public void valueChanged(ListSelectionEvent o) {
+	if (o.getSource() == this.reservoir) {
+	    /*
+	     * Reservoir selection was changed. The source field needs to be updated.
+	     */
+	    changedSource();
 	}
+    }
 
-	public MultiLanguageTranslations getTranslations() {
-		return translations;
+    @Override
+    public void caretUpdate(CaretEvent o) {
+	if (o.getSource() == translation) {
+	    /*
+	     * The text field was changed, maybe...
+	     */
 	}
-
-	private void updateTranslationHash() {
-		if ((!oldSource.isEmpty())
-				&& (!oldTranslation.equals(translation.getText()))) {
-			translations.add(oldSource, selectedLocale, translation.getText());
-			changed = true;
-		}
-	}
-
-	private void changedSource() {
-		setSource((String) reservoir.getSelectedValue());
-	}
-
-	private void updateReservoir() {
-		if (translations == null) {
-			reservoir.removeAll();
-			return;
-		} else {
-			Vector<String> listData = new Vector<String>(
-					translations.getSources());
-			Collections.sort(listData);
-			reservoirCellRenderer.setTranslationsHash(translations);
-			reservoir.setListData(listData);
-		}
-		setSource(null);
-	}
-
-	private void setSource(String text) {
-		source.setText(text != null ? text : "");
-		updateTranslation();
-		updateLocation();
-	}
-
-	private void updateTranslation() {
-		if ((translations == null) || (source.getText().isEmpty())) {
-			translation.setText("");
-			translation.setEditable(false);
-			return;
-		}
-		translation.setEditable(true);
-		updateTranslationHash();
-		oldSource = source.getText();
-		if (translations.has(oldSource, selectedLocale)) {
-			oldTranslation = translations.get(oldSource, selectedLocale);
-		} else {
-			oldTranslation = "";
-		}
-		translation.setText(oldTranslation);
-	}
-
-	private void updateLocation() {
-		if ((translations == null) || (source.getText().isEmpty())) {
-			location.setText("");
-			return;
-		}
-		LanguageSet languageSet = translations.get(source.getText());
-		if (languageSet == null) {
-			location.setText("");
-			return;
-		}
-		StringBuilder locations = new StringBuilder();
-		for (SourceLocation location : languageSet.getLocations()) {
-			locations.append(location.toString()).append("\n");
-		}
-		location.setText(locations.toString());
-	}
-
-	public void removeObsoletePhrases() {
-		translations.removeSourcesWithoutLocation();
-		updateReservoir();
-	}
-
-	@Override
-	public void valueChanged(ListSelectionEvent o) {
-		if (o.getSource() == this.reservoir) {
-			/*
-			 * Reservoir selection was changed. The source field needs to be
-			 * updated.
-			 */
-			changedSource();
-		}
-	}
-
-	@Override
-	public void caretUpdate(CaretEvent o) {
-		if (o.getSource() == translation) {
-			/*
-			 * The text field was changed, maybe...
-			 */
-		}
-	}
+    }
 
 }
