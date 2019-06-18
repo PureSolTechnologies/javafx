@@ -18,8 +18,9 @@ import com.puresoltechnologies.javafx.i18n.utils.FileSearch;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
-import com.puresoltechnologies.javafx.rcp.perspectives.linguist.ProjectTranslationPane;
-import com.puresoltechnologies.javafx.rcp.perspectives.linguist.TranslationCopyDialog;
+import com.puresoltechnologies.javafx.rcp.linguist.CreateI18nProjectDialog;
+import com.puresoltechnologies.javafx.rcp.linguist.ProjectTranslationPane;
+import com.puresoltechnologies.javafx.rcp.linguist.TranslationCopyDialog;
 
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -41,7 +42,7 @@ public class LinguistPart extends AbstractViewer {
     private static final Translator translator = Translator.getTranslator(LinguistPart.class);
 
     // other GUI elements...
-    private final ProjectTranslationPane translationPanel = new ProjectTranslationPane();
+    private final ProjectTranslationPane translationPane = new ProjectTranslationPane();
 
     private final BorderPane borderPane = new BorderPane();
 
@@ -79,6 +80,11 @@ public class LinguistPart extends AbstractViewer {
     private void initializeMenu() {
 	Menu fileMenu = new Menu("_File");
 
+	MenuItem create = new MenuItem("_Create...");
+	create.setOnAction(event -> {
+	    create();
+	    event.consume();
+	});
 	MenuItem open = new MenuItem("_Open...");
 	open.setOnAction(event -> {
 	    open();
@@ -92,7 +98,7 @@ public class LinguistPart extends AbstractViewer {
 	    event.consume();
 	});
 
-	fileMenu.getItems().addAll(open, save);
+	fileMenu.getItems().addAll(create, open, save);
 
 	Menu toolsMenu = new Menu("_Tools");
 
@@ -136,10 +142,15 @@ public class LinguistPart extends AbstractViewer {
     }
 
     private void initializeDesktop() {
-	borderPane.setCenter(translationPanel);
+	borderPane.setCenter(translationPane);
     }
 
     private void initializeToolBar() {
+	Button createButton = new Button("Create...");
+	createButton.setOnAction(event -> {
+	    create();
+	    event.consume();
+	});
 	Button openButton = new Button("Open...");
 	openButton.setOnAction(event -> {
 	    open();
@@ -162,13 +173,13 @@ public class LinguistPart extends AbstractViewer {
 	});
 
 	ToolBar tools = new ToolBar();
-	tools.getItems().addAll(openButton, updateButton, releaseButton, clearButton);
+	tools.getItems().addAll(createButton, openButton, updateButton, releaseButton, clearButton);
 	borderPane.setTop(tools);
     }
 
     private void update() {
 	try {
-	    I18NUpdate.update(translationPanel.getDirectory());
+	    I18NUpdate.update(translationPane.getDirectory());
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    Alert alert = new Alert(AlertType.ERROR,
@@ -179,7 +190,7 @@ public class LinguistPart extends AbstractViewer {
 
     private void release() {
 	try {
-	    I18NRelease.release(translationPanel.getDirectory());
+	    I18NRelease.release(translationPane.getDirectory());
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    Alert alert = new Alert(AlertType.ERROR,
@@ -189,7 +200,7 @@ public class LinguistPart extends AbstractViewer {
     }
 
     private void clear() {
-	translationPanel.removeObsoletePhrases();
+	translationPane.removeObsoletePhrases();
     }
 
     private void copyTranslation() {
@@ -201,7 +212,7 @@ public class LinguistPart extends AbstractViewer {
 		Locale sourceLocale = dlg.getSource();
 		Locale targetLocale = dlg.getTarget();
 		I18NProjectConfiguration configuration;
-		configuration = new I18NProjectConfiguration(translationPanel.getDirectory());
+		configuration = new I18NProjectConfiguration(translationPane.getDirectory());
 		List<File> files = FileSearch.find(configuration.getI18nDirectory(), "*.i18n");
 		for (File file : files) {
 		    File i18nFile = new File(configuration.getI18nDirectory(), file.getPath());
@@ -224,6 +235,11 @@ public class LinguistPart extends AbstractViewer {
 	}
     }
 
+    private void create() {
+	CreateI18nProjectDialog dialog = new CreateI18nProjectDialog();
+	dialog.showAndWait();
+    }
+
     private void open() {
 	DirectoryChooser directoryChooser = new DirectoryChooser();
 	directoryChooser.setTitle("Open Resource File");
@@ -231,12 +247,12 @@ public class LinguistPart extends AbstractViewer {
 	if (directory == null) {
 	    return;
 	}
-	translationPanel.openDirectory(directory);
+	translationPane.openDirectory(directory);
     }
 
     private void save() {
 	try {
-	    translationPanel.saveFile();
+	    translationPane.saveFile();
 	} catch (IOException e) {
 	    e.printStackTrace();
 	    Alert alert = new Alert(AlertType.ERROR, translator.i18n("I18NFile could not be saved!"), ButtonType.OK);

@@ -26,14 +26,82 @@
  *
  ****************************************************************************/
 
-package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
+package com.puresoltechnologies.javafx.rcp.linguist;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
+
+import com.puresoltechnologies.javafx.i18n.data.I18NFile;
+import com.puresoltechnologies.javafx.i18n.data.MultiLanguageTranslations;
 
 class FileTree implements Comparable<FileTree> {
+
+    /**
+     * This method is static to express the functional character of the method and
+     * to avoid accidental usage of non static fields.
+     *
+     * @param file
+     * @param locale
+     * @return
+     * @throws IOException
+     */
+    static Status getStatus(File file, Locale locale) throws IOException {
+	if (file.exists() && file.isFile()) {
+	    MultiLanguageTranslations translations = I18NFile.read(file);
+	    if (!translations.getAvailableLanguages().contains(locale)) {
+		return Status.EMPTY;
+	    }
+	    if (translations.isTranslationFinished(locale)) {
+		return Status.FINISHED;
+	    }
+	    return Status.ONGOING;
+	}
+	return Status.EMPTY;
+    }
+
+    /**
+     * This method is static to express the functional character of the method and
+     * to avoid accidental usage of non static fields.
+     *
+     * @param currentNode
+     * @throws IOException
+     */
+    static void setStatusFlags(FileTree currentNode, Locale locale) throws IOException {
+	if (!currentNode.hashChildren()) {
+	    currentNode.setStatus(getStatus(currentNode.getFile(), locale));
+	    return;
+	}
+	Status status = Status.EMPTY;
+	boolean first = true;
+	for (int index = 0; index < currentNode.getChildCount(); index++) {
+	    FileTree child = currentNode.getChild(index);
+	    setStatusFlags(child, locale);
+	    if (first) {
+		first = false;
+		status = child.getStatus();
+	    } else {
+		switch (child.getStatus()) {
+		case EMPTY:
+		    if (status == Status.FINISHED) {
+			status = Status.ONGOING;
+		    }
+		    break;
+		case ONGOING:
+		    status = Status.ONGOING;
+		    break;
+		case FINISHED:
+		    if (status == Status.EMPTY) {
+			status = Status.ONGOING;
+		    }
+		}
+	    }
+	}
+	currentNode.setStatus(status);
+    }
 
     /**
      * This method is static to express the functional character of the method and

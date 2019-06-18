@@ -26,25 +26,26 @@
  *
  ****************************************************************************/
 
-package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
+package com.puresoltechnologies.javafx.rcp.linguist;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
-import javax.swing.JOptionPane;
-import javax.swing.event.TreeSelectionEvent;
 
 import com.puresoltechnologies.javafx.i18n.Translator;
 import com.puresoltechnologies.javafx.i18n.data.I18NFile;
 import com.puresoltechnologies.javafx.i18n.proc.I18NProjectConfiguration;
 import com.puresoltechnologies.javafx.i18n.utils.FileSearch;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.scene.control.Label;
+import javafx.scene.control.MultipleSelectionModel;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TreeCell;
+import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.layout.BorderPane;
 
@@ -58,8 +59,9 @@ class FilesTranslationPanel extends BorderPane {
     private final TreeView<FileTree> fileTree = new TreeView<>();
     private final TranslationPanel translationPanel = new TranslationPanel();
 
-    private final I18NProjectConfiguration configuration = null;
+    private I18NProjectConfiguration configuration = null;
     private final File i18nFile = null;
+    private final FileTree fileTreeNode = null;
 
     public FilesTranslationPanel() {
 	super();
@@ -67,19 +69,23 @@ class FilesTranslationPanel extends BorderPane {
     }
 
     private void initializeDesktop() {
-	fileTree.setCellFactory((view) -> new TreeCell<>() {
-	    @Override
-	    protected void updateItem(FileTree file, boolean empty) {
-		super.updateItem(file, empty);
-		if (empty) {
-		    setText("");
-		    setGraphic(null);
-		} else {
-		    new StatusComponent(file.getName(), isSelected(), isFocused(), fileTree.getStatus());
-		}
-	    }
-	});
-	fileTree.selectionModelProperty().addListener((oldValue, newValue, component) -> {
+//	fileTree.setCellFactory((view) -> new TreeCell<>() {
+//	    @Override
+//	    protected void updateItem(FileTree file, boolean empty) {
+//		super.updateItem(file, empty);
+//		if (empty) {
+//		    setText("");
+//		    setGraphic(null);
+//		} else {
+//		    new StatusComponent(file.getName(), isSelected(), isFocused(), file.getStatus());
+//		}
+//	    }
+//	});
+	ObjectProperty<MultipleSelectionModel<TreeItem<FileTree>>> selectionModelProperty = fileTree
+		.selectionModelProperty();
+	selectionModelProperty.get().setSelectionMode(SelectionMode.SINGLE);
+//	selectionModelProperty.get().select
+	selectionModelProperty.addListener((oldValue, newValue, component) -> {
 	});
 
 	setCenter(new SplitPane(new ScrollPane(fileTree), translationPanel));
@@ -93,8 +99,7 @@ class FilesTranslationPanel extends BorderPane {
      */
     public void setSelectedLocale(Locale selectedLocale) throws IOException {
 	translationPanel.setSelectedLocale(selectedLocale);
-	fileTreeModel.setSelectedLocale(selectedLocale);
-	fileTree.repaint();
+//	fileTreeNode.setSelectedLocale(selectedLocale);
     }
 
     public boolean hasChanged() {
@@ -116,14 +121,14 @@ class FilesTranslationPanel extends BorderPane {
 	if (!hasChanged()) {
 	    return true;
 	}
-	int result = JOptionPane.showConfirmDialog(this, translator.i18n("Changes were made.\nDo you want to save?"),
-		translator.i18n("Save"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-	if (result == JOptionPane.CANCEL_OPTION) {
-	    return false;
-	}
-	if (result == JOptionPane.NO_OPTION) {
-	    return true;
-	}
+//	int result = JOptionPane.showConfirmDialog(this, translator.i18n("Changes were made.\nDo you want to save?"),
+//		translator.i18n("Save"), JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+//	if (result == JOptionPane.CANCEL_OPTION) {
+//	    return false;
+//	}
+//	if (result == JOptionPane.NO_OPTION) {
+//	    return true;
+//	}
 	saveFile();
 	return true;
     }
@@ -132,7 +137,7 @@ class FilesTranslationPanel extends BorderPane {
 	if (i18nFile != null) {
 	    I18NFile.write(i18nFile, translationPanel.getTranslations());
 	    translationPanel.setChanged(false);
-	    fileTreeModel.changedFile(i18nFile);
+//	    fileTreeModel.changedFile(i18nFile);
 	}
     }
 
@@ -144,11 +149,36 @@ class FilesTranslationPanel extends BorderPane {
 	    configuration = new I18NProjectConfiguration(directory);
 
 	    List<File> files = FileSearch.find(configuration.getI18nDirectory(), "*.i18n");
-	    fileTreeModel.setFiles(files, configuration);
+//	    fileTreeNode = setFiles(files);
+	    FileTree.setStatusFlags(fileTreeNode, Locale.getDefault());
 	} catch (IOException e) {
-	    JOptionPane.showConfirmDialog(this, translator.i18n("Error"), translator.i18n("IO error in file reading."),
-		    JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+//	    JOptionPane.showConfirmDialog(this, translator.i18n("Error"), translator.i18n("IO error in file reading."),
+//		    JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
 	}
+    }
+
+    private FileTree setFiles(List<File> files) {
+	FileTree fileTree = new FileTree(configuration.getI18nDirectory().getPath() + "/");
+	for (File file : files) {
+	    List<String> parts = new ArrayList<>();
+	    File currentFile = file;
+	    do {
+		parts.add(0, currentFile.getName());
+		currentFile = currentFile.getParentFile();
+	    } while (currentFile != null);
+	    FileTree currentNode = fileTree;
+	    for (String part : parts) {
+		if (part.isEmpty()) {
+		    continue;
+		}
+		if (currentNode.containsChild(part)) {
+		    currentNode = currentNode.getChild(part);
+		} else {
+		    currentNode = new FileTree(currentNode, part);
+		}
+	    }
+	}
+	return fileTree;
     }
 
     public void openFile(File file) {
@@ -156,12 +186,12 @@ class FilesTranslationPanel extends BorderPane {
 	    if (!saveIfChanged()) {
 		return;
 	    }
-	    i18nFile = file;
+//	    i18nFile = file;
 	    translationPanel.setTranslations(I18NFile.read(i18nFile));
 	} catch (IOException e) {
-	    JOptionPane.showMessageDialog(this, translator.i18n("The file {0} could not be read!", i18nFile),
-		    translator.i18n("File not found"), JOptionPane.ERROR_MESSAGE);
-	    i18nFile = null;
+//	    JOptionPane.showMessageDialog(this, translator.i18n("The file {0} could not be read!", i18nFile),
+//		    translator.i18n("File not found"), JOptionPane.ERROR_MESSAGE);
+//	    i18nFile = null;
 	}
     }
 
@@ -173,16 +203,16 @@ class FilesTranslationPanel extends BorderPane {
 	translationPanel.removeObsoletePhrases();
     }
 
-    @Override
-    public void valueChanged(TreeSelectionEvent o) {
-	if (o.getSource() == fileTree) {
-	    FileTree fileTree = (FileTree) o.getPath().getLastPathComponent();
-	    if (!fileTree.hashChildren()) {
-		File file = fileTree.getFile();
-		if (!file.equals(i18nFile)) {
-		    openFile(file);
-		}
-	    }
-	}
-    }
+//    @Override
+//    public void valueChanged(TreeSelectionEvent o) {
+//	if (o.getSource() == fileTree) {
+//	    FileTree fileTree = (FileTree) o.getPath().getLastPathComponent();
+//	    if (!fileTree.hashChildren()) {
+//		File file = fileTree.getFile();
+//		if (!file.equals(i18nFile)) {
+//		    openFile(file);
+//		}
+//	    }
+//	}
+//    }
 }

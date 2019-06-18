@@ -26,7 +26,7 @@
  *
  ****************************************************************************/
 
-package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
+package com.puresoltechnologies.javafx.rcp.linguist;
 
 enum Status {
 	EMPTY, ONGOING, FINISHED;

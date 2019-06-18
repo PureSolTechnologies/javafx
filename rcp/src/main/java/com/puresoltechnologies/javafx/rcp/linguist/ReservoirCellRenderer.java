@@ -26,7 +26,7 @@
  *
  ****************************************************************************/
 
-package com.puresoltechnologies.javafx.rcp.perspectives.linguist;
+package com.puresoltechnologies.javafx.rcp.linguist;
 
 import java.util.Locale;
 

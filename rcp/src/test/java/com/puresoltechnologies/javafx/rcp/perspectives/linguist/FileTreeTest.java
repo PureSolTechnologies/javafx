@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 
 import org.junit.jupiter.api.Test;
 
-import com.puresoltechnologies.javafx.rcp.perspectives.linguist.FileTree;
+import com.puresoltechnologies.javafx.rcp.linguist.FileTree;
 
 public class FileTreeTest {
 
