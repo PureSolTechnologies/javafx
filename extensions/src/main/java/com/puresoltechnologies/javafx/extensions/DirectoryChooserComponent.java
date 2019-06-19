@@ -5,7 +5,7 @@ import java.io.File;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 
 /**
  * This component is a convenience implementation of a file chooser component
@@ -15,21 +15,21 @@ import javafx.stage.FileChooser;
  * @author Rick-Rainer Ludwig
  *
  */
-public class FileChooserComponent extends AbstractChooserComponent<File> {
+public class DirectoryChooserComponent extends AbstractChooserComponent<File> {
 
-    public FileChooserComponent() {
+    public DirectoryChooserComponent() {
 	super();
     }
 
-    public FileChooserComponent(String title) {
+    public DirectoryChooserComponent(String title) {
 	super(title);
     }
 
     @Override
     protected String callChooserDialog() {
-	FileChooser fileChooser = new FileChooser();
-	fileChooser.setTitle(getTitle());
-	File file = fileChooser.showOpenDialog(getScene().getWindow());
+	DirectoryChooser directoryChooser = new DirectoryChooser();
+	directoryChooser.setTitle(getTitle());
+	File file = directoryChooser.showDialog(getScene().getWindow());
 	return file != null ? file.getPath() : "";
     }
 

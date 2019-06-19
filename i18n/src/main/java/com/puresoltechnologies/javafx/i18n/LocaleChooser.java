@@ -36,6 +36,7 @@ import com.puresoltechnologies.javafx.i18n.utils.I18N4Java;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.ListCell;
 
 /**
  * This class provides a combobox with all available locales for choosing.
@@ -52,5 +53,27 @@ public class LocaleChooser extends ComboBox<Locale> {
 	setItems(availableLocales);
 	availableLocales.addAll(I18N4Java.getAvailableLocales());
 	Collections.sort(availableLocales, (arg0, arg1) -> arg0.toString().compareTo(arg1.toString()));
+	setCellFactory(view -> new ListCell<>() {
+	    protected void updateItem(Locale locale, boolean empty) {
+		super.updateItem(locale, empty);
+		if (empty) {
+		    setText(null);
+		    setGraphic(null);
+		} else {
+		    setText(locale.getDisplayName());
+		}
+	    }
+	});
+	setButtonCell(new ListCell<>() {
+	    protected void updateItem(Locale locale, boolean empty) {
+		super.updateItem(locale, empty);
+		if (empty) {
+		    setText(null);
+		    setGraphic(null);
+		} else {
+		    setText(locale.getDisplayName());
+		}
+	    }
+	});
     }
 }

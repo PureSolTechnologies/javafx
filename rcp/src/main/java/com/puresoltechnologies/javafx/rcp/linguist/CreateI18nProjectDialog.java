@@ -9,7 +9,11 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
 /**
@@ -21,7 +25,8 @@ public class CreateI18nProjectDialog extends Dialog<I18NProjectConfiguration> {
 
     private static final Translator translator = Translator.getTranslator(CreateI18nProjectDialog.class);
 
-    private final FileChooserComponent projectFileComponent = new FileChooserComponent("Project File");
+    private final TextField projectName = new TextField();
+    private final FileChooserComponent projectDirectory = new FileChooserComponent("Location");
     private final FileChooserComponent sourceDirectoryComponent = new FileChooserComponent("Source Directory");
     private final FileChooserComponent resourceDirectoryComponent = new FileChooserComponent("Target Directory");
     private final LocaleChooser implementationLocaleChooser = new LocaleChooser();
@@ -31,9 +36,20 @@ public class CreateI18nProjectDialog extends Dialog<I18NProjectConfiguration> {
 	setTitle(translator.i18n("Create new I18n project"));
 	setResizable(true);
 
-	TitledPane titledPane = new TitledPane("Project File", projectFileComponent);
+	VBox projectPane = new VBox();
+	projectPane.setSpacing(5.0);
+	HBox projectNamePane = new HBox();
+	projectNamePane.setSpacing(5.0);
+	Label projectNameLabel = new Label("Project Name");
+	HBox.setHgrow(projectNameLabel, Priority.NEVER);
+	HBox.setHgrow(projectName, Priority.ALWAYS);
+	projectNamePane.getChildren().addAll(projectNameLabel, projectName);
+	projectPane.getChildren().addAll(projectNamePane, projectDirectory);
+
+	TitledPane titledPane = new TitledPane("Project", projectPane);
 
 	VBox directoriesPane = new VBox();
+	directoriesPane.setSpacing(5.0);
 
 	directoriesPane.getChildren().addAll(sourceDirectoryComponent, resourceDirectoryComponent);
 
@@ -41,6 +57,7 @@ public class CreateI18nProjectDialog extends Dialog<I18NProjectConfiguration> {
 	TitledPane settings = new TitledPane("Settings", implementationLocaleChooser);
 
 	VBox vbox = new VBox();
+	vbox.setSpacing(5.0);
 	vbox.getChildren().addAll(titledPane, sourceDirectories, settings);
 
 	DialogPane dialogPane = getDialogPane();
