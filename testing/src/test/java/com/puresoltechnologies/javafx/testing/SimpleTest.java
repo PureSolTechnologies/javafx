@@ -47,10 +47,9 @@ public class SimpleTest extends OpenJFXTest {
 
     @Test
     public void test() throws InterruptedException {
-
-	Label label = (Label) findNodeById("test.label");
+	Label label = findNodeById(Label.class, "test.label");
 	assertNotNull(label);
-	Button button = (Button) findNodeById("test.button");
+	Button button = getButtonById("test.button");
 	assertNotNull(button);
 	click("#test.button");
 	Thread.sleep(3000);

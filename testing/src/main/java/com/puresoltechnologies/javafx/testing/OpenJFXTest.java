@@ -11,12 +11,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 
 import com.puresoltechnologies.javafx.testing.mouse.MouseInteraction;
-import com.puresoltechnologies.javafx.testing.select.NodeSearch;
+import com.puresoltechnologies.javafx.testing.select.ButtonSelector;
+import com.puresoltechnologies.javafx.testing.select.MenuSelector;
+import com.puresoltechnologies.javafx.testing.select.NodeFullSearch;
 
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
-public abstract class OpenJFXTest implements NodeSearch, MouseInteraction {
+public abstract class OpenJFXTest implements NodeFullSearch, MouseInteraction, ButtonSelector, MenuSelector {
 
     @BeforeAll
     public static void startJavaFX() throws InterruptedException {
@@ -55,16 +57,11 @@ public abstract class OpenJFXTest implements NodeSearch, MouseInteraction {
 
     @AfterEach
     public void destroyStage() throws InterruptedException {
-	CountDownLatch latch = new CountDownLatch(1);
-	Platform.runLater(() -> {
-	    try {
-		stop();
-		stage = null;
-	    } finally {
-		latch.countDown();
-	    }
-	});
-	assertTrue(latch.await(10, TimeUnit.SECONDS));
+	try {
+	    stop();
+	} finally {
+	    stage = null;
+	}
     }
 
     protected abstract Stage start();
