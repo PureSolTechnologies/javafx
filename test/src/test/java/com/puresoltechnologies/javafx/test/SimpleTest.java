@@ -26,15 +26,12 @@ public class SimpleTest extends OpenJFXTest {
 	ReplayTimings.setSpeed(Speed.MEDIUM);
     }
 
-    private ShowRoom application;
-    private Stage stage;
+    private final ShowRoom application = new ShowRoom();
 
     @Override
     protected Stage start() {
-	application = new ShowRoom();
 	try {
-	    application.init();
-	    stage = new Stage(StageStyle.DECORATED);
+	    Stage stage = new Stage(StageStyle.DECORATED);
 	    application.start(stage);
 	    return stage;
 	} catch (Exception e) {
@@ -48,7 +45,7 @@ public class SimpleTest extends OpenJFXTest {
     }
 
     @BeforeEach
-    public void wait3sec() throws InterruptedException {
+    public void wait2sec() throws InterruptedException {
 	Thread.sleep(2000);
     }
 

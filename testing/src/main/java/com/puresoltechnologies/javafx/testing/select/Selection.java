@@ -26,4 +26,8 @@ public class Selection<T extends Node> implements NodeSubTreeSearch<T>, MouseInt
     public void click(MouseButton mouseButton) {
 	click(node, mouseButton);
     }
+
+    public boolean isPresent() {
+	return node != null;
+    }
 }

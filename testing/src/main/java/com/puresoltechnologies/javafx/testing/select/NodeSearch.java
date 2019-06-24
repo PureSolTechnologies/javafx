@@ -25,7 +25,7 @@ public interface NodeSearch {
 	    return null;
 	}
 	if (nodes.size() > 1) {
-	    throw new IllegalStateException("Multiple nodes were found.");
+	    throw new IllegalStateException("Multiple nodes (" + nodes.size() + ") were found.");
 	}
 	return new Selection<>(nodes.get(0));
     }
