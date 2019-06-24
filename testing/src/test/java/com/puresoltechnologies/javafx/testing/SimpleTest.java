@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
+import com.puresoltechnologies.javafx.testing.select.Selection;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -47,9 +48,9 @@ public class SimpleTest extends OpenJFXTest {
 
     @Test
     public void test() throws InterruptedException {
-	Label label = findNodeById(Label.class, "test.label");
+	Selection<Label> label = findNodeById(Label.class, "test.label");
 	assertNotNull(label);
-	Button button = getButtonById("test.button");
+	Selection<Button> button = getButtonById("test.button");
 	assertNotNull(button);
 	click("#test.button");
 	Thread.sleep(3000);

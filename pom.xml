@@ -359,37 +359,6 @@
 					<artifactId>tidy-maven-plugin</artifactId>
 					<version>1.1.0</version>
 				</plugin>
-				<plugin><!--This plugin's configuration is used to store Eclipse m2e 
-						settings only. It has no influence on the Maven build itself. -->
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>
-											com.puresoltechnologies.maven.plugins
-										</groupId>
-										<artifactId>
-											license-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.2.0,)
-										</versionRange>
-										<goals>
-											<goal>validate</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore />
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -595,6 +564,7 @@
 				<artifactId>tidy-maven-plugin</artifactId>
 				<executions>
 					<execution>
+						<phase>validate</phase>
 						<goals>
 							<goal>check</goal>
 						</goals>
@@ -677,6 +647,71 @@
 						</configuration>
 					</plugin>
 				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>m2e</id>
+			<activation>
+				<property>
+					<name>m2e.version</name>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<!--This plugin's configuration is used to store Eclipse m2e settings 
+							only. It has no influence on the Maven build itself. -->
+						<plugin>
+							<groupId>org.eclipse.m2e</groupId>
+							<artifactId>lifecycle-mapping</artifactId>
+							<version>1.0.0</version>
+							<configuration>
+								<lifecycleMappingMetadata>
+									<pluginExecutions>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>
+													com.puresoltechnologies.maven.plugins
+												</groupId>
+												<artifactId>
+													license-maven-plugin
+												</artifactId>
+												<versionRange>
+													[1.2.0,)
+												</versionRange>
+												<goals>
+													<goal>validate</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore />
+											</action>
+										</pluginExecution>
+										<pluginExecution>
+											<pluginExecutionFilter>
+												<groupId>
+													org.codehaus.mojo
+												</groupId>
+												<artifactId>
+													tidy-maven-plugin
+												</artifactId>
+												<versionRange>
+													[1.1.0,)
+												</versionRange>
+												<goals>
+													<goal>check</goal>
+												</goals>
+											</pluginExecutionFilter>
+											<action>
+												<ignore></ignore>
+											</action>
+										</pluginExecution>
+									</pluginExecutions>
+								</lifecycleMappingMetadata>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
 			</build>
 		</profile>
 	</profiles>
