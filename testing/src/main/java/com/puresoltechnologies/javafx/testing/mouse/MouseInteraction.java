@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import com.puresoltechnologies.javafx.testing.OpenJFXRobot;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.select.NodeSearch;
+import com.puresoltechnologies.javafx.testing.select.Selection;
 import com.puresoltechnologies.javafx.testing.utils.CoordinateUtils;
 
 import javafx.application.Platform;
@@ -31,8 +32,9 @@ public interface MouseInteraction extends NodeSearch {
 
     default void click(String id, MouseButton mouseButton) {
 	if (id.startsWith("#")) {
-	    Node node = findNodeById(id.substring(1));
-	    click(node, mouseButton);
+	    Selection<Node> node = findNodeById(Node.class, id.substring(1));
+	    System.err.println(node.getNode().getClass());
+	    node.click(mouseButton);
 	}
     }
 

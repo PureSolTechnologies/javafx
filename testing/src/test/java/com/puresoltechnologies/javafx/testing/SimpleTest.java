@@ -1,11 +1,12 @@
 package com.puresoltechnologies.javafx.testing;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
+import com.puresoltechnologies.javafx.testing.select.Selection;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -47,11 +48,10 @@ public class SimpleTest extends OpenJFXTest {
 
     @Test
     public void test() throws InterruptedException {
-
-	Label label = (Label) findNodeById("test.label");
-	assertNotNull(label);
-	Button button = (Button) findNodeById("test.button");
-	assertNotNull(button);
+	Selection<Label> label = findNodeById(Label.class, "test.label");
+	assertTrue(label.isPresent());
+	Selection<Button> button = getButtonById("test.button");
+	assertTrue(button.isPresent());
 	click("#test.button");
 	Thread.sleep(3000);
     }

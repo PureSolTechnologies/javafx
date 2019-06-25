@@ -1,62 +1,37 @@
 package com.puresoltechnologies.javafx.testing.select;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 import org.awaitility.Awaitility;
 
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.stage.Window;
+import javafx.scene.control.Labeled;
 
+/**
+ * This is the central interface for all classes which provide searching for
+ * nodes.
+ *
+ * @author Rick-Rainer Ludwig
+ */
 public interface NodeSearch {
 
-    default List<Node> findNodes(Predicate<Node> filter) {
-	return Window.getWindows().stream() //
-		.map(window -> {
-		    System.out.println("window: " + window.getClass().getName());
-		    return findNodesInScene(window.getScene(), filter);
-		}) //
-		.flatMap(nodeList -> nodeList.stream()) //
-		.collect(Collectors.toList());
-    }
+    List<Node> findNodes(Predicate<Node> filter);
 
-    default List<Node> findNodesInScene(Scene scene, Predicate<Node> filter) {
-	List<Node> nodes = new ArrayList<>();
-	Parent rootNode = scene.getRoot();
-	addAllChildren(rootNode, nodes, filter);
-	return nodes;
-    }
-
-    private void addAllChildren(Parent parent, List<Node> nodes, Predicate<Node> filter) {
-	System.out.println(parent.getClass().getName());
-	for (Node node : parent.getChildrenUnmodifiable()) {
-	    if (filter.test(node)) {
-		nodes.add(node);
-	    }
-	    if (Parent.class.isAssignableFrom(node.getClass())) {
-		addAllChildren((Parent) node, nodes, filter);
-	    }
-	}
-    }
-
-    default Node findNode(Predicate<Node> filter) {
+    default Selection<Node> findNode(Predicate<Node> filter) {
 	List<Node> nodes = findNodes(filter);
 	if (nodes.isEmpty()) {
 	    return null;
 	}
 	if (nodes.size() > 1) {
-	    throw new IllegalStateException("Multiple nodes were found.");
+	    throw new IllegalStateException("Multiple nodes (" + nodes.size() + ") were found.");
 	}
-	return nodes.get(0);
+	return new Selection<>(nodes.get(0));
     }
 
-    default Node waitForNode(Predicate<Node> filter) {
-	Node node = Awaitility.await() //
+    default Selection<Node> waitForNode(Predicate<Node> filter) {
+	Selection<Node> node = Awaitility.await() //
 		.pollDelay(100, TimeUnit.MILLISECONDS) //
 		.atMost(10, TimeUnit.SECONDS) //
 		.until(() -> {
@@ -69,8 +44,24 @@ public interface NodeSearch {
 	return node;
     }
 
-    default Node findNodeById(String id) {
-	return findNode(node -> id.equals(node.getId()));
+    default <T extends Node> Selection<T> findNode(Class<T> clazz, Predicate<T> filter) {
+	Predicate<Node> classPredicate = node -> clazz.isAssignableFrom(node.getClass());
+	Predicate<Node> castedPredicate = node -> {
+	    @SuppressWarnings("unchecked")
+	    T t = (T) node;
+	    return filter.test(t);
+	};
+	@SuppressWarnings("unchecked")
+	Selection<T> selection = (Selection<T>) findNode(classPredicate.and(castedPredicate));
+	return selection;
+    }
+
+    default <T extends Node> Selection<T> findNodeById(Class<T> clazz, String id) {
+	return findNode(clazz, node -> id.equals(node.getId()));
+    }
+
+    default <T extends Labeled> Selection<T> findNodeByText(Class<T> clazz, String text) {
+	return findNode(clazz, node -> text.equals(node.getText()));
     }
 
 }

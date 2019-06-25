@@ -98,7 +98,6 @@ public class ShowRoom extends Application {
 	splashScreen.addTask("Start services", () -> Services.startAllServices());
 
 	splashScreen.startApplication();
-
     }
 
     private void addMenu(Stage stage, BorderPane root) {

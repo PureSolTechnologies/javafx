@@ -21,21 +21,17 @@ import javafx.stage.StageStyle;
 
 public class SimpleTest extends OpenJFXTest {
 
-    private static ShowRoom application;
-    private static Stage stage;
-
     @BeforeAll
     public static void setup() {
 	ReplayTimings.setSpeed(Speed.MEDIUM);
     }
 
+    private final ShowRoom application = new ShowRoom();
+
     @Override
     protected Stage start() {
-	application = new ShowRoom();
 	try {
-	    application.init();
 	    Stage stage = new Stage(StageStyle.DECORATED);
-	    SimpleTest.stage = stage;
 	    application.start(stage);
 	    return stage;
 	} catch (Exception e) {
@@ -49,7 +45,7 @@ public class SimpleTest extends OpenJFXTest {
     }
 
     @BeforeEach
-    public void wait3sec() throws InterruptedException {
+    public void wait2sec() throws InterruptedException {
 	Thread.sleep(2000);
     }
 
@@ -59,6 +55,14 @@ public class SimpleTest extends OpenJFXTest {
 	click("#menu.main.file");
 	System.out.println("=== ExitItem ===");
 	click("#menu.main.file.exit");
+    }
+
+    @Test
+    public void test2() throws InterruptedException {
+	System.out.println("=== FileMenu ===");
+	getMenuByText("_File").click();
+	System.out.println("=== ExitItem ===");
+	getMenuByText("E_xit").click();
     }
 
     @Test
