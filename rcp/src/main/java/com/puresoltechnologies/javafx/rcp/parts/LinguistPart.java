@@ -18,9 +18,11 @@ import com.puresoltechnologies.javafx.i18n.utils.FileSearch;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
+import com.puresoltechnologies.javafx.rcp.Rcp;
 import com.puresoltechnologies.javafx.rcp.linguist.CreateI18nProjectDialog;
 import com.puresoltechnologies.javafx.rcp.linguist.ProjectTranslationPane;
 import com.puresoltechnologies.javafx.rcp.linguist.TranslationCopyDialog;
+import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -48,6 +50,11 @@ public class LinguistPart extends AbstractViewer {
 
     public LinguistPart() {
 	super("Linguist", PartOpenMode.AUTO_AND_MANUAL);
+	try {
+	    setImage(ResourceUtils.getImage(Rcp.class, "icons/FatCow_Icons16x16/change_language.png"));
+	} catch (IOException e) {
+	    e.printStackTrace();
+	}
     }
 
     @Override
