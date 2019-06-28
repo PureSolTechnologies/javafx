@@ -122,7 +122,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	    switch (axisType) {
 	    case X:
 		currentPosition = calculatePos(x, y, width, height, current);
-		if ((currentPosition - position < MIN_DISTANCE) && (position > x)) {
+		if (((currentPosition - position) < MIN_DISTANCE) && (position > x)) {
 		    continue;
 		}
 		position = currentPosition;
@@ -137,48 +137,49 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		break;
 	    case ALT_X:
 		currentPosition = calculatePos(x, y, width, height, current);
-		if ((currentPosition - position < MIN_DISTANCE) && (position > x)) {
+		if (((currentPosition - position) < MIN_DISTANCE) && (position > x)) {
 		    continue;
 		}
 		position = currentPosition;
 		gc.setFill(axisColor.get());
 		gc.setStroke(axisColor.get());
-		gc.strokeLine(x + position, y + height, x + position, y + height - AXIS_THICKNESS);
+		gc.strokeLine(x + position, y + height, x + position, (y + height) - AXIS_THICKNESS);
 		gc.setStroke(axisTitleFont.get().getColor());
 		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
-		gc.fillText(String.valueOf(current), x + position, y + height - AXIS_THICKNESS);
+		gc.fillText(String.valueOf(current), x + position, (y + height) - AXIS_THICKNESS);
 		break;
 	    case Y:
 		currentPosition = calculatePos(x, y, width, height, current);
-		if ((position - currentPosition < MIN_DISTANCE) && (currentPosition < y + height)) {
+		if (((position - currentPosition) < MIN_DISTANCE) && (currentPosition < (y + height))) {
 		    continue;
 		}
 		position = currentPosition;
 		gc.setFill(axisColor.get());
 		gc.setStroke(axisColor.get());
-		gc.strokeLine(x + width - AXIS_THICKNESS, y + height - position, x + width, y + height - position);
+		gc.strokeLine((x + width) - AXIS_THICKNESS, (y + height) - position, x + width,
+			(y + height) - position);
 		gc.setStroke(axisTitleFont.get().getColor());
 		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.RIGHT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.fillText(String.valueOf(current), x + width - AXIS_THICKNESS, y + height - position);
+		gc.fillText(String.valueOf(current), (x + width) - AXIS_THICKNESS, (y + height) - position);
 		break;
 	    case ALT_Y:
 		currentPosition = calculatePos(x, y, width, height, current);
-		if ((position - currentPosition < MIN_DISTANCE) && (currentPosition < y + height)) {
+		if (((position - currentPosition) < MIN_DISTANCE) && (currentPosition < (y + height))) {
 		    continue;
 		}
 		position = currentPosition;
 		gc.setFill(axisColor.get());
 		gc.setStroke(axisColor.get());
-		gc.strokeLine(x, y + height - position, x + AXIS_THICKNESS, y + height - position);
+		gc.strokeLine(x, (y + height) - position, x + AXIS_THICKNESS, (y + height) - position);
 		gc.setStroke(axisTitleFont.get().getColor());
 		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.fillText(String.valueOf(current), x + AXIS_THICKNESS, y + height - position);
+		gc.fillText(String.valueOf(current), x + AXIS_THICKNESS, (y + height) - position);
 		break;
 	    }
 	}

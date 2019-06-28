@@ -10,27 +10,25 @@ import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
 import javafx.scene.canvas.Canvas;
 
-public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D>
-	extends AbstractPlot<X, Y, D> {
+public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>>
+	extends AbstractPlot<X, Y, XYValue<X, Y>> {
 
     public XYPlot(String title, NumberAxis<X> xAxis, NumberAxis<Y> yAxis) {
 	super(title, xAxis, yAxis);
     }
 
-    public XYPlot(String title, NumberAxis<X> xAxis, NumberAxis<Y> yAxis, List<D> data) {
+    public XYPlot(String title, NumberAxis<X> xAxis, NumberAxis<Y> yAxis, List<XYValue<X, Y>> data) {
 	super(title, xAxis, yAxis, data);
     }
 
     @Override
-    public X getAxisX(D date) {
-	// TODO Auto-generated method stub
-	return null;
+    public X getAxisX(XYValue<X, Y> date) {
+	return date.getX();
     }
 
     @Override
-    public Y getAxisY(D date) {
-	// TODO Auto-generated method stub
-	return null;
+    public Y getAxisY(XYValue<X, Y> date) {
+	return date.getY();
     }
 
     @Override
