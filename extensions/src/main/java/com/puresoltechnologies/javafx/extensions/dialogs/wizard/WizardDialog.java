@@ -25,7 +25,7 @@ import javafx.scene.layout.BorderPane;
  *
  * @author Rick-Rainer Ludwig
  *
- * @param <T>
+ * @param <T> is the type of the expected selection result.
  */
 public class WizardDialog<T> extends Dialog<T> {
 

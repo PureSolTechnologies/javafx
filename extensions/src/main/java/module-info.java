@@ -1,8 +1,9 @@
 module com.puresoltechnologies.javafx.extensions {
 
     requires com.puresoltechnologies.javafx.utils;
-    requires transitive javafx.controls;
+
     requires com.github.spotbugs.annotations;
+    requires transitive javafx.controls;
     requires javafx.graphics;
     requires slf4j.api;
 

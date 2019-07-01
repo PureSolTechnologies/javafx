@@ -32,13 +32,15 @@ public class SplashScreen {
     private int delay = 0;
     private final Stage initStage;
     private final Consumer<Stage> startStage;
-    private final Scene scene;
     private final GridPane root = new GridPane();
     private final ProgressBar loadProgress = new ProgressBar();
     private final Label amountLabel = new Label();
     private final Label titleLabel = new Label();
 
     private final List<Task<?>> tasks = new ArrayList<>();
+
+    private final boolean startIsAlwaysOnTop;
+    private final boolean startIsResizable;
 
     public SplashScreen(Stage initStage, Image splashImage, Consumer<Stage> startStage) {
 	super();
@@ -64,7 +66,7 @@ public class SplashScreen {
 	    Bounds cellBounds = root.getCellBounds(0, 1);
 	    loadProgress.setPrefWidth(cellBounds.getWidth());
 
-	    scene = new Scene(root, Color.TRANSPARENT);
+	    Scene scene = new Scene(root, Color.TRANSPARENT);
 	    initStage.setScene(scene);
 
 	    final Rectangle2D bounds = Screen.getPrimary().getBounds();
@@ -74,17 +76,31 @@ public class SplashScreen {
 		    "icons/FatCow_Icons16x16/information.png");
 	    Image chartUpColorBig = ResourceUtils.getImage(StatusBar.class, "icons/FatCow_Icons32x32/information.png");
 	    initStage.getIcons().addAll(chartUpColorSmall, chartUpColorBig);
-	    initStage.setTitle("ToolShed");
+
+	    startIsAlwaysOnTop = initStage.isAlwaysOnTop();
 	    initStage.setAlwaysOnTop(true);
+	    startIsResizable = initStage.isResizable();
+	    initStage.setResizable(false);
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
     }
 
+    /**
+     * Returns the set delay provided by {@link #setDelay(int)}.
+     *
+     * @return An integer containing the delay in milliseconds is returned.
+     */
     public int getDelay() {
 	return delay;
     }
 
+    /**
+     * This method sets an additional delay in between the different tasks. This
+     * slows down the startup process, but makes the messages readable.
+     *
+     * @param delay is the delay in milliseconds.
+     */
     public void setDelay(int delay) {
 	this.delay = delay;
     }
@@ -118,13 +134,20 @@ public class SplashScreen {
 	task.stateProperty().addListener((observableValue, oldState, newState) -> {
 	    if (newState == Worker.State.SUCCEEDED) {
 		root.setVisible(false);
-		initStage.setAlwaysOnTop(false);
+		initStage.setAlwaysOnTop(startIsAlwaysOnTop);
+		initStage.setResizable(startIsResizable);
 		startStage.accept(initStage);
 	    } // todo add code to gracefully handle other task states.
 	});
 	FXThreads.runAsync(task);
     }
 
+    /**
+     * Adds a new tasks to the startup process.
+     *
+     * @param title    is the title to be shown when this runnable runs.
+     * @param runnable is the {@link Runnable} to be added to startup procedure.
+     */
     public void addTask(String title, Runnable runnable) {
 	tasks.add(new Task<Void>() {
 	    {
@@ -139,6 +162,13 @@ public class SplashScreen {
 	});
     }
 
+    /**
+     * Adds a new tasks to the startup process.
+     *
+     * @param <T>      is the result value of the task
+     * @param title    is the title to be shown when this callable runs.
+     * @param callable is the {@link Callable} to be added to startup procedure.
+     */
     public <T> void addTask(String title, Callable<T> callable) {
 	tasks.add(new Task<T>() {
 	    {
@@ -152,6 +182,12 @@ public class SplashScreen {
 	});
     }
 
+    /**
+     * Adds a new tasks to the startup process.
+     *
+     * @param <T>  is the result value of the task
+     * @param task is the {@link Task} to be added to startup procedure.
+     */
     public <T> void addTask(Task<T> task) {
 	tasks.add(task);
     }
