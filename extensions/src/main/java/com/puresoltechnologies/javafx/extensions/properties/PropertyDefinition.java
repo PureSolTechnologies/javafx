@@ -4,64 +4,63 @@ import java.util.Optional;
 
 /**
  * This is the central interface for all preferences property definitions.
- * 
+ *
  * @author Rick-Rainer Ludwig
  *
- * @param <T>
- *            is the actual type of the property value.
+ * @param <T> is the actual type of the property value.
  */
 public interface PropertyDefinition<T> {
 
     /**
      * Returns the actual property id as known from property files and
      * {@link System#getProperty(String)}.
-     * 
-     * @return
+     *
+     * @return A {@link String} is returned.
      */
-    public String getId();
+    String getId();
 
     /**
      * Returns a user readable name of the property.
-     * 
-     * @return
+     *
+     * @return A {@link String} is returned.
      */
-    public String getName();
+    String getName();
 
     /**
      * Returns a short description to be used in tooltips.
-     * 
-     * @return
+     *
+     * @return A {@link String} is returned.
      */
-    public String getDescription();
+    String getDescription();
 
     /**
      * Returns the actual type {@link Class} of the property.
-     * 
-     * @return
+     *
+     * @return A {@link Class} is returned.
      */
-    public Class<T> getType();
+    Class<T> getType();
 
     /**
      * Returns the default value if not value can be found saved somewhere.
-     * 
-     * @return
+     *
+     * @return A object of type T is returned.
      */
-    public T getDefaultValue();
+    T getDefaultValue();
 
     /**
      * Defines whether the property is readonly or not. If is not editable, it is
      * only shown, but cannot be altered.
-     * 
-     * @return
+     *
+     * @return A boolean is returned.
      */
-    public boolean isEditable();
+    boolean isEditable();
 
     /**
      * This method returns an optiona editor in case there is no standard editor
      * available.
-     * 
-     * @return
+     *
+     * @return An {@link Optional} of {@link PropertyEditor} is returned.
      */
-    public Optional<PropertyEditor<T>> getEditor();
+    Optional<PropertyEditor<T>> getEditor();
 
 }
