@@ -1,13 +1,13 @@
 package com.puresoltechnologies.javafx.tasks;
 
 import java.io.IOException;
+import java.util.concurrent.Flow.Subscriber;
+import java.util.concurrent.Flow.Subscription;
 
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
@@ -22,15 +22,15 @@ import javafx.scene.layout.Priority;
 /**
  * This class is used for instance in status bars to show the overall status of
  * all running tasks.
- * 
+ *
  * @author Rick-Rainer Ludwig
  */
-public class TasksStatusBar extends GridPane implements AutoCloseable, Consumer<TasksSummery> {
+public class TasksStatusBar extends GridPane implements AutoCloseable, Subscriber<TasksSummery> {
 
     private final Label taskNumlabel;
     private final ProgressBar progressBar;
     private final Button openButton;
-    private final Disposable disposable;
+    private Subscription subscription;
 
     public TasksStatusBar() {
 	super();
@@ -49,7 +49,7 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Consumer<
 
 	    getChildren().addAll(taskNumlabel, progressBar, openButton);
 
-	    disposable = ReactiveFX.getStore().subscribe(TasksTopics.TASKS_SUMMARY, this);
+	    ReactiveFX.getStore().subscribe(TasksTopics.TASKS_SUMMARY, this);
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}
@@ -57,18 +57,34 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Consumer<
 
     @Override
     public void close() {
-	if (disposable != null) {
-	    disposable.dispose();
+	if (subscription != null) {
+	    subscription.cancel();
 	}
     }
 
     @Override
-    public void accept(TasksSummery summary) throws Exception {
+    public void onSubscribe(Subscription subscription) {
+	this.subscription = subscription;
+	subscription.request(Long.MAX_VALUE);
+    }
+
+    @Override
+    public void onNext(TasksSummery summary) {
 	FXThreads.runOnFXThread(() -> {
 	    taskNumlabel.setText(summary.getTaskNum() + " tasks");
 	    progressBar.setProgress(summary.getProgress());
 	    progressBar.setTooltip(new Tooltip(summary.getTaskNum() + " tasks"));
 	});
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onComplete() {
+	// TODO Auto-generated method stub
     }
 
 }

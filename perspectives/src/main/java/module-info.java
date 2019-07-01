@@ -6,7 +6,6 @@ module com.puresoltechnologies.javafx.perspectives {
     requires transitive com.puresoltechnologies.javafx.tasks;
     requires com.puresoltechnologies.javafx.utils;
 
-    requires io.reactivex.rxjava2;
     requires transitive javafx.controls;
     requires transitive javafx.graphics;
     requires transitive javafx.web;

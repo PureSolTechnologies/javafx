@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.Flow.Subscriber;
+import java.util.concurrent.Flow.Subscription;
 
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.Perspective;
@@ -14,8 +16,6 @@ import com.puresoltechnologies.javafx.tasks.TasksTopics;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
-import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 import javafx.geometry.Insets;
@@ -36,10 +36,10 @@ import javafx.scene.paint.Color;
  *
  * @author Rick-Rainer Ludwig
  */
-public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskInfo> {
+public class TaskProgressViewer extends AbstractViewer implements Subscriber<TaskInfo> {
 
     private final Map<Task<?>, TaskProgressPane<?>> taskPanes = new HashMap<>();
-    private Disposable disposable;
+    private Subscription subscription;
 
     private final BorderPane borderPane = new BorderPane();
     private final VBox vBox = new VBox();
@@ -63,13 +63,13 @@ public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskI
     public void initialize() {
 	borderPane.setCenter(scrollPane);
 	scrollPane.setFitToWidth(true);
-	disposable = ReactiveFX.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
+	ReactiveFX.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
     }
 
     @Override
     public void close() {
-	if (disposable != null) {
-	    disposable.dispose();
+	if (subscription != null) {
+	    subscription.cancel();
 	}
     }
 
@@ -79,36 +79,52 @@ public class TaskProgressViewer extends AbstractViewer implements Consumer<TaskI
     }
 
     @Override
-    public void accept(TaskInfo taskInfo) throws Exception {
+    public void onSubscribe(Subscription subscription) {
+	this.subscription = subscription;
+	subscription.request(Long.MAX_VALUE);
+    }
+
+    @Override
+    public void onNext(TaskInfo taskInfo) {
 	Task<?> task = taskInfo.getTask();
-	State state = task.getState();
-	if (state == State.READY) {
-	    if (!taskPanes.containsKey(task)) {
-		TaskProgressPane<?> pane;
-		Optional<Image> image = taskInfo.getImage();
-		if (image.isPresent()) {
-		    pane = new TaskProgressPane<>(task, image.get());
-		} else {
-		    pane = new TaskProgressPane<>(task);
-		}
-		pane.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
-			new CornerRadii(0.0, 0.0, 0.0, 0.0, false), //
-			new BorderWidths(1.0, 0.0, 1.0, 0.0, false, false, false, false), //
-			new Insets(5, 5, 5, 5))));
-		FXThreads.runOnFXThread(() -> {
+	FXThreads.runOnFXThread(() -> {
+	    State state = task.getState();
+	    if (state == State.READY) {
+		if (!taskPanes.containsKey(task)) {
+		    TaskProgressPane<?> pane;
+		    Optional<Image> image = taskInfo.getImage();
+		    if (image.isPresent()) {
+			pane = new TaskProgressPane<>(task, image.get());
+		    } else {
+			pane = new TaskProgressPane<>(task);
+		    }
+		    pane.setBorder(new Border(new BorderStroke(Color.DARKGRAY, BorderStrokeStyle.SOLID,
+			    new CornerRadii(0.0, 0.0, 0.0, 0.0, false), //
+			    new BorderWidths(1.0, 0.0, 1.0, 0.0, false, false, false, false), //
+			    new Insets(5, 5, 5, 5))));
 		    vBox.getChildren().add(pane);
 		    taskPanes.put(task, pane);
+		}
+	    } else if (state == State.SCHEDULED) {
+		// TODO
+	    } else if ((state == State.SUCCEEDED) || (state == State.FAILED) || (state == State.CANCELLED)) {
+		TaskProgressPane<?> pane = taskPanes.get(task);
+		FXThreads.runOnFXThread(() -> {
+		    vBox.getChildren().remove(pane);
+		    taskPanes.remove(task);
 		});
 	    }
-	} else if (state == State.SCHEDULED) {
-	    // TODO
-	} else if ((state == State.SUCCEEDED) || (state == State.FAILED) || (state == State.CANCELLED)) {
-	    TaskProgressPane<?> pane = taskPanes.get(task);
-	    FXThreads.runOnFXThread(() -> {
-		vBox.getChildren().remove(pane);
-		taskPanes.remove(task);
-	    });
-	}
+	});
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
+    public void onComplete() {
+	// TODO Auto-generated method stub
     }
 
 }

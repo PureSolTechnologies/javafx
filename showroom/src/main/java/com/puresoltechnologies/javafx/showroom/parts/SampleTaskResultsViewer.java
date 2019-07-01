@@ -1,6 +1,8 @@
 package com.puresoltechnologies.javafx.showroom.parts;
 
 import java.util.Optional;
+import java.util.concurrent.Flow.Subscriber;
+import java.util.concurrent.Flow.Subscription;
 
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
@@ -8,8 +10,8 @@ import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
 import com.puresoltechnologies.javafx.tasks.TaskInfo;
 import com.puresoltechnologies.javafx.tasks.TasksTopics;
+import com.puresoltechnologies.javafx.utils.FXThreads;
 
-import io.reactivex.functions.Consumer;
 import javafx.concurrent.Task;
 import javafx.concurrent.Worker.State;
 import javafx.geometry.HPos;
@@ -20,11 +22,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Text;
 
-public class SampleTaskResultsViewer extends AbstractViewer implements Consumer<TaskInfo> {
+public class SampleTaskResultsViewer extends AbstractViewer implements Subscriber<TaskInfo> {
 
     private final GridPane gridPane = new GridPane();
     private final Text text = new Text();
     private final Button clearButton = new Button("Clear");
+    private Subscription subscription;
 
     public SampleTaskResultsViewer() {
 	super("Sample Task Results", PartOpenMode.AUTO_AND_MANUAL);
@@ -47,7 +50,9 @@ public class SampleTaskResultsViewer extends AbstractViewer implements Consumer<
 
     @Override
     public void close() {
-	// intentionally left blank
+	if (subscription != null) {
+	    subscription.cancel();
+	}
     }
 
     @Override
@@ -56,13 +61,33 @@ public class SampleTaskResultsViewer extends AbstractViewer implements Consumer<
     }
 
     @Override
-    public void accept(TaskInfo taskInfo) throws Exception {
+    public void onSubscribe(Subscription subscription) {
+	this.subscription = subscription;
+	subscription.request(Long.MAX_VALUE);
+    }
+
+    @Override
+    public void onNext(TaskInfo taskInfo) {
 	Task<?> task = taskInfo.getTask();
-	State state = task.getState();
-	if ((state == State.SUCCEEDED) || (state == State.FAILED) || (state == State.CANCELLED)) {
-	    String report = text.getText();
-	    report += "'" + task.getTitle() + "' finished with: " + state.name() + ".\n";
-	    text.setText(report);
-	}
+	FXThreads.runOnFXThread(() -> {
+	    State state = task.getState();
+	    if ((state == State.SUCCEEDED) || (state == State.FAILED) || (state == State.CANCELLED)) {
+		String report = text.getText();
+		report += "'" + task.getTitle() + "' finished with: " + state.name() + ".\n";
+		text.setText(report);
+	    }
+	});
+    }
+
+    @Override
+    public void onError(Throwable throwable) {
+	// TODO Auto-generated method stub
+
+    }
+
+    @Override
+    public void onComplete() {
+	// TODO Auto-generated method stub
+
     }
 }
