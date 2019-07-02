@@ -118,7 +118,7 @@ public class PlotCanvas extends Canvas {
 
 	for (Axis<?> axis : Arrays.asList(xAxis, yAxis)) {
 	    if (!renderers.containsKey(axis)) {
-		ArrayList<Plot<?, ?, ?>> plots = new ArrayList<>();
+		List<Plot<?, ?, ?>> plots = new ArrayList<>();
 		plots.add(plot);
 		affectedPlots.put(axis, plots);
 	    } else {
@@ -126,12 +126,7 @@ public class PlotCanvas extends Canvas {
 	    }
 	    renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
 	}
-	plot.data().addListener(new ListChangeListener<Object>() {
-	    @Override
-	    public void onChanged(Change<?> change) {
-		draw();
-	    }
-	});
+	plot.data().addListener((ListChangeListener<Object>) change -> draw());
     }
 
     private void draw() {

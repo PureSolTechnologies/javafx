@@ -29,21 +29,21 @@ public class FluxStore {
 	return assurePresenceOfTopic(topic);
     }
 
-    public <T> void subscribe(Topic<T> topic, Subscriber<T> observer) {
+    public <T> void subscribe(Topic<T> topic, Subscriber<T> subscriber) {
 	SubmissionPublisher<T> subject = forTopic(topic);
 	@SuppressWarnings("unchecked")
 	T initialValue = (T) last.get(topic);
 	if (initialValue != null) {
 	    try {
-		observer.onNext(initialValue);
-		subject.subscribe(observer);
+		subscriber.onNext(initialValue);
+		subject.subscribe(subscriber);
 	    } catch (Exception e) {
 		logger.warn(
-			"Could not subscribe observer '" + observer.getClass() + "' to topic '" + topic.getId() + "'.");
+			"Could not subscribe observer '" + subscriber.getClass() + "' to topic '" + topic.getId() + "'.");
 		return;
 	    }
 	} else {
-	    subject.subscribe(observer);
+	    subject.subscribe(subscriber);
 	}
     }
 
