@@ -1,16 +1,16 @@
 package com.puresoltechnologies.javafx.charts.axes;
 
 import java.time.Instant;
-import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 
 public class AxisRendererFactory {
 
     @SuppressWarnings("unchecked")
-    public static AxisRenderer<?> forAxis(Canvas canvas, Axis<?> axis, List<Plot<?, ?, ?>> plots) {
+    public static AxisRenderer<?> forAxis(Canvas canvas, Axis<?> axis, ObservableList<Plot<?, ?, ?>> plots) {
 	Class<?> valueType = axis.getValueType();
 	if (Instant.class.isAssignableFrom(valueType)) {
 	    return new InstantAxisRenderer(canvas, (Axis<Instant>) axis, plots);

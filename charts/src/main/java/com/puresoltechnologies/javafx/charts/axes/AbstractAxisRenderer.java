@@ -1,7 +1,5 @@
 package com.puresoltechnologies.javafx.charts.axes;
 
-import java.util.List;
-
 import com.puresoltechnologies.javafx.charts.AbstractRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
@@ -10,6 +8,7 @@ import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -31,28 +30,45 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	    .getProperty(ChartsProperties.AXIS_TITLE_FONT);
 
     private final Axis<T> axis;
-    private final List<Plot<?, ?, ?>> plots;
+    private final ObservableList<Plot<?, ?, ?>> plots;
 
-    public AbstractAxisRenderer(Canvas canvas, Axis<T> axis, List<Plot<?, ?, ?>> plots) {
+    private T min = null;
+    private T max = null;
+
+    public AbstractAxisRenderer(Canvas canvas, Axis<T> axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(canvas);
 	this.axis = axis;
 	this.plots = plots;
-	plots.forEach(plot -> plot.data().addListener(new ListChangeListener<Object>() {
-	    @Override
-	    public void onChanged(Change<? extends Object> arg0) {
-		updateMinMax();
-	    }
-	}));
+	plots.addListener((ListChangeListener<Plot<?, ?, ?>>) c -> updateMinMax());
+	plots.forEach(plot -> plot.data().addListener((ListChangeListener<Object>) arg0 -> updateMinMax()));
 	updateMinMax();
     }
 
     protected abstract void updateMinMax();
 
+    protected final void setMin(T min) {
+	this.min = min;
+    }
+
+    @Override
+    public final T getMin() {
+	return min;
+    }
+
+    protected final void setMax(T max) {
+	this.max = max;
+    }
+
+    @Override
+    public final T getMax() {
+	return max;
+    }
+
     public final Axis<T> getAxis() {
 	return axis;
     }
 
-    protected final List<Plot<?, ?, ?>> getPlots() {
+    protected final ObservableList<Plot<?, ?, ?>> getPlots() {
 	return plots;
     }
 
@@ -167,11 +183,11 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	switch (axis.getAxisType()) {
 	case X:
 	    // Title
-	    gc.fillText(axisTitle, x + width / 2.0, y + height - titleText.getLayoutBounds().getHeight());
+	    gc.fillText(axisTitle, x + (width / 2.0), (y + height) - titleText.getLayoutBounds().getHeight());
 	    break;
 	case ALT_X:
 	    // Title
-	    gc.fillText(axisTitle, x + width / 2.0, y);
+	    gc.fillText(axisTitle, x + (width / 2.0), y);
 	    break;
 	case Y:
 	    // Title

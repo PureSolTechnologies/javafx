@@ -1,29 +1,16 @@
 package com.puresoltechnologies.javafx.charts.axes;
 
-import java.util.List;
-
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 
 public class OridinalAxisRenderer extends AbstractAxisRenderer<Comparable<Object>> {
 
-    public OridinalAxisRenderer(Canvas canvas, Axis<Comparable<Object>> axis, List<Plot<?, ?, ?>> plots) {
+    public OridinalAxisRenderer(Canvas canvas, Axis<Comparable<Object>> axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(canvas, axis, plots);
-    }
-
-    @Override
-    public Comparable<Object> getMin() {
-	// TODO Auto-generated method stub
-	return null;
-    }
-
-    @Override
-    public Comparable<Object> getMax() {
-	// TODO Auto-generated method stub
-	return null;
     }
 
     @Override

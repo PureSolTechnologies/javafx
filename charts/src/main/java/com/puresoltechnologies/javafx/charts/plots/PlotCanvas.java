@@ -13,7 +13,9 @@ import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -31,7 +33,7 @@ public class PlotCanvas extends Canvas {
     private final List<Axis<?>> altXAxes = new ArrayList<>();
     private final List<Axis<?>> altYAxes = new ArrayList<>();
     private final Map<Axis<?>, AxisRenderer<?>> renderers = new HashMap<>();
-    private final Map<Axis<?>, List<Plot<?, ?, ?>>> affectedPlots = new HashMap<>();
+    private final Map<Axis<?>, ObservableList<Plot<?, ?, ?>>> affectedPlots = new HashMap<>();
 
     public PlotCanvas() {
 	super();
@@ -118,7 +120,7 @@ public class PlotCanvas extends Canvas {
 
 	for (Axis<?> axis : Arrays.asList(xAxis, yAxis)) {
 	    if (!renderers.containsKey(axis)) {
-		List<Plot<?, ?, ?>> plots = new ArrayList<>();
+		ObservableList<Plot<?, ?, ?>> plots = FXCollections.observableArrayList();
 		plots.add(plot);
 		affectedPlots.put(axis, plots);
 	    } else {

@@ -11,6 +11,7 @@ import java.util.List;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -20,17 +21,15 @@ import javafx.scene.text.TextAlignment;
 public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy MMM dd\nHH:mm");
-    private Instant min = null;
-    private Instant max = null;
 
-    public InstantAxisRenderer(Canvas canvas, Axis<Instant> axis, List<Plot<?, ?, ?>> plots) {
+    public InstantAxisRenderer(Canvas canvas, Axis<Instant> axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(canvas, axis, plots);
     }
 
     @Override
     protected void updateMinMax() {
 	Axis<Instant> axis = getAxis();
-	List<Plot<?, ?, ?>> plots = getPlots();
+	ObservableList<Plot<?, ?, ?>> plots = getPlots();
 	Instant min = null;
 	Instant max = null;
 	switch (axis.getAxisType()) {
@@ -55,18 +54,8 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 	default:
 	    throw new IllegalStateException("Wrong type of axis found.");
 	}
-	this.min = min;
-	this.max = max;
-    }
-
-    @Override
-    public Instant getMin() {
-	return min;
-    }
-
-    @Override
-    public Instant getMax() {
-	return max;
+	setMin(min);
+	setMax(max);
     }
 
     @Override
@@ -80,17 +69,18 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
     @Override
     public double calculatePos(double x, double y, double width, double height, Instant value) {
 	updateMinMax(); // XXX find something more efficient
-	long maxEpochSecond = max.getEpochSecond();
-	long minEpochSecond = min.getEpochSecond();
+	long maxEpochSecond = getMax().getEpochSecond();
+	long minEpochSecond = getMin().getEpochSecond();
 	long currentEpochSecond = value.getEpochSecond();
 	AxisType axisType = getAxis().getAxisType();
 	switch (axisType) {
 	case X:
 	case ALT_X:
-	    return x + width / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
+	    return x + ((width / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond));
 	case Y:
 	case ALT_Y:
-	    return y + height - height / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
+	    return (y + height)
+		    - ((height / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond));
 	default:
 	    throw new IllegalStateException("Unknown axis type '" + axisType + "' found.");
 	}
@@ -125,14 +115,14 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 	Collections.sort(possibleTicks);
 	double position = 0.0;
 	for (Instant current : possibleTicks) {
-	    long maxEpochSecond = max.getEpochSecond();
-	    long minEpochSecond = min.getEpochSecond();
+	    long maxEpochSecond = getMax().getEpochSecond();
+	    long minEpochSecond = getMin().getEpochSecond();
 	    long currentEpochSecond = current.getEpochSecond();
 	    double currentPosition;
 	    switch (axisType) {
 	    case X:
-		currentPosition = width / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
-		if ((currentPosition - position < MIN_DISTANCE) && (position > 0.0)) {
+		currentPosition = (width / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
+		if (((currentPosition - position) < MIN_DISTANCE) && (position > 0.0)) {
 		    continue;
 		}
 		position = currentPosition;
@@ -147,52 +137,53 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 			y + AXIS_THICKNESS);
 		break;
 	    case ALT_X:
-		currentPosition = width / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
-		if (currentPosition - position < MIN_DISTANCE) {
+		currentPosition = (width / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
+		if ((currentPosition - position) < MIN_DISTANCE) {
 		    continue;
 		}
 		position = currentPosition;
 		gc.setStroke(axisColor.get());
 		gc.setFill(axisColor.get());
-		gc.strokeLine(x + position, y + height, x + position, y + height - AXIS_THICKNESS);
+		gc.strokeLine(x + position, y + height, x + position, (y + height) - AXIS_THICKNESS);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
 		gc.setStroke(axisLabelFont.get().getColor());
 		gc.setFill(axisLabelFont.get().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + position,
-			y + height - AXIS_THICKNESS);
+			(y + height) - AXIS_THICKNESS);
 		break;
 	    case Y:
-		currentPosition = height / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
-		if (currentPosition - position < MIN_DISTANCE) {
+		currentPosition = (height / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
+		if ((currentPosition - position) < MIN_DISTANCE) {
 		    continue;
 		}
 		position = currentPosition;
 		gc.setStroke(axisColor.get());
 		gc.setFill(axisColor.get());
-		gc.strokeLine(x + width - AXIS_THICKNESS, y + height - position, x + width, y + height - position);
+		gc.strokeLine((x + width) - AXIS_THICKNESS, (y + height) - position, x + width,
+			(y + height) - position);
 		gc.setTextAlign(TextAlignment.RIGHT);
 		gc.setTextBaseline(VPos.CENTER);
 		gc.setStroke(axisLabelFont.get().getColor());
 		gc.setFill(axisLabelFont.get().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))),
-			x + width - AXIS_THICKNESS, y + height - position);
+			(x + width) - AXIS_THICKNESS, (y + height) - position);
 		break;
 	    case ALT_Y:
-		currentPosition = height / (maxEpochSecond - minEpochSecond) * (currentEpochSecond - minEpochSecond);
-		if (currentPosition - position < MIN_DISTANCE) {
+		currentPosition = (height / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
+		if ((currentPosition - position) < MIN_DISTANCE) {
 		    continue;
 		}
 		position = currentPosition;
 		gc.setStroke(axisColor.get());
 		gc.setFill(axisColor.get());
-		gc.strokeLine(x, y + height - position, x + AXIS_THICKNESS, y + height - position);
+		gc.strokeLine(x, (y + height) - position, x + AXIS_THICKNESS, (y + height) - position);
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.CENTER);
 		gc.setStroke(axisLabelFont.get().getColor());
 		gc.setFill(axisLabelFont.get().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + AXIS_THICKNESS,
-			y + height - position);
+			(y + height) - position);
 		break;
 	    }
 	}

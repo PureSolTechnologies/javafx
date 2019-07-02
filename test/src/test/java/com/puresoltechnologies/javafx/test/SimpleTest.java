@@ -46,7 +46,7 @@ public class SimpleTest extends OpenJFXTest {
 
     @BeforeEach
     public void wait2sec() throws InterruptedException {
-	Thread.sleep(2000);
+	Thread.sleep(1000);
     }
 
     @Test
@@ -60,9 +60,9 @@ public class SimpleTest extends OpenJFXTest {
     @Test
     public void test2() throws InterruptedException {
 	System.out.println("=== FileMenu ===");
-	getMenuByText("_File").click();
+	findMenuByText("_File").click();
 	System.out.println("=== ExitItem ===");
-	getMenuByText("E_xit").click();
+	findMenuByText("E_xit").click();
     }
 
     @Test

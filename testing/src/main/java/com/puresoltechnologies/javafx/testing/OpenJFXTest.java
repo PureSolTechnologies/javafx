@@ -13,6 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 
 import com.puresoltechnologies.javafx.testing.mouse.MouseInteraction;
 import com.puresoltechnologies.javafx.testing.select.ButtonSelector;
+import com.puresoltechnologies.javafx.testing.select.DialogSelector;
 import com.puresoltechnologies.javafx.testing.select.MenuSelector;
 import com.puresoltechnologies.javafx.testing.select.NodeFullSearch;
 
@@ -21,7 +22,8 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
-public abstract class OpenJFXTest implements NodeFullSearch, MouseInteraction, ButtonSelector, MenuSelector {
+public abstract class OpenJFXTest
+	implements NodeFullSearch, MouseInteraction, ButtonSelector, MenuSelector, DialogSelector {
 
     @BeforeAll
     public static void startJavaFX() throws InterruptedException {
@@ -75,7 +77,7 @@ public abstract class OpenJFXTest implements NodeFullSearch, MouseInteraction, B
 	assertFalse(Platform.isFxApplicationThread(), "FX thread is not correct here.");
 	System.out.println("Destroying stages...");
 	try {
-	    ObservableList<Window> windows = Stage.getWindows();
+	    ObservableList<Window> windows = Window.getWindows();
 
 	    CountDownLatch latch = new CountDownLatch(windows.size() + 1);
 	    windows.stream().filter(window -> Stage.class.isAssignableFrom(window.getClass())) //

@@ -4,9 +4,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.MenuButton;
 import javafx.scene.layout.Region;
 
-public interface MenuSelector extends NodeFullSearch {
+public interface MenuSelector extends NodeSearch {
 
-    default Selection<?> getMenuById(String id) {
+    default Selection<?> findMenuById(String id) {
 	Selection<MenuButton> button = findNodeById(MenuButton.class, id);
 	if (button != null) {
 	    return button;
@@ -18,7 +18,7 @@ public interface MenuSelector extends NodeFullSearch {
 	return null;
     }
 
-    default Selection<?> getMenuByText(String text) {
+    default Selection<?> findMenuByText(String text) {
 	Selection<MenuButton> button = findNodeByText(MenuButton.class, text);
 	if (button != null) {
 	    return button;

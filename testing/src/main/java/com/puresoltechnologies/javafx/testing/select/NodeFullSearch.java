@@ -26,6 +26,9 @@ public interface NodeFullSearch extends NodeSearch {
     default List<Node> findNodesInScene(Scene scene, Predicate<Node> filter) {
 	List<Node> nodes = new ArrayList<>();
 	Parent rootNode = scene.getRoot();
+	if (filter.test(rootNode)) {
+	    nodes.add(rootNode);
+	}
 	addAllChildren(rootNode, nodes, filter);
 	return nodes;
     }

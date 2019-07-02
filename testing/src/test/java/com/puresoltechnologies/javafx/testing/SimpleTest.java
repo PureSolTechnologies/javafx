@@ -50,7 +50,7 @@ public class SimpleTest extends OpenJFXTest {
     public void test() throws InterruptedException {
 	Selection<Label> label = findNodeById(Label.class, "test.label");
 	assertTrue(label.isPresent());
-	Selection<Button> button = getButtonById("test.button");
+	Selection<Button> button = findButtonById("test.button");
 	assertTrue(button.isPresent());
 	click("#test.button");
 	Thread.sleep(3000);

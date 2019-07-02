@@ -7,6 +7,7 @@ import java.util.List;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
+import javafx.collections.ObservableList;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,17 +16,14 @@ import javafx.scene.text.TextAlignment;
 
 public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 
-    private Double min = null;
-    private Double max = null;
-
-    public NumberAxisRenderer(Canvas canvas, Axis<Number> axis, List<Plot<?, ?, ?>> plots) {
+    public NumberAxisRenderer(Canvas canvas, Axis<Number> axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(canvas, axis, plots);
     }
 
     @Override
     protected void updateMinMax() {
 	Axis<Number> axis = getAxis();
-	List<Plot<?, ?, ?>> plots = getPlots();
+	ObservableList<Plot<?, ?, ?>> plots = getPlots();
 	Double min = null;
 	Double max = null;
 	switch (axis.getAxisType()) {
@@ -50,23 +48,18 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	default:
 	    throw new IllegalStateException("Wrong type of axis found.");
 	}
-	this.min = min;
-	this.max = max;
-    }
-
-    @Override
-    public Double getMin() {
-	return min;
-    }
-
-    @Override
-    public Double getMax() {
-	return max;
+	setMin(min);
+	setMax(max);
     }
 
     @Override
     public double calculatePos(double x, double y, double width, double height, Number value) {
-	return super.calculatePos(x, y, width, height, min, max, value.doubleValue());
+	double d = value.doubleValue();
+	if ((getMin() != null) && (getMax() != null)) {
+	    return super.calculatePos(x, y, width, height, getMin().doubleValue(), getMax().doubleValue(), d);
+	} else {
+	    return super.calculatePos(x, y, width, height, d, d, d);
+	}
     }
 
     @Override
