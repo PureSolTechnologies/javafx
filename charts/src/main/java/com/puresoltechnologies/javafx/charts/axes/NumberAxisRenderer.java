@@ -88,8 +88,8 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	case ALT_X:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
 		for (Object value : plot.getData()) {
-		    Double i = ((AbstractPlot<Double, ?, Object>) plot).getAxisX(value);
-		    possibleTicks.add(i);
+		    Number i = (Number) ((AbstractPlot<?, ?, Object>) plot).getAxisX(value);
+		    possibleTicks.add(i.doubleValue());
 		}
 	    }
 	    break;
