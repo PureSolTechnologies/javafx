@@ -59,11 +59,15 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Subscribe
     public void close() {
 	if (subscription != null) {
 	    subscription.cancel();
+	    subscription = null;
 	}
     }
 
     @Override
     public void onSubscribe(Subscription subscription) {
+	if (this.subscription != null) {
+	    this.subscription.cancel();
+	}
 	this.subscription = subscription;
 	subscription.request(Long.MAX_VALUE);
     }
@@ -79,12 +83,12 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Subscribe
 
     @Override
     public void onError(Throwable throwable) {
-	// TODO Auto-generated method stub
+	// TODO
     }
 
     @Override
     public void onComplete() {
-	// TODO Auto-generated method stub
+	// Intentionally left blank
     }
 
 }

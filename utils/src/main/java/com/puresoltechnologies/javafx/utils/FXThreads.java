@@ -4,7 +4,10 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javafx.application.Platform;
 
@@ -16,7 +19,16 @@ public class FXThreads {
 	if (threadPool != null) {
 	    throw new IllegalStateException("FXThreads was already initialized.");
 	}
-	threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+	threadPool = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors(), new ThreadFactory() {
+
+	    private final AtomicInteger count = new AtomicInteger(0);
+
+	    @Override
+	    public Thread newThread(Runnable r) {
+		int id = count.incrementAndGet();
+		return new Thread(r, "FXThreads-pool-thread-" + id);
+	    }
+	});
     }
 
     public static synchronized void shutdown() throws InterruptedException {
@@ -51,8 +63,15 @@ public class FXThreads {
 	}
     }
 
-    public static void runAsync(Runnable runnable) {
-	threadPool.execute(runnable);
+    public static <V> Future<V> runAsync(FutureTask<V> runnable) {
+	return runAsync(() -> {
+	    runnable.run();
+	    return runnable.get();
+	});
+    }
+
+    public static Future<?> runAsync(Runnable runnable) {
+	return threadPool.submit(runnable);
     }
 
     public static <V> Future<V> runAsync(Callable<V> callable) {

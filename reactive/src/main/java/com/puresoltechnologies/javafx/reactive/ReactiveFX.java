@@ -1,6 +1,6 @@
 package com.puresoltechnologies.javafx.reactive;
 
-public class ReactiveFX {
+public class ReactiveFX implements AutoCloseable {
 
     private static ReactiveFX instance = null;
 
@@ -12,6 +12,7 @@ public class ReactiveFX {
     }
 
     public static void shutdown() {
+	instance.close();
 	instance = null;
     }
 
@@ -21,4 +22,15 @@ public class ReactiveFX {
 
     private final FluxStore store = new FluxStore();
 
+    /**
+     * Private constructor to avoid accidental instantiation and to ensure
+     * singleton.
+     */
+    private ReactiveFX() {
+    }
+
+    @Override
+    public void close() {
+	store.close();
+    }
 }

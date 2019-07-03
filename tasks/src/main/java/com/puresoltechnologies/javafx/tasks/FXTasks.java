@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.tasks;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 
 import com.puresoltechnologies.javafx.reactive.FluxStore;
 import com.puresoltechnologies.javafx.reactive.ReactiveFX;
@@ -15,17 +16,17 @@ public class FXTasks {
 
     private static final List<Task<?>> runningTasks = new ArrayList<>();
 
-    public static <T> Task<T> run(Task<T> task) {
+    public static <T> Future<T> run(Task<T> task) {
 	TaskInfo taskInfo = new TaskInfo(task);
 	return run(task, taskInfo);
     }
 
-    public static <T> Task<T> run(Task<T> task, Image image) {
+    public static <T> Future<T> run(Task<T> task, Image image) {
 	TaskInfo taskInfo = new TaskInfo(task, image);
 	return run(task, taskInfo);
     }
 
-    private static <T> Task<T> run(Task<T> task, TaskInfo taskInfo) {
+    private static <T> Future<T> run(Task<T> task, TaskInfo taskInfo) {
 	FluxStore fluxStore = ReactiveFX.getStore();
 	fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	task.stateProperty().addListener((observable, oldValue, newValue) -> {
@@ -35,8 +36,7 @@ public class FXTasks {
 	    fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	});
 	registerNewTask(task);
-	FXThreads.runAsync(task);
-	return task;
+	return FXThreads.runAsync(task);
     }
 
     private static void registerNewTask(Task<?> task) {

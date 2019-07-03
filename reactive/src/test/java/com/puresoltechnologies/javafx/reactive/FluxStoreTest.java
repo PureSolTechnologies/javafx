@@ -19,6 +19,8 @@ public class FluxStoreTest {
 
     private final Topic<Integer> topic = new Topic<>("test.counter", Integer.class);
 
+    private Subscriber<Integer> subscriber;
+
     @BeforeEach
     public void initialize() {
 	ReactiveFX.initialize();
@@ -122,5 +124,48 @@ public class FluxStoreTest {
 	    verify(subscriber2, times(1)).onNext(i);
 	    verify(subscriber3, times(1)).onNext(i);
 	}
+    }
+
+    @Test
+    public void testGetLastMessage() throws InterruptedException {
+	Subscriber<Integer> subscriber1 = createSubscriber();
+	Subscriber<Integer> subscriber2 = createSubscriber();
+
+	FluxStore store = ReactiveFX.getStore();
+	store.subscribe(topic, subscriber1);
+
+	for (int i = 0; i < 10; i++) {
+	    store.publish(topic, i);
+	}
+
+	Awaitility.await("Wait for delivery of message.") //
+		.atMost(1, TimeUnit.SECONDS)//
+		.pollInterval(10, TimeUnit.MILLISECONDS)//
+		.until(() -> {
+		    try {
+			verify(subscriber1, times(10)).onNext(any());
+			return true;
+		    } catch (Throwable e) {
+			return false;
+		    }
+		});
+
+	for (int i = 0; i < 10; i++) {
+	    verify(subscriber1, times(1)).onNext(i);
+	}
+
+	store.subscribe(topic, subscriber2);
+	Awaitility.await("Wait for delivery of message.") //
+		.atMost(1, TimeUnit.SECONDS)//
+		.pollInterval(10, TimeUnit.MILLISECONDS)//
+		.until(() -> {
+		    try {
+			verify(subscriber1, times(1)).onNext(9);
+			return true;
+		    } catch (Throwable e) {
+			return false;
+		    }
+		});
+
     }
 }

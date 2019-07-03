@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
 import java.util.function.Consumer;
 
 import com.puresoltechnologies.javafx.extensions.StatusBar;
@@ -11,7 +12,6 @@ import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.concurrent.Task;
-import javafx.concurrent.Worker;
 import javafx.geometry.Bounds;
 import javafx.geometry.HPos;
 import javafx.geometry.Rectangle2D;
@@ -106,7 +106,6 @@ public class SplashScreen {
     }
 
     public void startApplication() {
-	// startStage.accept(initStage);
 	initStage.show();
 	Task<Void> task = new Task<>() {
 	    @Override
@@ -132,12 +131,32 @@ public class SplashScreen {
 	    }
 	};
 	task.stateProperty().addListener((observableValue, oldState, newState) -> {
-	    if (newState == Worker.State.SUCCEEDED) {
+	    switch (newState) {
+	    case SUCCEEDED:
 		root.setVisible(false);
 		initStage.setAlwaysOnTop(startIsAlwaysOnTop);
 		initStage.setResizable(startIsResizable);
 		startStage.accept(initStage);
-	    } // todo add code to gracefully handle other task states.
+		break;
+	    case CANCELLED:
+	    case FAILED:
+		try {
+		    task.get();
+		    throw new RuntimeException("Application startup failed for unknown reason.");
+		} catch (InterruptedException e) {
+		    throw new RuntimeException("Application startup was cancelled.", e);
+		} catch (ExecutionException e) {
+		    /*
+		     * We do two getCause() next to get the actual Exception. We need to skip the
+		     * ExecutionException of this task and the splash step task.
+		     */
+		    throw new RuntimeException("Application startup failed.", e.getCause().getCause());
+		} finally {
+		    initStage.close();
+		}
+	    default:
+		break;
+	    }
 	});
 	FXThreads.runAsync(task);
     }
