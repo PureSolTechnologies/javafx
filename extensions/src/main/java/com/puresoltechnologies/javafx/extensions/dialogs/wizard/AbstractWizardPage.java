@@ -49,7 +49,7 @@ public abstract class AbstractWizardPage<T> implements WizardPage<T> {
 	this.data = data;
     }
 
-    public T getData() {
+    protected T getData() {
 	return data;
     }
 
@@ -68,11 +68,12 @@ public abstract class AbstractWizardPage<T> implements WizardPage<T> {
 	return image;
     }
 
+    @Override
     public final boolean canProceed() {
 	return canProceedProperty.get();
     }
 
-    public final void setCanProceed(boolean canProcees) {
+    protected final void setCanProceed(boolean canProcees) {
 	canProceedProperty.set(canProcees);
     }
 
@@ -81,11 +82,12 @@ public abstract class AbstractWizardPage<T> implements WizardPage<T> {
 	return canProceedProperty;
     }
 
+    @Override
     public final boolean canFinish() {
 	return canFinishProperty.get();
     }
 
-    public final void setCanFinish(boolean canFinish) {
+    protected final void setCanFinish(boolean canFinish) {
 	canFinishProperty.set(canFinish);
     }
 

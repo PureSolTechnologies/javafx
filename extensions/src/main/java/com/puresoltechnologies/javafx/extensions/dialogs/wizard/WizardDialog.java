@@ -17,6 +17,7 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -127,13 +128,16 @@ public class WizardDialog<T> extends Dialog<T> {
     }
 
     private void setDialogHeader(WizardPage<T> page) {
+	setTitle(page.getTitle());
 	header.setTitle(page.getTitle());
 	Optional<String> description = page.getDescription();
 	if (description.isPresent()) {
+	    setHeaderText(page.getDescription().get());
 	    header.setDescription(description.get());
 	}
 	Optional<Image> image = page.getImage();
 	if (image.isPresent()) {
+	    setGraphic(new ImageView(image.get()));
 	    header.setImage(image.get());
 	}
     }

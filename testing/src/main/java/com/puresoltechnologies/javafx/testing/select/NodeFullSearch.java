@@ -14,9 +14,10 @@ public interface NodeFullSearch extends NodeSearch {
 
     @Override
     default List<Node> findNodes(Predicate<Node> filter) {
+	System.err.println("find nodes...");
 	return Window.getWindows().stream() //
 		.map(window -> {
-		    System.out.println("window: " + window.getClass().getName());
+		    System.err.println("window: " + window.getClass().getName());
 		    return findNodesInScene(window.getScene(), filter);
 		}) //
 		.flatMap(nodeList -> nodeList.stream()) //
@@ -24,6 +25,7 @@ public interface NodeFullSearch extends NodeSearch {
     }
 
     default List<Node> findNodesInScene(Scene scene, Predicate<Node> filter) {
+	System.err.println("scene...");
 	List<Node> nodes = new ArrayList<>();
 	Parent rootNode = scene.getRoot();
 	if (filter.test(rootNode)) {
