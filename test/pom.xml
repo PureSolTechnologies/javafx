@@ -9,6 +9,7 @@
 	</parent>
 
 	<artifactId>test</artifactId>
+	<packaging>pom</packaging>
 
 	<name>${officalName} - ${project.artifactId}</name>
 
