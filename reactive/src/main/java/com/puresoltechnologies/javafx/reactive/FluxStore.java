@@ -2,11 +2,12 @@ package com.puresoltechnologies.javafx.reactive;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.SubmissionPublisher;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,24 +18,25 @@ public class FluxStore implements AutoCloseable {
 
     private final Map<Topic<?>, SubmissionPublisher<?>> subjects = new HashMap<>();
 
+    private final ExecutorService executorService;
+
     FluxStore() {
+	executorService = Executors.newCachedThreadPool(new ThreadFactory() {
+	    private final AtomicInteger id = new AtomicInteger(0);
+
+	    @Override
+	    public Thread newThread(Runnable target) {
+		return new Thread(target, "FluxStore-thread-" + id.incrementAndGet());
+	    }
+	});
     }
 
     @Override
     public void close() {
 	subjects.values().forEach(subject -> {
-	    /*
-	     * Workaround: The SubmissionPublisher does not shutdown the ExecuterServices in
-	     * the background. Because of that, the application shutdown is delayed.
-	     *
-	     * In the next two lines, the executor is retrieved and explicitly shutdown.
-	     */
-	    Executor executor = subject.getExecutor();
-	    if (ExecutorService.class.isAssignableFrom(executor.getClass())) {
-		((ExecutorService) executor).shutdownNow();
-	    }
 	    subject.close();
 	});
+	executorService.shutdownNow();
 	subjects.clear();
     }
 
@@ -59,7 +61,7 @@ public class FluxStore implements AutoCloseable {
 	    synchronized (subjects) {
 		subject = (SubmissionPublisher<T>) subjects.get(topic);
 		if (subject == null) {
-		    subject = new SubmissionPublisher<>(Executors.newCachedThreadPool(), 1);
+		    subject = new SubmissionPublisher<>(executorService, 1);
 		    subjects.put(topic, subject);
 		}
 	    }
