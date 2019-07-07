@@ -54,12 +54,12 @@ public class WizardDialog<T> extends Dialog<T> {
 	stepListView.setEditable(false);
 	stepListView.setDisable(true);
 
+	content.setPadding(Insets.EMPTY);
 	content.setTop(header);
 	content.setLeft(stepListView);
 
 	DialogPane dialogPane = getDialogPane();
 	dialogPane.setContent(content);
-	dialogPane.setPadding(new Insets(0));
 
 	ObservableList<ButtonType> buttonTypes = dialogPane.getButtonTypes();
 	buttonTypes.addAll(ButtonType.PREVIOUS, ButtonType.NEXT, ButtonType.FINISH, ButtonType.CANCEL);

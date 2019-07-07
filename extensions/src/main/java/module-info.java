@@ -4,17 +4,17 @@ module com.puresoltechnologies.javafx.extensions {
 
     requires com.github.spotbugs.annotations;
     requires transitive javafx.controls;
-    requires javafx.graphics;
+    requires transitive javafx.graphics;
     requires slf4j.api;
 
     exports com.puresoltechnologies.javafx.extensions;
     exports com.puresoltechnologies.javafx.extensions.dialogs;
     exports com.puresoltechnologies.javafx.extensions.dialogs.wizard;
+    exports com.puresoltechnologies.javafx.extensions.dialogs.procedure;
     exports com.puresoltechnologies.javafx.extensions.fonts;
     exports com.puresoltechnologies.javafx.extensions.menu;
     exports com.puresoltechnologies.javafx.extensions.properties;
     exports com.puresoltechnologies.javafx.extensions.splash;
-    exports com.puresoltechnologies.javafx.extensions.stepinterface;
     exports com.puresoltechnologies.javafx.extensions.toolbar;
 
     opens com.puresoltechnologies.javafx.extensions.icons;

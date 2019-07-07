@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.extensions.stepinterface;
+package com.puresoltechnologies.javafx.extensions.dialogs.procedure;
 
 import javafx.scene.Parent;
 

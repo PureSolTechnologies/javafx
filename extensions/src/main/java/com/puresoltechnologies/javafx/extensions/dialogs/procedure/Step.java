@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.extensions.stepinterface;
+package com.puresoltechnologies.javafx.extensions.dialogs.procedure;
 
 /**
  * This class represents a single step for the step interface.

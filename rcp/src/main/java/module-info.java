@@ -1,4 +1,5 @@
 module com.puresoltechnologies.javafx.rcp {
+
     requires transitive com.puresoltechnologies.javafx.extensions;
     requires transitive com.puresoltechnologies.javafx.perspectives;
     requires transitive com.puresoltechnologies.javafx.preferences;
@@ -7,4 +8,5 @@ module com.puresoltechnologies.javafx.rcp {
     requires transitive com.puresoltechnologies.javafx.tasks;
     requires transitive com.puresoltechnologies.javafx.utils;
     requires transitive com.puresoltechnologies.javafx.workspaces;
+
 }
