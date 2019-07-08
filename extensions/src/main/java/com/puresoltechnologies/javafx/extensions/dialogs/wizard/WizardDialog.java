@@ -62,7 +62,7 @@ public class WizardDialog<T> extends Dialog<T> {
 	dialogPane.setContent(content);
 
 	ObservableList<ButtonType> buttonTypes = dialogPane.getButtonTypes();
-	buttonTypes.addAll(ButtonType.PREVIOUS, ButtonType.NEXT, ButtonType.FINISH, ButtonType.CANCEL);
+	buttonTypes.addAll(ButtonType.CANCEL, ButtonType.PREVIOUS, ButtonType.NEXT, ButtonType.FINISH);
 	previousButton = (Button) dialogPane.lookupButton(ButtonType.PREVIOUS);
 	previousButton.addEventFilter(ActionEvent.ACTION, event -> goBack(event));
 	nextButton = (Button) dialogPane.lookupButton(ButtonType.NEXT);
@@ -72,12 +72,8 @@ public class WizardDialog<T> extends Dialog<T> {
 	cancelButton = (Button) dialogPane.lookupButton(ButtonType.CANCEL);
 	cancelButton.addEventFilter(ActionEvent.ACTION, event -> cancel(event));
 
-	setOnHidden(event -> {
-	    cleanup();
-	    event.consume();
-	});
-
 	setResultConverter(type -> {
+	    cleanup(type);
 	    if (type == ButtonType.OK) {
 		return getData();
 	    } else {
@@ -169,15 +165,14 @@ public class WizardDialog<T> extends Dialog<T> {
 	}
     }
 
-    private void cleanup() {
+    private void cleanup(ButtonType type) {
 	if (currentPageId >= 0) {
 	    WizardPage<T> currentPage = pages.get(currentPageId);
 	    if (currentPage != null) {
 		currentPage.onLeave();
 	    }
 	}
-
-	pages.forEach(page -> page.close());
+	pages.forEach(page -> page.close(type));
     }
 
 }

@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.test.extensions.dialogs.wizard;
 import com.puresoltechnologies.javafx.extensions.dialogs.wizard.AbstractWizardPage;
 
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 
 public class TestWizardPage1 extends AbstractWizardPage<TestWizardResult> {
@@ -27,7 +28,7 @@ public class TestWizardPage1 extends AbstractWizardPage<TestWizardResult> {
     }
 
     @Override
-    public void close() {
+    public void close(ButtonType type) {
 	// Intentionally left empty.
     }
 

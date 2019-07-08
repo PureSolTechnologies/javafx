@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.image.Image;
 
 /**
@@ -14,7 +15,7 @@ import javafx.scene.image.Image;
  *
  * @param <T> is the return type for the {@link WizardDialog}.
  */
-public interface WizardPage<T> extends AutoCloseable {
+public interface WizardPage<T> {
 
     /**
      * This method is used to set the reference to the result object for
@@ -81,9 +82,10 @@ public interface WizardPage<T> extends AutoCloseable {
     /**
      * This method is called just before the {@link WizardDialog} is closed to free
      * resources.
+     * 
+     * @param type
      */
-    @Override
-    void close();
+    void close(ButtonType type);
 
     /**
      * This method is called by {@link WizardDialog} every time the page is shown.

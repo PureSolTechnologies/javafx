@@ -5,6 +5,7 @@ import com.puresoltechnologies.javafx.extensions.dialogs.wizard.AbstractWizardPa
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.CheckBox;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
@@ -39,7 +40,7 @@ public class ExampleWizardPage2 extends AbstractWizardPage<ExampleWizardData> {
     }
 
     @Override
-    public void close() {
+    public void close(ButtonType type) {
 	// Intentionally left empty.
     }
 
