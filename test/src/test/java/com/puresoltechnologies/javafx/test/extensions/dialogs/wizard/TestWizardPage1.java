@@ -21,4 +21,23 @@ public class TestWizardPage1 extends AbstractWizardPage<TestWizardResult> {
 	return textArea;
     }
 
+    @Override
+    public void initialize() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void close() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void onArrival() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void onLeave() {
+	// Intentionally left empty.
+    }
 }

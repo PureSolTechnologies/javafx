@@ -91,7 +91,7 @@
 		<!-- Versions -->
 		<streaming.version>2.0.0</streaming.version>
 		<graphs.version>2.0.1</graphs.version>
-		<openjfx.version>11</openjfx.version>
+		<openjfx.version>11.0.2</openjfx.version>
 		<jdk.version>11.0.2</jdk.version>
 		<org.slf4j.version>1.7.26</org.slf4j.version>
 		<org.openjdk.jmh.version>1.21</org.openjdk.jmh.version>

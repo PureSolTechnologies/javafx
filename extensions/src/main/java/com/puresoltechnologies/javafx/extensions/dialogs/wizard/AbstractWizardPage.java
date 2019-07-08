@@ -16,8 +16,8 @@ public abstract class AbstractWizardPage<T> implements WizardPage<T> {
     private final String title;
     private final Optional<String> description;
     private final Optional<Image> image;
-    private final SimpleBooleanProperty canProceedProperty = new SimpleBooleanProperty();
-    private final SimpleBooleanProperty canFinishProperty = new SimpleBooleanProperty();
+    private final SimpleBooleanProperty canProceedProperty = new SimpleBooleanProperty(false);
+    private final SimpleBooleanProperty canFinishProperty = new SimpleBooleanProperty(false);
 
     private T data;
 
@@ -49,7 +49,7 @@ public abstract class AbstractWizardPage<T> implements WizardPage<T> {
 	this.data = data;
     }
 
-    protected T getData() {
+    protected final T getData() {
 	return data;
     }
 

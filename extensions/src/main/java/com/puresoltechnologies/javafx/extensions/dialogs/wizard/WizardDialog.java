@@ -71,6 +71,23 @@ public class WizardDialog<T> extends Dialog<T> {
 	finishButton.addEventFilter(ActionEvent.ACTION, event -> finish(event));
 	cancelButton = (Button) dialogPane.lookupButton(ButtonType.CANCEL);
 	cancelButton.addEventFilter(ActionEvent.ACTION, event -> cancel(event));
+
+	setOnHidden(event -> {
+	    cleanup();
+	    event.consume();
+	});
+
+	setResultConverter(type -> {
+	    if (type == ButtonType.OK) {
+		return getData();
+	    } else {
+		return null;
+	    }
+	});
+    }
+
+    public T getData() {
+	return data;
     }
 
     private void goBack(ActionEvent event) {
@@ -95,6 +112,7 @@ public class WizardDialog<T> extends Dialog<T> {
 
     public final void addPage(WizardPage<T> page) {
 	page.setData(data);
+	page.initialize();
 	pages.add(page);
 	stepTitleList.add(page.getTitle());
 	if (pages.size() == 1) {
@@ -105,6 +123,13 @@ public class WizardDialog<T> extends Dialog<T> {
     }
 
     private void setCurrentPage(int pageId) {
+	if (currentPageId >= 0) {
+	    WizardPage<T> currentPage = pages.get(currentPageId);
+	    if (currentPage != null) {
+		currentPage.onLeave();
+	    }
+	}
+
 	WizardPage<T> page = pages.get(pageId);
 	if (pageId == 0) {
 	    previousButton.setVisible(false);
@@ -120,6 +145,8 @@ public class WizardDialog<T> extends Dialog<T> {
 	nextButton.disableProperty().bind(page.canProceedProperty().not());
 	finishButton.disableProperty().unbind();
 	finishButton.disableProperty().bind(page.canFinishProperty().not());
+
+	page.onArrival();
 
 	content.setCenter(page.getNode());
 	stepListView.getSelectionModel().select(pageId);
@@ -142,7 +169,15 @@ public class WizardDialog<T> extends Dialog<T> {
 	}
     }
 
-    public void test() {
-	show();
+    private void cleanup() {
+	if (currentPageId >= 0) {
+	    WizardPage<T> currentPage = pages.get(currentPageId);
+	    if (currentPage != null) {
+		currentPage.onLeave();
+	    }
+	}
+
+	pages.forEach(page -> page.close());
     }
+
 }

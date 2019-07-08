@@ -14,7 +14,7 @@ import javafx.scene.image.Image;
  *
  * @param <T> is the return type for the {@link WizardDialog}.
  */
-public interface WizardPage<T> {
+public interface WizardPage<T> extends AutoCloseable {
 
     /**
      * This method is used to set the reference to the result object for
@@ -71,4 +71,27 @@ public interface WizardPage<T> {
      * @return A {@link BooleanProperty} is returned.
      */
     BooleanProperty canFinishProperty();
+
+    /**
+     * This method is called after this page was added to {@link WizardDialog}. The
+     * reference to the data was provided before.
+     */
+    void initialize();
+
+    /**
+     * This method is called just before the {@link WizardDialog} is closed to free
+     * resources.
+     */
+    @Override
+    void close();
+
+    /**
+     * This method is called by {@link WizardDialog} every time the page is shown.
+     */
+    void onArrival();
+
+    /**
+     * This method is called by {@link WizardDialog} every time the page is left.
+     */
+    void onLeave();
 }

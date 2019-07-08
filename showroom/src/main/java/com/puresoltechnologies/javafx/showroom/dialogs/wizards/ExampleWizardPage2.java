@@ -32,4 +32,24 @@ public class ExampleWizardPage2 extends AbstractWizardPage<ExampleWizardData> {
     public Node getNode() {
 	return gridPane;
     }
+
+    @Override
+    public void initialize() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void close() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void onArrival() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void onLeave() {
+	// Intentionally left empty.
+    }
 }

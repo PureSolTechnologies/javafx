@@ -21,4 +21,23 @@ public class TestWizardPage2 extends AbstractWizardPage<TestWizardResult> {
 	return slider;
     }
 
+    @Override
+    public void initialize() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void close() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void onArrival() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void onLeave() {
+	// Intentionally left empty.
+    }
 }
