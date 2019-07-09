@@ -11,7 +11,7 @@ import com.puresoltechnologies.javafx.perspectives.menu.PerspectiveMenu;
 import com.puresoltechnologies.javafx.perspectives.menu.ShowPartMenuItem;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.preferences.menu.PreferencesMenuItem;
-import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.javafx.reactive.MessageBroker;
 import com.puresoltechnologies.javafx.services.ServiceException;
 import com.puresoltechnologies.javafx.services.Services;
 import com.puresoltechnologies.javafx.services.menu.ServiceControlMenuItem;
@@ -87,7 +87,7 @@ public class ShowRoom extends Application {
 	    return null;
 	});
 	splashScreen.addTask("Initialize perspectives", () -> PerspectiveService.initialize());
-	splashScreen.addTask("Initialize reactive Java", () -> ReactiveFX.initialize());
+	splashScreen.addTask("Initialize reactive Java", () -> MessageBroker.initialize());
 	splashScreen.addTask("Initialize services", () -> {
 	    try {
 		Services.initialize();
@@ -143,7 +143,7 @@ public class ShowRoom extends Application {
 
     @Override
     public void stop() {
-	ReactiveFX.shutdown();
+	MessageBroker.shutdown();
 	PerspectiveService.shutdown();
 	Preferences.shutdown();
 	try {

@@ -15,7 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class FluxStoreTest {
+public class BrokerTest {
 
     private final Topic<Integer> topic = new Topic<>("test.counter", Integer.class);
 
@@ -23,12 +23,12 @@ public class FluxStoreTest {
 
     @BeforeEach
     public void initialize() {
-	ReactiveFX.initialize();
+	MessageBroker.initialize();
     }
 
     @AfterEach
     public void shutdown() {
-	ReactiveFX.shutdown();
+	MessageBroker.shutdown();
     }
 
     private Subscriber<Integer> createSubscriber() {
@@ -46,7 +46,7 @@ public class FluxStoreTest {
     public void testSingleSubscriber() throws InterruptedException {
 	Subscriber<Integer> subscriber = createSubscriber();
 
-	FluxStore store = ReactiveFX.getStore();
+	MessageBroker store = MessageBroker.getStore();
 	store.subscribe(topic, subscriber);
 
 	store.publish(topic, 1);
@@ -69,7 +69,7 @@ public class FluxStoreTest {
 	Subscriber<Integer> subscriber2 = createSubscriber();
 	Subscriber<Integer> subscriber3 = createSubscriber();
 
-	FluxStore store = ReactiveFX.getStore();
+	MessageBroker store = MessageBroker.getStore();
 	store.subscribe(topic, subscriber1);
 	store.subscribe(topic, subscriber2);
 	store.subscribe(topic, subscriber3);
@@ -96,7 +96,7 @@ public class FluxStoreTest {
 	Subscriber<Integer> subscriber2 = createSubscriber();
 	Subscriber<Integer> subscriber3 = createSubscriber();
 
-	FluxStore store = ReactiveFX.getStore();
+	MessageBroker store = MessageBroker.getStore();
 	store.subscribe(topic, subscriber1);
 	store.subscribe(topic, subscriber2);
 	store.subscribe(topic, subscriber3);
@@ -131,7 +131,7 @@ public class FluxStoreTest {
 	Subscriber<Integer> subscriber1 = createSubscriber();
 	Subscriber<Integer> subscriber2 = createSubscriber();
 
-	FluxStore store = ReactiveFX.getStore();
+	MessageBroker store = MessageBroker.getStore();
 	store.subscribe(topic, subscriber1);
 
 	for (int i = 0; i < 10; i++) {

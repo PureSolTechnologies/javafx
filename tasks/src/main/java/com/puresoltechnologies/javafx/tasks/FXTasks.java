@@ -4,8 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Future;
 
-import com.puresoltechnologies.javafx.reactive.FluxStore;
-import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.javafx.reactive.MessageBroker;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 
 import javafx.concurrent.Task;
@@ -27,13 +26,13 @@ public class FXTasks {
     }
 
     private static <T> Future<T> run(Task<T> task, TaskInfo taskInfo) {
-	FluxStore fluxStore = ReactiveFX.getStore();
-	fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
+	MessageBroker broker = MessageBroker.getStore();
+	broker.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	task.stateProperty().addListener((observable, oldValue, newValue) -> {
-	    fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
+	    broker.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	});
 	task.progressProperty().addListener((observable, oldValue, newValue) -> {
-	    fluxStore.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
+	    broker.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	});
 	registerNewTask(task);
 	return FXThreads.runAsync(task);
@@ -42,7 +41,7 @@ public class FXTasks {
     private static void registerNewTask(Task<?> task) {
 	synchronized (runningTasks) {
 	    runningTasks.add(task);
-	    ReactiveFX.getStore().publish(TasksTopics.TASKS_SUMMARY, new TasksSummery(runningTasks.size(), 0.5));
+	    MessageBroker.getStore().publish(TasksTopics.TASKS_SUMMARY, new TasksSummery(runningTasks.size(), 0.5));
 	    task.progressProperty().addListener((observalble, oldValue, newValue) -> {
 		sendSummaryUpdate();
 	    });
@@ -61,6 +60,7 @@ public class FXTasks {
 	    totalProgress += task.getProgress();
 	}
 	totalProgress /= runningTasks.size() > 0 ? runningTasks.size() : 1.0;
-	ReactiveFX.getStore().publish(TasksTopics.TASKS_SUMMARY, new TasksSummery(runningTasks.size(), totalProgress));
+	MessageBroker.getStore().publish(TasksTopics.TASKS_SUMMARY,
+		new TasksSummery(runningTasks.size(), totalProgress));
     }
 }

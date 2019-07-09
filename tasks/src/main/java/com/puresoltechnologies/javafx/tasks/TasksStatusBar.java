@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.concurrent.Flow.Subscriber;
 import java.util.concurrent.Flow.Subscription;
 
-import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.javafx.reactive.MessageBroker;
 import com.puresoltechnologies.javafx.utils.FXThreads;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
@@ -49,7 +49,7 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Subscribe
 
 	    getChildren().addAll(taskNumlabel, progressBar, openButton);
 
-	    ReactiveFX.getStore().subscribe(TasksTopics.TASKS_SUMMARY, this);
+	    MessageBroker.getStore().subscribe(TasksTopics.TASKS_SUMMARY, this);
 	} catch (IOException e) {
 	    throw new RuntimeException(e);
 	}

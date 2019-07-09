@@ -7,7 +7,7 @@ import java.util.concurrent.Flow.Subscription;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.parts.AbstractViewer;
 import com.puresoltechnologies.javafx.perspectives.parts.PartOpenMode;
-import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.javafx.reactive.MessageBroker;
 import com.puresoltechnologies.javafx.tasks.TaskInfo;
 import com.puresoltechnologies.javafx.tasks.TasksTopics;
 import com.puresoltechnologies.javafx.utils.FXThreads;
@@ -45,7 +45,7 @@ public class SampleTaskResultsViewer extends AbstractViewer implements Subscribe
 	GridPane.setConstraints(text, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.ALWAYS, Priority.ALWAYS);
 	GridPane.setConstraints(clearButton, 0, 1, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
 	gridPane.getChildren().addAll(text, clearButton);
-	ReactiveFX.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
+	MessageBroker.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
     }
 
     @Override

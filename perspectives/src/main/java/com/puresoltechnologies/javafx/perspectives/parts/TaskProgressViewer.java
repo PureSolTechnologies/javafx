@@ -9,7 +9,7 @@ import java.util.concurrent.Flow.Subscription;
 
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
 import com.puresoltechnologies.javafx.perspectives.Perspective;
-import com.puresoltechnologies.javafx.reactive.ReactiveFX;
+import com.puresoltechnologies.javafx.reactive.MessageBroker;
 import com.puresoltechnologies.javafx.tasks.TaskInfo;
 import com.puresoltechnologies.javafx.tasks.TaskProgressPane;
 import com.puresoltechnologies.javafx.tasks.TasksTopics;
@@ -63,7 +63,7 @@ public class TaskProgressViewer extends AbstractViewer implements Subscriber<Tas
     public void initialize() {
 	borderPane.setCenter(scrollPane);
 	scrollPane.setFitToWidth(true);
-	ReactiveFX.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
+	MessageBroker.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
     }
 
     @Override
