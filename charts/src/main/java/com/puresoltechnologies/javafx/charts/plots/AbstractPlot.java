@@ -49,10 +49,12 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 	setData(data);
     }
 
-    protected abstract PlotRenderer getRenderer(AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer);
+    protected abstract PlotRenderer<X, Y, D, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>> getRenderer(
+	    AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer);
 
     @SuppressWarnings("unchecked")
-    PlotRenderer getGenericRenderer(AxisRenderer<?> xAxisRenderer, AxisRenderer<?> yAxisRenderer) {
+    protected final PlotRenderer<X, Y, D, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>> getGenericRenderer(
+	    AxisRenderer<?> xAxisRenderer, AxisRenderer<?> yAxisRenderer) {
 	return getRenderer((AxisRenderer<X>) xAxisRenderer, (AxisRenderer<Y>) yAxisRenderer);
     }
 

@@ -30,8 +30,12 @@ public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Compara
     }
 
     @Override
-    public PlotRenderer getRenderer(AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new XYPlotRenderer<>(this, (NumberAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
+    public PlotRenderer<X, Y, XYValue<X, Y>, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>> getRenderer(
+	    AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	@SuppressWarnings("unchecked")
+	PlotRenderer<X, Y, XYValue<X, Y>, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>> renderer = (PlotRenderer<X, Y, XYValue<X, Y>, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>>) new XYPlotRenderer<>(
+		this, (NumberAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
+	return renderer;
     }
 
 }

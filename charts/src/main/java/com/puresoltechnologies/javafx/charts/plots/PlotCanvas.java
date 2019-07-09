@@ -207,7 +207,7 @@ public class PlotCanvas extends Canvas {
     private void drawPlots(Rectangle plottingArea) {
 	for (Plot<?, ?, ?> plot : plots) {
 	    if (plot.hasData()) {
-		PlotRenderer plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
+		PlotRenderer<?, ?, ?, ?, ?> plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
 			.getGenericRenderer(renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
 		plotRenderer.renderTo(this, plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
 			plottingArea.getHeight());

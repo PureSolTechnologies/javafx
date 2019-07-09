@@ -38,9 +38,12 @@ public class TimeSeriesPlot<Y extends Number & Comparable<Y>, D> extends Abstrac
     }
 
     @Override
-    public PlotRenderer getRenderer(AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new TimeSeriesPlotRenderer<>(this, (InstantAxisRenderer) xAxisRenderer,
-		(NumberAxisRenderer) yAxisRenderer);
+    public PlotRenderer<Instant, Y, D, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>> getRenderer(
+	    AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	@SuppressWarnings("unchecked")
+	PlotRenderer<Instant, Y, D, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>> renderer = (PlotRenderer<Instant, Y, D, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>>) new TimeSeriesPlotRenderer<>(
+		this, (InstantAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
+	return renderer;
     }
 
     @Override

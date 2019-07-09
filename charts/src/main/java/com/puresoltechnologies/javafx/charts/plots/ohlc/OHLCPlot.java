@@ -36,8 +36,12 @@ public class OHLCPlot<Y extends Number & Comparable<Y>> extends AbstractPlot<Ins
     }
 
     @Override
-    public PlotRenderer getRenderer(AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new OHLCPlotRenderer<>(this, (InstantAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
+    public PlotRenderer<Instant, Y, OHLCValue<Y>, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>> getRenderer(
+	    AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	@SuppressWarnings("unchecked")
+	PlotRenderer<Instant, Y, OHLCValue<Y>, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>> renderer = (PlotRenderer<Instant, Y, OHLCValue<Y>, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>>) new OHLCPlotRenderer<>(
+		this, (InstantAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
+	return renderer;
     }
 
 }

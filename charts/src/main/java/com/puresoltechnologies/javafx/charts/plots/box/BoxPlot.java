@@ -28,7 +28,11 @@ public class BoxPlot<X extends Comparable<X>, Y extends Number & Comparable<Y>, 
     }
 
     @Override
-    public PlotRenderer getRenderer(AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new BoxPlotRenderer<X, Y, D, AxisRenderer<X>>(this, xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
+    public PlotRenderer<X, Y, D, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>> getRenderer(
+	    AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	@SuppressWarnings("unchecked")
+	PlotRenderer<X, Y, D, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>> renderer = (PlotRenderer<X, Y, D, ? extends AxisRenderer<X>, ? extends AxisRenderer<Y>>) new BoxPlotRenderer<>(
+		this, xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
+	return renderer;
     }
 }
