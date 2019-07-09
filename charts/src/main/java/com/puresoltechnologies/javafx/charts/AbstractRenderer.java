@@ -1,7 +1,5 @@
 package com.puresoltechnologies.javafx.charts;
 
-import javafx.scene.canvas.Canvas;
-
 /**
  * This is the minimal abstract implementation of a {@link Renderer}.
  *
@@ -54,19 +52,4 @@ public abstract class AbstractRenderer implements Renderer {
 	return (y + height) - ((height / (max - min)) * (value - min));
     }
 
-    private final Canvas canvas;
-
-    /**
-     * This is the constructor.
-     *
-     * @param canvas is the canvas to render to later on.
-     */
-    public AbstractRenderer(Canvas canvas) {
-	super();
-	this.canvas = canvas;
-    }
-
-    public final Canvas getCanvas() {
-	return canvas;
-    }
 }

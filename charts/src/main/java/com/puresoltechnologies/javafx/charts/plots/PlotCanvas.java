@@ -165,28 +165,32 @@ public class PlotCanvas extends Canvas {
 	for (Axis<?> axis : xAxes) {
 	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(yAxesThickness, position, getWidth() - yAxesThickness - altYAxesThickness, tickness);
+	    renderer.renderTo(this, yAxesThickness, position, getWidth() - yAxesThickness - altYAxesThickness,
+		    tickness);
 	    position += tickness;
 	}
 	position = 0.0;
 	for (Axis<?> axis : yAxes) {
 	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(position, altXAxesThickness, tickness, getHeight() - xAxesThickness - altXAxesThickness);
+	    renderer.renderTo(this, position, altXAxesThickness, tickness,
+		    getHeight() - xAxesThickness - altXAxesThickness);
 	    position += tickness;
 	}
 	position = 0.0;
 	for (Axis<?> axis : altXAxes) {
 	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(yAxesThickness, position, getWidth() - yAxesThickness - altYAxesThickness, tickness);
+	    renderer.renderTo(this, yAxesThickness, position, getWidth() - yAxesThickness - altYAxesThickness,
+		    tickness);
 	    position += tickness;
 	}
 	position = getWidth() - altYAxesThickness;
 	for (Axis<?> axis : altYAxes) {
 	    AxisRenderer<?> renderer = renderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(position, altXAxesThickness, tickness, getHeight() - xAxesThickness - altXAxesThickness);
+	    renderer.renderTo(this, position, altXAxesThickness, tickness,
+		    getHeight() - xAxesThickness - altXAxesThickness);
 	    position += tickness;
 	}
 
@@ -203,9 +207,9 @@ public class PlotCanvas extends Canvas {
     private void drawPlots(Rectangle plottingArea) {
 	for (Plot<?, ?, ?> plot : plots) {
 	    if (plot.hasData()) {
-		PlotRenderer plotRenderer = ((AbstractPlot<?, ?, ?>) plot).getGenericRenderer(this,
-			renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
-		plotRenderer.renderTo(plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
+		PlotRenderer plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
+			.getGenericRenderer(renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
+		plotRenderer.renderTo(this, plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
 			plottingArea.getHeight());
 	    }
 	}

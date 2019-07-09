@@ -11,8 +11,6 @@ import com.puresoltechnologies.javafx.charts.axes.TimeSeriesAxis;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
-import javafx.scene.canvas.Canvas;
-
 public class OHLCPlot<Y extends Number & Comparable<Y>> extends AbstractPlot<Instant, Y, OHLCValue<Y>> {
 
     public OHLCPlot(TimeSeriesAxis xAxis, Axis<Y> yAxis) {
@@ -38,9 +36,8 @@ public class OHLCPlot<Y extends Number & Comparable<Y>> extends AbstractPlot<Ins
     }
 
     @Override
-    public PlotRenderer getRenderer(Canvas canvas, AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new OHLCPlotRenderer<>(canvas, this, (InstantAxisRenderer) xAxisRenderer,
-		(NumberAxisRenderer) yAxisRenderer);
+    public PlotRenderer getRenderer(AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	return new OHLCPlotRenderer<>(this, (InstantAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
     }
 
 }

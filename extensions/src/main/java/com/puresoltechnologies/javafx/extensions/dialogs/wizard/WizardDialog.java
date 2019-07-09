@@ -18,6 +18,7 @@ import javafx.scene.control.DialogPane;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -52,7 +53,7 @@ public class WizardDialog<T> extends Dialog<T> {
 	setResizable(true);
 
 	stepListView.setEditable(false);
-	stepListView.setDisable(true);
+	stepListView.addEventFilter(MouseEvent.ANY, MouseEvent::consume);
 
 	content.setPadding(Insets.EMPTY);
 	content.setTop(header);

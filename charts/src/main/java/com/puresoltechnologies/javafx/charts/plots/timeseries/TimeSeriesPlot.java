@@ -11,8 +11,6 @@ import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
-import javafx.scene.canvas.Canvas;
-
 public class TimeSeriesPlot<Y extends Number & Comparable<Y>, D> extends AbstractPlot<Instant, Y, D> {
 
     private final Function<D, Instant> xValueFactory;
@@ -40,8 +38,8 @@ public class TimeSeriesPlot<Y extends Number & Comparable<Y>, D> extends Abstrac
     }
 
     @Override
-    public PlotRenderer getRenderer(Canvas canvas, AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new TimeSeriesPlotRenderer<>(canvas, this, (InstantAxisRenderer) xAxisRenderer,
+    public PlotRenderer getRenderer(AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	return new TimeSeriesPlotRenderer<>(this, (InstantAxisRenderer) xAxisRenderer,
 		(NumberAxisRenderer) yAxisRenderer);
     }
 

@@ -12,7 +12,6 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.canvas.Canvas;
 
 public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> implements Plot<X, Y, D> {
 
@@ -37,12 +36,7 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 		&& (yAxis.getAxisType() != AxisType.ALT_Y)) {
 	    throw new IllegalArgumentException("Provided Y axis is not an Y axis.");
 	}
-	data.addListener(new ListChangeListener<D>() {
-	    @Override
-	    public void onChanged(Change<? extends D> change) {
-		updateExtrema();
-	    }
-	});
+	data.addListener((ListChangeListener<D>) change -> updateExtrema());
     }
 
     public AbstractPlot(String title, Axis<X> xAxis, Axis<Y> yAxis) {
@@ -55,12 +49,11 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 	setData(data);
     }
 
-    protected abstract PlotRenderer getRenderer(Canvas canvas, AxisRenderer<X> xAxisRenderer,
-	    AxisRenderer<Y> yAxisRenderer);
+    protected abstract PlotRenderer getRenderer(AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer);
 
     @SuppressWarnings("unchecked")
-    PlotRenderer getGenericRenderer(PlotCanvas canvas, AxisRenderer<?> xAxisRenderer, AxisRenderer<?> yAxisRenderer) {
-	return getRenderer(canvas, (AxisRenderer<X>) xAxisRenderer, (AxisRenderer<Y>) yAxisRenderer);
+    PlotRenderer getGenericRenderer(AxisRenderer<?> xAxisRenderer, AxisRenderer<?> yAxisRenderer) {
+	return getRenderer((AxisRenderer<X>) xAxisRenderer, (AxisRenderer<Y>) yAxisRenderer);
     }
 
     @Override

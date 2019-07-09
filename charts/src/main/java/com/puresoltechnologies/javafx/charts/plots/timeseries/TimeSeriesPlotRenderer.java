@@ -15,13 +15,13 @@ import javafx.scene.paint.Color;
 public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D>
 	extends AbstractPlotRenderer<Instant, Y, D, InstantAxisRenderer, NumberAxisRenderer> {
 
-    public TimeSeriesPlotRenderer(Canvas canvas, Plot<Instant, Y, D> plot, InstantAxisRenderer xAxisRenderer,
+    public TimeSeriesPlotRenderer(Plot<Instant, Y, D> plot, InstantAxisRenderer xAxisRenderer,
 	    NumberAxisRenderer yAxisRenderer) {
-	super(canvas, plot, xAxisRenderer, yAxisRenderer);
+	super(plot, xAxisRenderer, yAxisRenderer);
     }
 
     @Override
-    public void renderTo(double x, double y, double width, double height) {
+    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
 	TimeSeriesPlot<Y, D> plot = (TimeSeriesPlot<Y, D>) getPlot();
 	List<D> data = plot.getData();
 	if (data.size() == 0) {
@@ -29,7 +29,7 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D>
 	}
 	InstantAxisRenderer xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
-	GraphicsContext gc = getCanvas().getGraphicsContext2D();
+	GraphicsContext gc = canvas.getGraphicsContext2D();
 	gc.setStroke(Color.BLACK);
 	gc.setLineWidth(1.0);
 	double lastXValue = xAxisRenderer.calculatePos(x, y, width, height, plot.getAxisX(data.get(0)));

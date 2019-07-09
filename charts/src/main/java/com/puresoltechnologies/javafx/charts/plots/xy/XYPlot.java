@@ -8,8 +8,6 @@ import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
-import javafx.scene.canvas.Canvas;
-
 public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>>
 	extends AbstractPlot<X, Y, XYValue<X, Y>> {
 
@@ -32,9 +30,8 @@ public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Compara
     }
 
     @Override
-    public PlotRenderer getRenderer(Canvas canvas, AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new XYPlotRenderer<>(canvas, this, (NumberAxisRenderer) xAxisRenderer,
-		(NumberAxisRenderer) yAxisRenderer);
+    public PlotRenderer getRenderer(AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	return new XYPlotRenderer<>(this, (NumberAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
     }
 
 }

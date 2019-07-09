@@ -22,14 +22,14 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>>
     private static final ObjectProperty<Color> downwardTrendColor = Preferences
 	    .getProperty(OHLCPlotProperties.DOWNWARD_TREND_COLOR);
 
-    public OHLCPlotRenderer(Canvas canvas, Plot<Instant, Y, OHLCValue<Y>> plot, InstantAxisRenderer xAxisRenderer,
+    public OHLCPlotRenderer(Plot<Instant, Y, OHLCValue<Y>> plot, InstantAxisRenderer xAxisRenderer,
 	    NumberAxisRenderer yAxisRenderer) {
-	super(canvas, plot, xAxisRenderer, yAxisRenderer);
+	super(plot, xAxisRenderer, yAxisRenderer);
     }
 
     @Override
-    public void renderTo(double x, double y, double width, double height) {
-	GraphicsContext gc = getCanvas().getGraphicsContext2D();
+    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	GraphicsContext gc = canvas.getGraphicsContext2D();
 	InstantAxisRenderer xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
 	Plot<Instant, Y, OHLCValue<Y>> plot = getPlot();
@@ -43,7 +43,7 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>>
 	    double highY = yAxisRenderer.calculatePos(x, y, width, height, value.getHigh());
 	    double lowY = yAxisRenderer.calculatePos(x, y, width, height, value.getLow());
 	    gc.setFill(Color.GRAY);
-	    gc.fillRect(startX + (endX - startX) / 3.0, highY, (endX - startX) / 3.0, lowY - highY);
+	    gc.fillRect(startX + ((endX - startX) / 3.0), highY, (endX - startX) / 3.0, lowY - highY);
 	    if (value.isIncrease()) {
 		gc.setFill(upwardTrendColor.get());
 		gc.fillRect(startX, closeY, endX - startX, closeY - openY);

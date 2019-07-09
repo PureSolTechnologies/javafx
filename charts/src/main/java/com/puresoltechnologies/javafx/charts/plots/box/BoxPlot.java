@@ -9,8 +9,6 @@ import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
-import javafx.scene.canvas.Canvas;
-
 public class BoxPlot<X extends Comparable<X>, Y extends Number & Comparable<Y>, D> extends AbstractPlot<X, Y, D> {
 
     public BoxPlot(String title, Axis<X> xAxis, NumberAxis<Y> yAxis, List<D> data) {
@@ -30,8 +28,7 @@ public class BoxPlot<X extends Comparable<X>, Y extends Number & Comparable<Y>, 
     }
 
     @Override
-    public PlotRenderer getRenderer(Canvas canvas, AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
-	return new BoxPlotRenderer<X, Y, D, AxisRenderer<X>>(canvas, this, xAxisRenderer,
-		(NumberAxisRenderer) yAxisRenderer);
+    public PlotRenderer getRenderer(AxisRenderer<X> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
+	return new BoxPlotRenderer<X, Y, D, AxisRenderer<X>>(this, xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
     }
 }

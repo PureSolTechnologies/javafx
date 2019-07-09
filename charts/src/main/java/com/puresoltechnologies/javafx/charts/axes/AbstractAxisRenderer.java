@@ -35,8 +35,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     private T min = null;
     private T max = null;
 
-    public AbstractAxisRenderer(Canvas canvas, Axis<T> axis, ObservableList<Plot<?, ?, ?>> plots) {
-	super(canvas);
+    public AbstractAxisRenderer(Axis<T> axis, ObservableList<Plot<?, ?, ?>> plots) {
 	this.axis = axis;
 	this.plots = plots;
 	plots.addListener((ListChangeListener<Plot<?, ?, ?>>) c -> updateMinMax());
@@ -122,14 +121,14 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     protected abstract double getLabelThickness();
 
     @Override
-    public void renderTo(double x, double y, double width, double height) {
-	GraphicsContext gc = getCanvas().getGraphicsContext2D();
+    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	GraphicsContext gc = canvas.getGraphicsContext2D();
 	clearAxisArea(gc, x, y, width, height);
 	drawAxis(gc, x, y, width, height);
 	if (hasData()) {
 	    drawTicks(gc, x, y, width, height);
 	}
-	renderAxisTitle(gc, x, y, width, height);
+	renderAxisTitle(canvas, x, y, width, height);
     }
 
     private boolean hasData() {
@@ -163,7 +162,8 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 
     protected abstract void drawTicks(GraphicsContext gc, double x, double y, double width, double height);
 
-    private void renderAxisTitle(GraphicsContext gc, double x, double y, double width, double height) {
+    private void renderAxisTitle(Canvas canvas, double x, double y, double width, double height) {
+	GraphicsContext gc = canvas.getGraphicsContext2D();
 	// TITLE
 	String axisTitle = axis.getTitle();
 	if (axis.getUnit() != null) {
@@ -179,7 +179,6 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.TOP);
 
-	Canvas canvas = getCanvas();
 	switch (axis.getAxisType()) {
 	case X:
 	    // Title

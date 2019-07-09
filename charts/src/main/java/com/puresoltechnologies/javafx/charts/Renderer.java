@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.charts;
 
+import javafx.scene.canvas.Canvas;
+
 /**
  * This is the generic interface for renderer. The canvas to render to, should
  * be provided via constructor. The renderer is just told to render its content
@@ -18,6 +20,6 @@ public interface Renderer {
      * @param width  is the width of the area to plot into.
      * @param height is the height of the area to plot into.
      */
-    void renderTo(double x, double y, double width, double height);
+    void renderTo(Canvas canvas, double x, double y, double width, double height);
 
 }

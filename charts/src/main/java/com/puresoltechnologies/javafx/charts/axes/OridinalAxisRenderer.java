@@ -3,14 +3,13 @@ package com.puresoltechnologies.javafx.charts.axes;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.collections.ObservableList;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 
 public class OridinalAxisRenderer extends AbstractAxisRenderer<Comparable<Object>> {
 
-    public OridinalAxisRenderer(Canvas canvas, Axis<Comparable<Object>> axis, ObservableList<Plot<?, ?, ?>> plots) {
-	super(canvas, axis, plots);
+    public OridinalAxisRenderer(Axis<Comparable<Object>> axis, ObservableList<Plot<?, ?, ?>> plots) {
+	super(axis, plots);
     }
 
     @Override

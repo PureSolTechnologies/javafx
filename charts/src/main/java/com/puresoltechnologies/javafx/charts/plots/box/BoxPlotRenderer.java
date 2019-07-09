@@ -10,12 +10,12 @@ import javafx.scene.canvas.Canvas;
 public class BoxPlotRenderer<X extends Comparable<X>, Y extends Number & Comparable<Y>, D, XAR extends AxisRenderer<?>>
 	extends AbstractPlotRenderer<X, Y, D, XAR, NumberAxisRenderer> {
 
-    public BoxPlotRenderer(Canvas canvas, Plot<X, Y, D> plot, XAR xAxisRenderer, NumberAxisRenderer yAxisRenderer) {
-	super(canvas, plot, xAxisRenderer, yAxisRenderer);
+    public BoxPlotRenderer(Plot<X, Y, D> plot, XAR xAxisRenderer, NumberAxisRenderer yAxisRenderer) {
+	super(plot, xAxisRenderer, yAxisRenderer);
     }
 
     @Override
-    public void renderTo(double x, double y, double width, double height) {
+    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
 	// TODO Auto-generated method stub
 
     }

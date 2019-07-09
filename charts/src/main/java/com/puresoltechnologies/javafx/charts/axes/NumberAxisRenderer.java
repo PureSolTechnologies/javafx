@@ -9,15 +9,14 @@ import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 
-    public NumberAxisRenderer(Canvas canvas, Axis<Number> axis, ObservableList<Plot<?, ?, ?>> plots) {
-	super(canvas, axis, plots);
+    public NumberAxisRenderer(Axis<Number> axis, ObservableList<Plot<?, ?, ?>> plots) {
+	super(axis, plots);
     }
 
     @Override

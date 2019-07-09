@@ -11,14 +11,13 @@ import javafx.scene.paint.Color;
 public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D>
 	extends AbstractPlotRenderer<X, Y, D, NumberAxisRenderer, NumberAxisRenderer> {
 
-    public XYPlotRenderer(Canvas canvas, Plot<X, Y, D> plot, NumberAxisRenderer xAxisRenderer,
-	    NumberAxisRenderer yAxisRenderer) {
-	super(canvas, plot, xAxisRenderer, yAxisRenderer);
+    public XYPlotRenderer(Plot<X, Y, D> plot, NumberAxisRenderer xAxisRenderer, NumberAxisRenderer yAxisRenderer) {
+	super(plot, xAxisRenderer, yAxisRenderer);
     }
 
     @Override
-    public void renderTo(double x, double y, double width, double height) {
-	GraphicsContext gc = getCanvas().getGraphicsContext2D();
+    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	GraphicsContext gc = canvas.getGraphicsContext2D();
 	NumberAxisRenderer xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
 	@SuppressWarnings("unchecked")
