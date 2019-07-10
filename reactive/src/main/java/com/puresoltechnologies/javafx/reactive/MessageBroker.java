@@ -29,7 +29,7 @@ public class MessageBroker {
      * @throws IllegalStateException is thrown in case the broker was already
      *                               initialized.
      */
-    public static void initialize() {
+    public static synchronized void initialize() {
 	if (instance != null) {
 	    throw new IllegalStateException("Broker was initialized already.");
 	}
@@ -42,7 +42,7 @@ public class MessageBroker {
      * @throws IllegalStateException is thrown in case the broker was already
      *                               shutdown or not initialized.
      */
-    public static void shutdown() {
+    public static synchronized void shutdown() {
 	instance.close();
 	instance = null;
     }
@@ -53,11 +53,11 @@ public class MessageBroker {
      * @return <code>true</code> is returned in case the Broker is initialized.
      *         <code>false</code> is returned otherwise.
      */
-    public static boolean isInitialized() {
+    public static synchronized boolean isInitialized() {
 	return instance != null;
     }
 
-    public static MessageBroker getStore() {
+    public static synchronized MessageBroker getStore() {
 	return instance;
     }
 

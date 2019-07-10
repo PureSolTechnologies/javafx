@@ -31,7 +31,7 @@ public class AboutDialog extends Dialog<Void> {
 	}
     }
 
-    private TabPane tabPane;
+    private final TabPane tabPane;
 
     public AboutDialog() {
 	setTitle("About");
@@ -56,7 +56,7 @@ public class AboutDialog extends Dialog<Void> {
 	Tab javaFX = new Tab("PST JavaFX");
 	javaFX.setClosable(false);
 	TextArea textArea = new TextArea();
-	textArea.setText("PureSol Technolofies' JavaFX\n" //
+	textArea.setText("PureSol Technologies' JavaFX\n" //
 		+ "(c) 2018 PureSol Technologies (http://puresol-technologies.com)\n\n" //
 		+ "License: Apache License, Version 2.0\n\n" //
 		+ "This software incorporates FatCow \"Farm-Fresh Web Icons\" (http://www.fatcow.com/free-icons).");

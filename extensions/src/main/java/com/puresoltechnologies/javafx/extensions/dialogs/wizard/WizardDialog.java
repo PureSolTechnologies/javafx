@@ -58,6 +58,7 @@ public class WizardDialog<T> extends Dialog<T> {
 	content.setPadding(Insets.EMPTY);
 	content.setTop(header);
 	content.setLeft(stepListView);
+	content.setCenterShape(true);
 
 	DialogPane dialogPane = getDialogPane();
 	dialogPane.setContent(content);
@@ -152,11 +153,9 @@ public class WizardDialog<T> extends Dialog<T> {
     }
 
     private void setDialogHeader(WizardPage<T> page) {
-	setTitle(page.getTitle());
 	header.setTitle(page.getTitle());
 	Optional<String> description = page.getDescription();
 	if (description.isPresent()) {
-	    setHeaderText(page.getDescription().get());
 	    header.setDescription(description.get());
 	}
 	Optional<Image> image = page.getImage();
