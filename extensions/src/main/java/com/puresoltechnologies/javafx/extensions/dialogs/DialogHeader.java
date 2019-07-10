@@ -17,10 +17,10 @@ import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
 /**
- * This class provides a dialog header with an image, title and text.
+ * This class provides a dialog header with an image, title and text. It looks
+ * more modern than the original header text with graphics.
  *
  * @author Rick-Rainer Ludwig
- *
  */
 public class DialogHeader extends GridPane {
 

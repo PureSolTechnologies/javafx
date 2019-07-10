@@ -3,7 +3,7 @@ package com.puresoltechnologies.javafx.extensions.menu;
 import java.io.IOException;
 
 import com.puresoltechnologies.javafx.extensions.StatusBar;
-import com.puresoltechnologies.javafx.extensions.dialogs.AboutDialog;
+import com.puresoltechnologies.javafx.extensions.dialogs.about.AboutDialog;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.scene.Node;

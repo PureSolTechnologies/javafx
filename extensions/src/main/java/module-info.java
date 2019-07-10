@@ -9,6 +9,7 @@ module com.puresoltechnologies.javafx.extensions {
 
     exports com.puresoltechnologies.javafx.extensions;
     exports com.puresoltechnologies.javafx.extensions.dialogs;
+    exports com.puresoltechnologies.javafx.extensions.dialogs.about;
     exports com.puresoltechnologies.javafx.extensions.dialogs.wizard;
     exports com.puresoltechnologies.javafx.extensions.dialogs.procedure;
     exports com.puresoltechnologies.javafx.extensions.fonts;
@@ -21,5 +22,5 @@ module com.puresoltechnologies.javafx.extensions {
     opens com.puresoltechnologies.javafx.extensions.icons.FatCow_Icons16x16;
     opens com.puresoltechnologies.javafx.extensions.icons.FatCow_Icons32x32;
 
-    uses com.puresoltechnologies.javafx.extensions.dialogs.AboutDialogContribution;
+    uses com.puresoltechnologies.javafx.extensions.dialogs.about.AboutDialogContribution;
 }

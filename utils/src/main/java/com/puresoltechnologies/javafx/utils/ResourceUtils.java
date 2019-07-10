@@ -34,6 +34,15 @@ public class ResourceUtils {
 	return getImage(object.getClass(), imageResource);
     }
 
+    /**
+     * This method reads the image from the given resource path relative to the
+     * given class.
+     *
+     * @param clazz         is the class to specify the classloader.
+     * @param imageResource is the resource path of the image to be loaded.
+     * @return A {@link Image} object is returned. containing the picture.
+     * @throws IOException is thrown in case of I/O issues.
+     */
     public static Image getImage(Class<?> clazz, String imageResource) throws IOException {
 	InputStream perspectivesImage = clazz.getResourceAsStream(imageResource);
 	if (perspectivesImage == null) {
@@ -60,6 +69,15 @@ public class ResourceUtils {
 	return getImageView(object.getClass(), imageResource);
     }
 
+    /**
+     * This method reads the image from the given resource path relative to the
+     * given class.
+     *
+     * @param clazz         is the class to specify the classloader.
+     * @param imageResource is the resource path of the image to be loaded.
+     * @return A {@link ImageView} object is returned. containing the picture.
+     * @throws IOException is thrown in case of I/O issues.
+     */
     public static ImageView getImageView(Class<?> clazz, String imageResource) throws IOException {
 	InputStream imageStream = clazz.getResourceAsStream(imageResource);
 	if (imageStream == null) {

@@ -1,4 +1,4 @@
-package com.puresoltechnologies.javafx.extensions.dialogs;
+package com.puresoltechnologies.javafx.extensions.dialogs.about;
 
 import java.io.IOException;
 import java.util.ServiceLoader;
@@ -18,6 +18,13 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+/**
+ * This class provides a standardized way to show an About Dialog. It is also
+ * using Java's {@link ServiceLoader} to load additional
+ * {@link AboutDialogContribution}s which are shown in additional tabs.
+ *
+ * @author Rick-Rainer Ludwig
+ */
 public class AboutDialog extends Dialog<Void> {
 
     private static final Image iconSmall;
@@ -31,15 +38,16 @@ public class AboutDialog extends Dialog<Void> {
 	}
     }
 
-    private final TabPane tabPane;
-
+    /**
+     * Default constructor.
+     */
     public AboutDialog() {
 	setTitle("About");
 	Stage stage = (Stage) getDialogPane().getScene().getWindow();
 	stage.getIcons().addAll(iconSmall, iconBig);
 	setResizable(true);
 
-	tabPane = new TabPane();
+	TabPane tabPane = new TabPane();
 	tabPane.setSide(Side.TOP);
 	getDialogPane().setContent(tabPane);
 

@@ -11,13 +11,12 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontWeightListView;
 import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
-import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.VPos;
-import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
@@ -29,17 +28,23 @@ import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+/**
+ * This class provides a standard font dialog which is not contained inside
+ * JavaFX.
+ *
+ * @author Rick-Rainer Ludwig
+ */
 public class FontSelectionDialog extends Dialog<FontDefinition> {
 
     private static final String SAMPLE_TEXT;
     static {
 	StringBuilder builder = new StringBuilder();
 	for (char i = 32; i < 128; i++) {
-	    if ((i % 32 == 31) && (i != 127)) {
+	    if (((i % 32) == 31) && (i != 127)) {
 		builder.append("\n");
 	    }
 	    builder.append(i);
-	    if (i % 32 != 31) {
+	    if ((i % 32) != 31) {
 		builder.append(" ");
 	    }
 	}
@@ -64,13 +69,12 @@ public class FontSelectionDialog extends Dialog<FontDefinition> {
     private final ColorPicker fontColorPicker = new ColorPicker(Color.BLACK);
     private final TextArea sampleTextArea = new TextArea(SAMPLE_TEXT);
 
-    private final GridPane gridPane = new GridPane();
-
     public FontSelectionDialog() {
 	setTitle("Font Selection");
 	setHeaderText("Select a font.");
 	setGraphic(new ImageView(iconBig));
-	Stage stage = (Stage) getDialogPane().getScene().getWindow();
+	DialogPane dialogPane = getDialogPane();
+	Stage stage = (Stage) dialogPane.getScene().getWindow();
 	stage.getIcons().addAll(iconSmall, iconBig);
 	setResizable(true);
 
@@ -118,20 +122,18 @@ public class FontSelectionDialog extends Dialog<FontDefinition> {
 	GridPane.setConstraints(sampleTextLabel, 0, 7, 3, 1);
 	GridPane.setConstraints(sampleTextArea, 0, 8, 3, 1);
 
+	GridPane gridPane = new GridPane();
 	gridPane.setHgap(5.0);
 	gridPane.setVgap(5.0);
 	gridPane.getChildren().addAll(fontFamilyLabel, fontSizeLabel, fontWeightLabel, fontPostureLabel,
 		fontFamilyListView, fontSizeComboBox, fontWeightListView, fontPostureComboBox, fontColorLabel,
 		fontColorPicker, sampleTextLabel, sampleTextArea);
-	getDialogPane().setContent(gridPane);
+	dialogPane.setContent(gridPane);
 
-	ButtonType buttonTypeOk = new ButtonType("OK", ButtonData.OK_DONE);
-	ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
-	ObservableList<ButtonType> buttonTypes = getDialogPane().getButtonTypes();
-	buttonTypes.addAll(buttonTypeOk, buttonTypeCancel);
+	dialogPane.getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
 
 	setResultConverter(b -> {
-	    if (b == buttonTypeOk) {
+	    if (b == ButtonType.OK) {
 		return createFontDefinition();
 	    }
 	    return null;
