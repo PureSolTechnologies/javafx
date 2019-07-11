@@ -50,7 +50,12 @@ public class ExampleWizardPage1 extends AbstractWizardPage<ExampleWizardData> {
     }
 
     @Override
-    public void onLeave() {
+    public void onBack() {
+	// Intentionally left empty.
+    }
+
+    @Override
+    public void onNext() {
 	// Intentionally left empty.
     }
 }

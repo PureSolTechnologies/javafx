@@ -82,7 +82,7 @@ public interface WizardPage<T> {
     /**
      * This method is called just before the {@link WizardDialog} is closed to free
      * resources.
-     * 
+     *
      * @param type
      */
     void close(ButtonType type);
@@ -95,5 +95,10 @@ public interface WizardPage<T> {
     /**
      * This method is called by {@link WizardDialog} every time the page is left.
      */
-    void onLeave();
+    void onBack();
+
+    /**
+     * This method is called by {@link WizardDialog} every time the page is left.
+     */
+    void onNext();
 }
