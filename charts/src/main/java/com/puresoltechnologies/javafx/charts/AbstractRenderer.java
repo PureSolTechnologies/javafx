@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.charts;
 
+import javafx.scene.canvas.Canvas;
+
 /**
  * This is the minimal abstract implementation of a {@link Renderer}.
  *
@@ -12,7 +14,7 @@ public abstract class AbstractRenderer implements Renderer {
      * This method is used to calculate the x position of a given value based on the
      * plotting area.
      *
-     * @see Renderer#renderTo(double, double, double, double)
+     * @see Renderer#renderTo(Canvas, double, double, double, double)
      *
      * @param x     is the x position of the plotting area.
      * @param width is the width of the plotting area.
@@ -34,7 +36,7 @@ public abstract class AbstractRenderer implements Renderer {
      * This method is used to calculate the y position of a given value based on the
      * plotting area.
      *
-     * @see Renderer#renderTo(double, double, double, double)
+     * @see Renderer#renderTo(Canvas, double, double, double, double)
      *
      * @param y      is the y position of the plotting area.
      * @param height is the height of the plotting area.
