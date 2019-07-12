@@ -3,7 +3,7 @@ module com.puresoltechnologies.javafx.workspaces {
     requires com.puresoltechnologies.javafx.utils;
 
     requires java.prefs;
-    requires javafx.controls;
+    requires transitive javafx.controls;
 
     exports com.puresoltechnologies.javafx.workspaces;
     exports com.puresoltechnologies.javafx.workspaces.dialogs;

@@ -1,7 +1,7 @@
 module com.puresoltechnologies.javafx.charts {
 
-    requires com.puresoltechnologies.javafx.extensions;
-    requires com.puresoltechnologies.javafx.preferences;
+    requires transitive com.puresoltechnologies.javafx.extensions;
+    requires transitive com.puresoltechnologies.javafx.preferences;
     requires transitive com.puresoltechnologies.graphs.trees;
     requires com.puresoltechnologies.javafx.utils;
 

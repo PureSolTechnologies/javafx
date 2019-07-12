@@ -1,6 +1,6 @@
 module com.puresoltechnologies.javafx.preferences {
 
-    requires com.puresoltechnologies.javafx.extensions;
+    requires transitive com.puresoltechnologies.javafx.extensions;
     requires com.puresoltechnologies.javafx.utils;
 
     requires transitive javafx.graphics;

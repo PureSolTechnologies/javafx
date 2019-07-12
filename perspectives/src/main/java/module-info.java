@@ -1,8 +1,8 @@
 module com.puresoltechnologies.javafx.perspectives {
 
-    requires com.puresoltechnologies.javafx.extensions;
-    requires com.puresoltechnologies.javafx.preferences;
-    requires com.puresoltechnologies.javafx.reactive;
+    requires transitive com.puresoltechnologies.javafx.extensions;
+    requires transitive com.puresoltechnologies.javafx.preferences;
+    requires transitive com.puresoltechnologies.javafx.reactive;
     requires transitive com.puresoltechnologies.javafx.tasks;
     requires com.puresoltechnologies.javafx.utils;
 

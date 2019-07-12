@@ -1,22 +1,20 @@
 module com.puresoltechnologies.javafx.showroom {
 
-    requires com.puresoltechnologies.javafx.charts;
-    requires com.puresoltechnologies.javafx.extensions;
+    requires transitive com.puresoltechnologies.javafx.charts;
+    requires transitive com.puresoltechnologies.javafx.extensions;
     requires transitive com.puresoltechnologies.javafx.perspectives;
-    requires com.puresoltechnologies.javafx.preferences;
-    requires com.puresoltechnologies.javafx.reactive;
-    requires com.puresoltechnologies.javafx.tasks;
+    requires transitive com.puresoltechnologies.javafx.preferences;
+    requires transitive com.puresoltechnologies.javafx.reactive;
+    requires transitive com.puresoltechnologies.javafx.services;
+    requires transitive com.puresoltechnologies.javafx.tasks;
     requires com.puresoltechnologies.javafx.utils;
-    requires com.puresoltechnologies.javafx.workspaces;
+    requires transitive com.puresoltechnologies.javafx.workspaces;
 
-    requires com.puresoltechnologies.graphs.graph;
-    requires com.puresoltechnologies.streaming.iterators;
+    requires transitive com.puresoltechnologies.graphs.graph;
+    requires transitive com.puresoltechnologies.streaming.iterators;
 
-    requires javafx.controls;
-    requires javafx.graphics;
-
-    requires java.management;
-    requires com.puresoltechnologies.javafx.services;
+    requires transitive javafx.controls;
+    requires transitive javafx.graphics;
 
     exports com.puresoltechnologies.javafx.showroom;
     exports com.puresoltechnologies.javafx.showroom.parts;
