@@ -18,6 +18,13 @@
 		<dependencySet>
 			<outputDirectory>bin</outputDirectory>
 			<unpack>true</unpack>
+			<unpackOptions>
+				<excludes>
+					<exclude>**/include</exclude>
+					<exclude>**/jmods/jdk.*.jmod</exclude>
+					<exclude>**/lib/src.zip</exclude>
+				</excludes>
+			</unpackOptions>
 			<includes>
 				<include>net.java.jdk:openjdk:tar.gz:linux-x64</include>
 			</includes>

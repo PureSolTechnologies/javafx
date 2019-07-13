@@ -9,7 +9,6 @@
 	</parent>
 
 	<artifactId>rcp</artifactId>
-	<packaging>pom</packaging>
 
 	<name>${officalName} - ${project.artifactId}</name>
 
