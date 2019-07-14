@@ -10,7 +10,7 @@ import java.util.Objects;
  * @param <A> is the type of the action.
  * @param <D> is the type of data.
  */
-public class Payload<A, D> {
+public class Payload<A extends Enum<A>, D> {
 
     private final A action;
     private final D data;

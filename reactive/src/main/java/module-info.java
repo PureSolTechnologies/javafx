@@ -4,4 +4,5 @@ module com.puresoltechnologies.javafx.reactive {
 
     exports com.puresoltechnologies.javafx.reactive;
 
+    uses com.puresoltechnologies.javafx.reactive.flux.Store;
 }

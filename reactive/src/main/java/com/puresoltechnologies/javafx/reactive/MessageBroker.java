@@ -9,17 +9,12 @@ import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * This is a broker implementation for a Publish-Subscribe-Pattern.
  *
  * @author Rick-Rainer Ludwig
  */
 public class MessageBroker {
-
-    private static final Logger logger = LoggerFactory.getLogger(MessageBroker.class);
 
     private static MessageBroker instance = null;
 
