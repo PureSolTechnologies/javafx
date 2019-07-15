@@ -177,7 +177,7 @@ public class MessageBrokerTest {
     }
 
     @Test
-    public void testGetLastMessagesWithBufferSize() throws InterruptedException {
+    public void testGetLastMessagesWithHistorySize() throws InterruptedException {
 	Subscriber<Integer> subscriber1 = createSubscriber();
 	Subscriber<Integer> subscriber2 = createSubscriber();
 
