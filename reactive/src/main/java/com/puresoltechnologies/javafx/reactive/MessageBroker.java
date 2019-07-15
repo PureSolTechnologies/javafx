@@ -1,7 +1,7 @@
 package com.puresoltechnologies.javafx.reactive;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -58,8 +58,22 @@ public class MessageBroker {
 	return instance;
     }
 
-    private final Map<Topic<?>, SubmissionPublisher<?>> subjects = new HashMap<>();
-    private final Map<Topic<?>, List<?>> lastItems = new HashMap<>();
+    private class Subject<T> implements AutoCloseable {
+	private final SubmissionPublisher<T> submissionPublisher;
+	private final List<T> lastItems;
+
+	private Subject(Topic<T> topic) {
+	    this.submissionPublisher = new SubmissionPublisher<>(executorService, topic.getBufferSize());
+	    this.lastItems = new ArrayList<>();
+	}
+
+	@Override
+	public void close() {
+	    submissionPublisher.close();
+	}
+    }
+
+    private final Map<Topic<?>, Subject<?>> subjects = new HashMap<>();
 
     private final ExecutorService executorService;
 
@@ -83,38 +97,30 @@ public class MessageBroker {
     }
 
     public <T> void publish(Topic<T> topic, T message) {
-	SubmissionPublisher<T> subject = assurePresenceOfTopic(topic);
-	subject.submit(message);
-	List<T> deque = getDeque(topic);
-	deque.add(message);
-	if (deque.size() > topic.getBufferSize()) {
-	    deque.remove(0);
+	Subject<T> subject = assurePresenceOfTopic(topic);
+	subject.submissionPublisher.submit(message);
+	List<T> lastItems = subject.lastItems;
+	lastItems.add(message);
+	if (lastItems.size() > topic.getBufferSize()) {
+	    lastItems.remove(0);
 	}
     }
 
-    private <T> List<T> getDeque(Topic<T> topic) {
-	@SuppressWarnings("unchecked")
-	List<T> deque = (List<T>) lastItems.get(topic);
-	return deque;
-    }
-
     public <T> void subscribe(Topic<T> topic, Subscriber<T> subscriber) {
-	SubmissionPublisher<T> subject = assurePresenceOfTopic(topic);
-	subject.subscribe(subscriber);
-	List<T> deque = getDeque(topic);
-	deque.stream().forEach(message -> subscriber.onNext(message));
+	Subject<T> subject = assurePresenceOfTopic(topic);
+	subject.submissionPublisher.subscribe(subscriber);
+	subject.lastItems.stream().forEach(message -> subscriber.onNext(message));
     }
 
     @SuppressWarnings("unchecked")
-    private <T> SubmissionPublisher<T> assurePresenceOfTopic(Topic<T> topic) {
-	SubmissionPublisher<T> subject = (SubmissionPublisher<T>) subjects.get(topic);
+    private <T> Subject<T> assurePresenceOfTopic(Topic<T> topic) {
+	Subject<T> subject = (Subject<T>) subjects.get(topic);
 	if (subject == null) {
 	    synchronized (subjects) {
-		subject = (SubmissionPublisher<T>) subjects.get(topic);
+		subject = (Subject<T>) subjects.get(topic);
 		if (subject == null) {
-		    subject = new SubmissionPublisher<>(executorService, topic.getBufferSize());
+		    subject = new Subject<>(topic);
 		    subjects.put(topic, subject);
-		    lastItems.put(topic, new LinkedList<>());
 		}
 	    }
 	}
