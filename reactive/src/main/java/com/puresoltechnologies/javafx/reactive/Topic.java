@@ -18,19 +18,25 @@ public class Topic<T> {
 
     private final String id;
     private final Class<T> type;
+    private final int historySize;
     private final int bufferSize;
     private final int hash;
 
     public Topic(String id, Class<T> type) {
-	this(id, type, 1);
+	this(id, type, 1, 1);
     }
 
-    public Topic(String id, Class<T> type, int bufferSize) {
+    public Topic(String id, Class<T> type, int historySize) {
+	this(id, type, historySize, historySize);
+    }
+
+    public Topic(String id, Class<T> type, int historySize, int bufferSize) {
 	super();
 	this.id = id;
 	this.type = type;
+	this.historySize = historySize;
 	this.bufferSize = bufferSize;
-	this.hash = Objects.hash(id, type, bufferSize);
+	this.hash = Objects.hash(id, type, historySize, bufferSize);
     }
 
     public String getId() {
@@ -80,6 +86,9 @@ public class Topic<T> {
 	    return false;
 	}
 	if (bufferSize != other.bufferSize) {
+	    return false;
+	}
+	if (historySize != other.historySize) {
 	    return false;
 	}
 	return true;

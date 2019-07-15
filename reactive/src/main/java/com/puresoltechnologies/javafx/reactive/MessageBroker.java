@@ -1,6 +1,8 @@
 package com.puresoltechnologies.javafx.reactive;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -57,6 +59,7 @@ public class MessageBroker {
     }
 
     private final Map<Topic<?>, SubmissionPublisher<?>> subjects = new HashMap<>();
+    private final Map<Topic<?>, List<?>> lastItems = new HashMap<>();
 
     private final ExecutorService executorService;
 
@@ -82,11 +85,24 @@ public class MessageBroker {
     public <T> void publish(Topic<T> topic, T message) {
 	SubmissionPublisher<T> subject = assurePresenceOfTopic(topic);
 	subject.submit(message);
+	List<T> deque = getDeque(topic);
+	deque.add(message);
+	if (deque.size() > topic.getBufferSize()) {
+	    deque.remove(0);
+	}
+    }
+
+    private <T> List<T> getDeque(Topic<T> topic) {
+	@SuppressWarnings("unchecked")
+	List<T> deque = (List<T>) lastItems.get(topic);
+	return deque;
     }
 
     public <T> void subscribe(Topic<T> topic, Subscriber<T> subscriber) {
 	SubmissionPublisher<T> subject = assurePresenceOfTopic(topic);
 	subject.subscribe(subscriber);
+	List<T> deque = getDeque(topic);
+	deque.stream().forEach(message -> subscriber.onNext(message));
     }
 
     @SuppressWarnings("unchecked")
@@ -98,6 +114,7 @@ public class MessageBroker {
 		if (subject == null) {
 		    subject = new SubmissionPublisher<>(executorService, topic.getBufferSize());
 		    subjects.put(topic, subject);
+		    lastItems.put(topic, new LinkedList<>());
 		}
 	    }
 	}

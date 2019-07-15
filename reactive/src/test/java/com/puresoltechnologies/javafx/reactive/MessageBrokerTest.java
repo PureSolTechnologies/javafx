@@ -15,9 +15,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-public class BrokerTest {
+public class MessageBrokerTest {
 
     private final Topic<Integer> topic = new Topic<>("test.counter", Integer.class);
+    private final Topic<Integer> topicWithBuffer = new Topic<>("test.counter", Integer.class, 3);
 
     private Subscriber<Integer> subscriber;
 
@@ -37,8 +38,14 @@ public class BrokerTest {
 	Mockito.doAnswer(invocation -> {
 	    Subscription subscription = invocation.getArgument(0);
 	    subscription.request(Long.MAX_VALUE);
+	    System.out.println("subscribe");
 	    return null;
 	}).when(subscriber).onSubscribe(any());
+	Mockito.doAnswer(invocation -> {
+	    Integer message = invocation.getArgument(0);
+	    System.out.println(message);
+	    return null;
+	}).when(subscriber).onNext(any());
 	return subscriber;
     }
 
@@ -138,7 +145,7 @@ public class BrokerTest {
 	    store.publish(topic, i);
 	}
 
-	Awaitility.await("Wait for delivery of message.") //
+	Awaitility.await("Wait for delivery of messages.") //
 		.atMost(1, TimeUnit.SECONDS)//
 		.pollInterval(10, TimeUnit.MILLISECONDS)//
 		.until(() -> {
@@ -155,17 +162,63 @@ public class BrokerTest {
 	}
 
 	store.subscribe(topic, subscriber2);
-	Awaitility.await("Wait for delivery of message.") //
+	Awaitility.await("Wait for delivery of buffered message.") //
 		.atMost(1, TimeUnit.SECONDS)//
 		.pollInterval(10, TimeUnit.MILLISECONDS)//
 		.until(() -> {
 		    try {
-			verify(subscriber1, times(1)).onNext(9);
+			// verify(subscriber2, times(1)).onNext(9);
+			verify(subscriber2, times(1)).onNext(any());
+			return true;
+		    } catch (Throwable e) {
+			return false;
+		    }
+		});
+    }
+
+    @Test
+    public void testGetLastMessagesWithBufferSize() throws InterruptedException {
+	Subscriber<Integer> subscriber1 = createSubscriber();
+	Subscriber<Integer> subscriber2 = createSubscriber();
+
+	MessageBroker store = MessageBroker.getStore();
+	store.subscribe(topicWithBuffer, subscriber1);
+
+	for (int i = 0; i < 10; i++) {
+	    store.publish(topicWithBuffer, i);
+	}
+
+	Awaitility.await("Wait for delivery of messages.") //
+		.atMost(1, TimeUnit.SECONDS)//
+		.pollInterval(10, TimeUnit.MILLISECONDS)//
+		.until(() -> {
+		    try {
+			verify(subscriber1, times(10)).onNext(any());
 			return true;
 		    } catch (Throwable e) {
 			return false;
 		    }
 		});
 
+	for (int i = 0; i < 10; i++) {
+	    verify(subscriber1, times(1)).onNext(i);
+	}
+
+	store.subscribe(topicWithBuffer, subscriber2);
+	Awaitility.await("Wait for delivery of buffered message.") //
+		.atMost(1, TimeUnit.SECONDS)//
+		.pollInterval(10, TimeUnit.MILLISECONDS)//
+		.until(() -> {
+		    try {
+			verify(subscriber2, times(1)).onNext(7);
+			verify(subscriber2, times(1)).onNext(8);
+			verify(subscriber2, times(1)).onNext(9);
+			verify(subscriber2, times(3)).onNext(any());
+			return true;
+		    } catch (Throwable e) {
+			return false;
+		    }
+		});
     }
+
 }
