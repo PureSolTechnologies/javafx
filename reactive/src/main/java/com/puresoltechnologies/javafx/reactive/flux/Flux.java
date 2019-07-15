@@ -39,10 +39,7 @@ public class Flux {
 		    }
 		}) //
 		.map(store -> (AbstractStore<?, ?>) store) //
-		.forEach(store -> {
-		    stores.put(store.getClass(), store);
-		    dispatcher.subscribe(store);
-		});
+		.forEach(store -> registerStore(store));
 	initialized = true;
     }
 
@@ -59,6 +56,7 @@ public class Flux {
     public static synchronized <A extends Enum<A>, D> void registerStore(AbstractStore<A, D> store) {
 	assertInitialized();
 	stores.put(store.getClass(), store);
+	dispatcher.subscribe(store);
     }
 
     /**
