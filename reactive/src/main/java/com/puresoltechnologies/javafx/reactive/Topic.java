@@ -47,6 +47,10 @@ public class Topic<T> {
 	return type;
     }
 
+    public int getHistorySize() {
+	return historySize;
+    }
+
     public int getBufferSize() {
 	return bufferSize;
     }

@@ -101,7 +101,7 @@ public class MessageBroker {
 	subject.submissionPublisher.submit(message);
 	List<T> lastItems = subject.lastItems;
 	lastItems.add(message);
-	if (lastItems.size() > topic.getBufferSize()) {
+	if (lastItems.size() > topic.getHistorySize()) {
 	    lastItems.remove(0);
 	}
     }
