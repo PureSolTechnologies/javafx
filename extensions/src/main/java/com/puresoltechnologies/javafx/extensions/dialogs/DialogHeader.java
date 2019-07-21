@@ -45,7 +45,7 @@ public class DialogHeader extends GridPane {
 	getChildren().addAll(imageView, titleLabel, descriptionTextArea);
     }
 
-    public final StringProperty getTitleProperty() {
+    public final StringProperty titleProperty() {
 	return titleLabel.textProperty();
     }
 

@@ -12,9 +12,9 @@ import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
 import com.puresoltechnologies.javafx.testing.select.Selection;
 
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DialogPane;
 import javafx.stage.Stage;
 
 public class WizardDialogUIT extends OpenJFXTest {
@@ -27,7 +27,7 @@ public class WizardDialogUIT extends OpenJFXTest {
 
     @Override
     protected Stage start() {
-	Button button = new Button("Stard Wizard...");
+	Button button = new Button("Start Wizard...");
 	button.setId("wizard.start");
 	button.setOnAction(event -> {
 	    WizardDialog<TestWizardResult> dialog = new WizardDialog<>(TestWizardResult::new);
@@ -53,7 +53,7 @@ public class WizardDialogUIT extends OpenJFXTest {
     public void test() throws InterruptedException {
 	findButtonById("wizard.start").click();
 
-	Selection<DialogPane> dialog = Awaitility.await() //
+	Selection<Parent> dialog = Awaitility.await() //
 		.atMost(10, TimeUnit.SECONDS) //
 		.pollDelay(100, TimeUnit.MILLISECONDS) //
 		.until(() -> findDialogByTitle("Wizard Page 1"), selection -> selection.getNode() != null);
