@@ -5,6 +5,7 @@ module com.puresoltechnologies.javafx.testing {
     requires org.junit.jupiter.api;
     requires awaitility;
     requires hamcrest.core;
+    requires com.puresoltechnologies.graphs.trees;
 
     exports com.puresoltechnologies.javafx.testing;
     exports com.puresoltechnologies.javafx.testing.mouse;
