@@ -45,7 +45,7 @@ public class SampleTaskResultsViewer extends AbstractViewer implements Subscribe
 	GridPane.setConstraints(text, 0, 0, 1, 1, HPos.LEFT, VPos.TOP, Priority.ALWAYS, Priority.ALWAYS);
 	GridPane.setConstraints(clearButton, 0, 1, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
 	gridPane.getChildren().addAll(text, clearButton);
-	MessageBroker.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
+	MessageBroker.getBroker().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
     }
 
     @Override

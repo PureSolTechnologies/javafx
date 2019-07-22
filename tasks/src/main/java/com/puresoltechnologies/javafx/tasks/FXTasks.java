@@ -26,7 +26,7 @@ public class FXTasks {
     }
 
     private static <T> Future<T> run(Task<T> task, TaskInfo taskInfo) {
-	MessageBroker broker = MessageBroker.getStore();
+	MessageBroker broker = MessageBroker.getBroker();
 	broker.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
 	task.stateProperty().addListener((observable, oldValue, newValue) -> {
 	    broker.publish(TasksTopics.TASK_STATUS_UPDATE, taskInfo);
@@ -41,7 +41,7 @@ public class FXTasks {
     private static void registerNewTask(Task<?> task) {
 	synchronized (runningTasks) {
 	    runningTasks.add(task);
-	    MessageBroker.getStore().publish(TasksTopics.TASKS_SUMMARY, new TasksSummery(runningTasks.size(), 0.5));
+	    MessageBroker.getBroker().publish(TasksTopics.TASKS_SUMMARY, new TasksSummery(runningTasks.size(), 0.5));
 	    task.progressProperty().addListener((observalble, oldValue, newValue) -> {
 		sendSummaryUpdate();
 	    });
@@ -60,7 +60,7 @@ public class FXTasks {
 	    totalProgress += task.getProgress();
 	}
 	totalProgress /= runningTasks.size() > 0 ? runningTasks.size() : 1.0;
-	MessageBroker.getStore().publish(TasksTopics.TASKS_SUMMARY,
+	MessageBroker.getBroker().publish(TasksTopics.TASKS_SUMMARY,
 		new TasksSummery(runningTasks.size(), totalProgress));
     }
 }

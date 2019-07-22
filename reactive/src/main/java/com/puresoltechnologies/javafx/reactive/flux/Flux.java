@@ -3,18 +3,22 @@ package com.puresoltechnologies.javafx.reactive.flux;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ServiceLoader;
-import java.util.concurrent.SubmissionPublisher;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.puresoltechnologies.javafx.reactive.MessageBroker;
+import com.puresoltechnologies.javafx.reactive.Topic;
 
 public class Flux {
 
     private static final Logger logger = LoggerFactory.getLogger(Flux.class);
 
-    private static final Map<Class<?>, AbstractStore<?, ?>> stores = new HashMap<>();
+    public static final Topic<Payload> FLUX_TOPIC = new Topic<>(Flux.class.getName(), Payload.class);
+
+    private static final Map<Class<?>, Store<?, ?>> stores = new HashMap<>();
+    private static final Map<Class<?>, Topic<Payload>> topics = new HashMap<>();
     private static boolean initialized = false;
-    private static final SubmissionPublisher<Payload<?, ?>> dispatcher = new SubmissionPublisher<>();
 
     /**
      * This method initializes the broker.
@@ -26,20 +30,16 @@ public class Flux {
 	if (initialized) {
 	    throw new IllegalStateException("Flux was already initialized.");
 	}
+	if (!MessageBroker.isInitialized()) {
+	    throw new IllegalStateException(
+		    "MessageBroker was not initialized, yet. It needs to be initialized before Flux.");
+	}
+
 	@SuppressWarnings("rawtypes")
 	ServiceLoader<Store> serviceLoader = ServiceLoader.load(Store.class);
 	serviceLoader.stream() //
 		.map(loader -> loader.get()) //
-		.filter(service -> {
-		    if (AbstractStore.class.isAssignableFrom(service.getClass())) {
-			return true;
-		    } else {
-			logger.warn("Provided store '" + service.getClass() + "' does not implement AbstractStore.");
-			return false;
-		    }
-		}) //
-		.map(store -> (AbstractStore<?, ?>) store) //
-		.forEach(store -> registerStore(store));
+		.forEach(store -> stores.put(store.getClass(), store));
 	initialized = true;
     }
 
@@ -53,10 +53,9 @@ public class Flux {
      * @param <D>   is the type of the message.
      * @param store an object to be registered.
      */
-    public static synchronized <A extends Enum<A>, D> void registerStore(AbstractStore<A, D> store) {
+    public static synchronized <A extends Enum<A>, D> void registerStore(Store<A, D> store) {
 	assertInitialized();
 	stores.put(store.getClass(), store);
-	dispatcher.subscribe(store);
     }
 
     /**
@@ -87,14 +86,17 @@ public class Flux {
 	return initialized;
     }
 
-    public static synchronized <A extends Enum<A>, D> Store<A, D> getStore(Class<? extends Store<A, D>> clazz) {
+    public static synchronized <A extends Enum<A>, D, S extends Store<A, D>> S getStore(Class<S> clazz) {
+	assertInitialized();
 	@SuppressWarnings("unchecked")
-	Store<A, D> store = (Store<A, D>) stores.get(clazz);
+	S store = (S) stores.get(clazz);
 	return store;
     }
 
     public static synchronized <A extends Enum<A>, D> void dispatch(A action, D data) {
-	dispatcher.submit(new Payload<>(action, data));
+	assertInitialized();
+	MessageBroker broker = MessageBroker.getBroker();
+	broker.publish(FLUX_TOPIC, new Payload(action, data));
     }
 
     /**

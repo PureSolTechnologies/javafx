@@ -10,24 +10,36 @@ import java.util.Objects;
  * @param <A> is the type of the action.
  * @param <D> is the type of data.
  */
-public class Payload<A extends Enum<A>, D> {
+public class Payload {
 
-    private final A action;
-    private final D data;
+    private final Enum<?> action;
+    private final Object data;
     private final int hashCode;
 
-    public Payload(A action, D data) {
+    public Payload(Enum<?> action, Object data) {
 	super();
 	this.action = action;
 	this.data = data;
 	this.hashCode = Objects.hash(action, data);
     }
 
-    public A getAction() {
+    public boolean hasActionOf(Class<? extends Enum<?>> actions) {
+	return action.getClass().isAssignableFrom(actions);
+    }
+
+    public boolean hasDataOf(Class<?> type) {
+	return data.getClass().isAssignableFrom(type);
+    }
+
+    public <Action extends Enum<Action>> Action getAction() {
+	@SuppressWarnings("unchecked")
+	Action action = (Action) this.action;
 	return action;
     }
 
-    public D getData() {
+    public <Data> Data getData() {
+	@SuppressWarnings("unchecked")
+	Data data = (Data) this.data;
 	return data;
     }
 
@@ -47,10 +59,7 @@ public class Payload<A extends Enum<A>, D> {
 	if (getClass() != obj.getClass()) {
 	    return false;
 	}
-	Payload<?, ?> other = (Payload<?, ?>) obj;
-	if (hashCode != other.hashCode) {
-	    return false;
-	}
+	Payload other = (Payload) obj;
 	if (action == null) {
 	    if (other.action != null) {
 		return false;
@@ -63,6 +72,9 @@ public class Payload<A extends Enum<A>, D> {
 		return false;
 	    }
 	} else if (!data.equals(other.data)) {
+	    return false;
+	}
+	if (hashCode != other.hashCode) {
 	    return false;
 	}
 	return true;

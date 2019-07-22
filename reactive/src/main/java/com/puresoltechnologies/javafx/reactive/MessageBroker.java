@@ -54,7 +54,7 @@ public class MessageBroker {
 	return instance != null;
     }
 
-    public static synchronized MessageBroker getStore() {
+    public static synchronized MessageBroker getBroker() {
 	return instance;
     }
 

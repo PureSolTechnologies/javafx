@@ -63,7 +63,7 @@ public class TaskProgressViewer extends AbstractViewer implements Subscriber<Tas
     public void initialize() {
 	borderPane.setCenter(scrollPane);
 	scrollPane.setFitToWidth(true);
-	MessageBroker.getStore().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
+	MessageBroker.getBroker().subscribe(TasksTopics.TASK_STATUS_UPDATE, this);
     }
 
     @Override

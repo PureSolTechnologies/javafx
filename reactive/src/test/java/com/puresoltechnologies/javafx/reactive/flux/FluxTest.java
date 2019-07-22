@@ -10,11 +10,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import com.puresoltechnologies.javafx.reactive.MessageBroker;
+
 public class FluxTest {
 
     @BeforeEach
     public void initialize() {
 	assertFalse(Flux.isInitialized());
+	MessageBroker.initialize();
 	Flux.initialize();
 	assertTrue(Flux.isInitialized());
     }
@@ -23,6 +26,7 @@ public class FluxTest {
     public void shutdown() {
 	assertTrue(Flux.isInitialized());
 	Flux.shutdown();
+	MessageBroker.shutdown();
 	assertFalse(Flux.isInitialized());
     }
 
@@ -63,10 +67,10 @@ public class FluxTest {
 	ACTION_1;
     }
 
-    private static class TestStore extends AbstractStore<Actions, String> {
+    private static class TestStore extends Store<Actions, String> {
 
 	@Override
-	void handle(Payload<?, ?> payload) {
+	protected void handle(Payload payload) {
 	    // TODO Auto-generated method stub
 	}
 

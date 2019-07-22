@@ -53,7 +53,7 @@ public class MessageBrokerTest {
     public void testSingleSubscriber() throws InterruptedException {
 	Subscriber<Integer> subscriber = createSubscriber();
 
-	MessageBroker store = MessageBroker.getStore();
+	MessageBroker store = MessageBroker.getBroker();
 	store.subscribe(topic, subscriber);
 
 	store.publish(topic, 1);
@@ -76,7 +76,7 @@ public class MessageBrokerTest {
 	Subscriber<Integer> subscriber2 = createSubscriber();
 	Subscriber<Integer> subscriber3 = createSubscriber();
 
-	MessageBroker store = MessageBroker.getStore();
+	MessageBroker store = MessageBroker.getBroker();
 	store.subscribe(topic, subscriber1);
 	store.subscribe(topic, subscriber2);
 	store.subscribe(topic, subscriber3);
@@ -103,7 +103,7 @@ public class MessageBrokerTest {
 	Subscriber<Integer> subscriber2 = createSubscriber();
 	Subscriber<Integer> subscriber3 = createSubscriber();
 
-	MessageBroker store = MessageBroker.getStore();
+	MessageBroker store = MessageBroker.getBroker();
 	store.subscribe(topic, subscriber1);
 	store.subscribe(topic, subscriber2);
 	store.subscribe(topic, subscriber3);
@@ -138,7 +138,7 @@ public class MessageBrokerTest {
 	Subscriber<Integer> subscriber1 = createSubscriber();
 	Subscriber<Integer> subscriber2 = createSubscriber();
 
-	MessageBroker store = MessageBroker.getStore();
+	MessageBroker store = MessageBroker.getBroker();
 	store.subscribe(topic, subscriber1);
 
 	for (int i = 0; i < 10; i++) {
@@ -181,7 +181,7 @@ public class MessageBrokerTest {
 	Subscriber<Integer> subscriber1 = createSubscriber();
 	Subscriber<Integer> subscriber2 = createSubscriber();
 
-	MessageBroker store = MessageBroker.getStore();
+	MessageBroker store = MessageBroker.getBroker();
 	store.subscribe(topicWithBuffer, subscriber1);
 
 	for (int i = 0; i < 10; i++) {

@@ -9,6 +9,7 @@ import com.puresoltechnologies.javafx.utils.FXThreads;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
@@ -31,6 +32,7 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Subscribe
 
     public TasksStatusBar() {
 	super();
+	setPadding(new Insets(0.0, 5.0, 0.0, 5.0));
 	taskNumlabel = new Label("");
 	progressBar = new ProgressBar(0.0);
 	progressBar.disableProperty().bind(taskNumProperty.isEqualTo(0));
@@ -41,7 +43,7 @@ public class TasksStatusBar extends GridPane implements AutoCloseable, Subscribe
 
 	getChildren().addAll(taskNumlabel, progressBar);
 
-	MessageBroker.getStore().subscribe(TasksTopics.TASKS_SUMMARY, this);
+	MessageBroker.getBroker().subscribe(TasksTopics.TASKS_SUMMARY, this);
     }
 
     @Override

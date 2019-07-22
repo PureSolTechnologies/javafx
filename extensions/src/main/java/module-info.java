@@ -16,6 +16,7 @@ module com.puresoltechnologies.javafx.extensions {
     exports com.puresoltechnologies.javafx.extensions.menu;
     exports com.puresoltechnologies.javafx.extensions.properties;
     exports com.puresoltechnologies.javafx.extensions.splash;
+    exports com.puresoltechnologies.javafx.extensions.status;
     exports com.puresoltechnologies.javafx.extensions.toolbar;
 
     opens com.puresoltechnologies.javafx.extensions.icons;
