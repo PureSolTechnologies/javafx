@@ -10,7 +10,6 @@ import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D>
 	extends AbstractPlotRenderer<Instant, Y, D, InstantAxisRenderer, NumberAxisRenderer> {
@@ -30,7 +29,7 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D>
 	InstantAxisRenderer xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
 	GraphicsContext gc = canvas.getGraphicsContext2D();
-	gc.setStroke(Color.BLACK);
+	gc.setStroke(plot.getColor());
 	gc.setLineWidth(1.0);
 	double lastXValue = xAxisRenderer.calculatePos(x, y, width, height, plot.getAxisX(data.get(0)));
 	double lastYValue = yAxisRenderer.calculatePos(x, y, width, height, plot.getAxisY(data.get(0)));
@@ -38,7 +37,6 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D>
 	    double xValue = xAxisRenderer.calculatePos(x, y, width, height, plot.getAxisX(value));
 	    double yValue = yAxisRenderer.calculatePos(x, y, width, height, plot.getAxisY(value));
 	    if ((!Double.isNaN(xValue)) && (!Double.isNaN(yValue))) {
-		gc.setStroke(Color.BLACK);
 		gc.strokeLine(lastXValue, lastYValue, xValue, yValue);
 	    }
 	    lastXValue = xValue;

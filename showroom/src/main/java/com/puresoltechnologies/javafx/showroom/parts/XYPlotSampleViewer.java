@@ -8,6 +8,7 @@ import java.util.Optional;
 import com.puresoltechnologies.javafx.charts.ChartView;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
+import com.puresoltechnologies.javafx.charts.plots.ConnectingLineStyle;
 import com.puresoltechnologies.javafx.charts.plots.xy.XYPlot;
 import com.puresoltechnologies.javafx.charts.plots.xy.XYValue;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
@@ -19,6 +20,7 @@ import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 
 public class XYPlotSampleViewer extends AbstractViewer {
 
@@ -43,6 +45,8 @@ public class XYPlotSampleViewer extends AbstractViewer {
 	NumberAxis<Double> xAxis = new NumberAxis<>("X", "xxx", AxisType.X, Double.class);
 	NumberAxis<Double> yAxis = new NumberAxis<>("Y", "yyy", AxisType.Y, Double.class);
 	XYPlot<Double, Double> xyPlot = new XYPlot<>("XY Plot", xAxis, yAxis);
+	xyPlot.setColor(Color.RED);
+	xyPlot.setConnectingLineStyle(ConnectingLineStyle.STRAIGHT_LINE);
 	ChartView chartView = new ChartView("XY Plot");
 	chartView.addPlot(xyPlot);
 	borderPane.setCenter(chartView);

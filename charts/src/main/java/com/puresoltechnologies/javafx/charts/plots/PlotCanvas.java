@@ -155,6 +155,11 @@ public class PlotCanvas extends Canvas {
 	gc.strokeRect(0.0, 0.0, width, height);
     }
 
+    /**
+     * Draw the axes and returns the remaining plotting area.
+     *
+     * @return
+     */
     private Rectangle drawAxes() {
 	double xAxesThickness = calculateThickness(xAxes, renderers);
 	double yAxesThickness = calculateThickness(yAxes, renderers);

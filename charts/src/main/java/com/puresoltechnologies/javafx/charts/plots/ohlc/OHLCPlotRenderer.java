@@ -33,7 +33,7 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>>
 	InstantAxisRenderer xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
 	Plot<Instant, Y, OHLCValue<Y>> plot = getPlot();
-	gc.setStroke(Color.BLACK);
+	gc.setStroke(plot.getColor());
 	gc.setLineWidth(1.0);
 	for (OHLCValue<Y> value : plot.getData()) {
 	    double startX = xAxisRenderer.calculatePos(x, y, width, height, value.getStart());
@@ -42,14 +42,16 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>>
 	    double closeY = yAxisRenderer.calculatePos(x, y, width, height, value.getClose());
 	    double highY = yAxisRenderer.calculatePos(x, y, width, height, value.getHigh());
 	    double lowY = yAxisRenderer.calculatePos(x, y, width, height, value.getLow());
-	    gc.setFill(Color.GRAY);
-	    gc.fillRect(startX + ((endX - startX) / 3.0), highY, (endX - startX) / 3.0, lowY - highY);
+	    gc.setFill(plot.getColor());
+	    double middlePos = (endX - startX) / 2.0;
+	    gc.fillRect(startX + ((endX - startX) / 3.0) + middlePos, highY, (endX - startX) / 3.0, lowY - highY);
+	    gc.strokeRect(startX + ((endX - startX) / 3.0) + middlePos, highY, (endX - startX) / 3.0, lowY - highY);
 	    if (value.isIncrease()) {
 		gc.setFill(upwardTrendColor.get());
-		gc.fillRect(startX, closeY, endX - startX, closeY - openY);
+		gc.fillRect(startX + middlePos, closeY, endX - startX, openY - closeY);
 	    } else {
 		gc.setFill(downwardTrendColor.get());
-		gc.fillRect(startX, openY, endX - startX, openY - closeY);
+		gc.fillRect(startX + middlePos, openY, endX - startX, closeY - openY);
 	    }
 	}
     }
