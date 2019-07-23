@@ -46,7 +46,7 @@ public class WizardDialogUIT extends OpenJFXTest {
 
     @Override
     protected void stop() {
-	// TODO Auto-generated method stub
+	// Intentionally left blank
     }
 
     @Test

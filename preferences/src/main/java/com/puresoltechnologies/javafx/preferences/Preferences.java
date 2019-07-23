@@ -74,7 +74,14 @@ public class Preferences {
     }
 
     public static <T> ObjectProperty<T> getProperty(PropertyDefinition<T> definition) {
+	assureInitialized();
 	return instance.getValueProperty(definition);
+    }
+
+    private static void assureInitialized() {
+	if (!isInitialized()) {
+	    throw new IllegalStateException("Preferences not initialized.");
+	}
     }
 
     private final File directory;

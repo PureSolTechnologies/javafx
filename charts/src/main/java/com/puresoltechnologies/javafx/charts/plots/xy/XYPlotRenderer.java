@@ -2,11 +2,11 @@ package com.puresoltechnologies.javafx.charts.plots.xy;
 
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
+import com.puresoltechnologies.javafx.charts.plots.ConnectingLineStyle;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 
 public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D>
 	extends AbstractPlotRenderer<X, Y, D, NumberAxisRenderer, NumberAxisRenderer> {
@@ -22,13 +22,24 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
 	@SuppressWarnings("unchecked")
 	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
-	gc.setStroke(Color.BLACK);
+	gc.setStroke(plot.getColor());
+	gc.setFill(plot.getColor());
 	gc.setLineWidth(1.0);
+	double oldPosX = -Double.MAX_VALUE;
+	double oldPosY = -Double.MAX_VALUE;
 	for (XYValue<X, Y> value : plot.getData()) {
 	    double posX = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
 	    double posY = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
-	    gc.setFill(Color.GRAY);
 	    gc.fillRect(posX - 3.0, posY - 3.0, 6.0, 6.0);
+	    if (posX != -Double.MAX_VALUE) {
+		if (plot.getConnectingLineStyle() == ConnectingLineStyle.STRAIGHT_LINE) {
+		    gc.setGlobalAlpha(0.2);
+		    gc.strokeLine(oldPosX, oldPosY, posX, posY);
+		    gc.setGlobalAlpha(1.0);
+		}
+	    }
+	    oldPosX = posX;
+	    oldPosY = posY;
 	}
     }
 

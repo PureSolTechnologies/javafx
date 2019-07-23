@@ -20,7 +20,7 @@ public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<O
 	this.high = high;
 	this.low = low;
 	this.close = close;
-	this.increase = (close.doubleValue() - open.doubleValue()) < 0.0 ? false : true;
+	this.increase = close.doubleValue() > open.doubleValue() ? true : false;
     }
 
     public final Instant getStart() {

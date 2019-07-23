@@ -24,6 +24,7 @@ import com.puresoltechnologies.javafx.utils.ResourceUtils;
 
 import javafx.scene.Node;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.paint.Color;
 
 public class OhlcPlotSampleViewer extends AbstractViewer {
 
@@ -48,6 +49,7 @@ public class OhlcPlotSampleViewer extends AbstractViewer {
 	TimeSeriesAxis timeAxis = new TimeSeriesAxis("Time", AxisType.X);
 	Axis<Double> priceAxis = new NumberAxis<>("Price", "EUR", AxisType.Y, Double.class);
 	OHLCPlot<Double> ohlcPlot = new OHLCPlot<>("OHLC Plot", timeAxis, priceAxis);
+	ohlcPlot.setColor(Color.LIGHTBLUE);
 	ChartView chartView = new ChartView("OHLC Plot");
 	chartView.addPlot(ohlcPlot);
 	borderPane.setCenter(chartView);
@@ -56,8 +58,8 @@ public class OhlcPlotSampleViewer extends AbstractViewer {
     }
 
     private List<OHLCValue<Double>> generateTestOHLCData() {
-	Instant begin = Instant.ofEpochSecond(1483228800);
-	Instant end = Instant.ofEpochSecond(1514764800);
+	Instant begin = Instant.now().minus(48, ChronoUnit.DAYS);
+	Instant end = Instant.now();
 	List<OHLCValue<Double>> data = new ArrayList<>();
 	double days = 0;
 	Instant current = begin;

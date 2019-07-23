@@ -4,54 +4,59 @@ import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 
 /**
- * 
+ *
  * @author Rick-Rainer Ludwig
  *
- * @param <X>
- *            is the data type of the X axis.
- * @param <Y>is
- *            the data type of the Y axis.
- * @param <D>
- *            is the actual data type of the data points to be plotted.
+ * @param <X>   is the data type of the X axis.
+ * @param <Y>is the data type of the Y axis.
+ * @param <D>   is the actual data type of the data points to be plotted.
  */
 public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D> {
 
-    public String getTitle();
+    String getTitle();
 
-    public void setTitle(String title);
+    void setTitle(String title);
 
-    public StringProperty titleProperty();
+    StringProperty titleProperty();
 
-    public Axis<X> getXAxis();
+    ObjectProperty<Color> colorProperty();
 
-    public Axis<Y> getYAxis();
+    void setColor(Color color);
 
-    public boolean hasData();
+    Color getColor();
 
-    public X getMinX();
+    Axis<X> getXAxis();
 
-    public X getMaxX();
+    Axis<Y> getYAxis();
 
-    public Y getMinY();
+    boolean hasData();
 
-    public Y getMaxY();
+    X getMinX();
 
-    public ObservableList<D> data();
+    X getMaxX();
+
+    Y getMinY();
+
+    Y getMaxY();
+
+    ObservableList<D> data();
 
     /**
      * Returns the data to be plotted.
-     * 
+     *
      * @return A {@link List} of values is returned.
      */
-    public List<D> getData();
+    List<D> getData();
 
     /**
      * Returns the data to be plotted.
      */
-    public void setData(List<D> data);
+    void setData(List<D> data);
 
 }

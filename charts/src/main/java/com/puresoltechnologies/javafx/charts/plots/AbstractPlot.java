@@ -7,15 +7,19 @@ import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
+import javafx.scene.paint.Color;
 
 public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> implements Plot<X, Y, D> {
 
     private final StringProperty title = new SimpleStringProperty();
+    private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
     private final ObservableList<D> data = FXCollections.observableArrayList();
     private final Axis<X> xAxis;
     private final Axis<Y> yAxis;
@@ -71,6 +75,21 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
     @Override
     public final StringProperty titleProperty() {
 	return title;
+    }
+
+    @Override
+    public final ObjectProperty<Color> colorProperty() {
+	return color;
+    }
+
+    @Override
+    public final void setColor(Color color) {
+	this.color.setValue(color);
+    }
+
+    @Override
+    public final Color getColor() {
+	return color.getValue();
     }
 
     @Override
