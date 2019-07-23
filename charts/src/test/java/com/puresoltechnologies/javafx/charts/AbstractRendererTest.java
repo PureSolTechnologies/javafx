@@ -11,7 +11,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 
 public class AbstractRendererTest {
 
-    private static Stream<Arguments> provideCalcPosXValues() {
+    public static Stream<Arguments> provideCalcPosXValues() {
 	return Stream.of( //
 		Arguments.of(100.0, 100.0, 0.0, 100.0, 50.0, "Simple Center Test", 150), //
 		Arguments.of(100.0, 100.0, 400.0, 2000.0, 400.0, "Simple Edge Test", 100) //
@@ -26,7 +26,7 @@ public class AbstractRendererTest {
 	assertEquals(result, AbstractRenderer.calcPosX(x, width, min, max, value), comment);
     }
 
-    private static Stream<Arguments> provideCalcPosYValues() {
+    public static Stream<Arguments> provideCalcPosYValues() {
 	Arguments.of(100.0, 100.0, 0.0, 100.0, 50.0, "Simple Center Test");
 	return Stream.of( //
 		Arguments.of(100.0, 100.0, 0.0, 100.0, 50.0, "Simple Center Test", 150), //
