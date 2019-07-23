@@ -13,6 +13,7 @@
 	<name>${officalName} - ${project.artifactId}</name>
 
 	<dependencies>
+		<!-- Self -->
 		<dependency>
 			<groupId>com.puresoltechnologies.javafx</groupId>
 			<artifactId>extensions</artifactId>
@@ -25,6 +26,7 @@
 			<groupId>com.puresoltechnologies.javafx</groupId>
 			<artifactId>utils</artifactId>
 		</dependency>
+		<!-- PureSol Technologies -->
 		<dependency>
 			<groupId>com.puresoltechnologies.graphs</groupId>
 			<artifactId>trees</artifactId>
@@ -32,6 +34,19 @@
 		<dependency>
 			<groupId>com.puresoltechnologies.streaming</groupId>
 			<artifactId>iterators</artifactId>
+		</dependency>
+		<!-- 3rd party -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-engine</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter-params</artifactId>
 		</dependency>
 	</dependencies>
 </project>

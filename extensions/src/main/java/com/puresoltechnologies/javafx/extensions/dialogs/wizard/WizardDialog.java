@@ -7,7 +7,6 @@ import java.util.function.Supplier;
 
 import com.puresoltechnologies.javafx.extensions.dialogs.DialogHeader;
 
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
@@ -15,10 +14,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
-import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 
 /**
@@ -33,8 +30,6 @@ public class WizardDialog<T> extends Dialog<T> {
 
     private final List<WizardPage<T>> pages = new ArrayList<>();
 
-    private final ObservableList<String> stepTitleList = FXCollections.observableArrayList();
-    private final ListView<String> stepListView = new ListView<>(stepTitleList);
     private int currentPageId = -1;
 
     private final DialogHeader header = new DialogHeader();
@@ -52,12 +47,8 @@ public class WizardDialog<T> extends Dialog<T> {
 	this.data = supplier.get();
 	setResizable(true);
 
-	stepListView.setEditable(false);
-	stepListView.addEventFilter(MouseEvent.ANY, MouseEvent::consume);
-
 	content.setPadding(Insets.EMPTY);
 	content.setTop(header);
-	content.setLeft(stepListView);
 	content.setCenterShape(true);
 
 	DialogPane dialogPane = getDialogPane();
@@ -78,7 +69,7 @@ public class WizardDialog<T> extends Dialog<T> {
 
 	setResultConverter(type -> {
 	    cleanup(type);
-	    if (type == ButtonType.OK) {
+	    if (type == ButtonType.FINISH) {
 		return getData();
 	    } else {
 		return null;
@@ -102,19 +93,16 @@ public class WizardDialog<T> extends Dialog<T> {
 
     private void finish(ActionEvent event) {
 	setResult(data);
-	event.consume();
     }
 
     private void cancel(ActionEvent event) {
 	setResult(null);
-	event.consume();
     }
 
     public final void addPage(WizardPage<T> page) {
 	page.setData(data);
 	page.initialize();
 	pages.add(page);
-	stepTitleList.add(page.getTitle());
 	if (pages.size() == 1) {
 	    setCurrentPage(0);
 	} else {
@@ -153,7 +141,6 @@ public class WizardDialog<T> extends Dialog<T> {
 	page.onArrival();
 
 	content.setCenter(page.getNode());
-	stepListView.getSelectionModel().select(pageId);
 	currentPageId = pageId;
 	setDialogHeader(page);
     }

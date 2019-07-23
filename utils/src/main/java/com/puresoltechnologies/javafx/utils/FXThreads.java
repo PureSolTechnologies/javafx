@@ -66,6 +66,10 @@ public class FXThreads {
 	}
     }
 
+    public static boolean isInitialized() {
+	return threadPool != null;
+    }
+
     /**
      * This method puts the provided {@link Runnable} onto the FX thread. It is
      * equivalent to run {@link Platform#runLater(Runnable)}.

@@ -63,10 +63,19 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 
     @Override
     protected double getLabelThickness() {
-	Text text = new Text("WQ");
+	Text text = new Text("W1.23456");
 	text.setFont(axisLabelFont.get().toFont());
 	text.applyCss();
-	return text.getLayoutBounds().getHeight();
+	switch (getAxis().getAxisType()) {
+	case X:
+	case ALT_X:
+	    return text.getLayoutBounds().getHeight();
+	case Y:
+	case ALT_Y:
+	    return text.getLayoutBounds().getWidth();
+	default:
+	    return text.getLayoutBounds().getHeight();
+	}
     }
 
     @SuppressWarnings("unchecked")
@@ -120,12 +129,12 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		position = currentPosition;
 		gc.setFill(axisColor.get());
 		gc.setStroke(axisColor.get());
-		gc.strokeLine(x + position, y, x + position, y + AXIS_THICKNESS);
+		gc.strokeLine(position, y, position, y + AXIS_THICKNESS);
 		gc.setStroke(axisTitleFont.get().getColor());
 		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.TOP);
-		gc.fillText(String.valueOf(current), x + position, y + AXIS_THICKNESS);
+		gc.fillText(String.valueOf(current), position, y + AXIS_THICKNESS);
 		break;
 	    case ALT_X:
 		currentPosition = calculatePos(x, y, width, height, current);
@@ -135,12 +144,12 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		position = currentPosition;
 		gc.setFill(axisColor.get());
 		gc.setStroke(axisColor.get());
-		gc.strokeLine(x + position, y + height, x + position, (y + height) - AXIS_THICKNESS);
+		gc.strokeLine(position, y + height, position, (y + height) - AXIS_THICKNESS);
 		gc.setStroke(axisTitleFont.get().getColor());
 		gc.setFill(axisTitleFont.get().getColor());
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
-		gc.fillText(String.valueOf(current), x + position, (y + height) - AXIS_THICKNESS);
+		gc.fillText(String.valueOf(current), position, (y + height) - AXIS_THICKNESS);
 		break;
 	    case Y:
 		currentPosition = calculatePos(x, y, width, height, current);

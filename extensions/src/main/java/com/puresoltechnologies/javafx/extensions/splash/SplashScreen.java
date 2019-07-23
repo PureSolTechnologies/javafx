@@ -41,6 +41,7 @@ public class SplashScreen {
 
     private final boolean startIsAlwaysOnTop;
     private final boolean startIsResizable;
+    private boolean aborted = false;
 
     public SplashScreen(Stage initStage, Image splashImage, Consumer<Stage> startStage) {
 	super();
@@ -126,6 +127,9 @@ public class SplashScreen {
 		    }
 		    task.get();
 		    FXThreads.runOnFXThread(() -> loadProgress.setProgress(((double) num) / taskNum));
+		    if (aborted) {
+			break;
+		    }
 		}
 		return null;
 	    }
@@ -133,10 +137,12 @@ public class SplashScreen {
 	task.stateProperty().addListener((observableValue, oldState, newState) -> {
 	    switch (newState) {
 	    case SUCCEEDED:
-		root.setVisible(false);
-		initStage.setAlwaysOnTop(startIsAlwaysOnTop);
-		initStage.setResizable(startIsResizable);
-		startStage.accept(initStage);
+		if (!aborted) {
+		    root.setVisible(false);
+		    initStage.setAlwaysOnTop(startIsAlwaysOnTop);
+		    initStage.setResizable(startIsResizable);
+		    startStage.accept(initStage);
+		}
 		break;
 	    case CANCELLED:
 	    case FAILED:
@@ -159,6 +165,10 @@ public class SplashScreen {
 	    }
 	});
 	FXThreads.runAsync(task);
+    }
+
+    public void abort() {
+	this.aborted = true;
     }
 
     /**
