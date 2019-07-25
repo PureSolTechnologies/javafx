@@ -18,6 +18,9 @@ public class TickCalculator {
      * @return An integer is returned for accuracy as exponent for base 10.
      */
     public static int calculateAccuracy(double min, double max) {
+	if ((max - min) == 0.0) {
+	    return 0;
+	}
 	return (int) Math.round(Math.log10(max - min) - 1);
     }
 

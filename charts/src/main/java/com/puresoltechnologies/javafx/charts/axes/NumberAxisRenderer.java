@@ -82,7 +82,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 
     @Override
     protected double getLabelThickness() {
-	Text text = new Text("W1.23456");
+	Text text = new Text("W1.234");
 	text.setFont(axisLabelFont.get().toFont());
 	text.applyCss();
 	switch (getAxis().getAxisType()) {
