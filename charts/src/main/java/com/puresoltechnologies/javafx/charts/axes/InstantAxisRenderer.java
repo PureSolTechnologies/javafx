@@ -121,7 +121,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 	    switch (axisType) {
 	    case X:
 		currentPosition = (width / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
-		if (((currentPosition - position) < MIN_DISTANCE) && (position > 0.0)) {
+		if (((currentPosition - position) < MIN_X_DISTANCE) && (position > 0.0)) {
 		    continue;
 		}
 		position = currentPosition;
@@ -137,7 +137,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		break;
 	    case ALT_X:
 		currentPosition = (width / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
-		if ((currentPosition - position) < MIN_DISTANCE) {
+		if ((currentPosition - position) < MIN_X_DISTANCE) {
 		    continue;
 		}
 		position = currentPosition;
@@ -153,7 +153,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		break;
 	    case Y:
 		currentPosition = (height / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
-		if ((currentPosition - position) < MIN_DISTANCE) {
+		if ((currentPosition - position) < MIN_X_DISTANCE) {
 		    continue;
 		}
 		position = currentPosition;
@@ -170,7 +170,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		break;
 	    case ALT_Y:
 		currentPosition = (height / (maxEpochSecond - minEpochSecond)) * (currentEpochSecond - minEpochSecond);
-		if ((currentPosition - position) < MIN_DISTANCE) {
+		if ((currentPosition - position) < MIN_X_DISTANCE) {
 		    continue;
 		}
 		position = currentPosition;

@@ -19,7 +19,8 @@ import javafx.scene.text.TextAlignment;
 public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implements AxisRenderer<T> {
 
     protected static final double AXIS_THICKNESS = 10.0;
-    protected static final double MIN_DISTANCE = 100.0;
+    protected static final double MIN_X_DISTANCE = 50.0;
+    protected static final double MIN_Y_DISTANCE = 25.0;
 
     protected static final ObjectProperty<Color> backgroundColor = Preferences
 	    .getProperty(ChartsProperties.BACKGROUND_COLOR);

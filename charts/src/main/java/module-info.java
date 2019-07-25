@@ -17,6 +17,7 @@ module com.puresoltechnologies.javafx.charts {
     exports com.puresoltechnologies.javafx.charts.plots.timeseries;
     exports com.puresoltechnologies.javafx.charts.plots.xy;
     exports com.puresoltechnologies.javafx.charts.tree;
+    exports com.puresoltechnologies.javafx.charts.utils;
 
     provides com.puresoltechnologies.javafx.preferences.dialogs.PreferencesPage
 	    with com.puresoltechnologies.javafx.charts.preferences.ChartPreferencesPage,

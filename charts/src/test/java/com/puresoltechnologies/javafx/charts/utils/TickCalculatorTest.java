@@ -8,11 +8,11 @@ public class TickCalculatorTest {
 
     @Test
     public void testCalculateStepExponent() {
-	assertEquals(-1, TickCalculator.calculateStepExponent(0.0, 1.0));
-	assertEquals(2, TickCalculator.calculateStepExponent(0.0, 1000.0));
-	assertEquals(2, TickCalculator.calculateStepExponent(-1000.0, 1000.0));
-	assertEquals(3, TickCalculator.calculateStepExponent(-2500.0, 2500.0));
-	assertEquals(2, TickCalculator.calculateStepExponent(400, 2000));
+	assertEquals(-1, TickCalculator.calculateAccuracy(0.0, 1.0));
+	assertEquals(2, TickCalculator.calculateAccuracy(0.0, 1000.0));
+	assertEquals(2, TickCalculator.calculateAccuracy(-1000.0, 1000.0));
+	assertEquals(3, TickCalculator.calculateAccuracy(-2500.0, 2500.0));
+	assertEquals(2, TickCalculator.calculateAccuracy(400, 2000));
     }
 
     @Test
