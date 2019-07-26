@@ -132,16 +132,16 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	    gc.setStroke(axisColor.get());
 	    switch (axisType) {
 	    case X:
-		gc.strokeLine(position, y, position, y + AXIS_THICKNESS);
+		gc.strokeLine(position, y, position, y + ((AXIS_THICKNESS * 2) / 3));
 		break;
 	    case ALT_X:
-		gc.strokeLine(position, y + height, position, (y + height) - AXIS_THICKNESS);
+		gc.strokeLine(position, y + height, position, (y + height) - ((AXIS_THICKNESS * 2) / 3));
 		break;
 	    case Y:
-		gc.strokeLine((x + width) - AXIS_THICKNESS, position, x + width, position);
+		gc.strokeLine((x + width) - ((AXIS_THICKNESS * 2) / 3), position, x + width, position);
 		break;
 	    case ALT_Y:
-		gc.strokeLine(x, position, x + AXIS_THICKNESS, position);
+		gc.strokeLine(x, position, x + ((AXIS_THICKNESS * 2) / 3), position);
 		break;
 	    }
 	    gc.setFont(axisLabelFont.get().toFont());
