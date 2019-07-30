@@ -1,8 +1,13 @@
 package com.puresoltechnologies.javafx.extensions;
 
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.ToolBar;
-import javafx.scene.effect.InnerShadow;
+import javafx.scene.layout.Border;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 
@@ -31,10 +36,9 @@ public class StatusBar extends HBox {
     }
 
     private void initializeUI() {
-	InnerShadow is = new InnerShadow(0.0, Color.GRAY);
-	is.setOffsetX(1.0f);
-	is.setOffsetY(1.0f);
-	setEffect(is);
+	setBorder(new Border(new BorderStroke(Color.LIGHTGRAY, Color.LIGHTGRAY, Color.LIGHTGRAY, Color.LIGHTGRAY,
+		BorderStrokeStyle.SOLID, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE, BorderStrokeStyle.NONE,
+		CornerRadii.EMPTY, BorderWidths.DEFAULT, Insets.EMPTY)));
     }
 
 }
