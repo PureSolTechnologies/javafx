@@ -50,11 +50,11 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	    throw new IllegalStateException("Wrong type of axis found.");
 	}
 	int accuracyExponent = 0;
-	if ((min != null) && (max != null)) {
+	if (min != null && max != null) {
 	    // optimize min and max
 	    accuracyExponent = TickCalculator.calculateAccuracy(min, max);
 	    min = TickCalculator.calculateChartMin(min, accuracyExponent);
-	    max = TickCalculator.calculateChartMin(max, accuracyExponent);
+	    max = TickCalculator.calculateChartMax(max, accuracyExponent);
 	}
 	setAccuracy(accuracyExponent);
 	setMin(min);
@@ -73,7 +73,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     @Override
     public double calculatePos(double x, double y, double width, double height, Number value) {
 	double d = value.doubleValue();
-	if ((getMin() != null) && (getMax() != null)) {
+	if (getMin() != null && getMax() != null) {
 	    return super.calculatePos(x, y, width, height, getMin().doubleValue(), getMax().doubleValue(), d);
 	} else {
 	    return super.calculatePos(x, y, width, height, d, d, d);
@@ -124,7 +124,7 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	boolean first = true;
 	for (double current = getMin().doubleValue(); current <= getMax().doubleValue(); current += tickSteps) {
 	    double currentPosition = calculatePos(x, y, width, height, current);
-	    if ((Math.abs(currentPosition - position) < minDinstance) && (!first)) {
+	    if (Math.abs(currentPosition - position) < minDinstance && !first) {
 		continue;
 	    }
 	    position = currentPosition;
@@ -132,16 +132,16 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	    gc.setStroke(axisColor.get());
 	    switch (axisType) {
 	    case X:
-		gc.strokeLine(position, y, position, y + ((AXIS_THICKNESS * 2) / 3));
+		gc.strokeLine(position, y, position, y + AXIS_THICKNESS * 2 / 3);
 		break;
 	    case ALT_X:
-		gc.strokeLine(position, y + height, position, (y + height) - ((AXIS_THICKNESS * 2) / 3));
+		gc.strokeLine(position, y + height, position, y + height - AXIS_THICKNESS * 2 / 3);
 		break;
 	    case Y:
-		gc.strokeLine((x + width) - ((AXIS_THICKNESS * 2) / 3), position, x + width, position);
+		gc.strokeLine(x + width - AXIS_THICKNESS * 2 / 3, position, x + width, position);
 		break;
 	    case ALT_Y:
-		gc.strokeLine(x, position, x + ((AXIS_THICKNESS * 2) / 3), position);
+		gc.strokeLine(x, position, x + AXIS_THICKNESS * 2 / 3, position);
 		break;
 	    }
 	    gc.setFont(axisLabelFont.get().toFont());
@@ -157,12 +157,12 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	    case ALT_X:
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
-		gc.fillText(tickLabel, position, (y + height) - AXIS_THICKNESS);
+		gc.fillText(tickLabel, position, y + height - AXIS_THICKNESS);
 		break;
 	    case Y:
 		gc.setTextAlign(TextAlignment.RIGHT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.fillText(tickLabel, (x + width) - AXIS_THICKNESS, position);
+		gc.fillText(tickLabel, x + width - AXIS_THICKNESS, position);
 		break;
 	    case ALT_Y:
 		gc.setTextAlign(TextAlignment.LEFT);
