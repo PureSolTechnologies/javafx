@@ -26,10 +26,10 @@ public abstract class AbstractRenderer implements Renderer {
      *         range is returned.
      */
     public static final double calcPosX(double x, double width, double min, double max, double value) {
-	if ((max - min) == 0.0) {
-	    return x + (width / 2.0);
+	if (max - min == 0.0) {
+	    return x + width / 2.0;
 	}
-	return x + ((width / (max - min)) * (value - min));
+	return x + width / (max - min) * (value - min);
     }
 
     /**
@@ -48,10 +48,10 @@ public abstract class AbstractRenderer implements Renderer {
      *         range is returned.
      */
     public static final double calcPosY(double y, double height, double min, double max, double value) {
-	if ((max - min) == 0.0) {
-	    return y + (height / 2.0);
+	if (max - min == 0.0) {
+	    return y + height / 2.0;
 	}
-	return (y + height) - ((height / (max - min)) * (value - min));
+	return y + height - height / (max - min) * (value - min);
     }
 
 }

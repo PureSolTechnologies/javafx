@@ -133,7 +133,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     }
 
     private boolean hasData() {
-	return (getMin() != null) && (getMax() != null);
+	return getMin() != null && getMax() != null;
     }
 
     private void clearAxisArea(GraphicsContext gc, double x, double y, double width, double height) {
@@ -183,11 +183,11 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	switch (axis.getAxisType()) {
 	case X:
 	    // Title
-	    gc.fillText(axisTitle, x + (width / 2.0), (y + height) - titleText.getLayoutBounds().getHeight());
+	    gc.fillText(axisTitle, x + width / 2.0, y + height - titleText.getLayoutBounds().getHeight());
 	    break;
 	case ALT_X:
 	    // Title
-	    gc.fillText(axisTitle, x + (width / 2.0), y);
+	    gc.fillText(axisTitle, x + width / 2.0, y);
 	    break;
 	case Y:
 	    // Title
