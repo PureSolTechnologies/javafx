@@ -4,8 +4,8 @@ import com.puresoltechnologies.javafx.charts.Renderer;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 
 /**
- * This is a marker interface for plot renderer. It is used to distinguish
- * different kinds of plotters.
+ * This is a interface for plot renderer. It is used to distinguish different
+ * kinds of plotters.
  *
  * @author Rick-Rainer Ludwig
  *

@@ -3,6 +3,9 @@ package com.puresoltechnologies.javafx.charts.plots;
 import javafx.beans.property.ObjectProperty;
 
 /**
+ * A point based plot is a simple plot which shows its data as single mark
+ * defined with X and Y coordinate. A non point-based plot could be bubble plots
+ * or bar charts.
  *
  * @author Rick-Rainer Ludwig
  *

@@ -24,9 +24,9 @@ import javafx.scene.layout.Priority;
  */
 public class ChartView extends GridPane {
 
-    protected static final ObjectProperty<FontDefinition> TITLE_FONT = Preferences
+    private static final ObjectProperty<FontDefinition> titleFontProperty = Preferences
 	    .getProperty(ChartsProperties.TITLE_FONT);
-    protected static final ObjectProperty<FontDefinition> SUBTITLE_FONT = Preferences
+    private static final ObjectProperty<FontDefinition> subtitleFontProperty = Preferences
 	    .getProperty(ChartsProperties.SUBTITLE_FONT);
 
     private final StringProperty titleProperty = new SimpleStringProperty();
@@ -46,15 +46,15 @@ public class ChartView extends GridPane {
 	titleLabel.textProperty().bind(titleProperty);
 	titleLabel.visibleProperty().bind(titleProperty.isNotEmpty());
 	titleLabel.managedProperty().bind(titleProperty.isNotEmpty());
-	titleLabel.setFont(TITLE_FONT.get().toFont());
+	titleLabel.setFont(titleFontProperty.get().toFont());
 	titleLabel.setAlignment(Pos.TOP_CENTER);
-	FXNodeUtils.setTextColor(titleLabel, TITLE_FONT.get().getColor());
+	FXNodeUtils.setTextColor(titleLabel, titleFontProperty.get().getColor());
 	subTitleLabel.textProperty().bind(subTitleProperty);
 	subTitleLabel.visibleProperty().bind(subTitleProperty.isNotEmpty());
 	subTitleLabel.managedProperty().bind(subTitleProperty.isNotEmpty());
-	subTitleLabel.setFont(SUBTITLE_FONT.get().toFont());
+	subTitleLabel.setFont(subtitleFontProperty.get().toFont());
 	subTitleLabel.setAlignment(Pos.TOP_CENTER);
-	FXNodeUtils.setTextColor(subTitleLabel, SUBTITLE_FONT.get().getColor());
+	FXNodeUtils.setTextColor(subTitleLabel, subtitleFontProperty.get().getColor());
 	plotCanvas.setManaged(true);
 	GridPane.setConstraints(titleLabel, 0, 0, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
 	GridPane.setConstraints(subTitleLabel, 0, 1, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);

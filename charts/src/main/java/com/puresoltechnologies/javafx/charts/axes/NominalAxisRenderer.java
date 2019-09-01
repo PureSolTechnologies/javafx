@@ -15,7 +15,7 @@ public class NominalAxisRenderer extends AbstractAxisRenderer<Object> {
     @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
-	text.setFont(axisLabelFont.get().toFont());
+	text.setFont(getAxis().getLabelFont().toFont());
 	text.applyCss();
 	return 2 * text.getLayoutBounds().getHeight();
     }

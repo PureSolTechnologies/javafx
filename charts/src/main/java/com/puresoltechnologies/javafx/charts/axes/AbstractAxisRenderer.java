@@ -3,7 +3,6 @@ package com.puresoltechnologies.javafx.charts.axes;
 import com.puresoltechnologies.javafx.charts.AbstractRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
-import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
@@ -25,10 +24,6 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     protected static final ObjectProperty<Color> backgroundColor = Preferences
 	    .getProperty(ChartsProperties.BACKGROUND_COLOR);
     protected static final ObjectProperty<Color> axisColor = Preferences.getProperty(ChartsProperties.AXIS_COLOR);
-    protected static final ObjectProperty<FontDefinition> axisLabelFont = Preferences
-	    .getProperty(ChartsProperties.AXIS_LABEL_FONT);
-    protected static final ObjectProperty<FontDefinition> axisTitleFont = Preferences
-	    .getProperty(ChartsProperties.AXIS_TITLE_FONT);
 
     private final Axis<T> axis;
     private final ObservableList<Plot<?, ?, ?>> plots;
@@ -97,7 +92,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	double thickness = AXIS_THICKNESS;
 	thickness += getLabelThickness();
 	Text text = new Text(axis.getTitle());
-	text.setFont(axisTitleFont.get().toFont());
+	text.setFont(axis.getTitleFont().toFont());
 	text.applyCss();
 	thickness += text.getLayoutBounds().getHeight();
 	return thickness;
@@ -133,7 +128,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     }
 
     private boolean hasData() {
-	return getMin() != null && getMax() != null;
+	return (getMin() != null) && (getMax() != null);
     }
 
     private void clearAxisArea(GraphicsContext gc, double x, double y, double width, double height) {
@@ -171,23 +166,23 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	    axisTitle += " (" + axis.getUnit() + ")";
 	}
 	Text titleText = new Text(axisTitle);
-	titleText.setFont(axisTitleFont.get().toFont());
+	titleText.setFont(axis.getTitleFont().toFont());
 	titleText.applyCss();
 	// Set attributes
-	gc.setStroke(axisTitleFont.get().getColor());
-	gc.setFill(axisTitleFont.get().getColor());
-	gc.setFont(axisTitleFont.get().toFont());
+	gc.setStroke(axis.getTitleFont().getColor());
+	gc.setFill(axis.getTitleFont().getColor());
+	gc.setFont(axis.getTitleFont().toFont());
 	gc.setTextAlign(TextAlignment.CENTER);
 	gc.setTextBaseline(VPos.TOP);
 
 	switch (axis.getAxisType()) {
 	case X:
 	    // Title
-	    gc.fillText(axisTitle, x + width / 2.0, y + height - titleText.getLayoutBounds().getHeight());
+	    gc.fillText(axisTitle, x + (width / 2.0), (y + height) - titleText.getLayoutBounds().getHeight());
 	    break;
 	case ALT_X:
 	    // Title
-	    gc.fillText(axisTitle, x + width / 2.0, y);
+	    gc.fillText(axisTitle, x + (width / 2.0), y);
 	    break;
 	case Y:
 	    // Title

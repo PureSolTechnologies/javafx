@@ -60,7 +60,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
     @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
-	text.setFont(axisLabelFont.get().toFont());
+	text.setFont(getAxis().getLabelFont().toFont());
 	text.applyCss();
 	return 2 * text.getLayoutBounds().getHeight();
     }
@@ -89,7 +89,7 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
     @Override
     protected void drawTicks(GraphicsContext gc, double x, double y, double width, double height) {
 	AxisType axisType = getAxis().getAxisType();
-	gc.setFont(axisLabelFont.get().toFont());
+	gc.setFont(getAxis().getLabelFont().toFont());
 	List<Instant> possibleTicks = new ArrayList<>();
 	switch (axisType) {
 	case X:
@@ -130,8 +130,8 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		gc.strokeLine(x + position, y, x + position, y + AXIS_THICKNESS);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.TOP);
-		gc.setStroke(axisLabelFont.get().getColor());
-		gc.setFill(axisLabelFont.get().getColor());
+		gc.setStroke(getAxis().getLabelFont().getColor());
+		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + position,
 			y + AXIS_THICKNESS);
 		break;
@@ -146,8 +146,8 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		gc.strokeLine(x + position, y + height, x + position, (y + height) - AXIS_THICKNESS);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
-		gc.setStroke(axisLabelFont.get().getColor());
-		gc.setFill(axisLabelFont.get().getColor());
+		gc.setStroke(getAxis().getLabelFont().getColor());
+		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + position,
 			(y + height) - AXIS_THICKNESS);
 		break;
@@ -163,8 +163,8 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 			(y + height) - position);
 		gc.setTextAlign(TextAlignment.RIGHT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.setStroke(axisLabelFont.get().getColor());
-		gc.setFill(axisLabelFont.get().getColor());
+		gc.setStroke(getAxis().getLabelFont().getColor());
+		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))),
 			(x + width) - AXIS_THICKNESS, (y + height) - position);
 		break;
@@ -179,8 +179,8 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		gc.strokeLine(x, (y + height) - position, x + AXIS_THICKNESS, (y + height) - position);
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.setStroke(axisLabelFont.get().getColor());
-		gc.setFill(axisLabelFont.get().getColor());
+		gc.setStroke(getAxis().getLabelFont().getColor());
+		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + AXIS_THICKNESS,
 			(y + height) - position);
 		break;

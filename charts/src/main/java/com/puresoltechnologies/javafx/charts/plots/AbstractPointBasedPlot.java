@@ -35,14 +35,17 @@ public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends 
 	super(title, xAxis, yAxis);
     }
 
+    @Override
     public ObjectProperty<ConnectingLineStyle> connectingLineStyleProperty() {
 	return connectingLineStyle;
     }
 
+    @Override
     public ConnectingLineStyle getConnectingLineStyle() {
 	return connectingLineStyle.getValue();
     }
 
+    @Override
     public void setConnectingLineStyle(ConnectingLineStyle connectingLineStyle) {
 	this.connectingLineStyle.setValue(connectingLineStyle);
     }
