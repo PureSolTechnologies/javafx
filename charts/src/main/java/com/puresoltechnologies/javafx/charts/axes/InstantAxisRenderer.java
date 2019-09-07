@@ -125,13 +125,11 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(axisColor.get());
-		gc.setFill(axisColor.get());
+		gc.setStroke(getAxis().getColor());
+		gc.setFill(getAxis().getColor());
 		gc.strokeLine(x + position, y, x + position, y + AXIS_THICKNESS);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.TOP);
-		gc.setStroke(getAxis().getLabelFont().getColor());
-		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + position,
 			y + AXIS_THICKNESS);
 		break;
@@ -141,13 +139,11 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(axisColor.get());
-		gc.setFill(axisColor.get());
+		gc.setStroke(getAxis().getColor());
+		gc.setFill(getAxis().getColor());
 		gc.strokeLine(x + position, y + height, x + position, (y + height) - AXIS_THICKNESS);
 		gc.setTextAlign(TextAlignment.CENTER);
 		gc.setTextBaseline(VPos.BOTTOM);
-		gc.setStroke(getAxis().getLabelFont().getColor());
-		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + position,
 			(y + height) - AXIS_THICKNESS);
 		break;
@@ -157,14 +153,12 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(axisColor.get());
-		gc.setFill(axisColor.get());
+		gc.setStroke(getAxis().getColor());
+		gc.setFill(getAxis().getColor());
 		gc.strokeLine((x + width) - AXIS_THICKNESS, (y + height) - position, x + width,
 			(y + height) - position);
 		gc.setTextAlign(TextAlignment.RIGHT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.setStroke(getAxis().getLabelFont().getColor());
-		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))),
 			(x + width) - AXIS_THICKNESS, (y + height) - position);
 		break;
@@ -174,13 +168,11 @@ public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
 		    continue;
 		}
 		position = currentPosition;
-		gc.setStroke(axisColor.get());
-		gc.setFill(axisColor.get());
+		gc.setStroke(getAxis().getColor());
+		gc.setFill(getAxis().getColor());
 		gc.strokeLine(x, (y + height) - position, x + AXIS_THICKNESS, (y + height) - position);
 		gc.setTextAlign(TextAlignment.LEFT);
 		gc.setTextBaseline(VPos.CENTER);
-		gc.setStroke(getAxis().getLabelFont().getColor());
-		gc.setFill(getAxis().getLabelFont().getColor());
 		gc.fillText(formatter.format(ZonedDateTime.ofInstant(current, ZoneId.of("UTC"))), x + AXIS_THICKNESS,
 			(y + height) - position);
 		break;

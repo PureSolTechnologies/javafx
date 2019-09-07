@@ -7,6 +7,7 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -15,11 +16,11 @@ import javafx.scene.paint.Color;
 
 class TreeMapCanvas<T extends TreeMapNode> extends Canvas {
 
-    protected static final ObjectProperty<Color> backgroundColor = Preferences
-	    .getProperty(ChartsProperties.BACKGROUND_COLOR);
-    protected static final ObjectProperty<Color> axisColor = Preferences.getProperty(ChartsProperties.AXIS_COLOR);
     protected static final ObjectProperty<FontDefinition> dataLabelFont = Preferences
 	    .getProperty(ChartsProperties.DATA_LABEL_FONT);
+
+    protected final ObjectProperty<Color> axisColor = new SimpleObjectProperty<>(Color.BLACK);
+    protected final ObjectProperty<Color> backgroundColor = new SimpleObjectProperty<>(Color.WHITE);
 
     private final TreeMapRenderer<T> renderer;
     private T rootNode = null;

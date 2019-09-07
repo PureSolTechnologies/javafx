@@ -11,6 +11,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.HPos;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.Label;
@@ -61,6 +62,10 @@ public class ChartView extends GridPane {
 	GridPane.setConstraints(plotCanvas, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
 	getChildren().addAll(titleLabel, subTitleLabel, plotCanvas);
 	setGridLinesVisible(false);
+    }
+
+    public void setPlotPadding(Insets insets) {
+	plotCanvas.setPadding(insets);
     }
 
     public StringProperty titleProperty() {

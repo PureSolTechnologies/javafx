@@ -127,8 +127,8 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		continue;
 	    }
 	    position = currentPosition;
-	    gc.setFill(axisColor.get());
-	    gc.setStroke(axisColor.get());
+	    gc.setFill(getAxis().getColor());
+	    gc.setStroke(getAxis().getColor());
 	    switch (axisType) {
 	    case X:
 		gc.strokeLine(position, y, position, y + ((AXIS_THICKNESS * 2) / 3));
@@ -144,8 +144,6 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 		break;
 	    }
 	    gc.setFont(getAxis().getLabelFont().toFont());
-	    gc.setStroke(getAxis().getTitleFont().getColor());
-	    gc.setFill(getAxis().getTitleFont().getColor());
 	    String tickLabel = String.format(formatString, current);
 	    switch (axisType) {
 	    case X:

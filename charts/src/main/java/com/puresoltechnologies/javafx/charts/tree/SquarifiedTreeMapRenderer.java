@@ -10,6 +10,7 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -18,9 +19,10 @@ import javafx.scene.text.TextAlignment;
 
 public class SquarifiedTreeMapRenderer<T extends TreeMapNode> implements TreeMapRenderer<T> {
 
-    protected static final ObjectProperty<Color> axisColor = Preferences.getProperty(ChartsProperties.AXIS_COLOR);
     protected static final ObjectProperty<FontDefinition> dataLabelFont = Preferences
 	    .getProperty(ChartsProperties.DATA_LABEL_FONT);
+
+    protected final ObjectProperty<Color> axisColor = new SimpleObjectProperty<>(Color.BLACK);
 
     @Override
     public void drawMap(TreeMapCanvas<T> canvas, int depth, double x, double y, double width, double height,

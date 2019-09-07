@@ -101,8 +101,6 @@ public class ChartPreferencesPage implements PreferencesPage {
 
     @Override
     public void reset() {
-	backgroundColorPicker.setValue(ChartsProperties.BACKGROUND_COLOR.getDefaultValue());
-	axisColorPicker.setValue(ChartsProperties.AXIS_COLOR.getDefaultValue());
 	titleFontSelector.setValue(ChartsProperties.TITLE_FONT.getDefaultValue());
 	subTitleFontSelector.setValue(ChartsProperties.SUBTITLE_FONT.getDefaultValue());
 	axisTitleFontSelector.setValue(ChartsProperties.AXIS_TITLE_FONT.getDefaultValue());
@@ -112,8 +110,6 @@ public class ChartPreferencesPage implements PreferencesPage {
 
     @Override
     public void load(Preferences preferences) {
-	backgroundColorPicker.setValue(preferences.getValue(ChartsProperties.BACKGROUND_COLOR));
-	axisColorPicker.setValue(preferences.getValue(ChartsProperties.AXIS_COLOR));
 	titleFontSelector.setValue(preferences.getValue(ChartsProperties.TITLE_FONT));
 	subTitleFontSelector.setValue(preferences.getValue(ChartsProperties.SUBTITLE_FONT));
 	axisTitleFontSelector.setValue(preferences.getValue(ChartsProperties.AXIS_TITLE_FONT));
@@ -123,8 +119,6 @@ public class ChartPreferencesPage implements PreferencesPage {
 
     @Override
     public void save(Preferences preferences) {
-	preferences.setValue(ChartsProperties.BACKGROUND_COLOR, backgroundColorPicker.getValue());
-	preferences.setValue(ChartsProperties.AXIS_COLOR, axisColorPicker.getValue());
 	preferences.setValue(ChartsProperties.TITLE_FONT, titleFontSelector.getValue());
 	preferences.setValue(ChartsProperties.SUBTITLE_FONT, subTitleFontSelector.getValue());
 	preferences.setValue(ChartsProperties.AXIS_TITLE_FONT, axisTitleFontSelector.getValue());

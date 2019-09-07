@@ -2,16 +2,12 @@ package com.puresoltechnologies.javafx.charts.axes;
 
 import com.puresoltechnologies.javafx.charts.AbstractRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
-import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
-import com.puresoltechnologies.javafx.preferences.Preferences;
 
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
@@ -20,10 +16,6 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     protected static final double AXIS_THICKNESS = 10.0;
     protected static final double MIN_X_DISTANCE = 50.0;
     protected static final double MIN_Y_DISTANCE = 25.0;
-
-    protected static final ObjectProperty<Color> backgroundColor = Preferences
-	    .getProperty(ChartsProperties.BACKGROUND_COLOR);
-    protected static final ObjectProperty<Color> axisColor = Preferences.getProperty(ChartsProperties.AXIS_COLOR);
 
     private final Axis<T> axis;
     private final ObservableList<Plot<?, ?, ?>> plots;
@@ -132,14 +124,14 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
     }
 
     private void clearAxisArea(GraphicsContext gc, double x, double y, double width, double height) {
-	gc.setFill(backgroundColor.get());
-	gc.setStroke(backgroundColor.get());
+	gc.setFill(axis.getBackgroundColor());
+	gc.setStroke(axis.getBackgroundColor());
 	gc.fillRect(x, y, width, height);
     }
 
     private void drawAxis(GraphicsContext gc, double x, double y, double width, double height) {
-	gc.setFill(axisColor.get());
-	gc.setStroke(axisColor.get());
+	gc.setFill(axis.getColor());
+	gc.setStroke(axis.getColor());
 	switch (axis.getAxisType()) {
 	case X:
 	    gc.strokeLine(x, y, x + width, y);
@@ -173,28 +165,30 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	gc.setFill(axis.getTitleFont().getColor());
 	gc.setFont(axis.getTitleFont().toFont());
 	gc.setTextAlign(TextAlignment.CENTER);
-	gc.setTextBaseline(VPos.TOP);
 
 	switch (axis.getAxisType()) {
 	case X:
 	    // Title
-	    gc.fillText(axisTitle, x + (width / 2.0), (y + height) - titleText.getLayoutBounds().getHeight());
+	    gc.setTextBaseline(VPos.BOTTOM);
+	    gc.fillText(axisTitle, x + (width / 2.0), (y + height));
 	    break;
 	case ALT_X:
 	    // Title
+	    gc.setTextBaseline(VPos.TOP);
 	    gc.fillText(axisTitle, x + (width / 2.0), y);
 	    break;
 	case Y:
 	    // Title
+	    gc.setTextBaseline(VPos.TOP);
 	    gc.rotate(-90);
-	    gc.fillText(axisTitle, -canvas.getHeight() / 2.0, 0.0);
+	    gc.fillText(axisTitle, -canvas.getHeight() / 2.0, x);
 	    gc.rotate(90);
 	    break;
 	case ALT_Y:
 	    // Title
+	    gc.setTextBaseline(VPos.BOTTOM);
 	    gc.rotate(-90);
-	    gc.fillText(axisTitle, -canvas.getHeight() / 2.0,
-		    canvas.getWidth() - titleText.getLayoutBounds().hashCode());
+	    gc.fillText(axisTitle, -canvas.getHeight() / 2.0, x + width);
 	    gc.rotate(90);
 	    break;
 	}
