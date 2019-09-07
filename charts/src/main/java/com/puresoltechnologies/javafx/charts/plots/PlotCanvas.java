@@ -27,7 +27,7 @@ public class PlotCanvas extends Canvas {
     protected final ObjectProperty<Color> backgroundColor = new SimpleObjectProperty<>(Color.WHITE);
     protected final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(5.0));
 
-    private final List<Plot<?, ?, ?>> plots = new ArrayList<>();
+    private final ObservableList<Plot<?, ?, ?>> plots = FXCollections.observableArrayList();
     private final List<Axis<?>> xAxes = new ArrayList<>();
     private final List<Axis<?>> yAxes = new ArrayList<>();
     private final List<Axis<?>> altXAxes = new ArrayList<>();
@@ -103,6 +103,10 @@ public class PlotCanvas extends Canvas {
 
     public void setPadding(Insets insets) {
 	padding.setValue(insets);
+    }
+
+    public ObservableList<Plot<?, ?, ?>> getPlots() {
+	return plots;
     }
 
     public void addPlot(Plot<?, ?, ?> plot) {
