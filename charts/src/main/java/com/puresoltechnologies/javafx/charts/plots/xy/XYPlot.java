@@ -37,4 +37,5 @@ public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Compara
 		this, (NumberAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
 	return renderer;
     }
+
 }

@@ -20,8 +20,10 @@ import javafx.beans.property.SimpleObjectProperty;
 public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D>
 	extends AbstractPlot<X, Y, D> implements PointBasedPlot<X, Y, D> {
 
-    private final ObjectProperty<ConnectingLineStyle> connectingLineStyle = new SimpleObjectProperty<>(
-	    ConnectingLineStyle.NONE);
+    private final ObjectProperty<MarkerType> markerType = new SimpleObjectProperty<>(MarkerType.SQUARE);
+
+    private final ObjectProperty<InterpolationType> interpolationType = new SimpleObjectProperty<>(
+	    InterpolationType.NONE);
 
     public AbstractPointBasedPlot(Axis<X> xAxis, Axis<Y> yAxis) {
 	super(xAxis, yAxis);
@@ -36,18 +38,13 @@ public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends 
     }
 
     @Override
-    public ObjectProperty<ConnectingLineStyle> connectingLineStyleProperty() {
-	return connectingLineStyle;
+    public ObjectProperty<MarkerType> markerTypeProperty() {
+	return markerType;
     }
 
     @Override
-    public ConnectingLineStyle getConnectingLineStyle() {
-	return connectingLineStyle.getValue();
-    }
-
-    @Override
-    public void setConnectingLineStyle(ConnectingLineStyle connectingLineStyle) {
-	this.connectingLineStyle.setValue(connectingLineStyle);
+    public ObjectProperty<InterpolationType> interpolationTypeProperty() {
+	return interpolationType;
     }
 
 }

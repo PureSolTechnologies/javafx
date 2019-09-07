@@ -15,25 +15,39 @@ import javafx.beans.property.ObjectProperty;
  */
 public interface PointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> extends Plot<X, Y, D> {
 
+    ObjectProperty<MarkerType> markerTypeProperty();
+
+    default MarkerType getMarkerType() {
+	return markerTypeProperty().getValue();
+    }
+
+    default void setMarkerType(MarkerType markerType) {
+	markerTypeProperty().setValue(markerType);
+    }
+
     /**
-     * Returns the {@link ConnectingLineStyle} property.
+     * Returns the {@link InterpolationType} property.
      *
      * @return
      */
-    ObjectProperty<ConnectingLineStyle> connectingLineStyleProperty();
+    ObjectProperty<InterpolationType> interpolationTypeProperty();
 
     /**
-     * Returns the {@link ConnectingLineStyle}.
+     * Returns the {@link InterpolationType}.
      *
      * @return
      */
-    ConnectingLineStyle getConnectingLineStyle();
+    default InterpolationType getInterpolationType() {
+	return interpolationTypeProperty().getValue();
+    }
 
     /**
-     * Sets the {@link ConnectingLineStyle}.
+     * Sets the {@link InterpolationType}.
      *
-     * @param connectingLineStyle is the {@link ConnectingLineStyle} to be set.
+     * @param interpolationType is the {@link InterpolationType} to be set.
      */
-    void setConnectingLineStyle(ConnectingLineStyle connectingLineStyle);
+    default void setInterpolationType(InterpolationType interpolationType) {
+	interpolationTypeProperty().setValue(interpolationType);
+    }
 
 }

@@ -7,7 +7,7 @@ package com.puresoltechnologies.javafx.charts.plots;
  * @author Rick-Rainer Ludwig
  *
  */
-public enum ConnectingLineStyle {
+public enum InterpolationType {
 
     /**
      * This constant tells to not connect points.

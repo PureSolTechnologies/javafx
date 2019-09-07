@@ -8,7 +8,7 @@ import java.util.Optional;
 import com.puresoltechnologies.javafx.charts.ChartView;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
-import com.puresoltechnologies.javafx.charts.plots.ConnectingLineStyle;
+import com.puresoltechnologies.javafx.charts.plots.InterpolationType;
 import com.puresoltechnologies.javafx.charts.plots.xy.XYPlot;
 import com.puresoltechnologies.javafx.charts.plots.xy.XYValue;
 import com.puresoltechnologies.javafx.perspectives.PartHeaderToolBar;
@@ -52,15 +52,15 @@ public class XYPlotSampleViewer extends AbstractViewer {
 
 	XYPlot<Double, Double> xySinePlot = new XYPlot<>("Sine", xAxis, yAxis);
 	xySinePlot.setColor(Color.RED);
-	xySinePlot.setConnectingLineStyle(ConnectingLineStyle.STRAIGHT_LINE);
+	xySinePlot.setInterpolationType(InterpolationType.STRAIGHT_LINE);
 
 	XYPlot<Double, Double> xyCosinePlot = new XYPlot<>("Cosine", xAxis, yAxis);
 	xyCosinePlot.setColor(Color.GREEN);
-	xyCosinePlot.setConnectingLineStyle(ConnectingLineStyle.STRAIGHT_LINE);
+	xyCosinePlot.setInterpolationType(InterpolationType.STRAIGHT_LINE);
 
 	XYPlot<Double, Double> xyTangentPlot = new XYPlot<>("Tangent", altXAxis, altYAxis);
 	xyTangentPlot.setColor(Color.BLUE);
-	xyTangentPlot.setConnectingLineStyle(ConnectingLineStyle.STRAIGHT_LINE);
+	xyTangentPlot.setInterpolationType(InterpolationType.NONE);
 
 	ChartView chartView = new ChartView("XY Plot");
 	chartView.addPlot(xySinePlot);

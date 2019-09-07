@@ -2,7 +2,7 @@ package com.puresoltechnologies.javafx.charts.plots.xy;
 
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
-import com.puresoltechnologies.javafx.charts.plots.ConnectingLineStyle;
+import com.puresoltechnologies.javafx.charts.plots.InterpolationType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.scene.canvas.Canvas;
@@ -30,9 +30,9 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	for (XYValue<X, Y> value : plot.getData()) {
 	    double posX = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
 	    double posY = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
-	    gc.fillRect(posX - 3.0, posY - 3.0, 6.0, 6.0);
+	    plot.getMarkerType().renderTo(canvas, posX - 3.0, posY - 3.0, 6.0, 6.0);
 	    if (posX != -Double.MAX_VALUE) {
-		if (plot.getConnectingLineStyle() == ConnectingLineStyle.STRAIGHT_LINE) {
+		if (plot.getInterpolationType() == InterpolationType.STRAIGHT_LINE) {
 		    gc.setGlobalAlpha(0.2);
 		    gc.strokeLine(oldPosX, oldPosY, posX, posY);
 		    gc.setGlobalAlpha(1.0);
