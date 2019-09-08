@@ -9,7 +9,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
+public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends NumberAxis<T>>
+	extends AbstractAxisRenderer<T, A> {
 
     /**
      * Keeps the accuracy of the tick numbers as exponent to base 10.
@@ -17,23 +18,23 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
     private int accuracy = 0;
     private double tickSteps = 1;
 
-    public NumberAxisRenderer(Axis<Number> axis, ObservableList<Plot<?, ?, ?>> plots) {
+    public NumberAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(axis, plots);
     }
 
     @Override
     protected void updateMinMax() {
-	Axis<Number> axis = getAxis();
+	A axis = getAxis();
 	ObservableList<Plot<?, ?, ?>> plots = getPlots();
-	Double min = null;
-	Double max = null;
+	T min = null;
+	T max = null;
 	switch (axis.getAxisType()) {
 	case X:
 	case ALT_X:
 	    for (Plot<?, ?, ?> plot : plots) {
 		if (plot.hasData()) {
-		    min = calcMin(min, ((Number) plot.getMinX()).doubleValue());
-		    max = calcMax(max, ((Number) plot.getMaxX()).doubleValue());
+		    min = calcMin(min, (T) plot.getMinX());
+		    max = calcMax(max, (T) plot.getMaxX());
 		}
 	    }
 	    break;
@@ -41,8 +42,8 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	case ALT_Y:
 	    for (Plot<?, ?, ?> plot : plots) {
 		if (plot.hasData()) {
-		    min = calcMin(min, ((Number) plot.getMinY()).doubleValue());
-		    max = calcMax(max, ((Number) plot.getMaxY()).doubleValue());
+		    min = calcMin(min, (T) plot.getMinY());
+		    max = calcMax(max, (T) plot.getMaxY());
 		}
 	    }
 	    break;
@@ -51,10 +52,15 @@ public class NumberAxisRenderer extends AbstractAxisRenderer<Number> {
 	}
 	int accuracyExponent = 0;
 	if ((min != null) && (max != null)) {
+	    accuracyExponent = TickCalculator.calculateAccuracy(min.doubleValue(), max.doubleValue());
+	    if (Double.class.isAssignableFrom(min.getClass())) {
+		min = (T) Double.valueOf(TickCalculator.calculateChartMin(min.doubleValue(), accuracyExponent));
+		max = (T) Double.valueOf(TickCalculator.calculateChartMax(max.doubleValue(), accuracyExponent));
+	    } else if (Float.class.isAssignableFrom(min.getClass())) {
+		min = (T) Float.valueOf((float) TickCalculator.calculateChartMin(min.floatValue(), accuracyExponent));
+		max = (T) Float.valueOf((float) TickCalculator.calculateChartMax(max.floatValue(), accuracyExponent));
+	    }
 	    // optimize min and max
-	    accuracyExponent = TickCalculator.calculateAccuracy(min, max);
-	    min = TickCalculator.calculateChartMin(min, accuracyExponent);
-	    max = TickCalculator.calculateChartMax(max, accuracyExponent);
 	}
 	setAccuracy(accuracyExponent);
 	setMin(min);

@@ -17,11 +17,11 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class InstantAxisRenderer extends AbstractAxisRenderer<Instant> {
+public class InstantAxisRenderer<A extends Axis<Instant>> extends AbstractAxisRenderer<Instant, A> {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy MMM dd\nHH:mm");
 
-    public InstantAxisRenderer(Axis<Instant> axis, ObservableList<Plot<?, ?, ?>> plots) {
+    public InstantAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(axis, plots);
     }
 

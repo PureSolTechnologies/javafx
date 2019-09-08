@@ -6,9 +6,9 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 
-public class NominalAxisRenderer extends AbstractAxisRenderer<Object> {
+public class NominalAxisRenderer<A extends Axis<Object>> extends AbstractAxisRenderer<Object, A> {
 
-    public NominalAxisRenderer(Axis<Object> axis, ObservableList<Plot<?, ?, ?>> plots) {
+    public NominalAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(axis, plots);
     }
 

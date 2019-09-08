@@ -11,19 +11,19 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implements AxisRenderer<T> {
+public abstract class AbstractAxisRenderer<T, A extends Axis<T>> extends AbstractRenderer implements AxisRenderer<T> {
 
     protected static final double AXIS_THICKNESS = 10.0;
     protected static final double MIN_X_DISTANCE = 50.0;
     protected static final double MIN_Y_DISTANCE = 25.0;
 
-    private final Axis<T> axis;
+    private final A axis;
     private final ObservableList<Plot<?, ?, ?>> plots;
 
     private T min = null;
     private T max = null;
 
-    public AbstractAxisRenderer(Axis<T> axis, ObservableList<Plot<?, ?, ?>> plots) {
+    public AbstractAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	this.axis = axis;
 	this.plots = plots;
 	plots.addListener((ListChangeListener<Plot<?, ?, ?>>) c -> updateMinMax());
@@ -51,7 +51,7 @@ public abstract class AbstractAxisRenderer<T> extends AbstractRenderer implement
 	return max;
     }
 
-    public final Axis<T> getAxis() {
+    public final A getAxis() {
 	return axis;
     }
 

@@ -13,13 +13,15 @@ public class AxisRendererFactory {
     public static AxisRenderer<?> forAxis(Canvas canvas, Axis<?> axis, ObservableList<Plot<?, ?, ?>> plots) {
 	Class<?> valueType = axis.getValueType();
 	if (Instant.class.isAssignableFrom(valueType)) {
-	    return new InstantAxisRenderer((Axis<Instant>) axis, plots);
-	} else if (Number.class.isAssignableFrom(valueType)) {
-	    return new NumberAxisRenderer((Axis<Number>) axis, plots);
+	    return new InstantAxisRenderer(axis, plots);
+	} else if (Double.class.isAssignableFrom(valueType)) {
+	    return new NumberAxisRenderer((NumberAxis<Double>) axis, plots);
+	} else if (Float.class.isAssignableFrom(valueType)) {
+	    return new NumberAxisRenderer((NumberAxis<Float>) axis, plots);
 	} else if (Comparable.class.isAssignableFrom(valueType)) {
-	    return new OridinalAxisRenderer((Axis<Comparable<Object>>) axis, plots);
+	    return new OridinalAxisRenderer(axis, plots);
 	} else {
-	    return new NominalAxisRenderer((Axis<Object>) axis, plots);
+	    return new NominalAxisRenderer(axis, plots);
 	}
     }
 
