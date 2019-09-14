@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 
 /**
@@ -18,11 +19,21 @@ public interface PointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>
     ObjectProperty<MarkerType> markerTypeProperty();
 
     default MarkerType getMarkerType() {
-	return markerTypeProperty().getValue();
+	return markerTypeProperty().get();
     }
 
     default void setMarkerType(MarkerType markerType) {
-	markerTypeProperty().setValue(markerType);
+	markerTypeProperty().set(markerType);
+    }
+
+    DoubleProperty markerSizeProperty();
+
+    default double getMarkerSize() {
+	return markerSizeProperty().get();
+    }
+
+    default void setMarkerSize(double markerSize) {
+	markerSizeProperty().set(markerSize);
     }
 
     /**

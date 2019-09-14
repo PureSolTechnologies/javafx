@@ -4,7 +4,9 @@ import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
 /**
@@ -20,7 +22,8 @@ import javafx.beans.property.SimpleObjectProperty;
 public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D>
 	extends AbstractPlot<X, Y, D> implements PointBasedPlot<X, Y, D> {
 
-    private final ObjectProperty<MarkerType> markerType = new SimpleObjectProperty<>(MarkerType.SQUARE);
+    private final ObjectProperty<MarkerType> markerType = new SimpleObjectProperty<>(MarkerType.CIRCLE);
+    private final DoubleProperty markerSize = new SimpleDoubleProperty(3.0);
 
     private final ObjectProperty<InterpolationType> interpolationType = new SimpleObjectProperty<>(
 	    InterpolationType.NONE);
@@ -40,6 +43,11 @@ public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends 
     @Override
     public ObjectProperty<MarkerType> markerTypeProperty() {
 	return markerType;
+    }
+
+    @Override
+    public DoubleProperty markerSizeProperty() {
+	return markerSize;
     }
 
     @Override

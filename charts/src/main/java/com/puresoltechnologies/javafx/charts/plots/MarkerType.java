@@ -11,7 +11,11 @@ import javafx.scene.canvas.Canvas;
  */
 public enum MarkerType implements Renderer {
 
-    SQUARE(new SquareMarkerRenderer());
+    SQUARE(new SquareMarkerRenderer()), //
+    CROSS(new CrossMarkerRenderer()), //
+    CIRCLE(new CircleMarkerRenderer()), //
+    DIAMOND(new DiamondMarkerRenderer()), //
+    ;
 
     private final Renderer renderer;
 
