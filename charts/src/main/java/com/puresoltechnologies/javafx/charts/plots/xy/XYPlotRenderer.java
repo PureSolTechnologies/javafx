@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.charts.plots.xy;
 
+import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.charts.plots.InterpolationType;
@@ -8,10 +9,11 @@ import com.puresoltechnologies.javafx.charts.plots.Plot;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D>
-	extends AbstractPlotRenderer<X, Y, D, NumberAxisRenderer, NumberAxisRenderer> {
+public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D> extends
+	AbstractPlotRenderer<X, Y, D, NumberAxisRenderer<X, NumberAxis<X>>, NumberAxisRenderer<Y, NumberAxis<Y>>> {
 
-    public XYPlotRenderer(Plot<X, Y, D> plot, NumberAxisRenderer xAxisRenderer, NumberAxisRenderer yAxisRenderer) {
+    public XYPlotRenderer(Plot<X, Y, D> plot, NumberAxisRenderer<X, NumberAxis<X>> xAxisRenderer,
+	    NumberAxisRenderer<Y, NumberAxis<Y>> yAxisRenderer) {
 	super(plot, xAxisRenderer, yAxisRenderer);
     }
 
