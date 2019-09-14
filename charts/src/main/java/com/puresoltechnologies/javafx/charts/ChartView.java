@@ -7,12 +7,14 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -25,6 +27,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
@@ -73,16 +76,20 @@ public class ChartView extends GridPane {
 
 	configureLegendTable();
 
-	GridPane.setConstraints(titleLabel, 0, 0, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
-	GridPane.setConstraints(subTitleLabel, 0, 1, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
-	GridPane.setConstraints(plotCanvas, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-	GridPane.setConstraints(legendTable, 1, 2, 1, 1, HPos.CENTER, VPos.TOP, Priority.SOMETIMES, Priority.ALWAYS);
-	getChildren().addAll(titleLabel, subTitleLabel, plotCanvas, legendTable);
+	HBox spacer1 = new HBox();
+	HBox spacer2 = new HBox();
+	GridPane.setConstraints(titleLabel, 0, 0, 2, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
+	GridPane.setConstraints(subTitleLabel, 0, 1, 2, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
+	GridPane.setConstraints(plotCanvas, 0, 2, 1, 3, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+	GridPane.setConstraints(spacer1, 1, 2, 1, 1, HPos.CENTER, VPos.TOP, Priority.SOMETIMES, Priority.ALWAYS);
+	GridPane.setConstraints(legendTable, 1, 3, 1, 1, HPos.CENTER, VPos.TOP, Priority.SOMETIMES, Priority.NEVER,
+		new Insets(5.0));
+	GridPane.setConstraints(spacer2, 1, 4, 1, 1, HPos.CENTER, VPos.TOP, Priority.SOMETIMES, Priority.ALWAYS);
+	getChildren().addAll(titleLabel, subTitleLabel, plotCanvas, spacer1, legendTable, spacer2);
 	setGridLinesVisible(false);
     }
 
     private void configureLegendTable() {
-
 	TableColumn<Plot<?, ?, ?>, Plot<?, ?, ?>> markerColumn = new TableColumn<>("Marker");
 	markerColumn.setCellValueFactory(plot -> new SimpleObjectProperty<>(plot.getValue()));
 	markerColumn.setCellFactory(column -> new TableCell<>() {
@@ -110,6 +117,23 @@ public class ChartView extends GridPane {
 	legendTable.visibleProperty().bind(legendVisible);
 	legendTable.managedProperty().bind(legendVisible);
 	legendTable.setItems(plotCanvas.getPlots());
+	legendTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+
+	legendTable.setFixedCellSize(25);
+	legendTable.prefHeightProperty()
+		.bind(legendTable.fixedCellSizeProperty().multiply(Bindings.size(legendTable.getItems()).add(0.1)));
+	legendTable.minHeightProperty().bind(legendTable.prefHeightProperty());
+	legendTable.maxHeightProperty().bind(legendTable.prefHeightProperty());
+
+	legendTable.widthProperty().addListener((ChangeListener<Number>) (source, oldWidth, newWidth) -> {
+	    Pane header = (Pane) legendTable.lookup("TableHeaderRow");
+	    if (header.isVisible()) {
+		header.setMaxHeight(0);
+		header.setMinHeight(0);
+		header.setPrefHeight(0);
+		header.setVisible(false);
+	    }
+	});
     }
 
     public ObjectProperty<Insets> plotPaddingProperty() {
