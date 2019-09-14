@@ -67,6 +67,7 @@ public class XYPlotSampleViewer extends AbstractViewer {
 	chartView.addPlot(xyCosinePlot);
 	chartView.addPlot(xyTangentPlot);
 	chartView.setPlotPadding(new Insets(20.0));
+	chartView.setLegendVisible(false);
 
 	borderPane.setCenter(chartView);
 	FXThreads.proceedOnFXThread(() -> xySinePlot.setData(generateSineXYData()));

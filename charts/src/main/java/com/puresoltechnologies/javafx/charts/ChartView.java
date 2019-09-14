@@ -108,6 +108,7 @@ public class ChartView extends GridPane {
 	legendTable.getColumns().add(nameColumn);
 
 	legendTable.visibleProperty().bind(legendVisible);
+	legendTable.managedProperty().bind(legendVisible);
 	legendTable.setItems(plotCanvas.getPlots());
     }
 
