@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.charts;
 import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
+import com.puresoltechnologies.javafx.charts.dialogs.ChartPropertiesDialog;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PlotCanvas;
 import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
@@ -160,7 +161,11 @@ public class ChartView extends GridPane {
 	    event.consume();
 	});
 	SeparatorMenuItem separator = new SeparatorMenuItem();
-	MenuItem chartPropertiesItem = new MenuItem("Chart Propeties...");
+	MenuItem chartPropertiesItem = new MenuItem("Chart Properties...");
+	chartPropertiesItem.setOnAction(event -> {
+	    new ChartPropertiesDialog(ChartView.this, plotCanvas.getPlots()).showAndWait();
+	    event.consume();
+	});
 	contextMenu.getItems().addAll(copyItem, separator, chartPropertiesItem);
 
 	setOnMouseClicked(event -> {
