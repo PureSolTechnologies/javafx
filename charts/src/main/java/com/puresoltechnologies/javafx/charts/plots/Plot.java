@@ -17,7 +17,7 @@ import javafx.scene.paint.Color;
  * @param <Y>is the data type of the Y axis.
  * @param <D>   is the actual data type of the data points to be plotted.
  */
-public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D> {
+public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>> {
 
     String getTitle();
 

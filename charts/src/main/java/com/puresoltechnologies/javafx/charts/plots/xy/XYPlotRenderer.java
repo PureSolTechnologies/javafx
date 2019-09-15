@@ -5,11 +5,13 @@ import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.charts.plots.InterpolationType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D> extends
+public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>, D extends PlotDatum<X, Y>>
+	extends
 	AbstractPlotRenderer<X, Y, D, NumberAxisRenderer<X, NumberAxis<X>>, NumberAxisRenderer<Y, NumberAxis<Y>>> {
 
     public XYPlotRenderer(Plot<X, Y, D> plot, NumberAxisRenderer<X, NumberAxis<X>> xAxisRenderer,

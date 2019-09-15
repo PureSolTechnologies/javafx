@@ -10,7 +10,7 @@ import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
  * @author Rick-Rainer Ludwig
  *
  */
-public interface PlotRenderer<X extends Comparable<X>, Y extends Comparable<Y>, D, XAR extends AxisRenderer<?>, YAR extends AxisRenderer<?>>
+public interface PlotRenderer<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>, XAR extends AxisRenderer<?>, YAR extends AxisRenderer<?>>
 	extends Renderer {
 
     /**

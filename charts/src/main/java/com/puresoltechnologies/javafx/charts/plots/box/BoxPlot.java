@@ -7,9 +7,11 @@ import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
-public class BoxPlot<X extends Comparable<X>, Y extends Number & Comparable<Y>, D> extends AbstractPlot<X, Y, D> {
+public class BoxPlot<X extends Comparable<X>, Y extends Number & Comparable<Y>, D extends PlotDatum<X, Y>>
+	extends AbstractPlot<X, Y, D> {
 
     public BoxPlot(String title, Axis<X> xAxis, NumberAxis<Y> yAxis, List<D> data) {
 	super(title, xAxis, yAxis, data);

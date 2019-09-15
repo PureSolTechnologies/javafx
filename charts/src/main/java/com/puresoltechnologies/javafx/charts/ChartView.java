@@ -1,8 +1,11 @@
 package com.puresoltechnologies.javafx.charts;
 
+import java.util.List;
+
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PlotCanvas;
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
 import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
@@ -225,8 +228,14 @@ public class ChartView extends GridPane {
 		} else {
 		    builder.append('\t');
 		}
-		Object datum = plot.getData().get(pos);
+		@SuppressWarnings("unchecked")
+		List<PlotDatum<?, ?>> data = (List<PlotDatum<?, ?>>) plot.getData();
+		if (data.size() > pos) {
+		    PlotDatum<?, ?> datum = data.get(pos);
+		    builder.append(datum.getClipboardString());
+		}
 	    }
+	    builder.append('\n');
 	}
 
 	ClipboardContent clipboardContent = new ClipboardContent();

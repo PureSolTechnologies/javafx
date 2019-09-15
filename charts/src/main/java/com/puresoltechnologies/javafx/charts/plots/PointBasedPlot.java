@@ -14,7 +14,8 @@ import javafx.beans.property.ObjectProperty;
  * @param <Y> see {@link Plot}.
  * @param <D> see {@link Plot}.
  */
-public interface PointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> extends Plot<X, Y, D> {
+public interface PointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>>
+	extends Plot<X, Y, D> {
 
     ObjectProperty<MarkerType> markerTypeProperty();
 

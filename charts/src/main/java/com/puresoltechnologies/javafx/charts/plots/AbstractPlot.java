@@ -16,7 +16,8 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.paint.Color;
 
-public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable<Y>, D> implements Plot<X, Y, D> {
+public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>>
+	implements Plot<X, Y, D> {
 
     private final StringProperty title = new SimpleStringProperty();
     private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
@@ -31,13 +32,13 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
     public AbstractPlot(Axis<X> xAxis, Axis<Y> yAxis) {
 	super();
 	this.xAxis = xAxis;
-	if (xAxis.getAxisType() != AxisType.X //
-		&& xAxis.getAxisType() != AxisType.ALT_X) {
+	if ((xAxis.getAxisType() != AxisType.X //
+	) && (xAxis.getAxisType() != AxisType.ALT_X)) {
 	    throw new IllegalArgumentException("Provided X axis is not an X axis.");
 	}
 	this.yAxis = yAxis;
-	if (yAxis.getAxisType() != AxisType.Y //
-		&& yAxis.getAxisType() != AxisType.ALT_Y) {
+	if ((yAxis.getAxisType() != AxisType.Y //
+	) && (yAxis.getAxisType() != AxisType.ALT_Y)) {
 	    throw new IllegalArgumentException("Provided Y axis is not an Y axis.");
 	}
 	data.addListener((ListChangeListener<D>) change -> updateExtrema());
@@ -123,11 +124,11 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 
     @Override
     public final boolean hasData() {
-	return data.size() > 0 //
-		&& getMinX() != null //
-		&& getMaxX() != null //
-		&& getMinY() != null //
-		&& getMaxY() != null;
+	return (data.size() > 0 //
+	) && (getMinX() != null //
+	) && (getMaxX() != null //
+	) && (getMinY() != null //
+	) && (getMaxY() != null);
     }
 
     @Override
@@ -167,25 +168,25 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
     }
 
     protected final void updateMinX(X value) {
-	if (minX == null || minX.compareTo(value) > 0.0) {
+	if ((minX == null) || (minX.compareTo(value) > 0.0)) {
 	    minX = value;
 	}
     }
 
     protected final void updateMaxX(X value) {
-	if (maxX == null || maxX.compareTo(value) < 0.0) {
+	if ((maxX == null) || (maxX.compareTo(value) < 0.0)) {
 	    maxX = value;
 	}
     }
 
     protected final void updateMinY(Y value) {
-	if (minY == null || minY.compareTo(value) > 0.0) {
+	if ((minY == null) || (minY.compareTo(value) > 0.0)) {
 	    minY = value;
 	}
     }
 
     protected final void updateMaxY(Y value) {
-	if (maxY == null || maxY.compareTo(value) < 0.0) {
+	if ((maxY == null) || (maxY.compareTo(value) < 0.0)) {
 	    maxY = value;
 	}
     }

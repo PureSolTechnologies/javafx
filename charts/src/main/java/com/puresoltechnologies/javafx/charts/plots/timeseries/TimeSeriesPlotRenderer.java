@@ -9,11 +9,12 @@ import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
-public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D> extends
+public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D extends PlotDatum<Instant, Y>> extends
 	AbstractPlotRenderer<Instant, Y, D, InstantAxisRenderer<Axis<Instant>>, NumberAxisRenderer<Y, NumberAxis<Y>>> {
 
     public TimeSeriesPlotRenderer(Plot<Instant, Y, D> plot, InstantAxisRenderer<Axis<Instant>> xAxisRenderer,

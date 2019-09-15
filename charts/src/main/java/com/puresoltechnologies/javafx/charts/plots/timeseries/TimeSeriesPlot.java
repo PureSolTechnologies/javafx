@@ -9,9 +9,11 @@ import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.InstantAxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPointBasedPlot;
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
-public class TimeSeriesPlot<Y extends Number & Comparable<Y>, D> extends AbstractPointBasedPlot<Instant, Y, D> {
+public class TimeSeriesPlot<Y extends Number & Comparable<Y>, D extends PlotDatum<Instant, Y>>
+	extends AbstractPointBasedPlot<Instant, Y, D> {
 
     private final Function<D, Instant> xValueFactory;
     private final Function<D, Y> yValueFactory;
@@ -41,7 +43,7 @@ public class TimeSeriesPlot<Y extends Number & Comparable<Y>, D> extends Abstrac
     public PlotRenderer<Instant, Y, D, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>> getRenderer(
 	    AxisRenderer<Instant> xAxisRenderer, AxisRenderer<Y> yAxisRenderer) {
 	@SuppressWarnings("unchecked")
-	PlotRenderer<Instant, Y, D, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>> renderer = (PlotRenderer<Instant, Y, D, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>>) new TimeSeriesPlotRenderer<>(
+	PlotRenderer<Instant, Y, D, ? extends AxisRenderer<Instant>, ? extends AxisRenderer<Y>> renderer = new TimeSeriesPlotRenderer<>(
 		this, (InstantAxisRenderer) xAxisRenderer, (NumberAxisRenderer) yAxisRenderer);
 	return renderer;
     }

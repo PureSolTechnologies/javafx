@@ -2,7 +2,9 @@ package com.puresoltechnologies.javafx.charts.plots.ohlc;
 
 import java.time.Instant;
 
-public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<OHLCValue<T>> {
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
+
+public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<OHLCValue<T>>, PlotDatum<Instant, T> {
 
     private final Instant start;
     private final Instant end;
@@ -21,6 +23,11 @@ public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<O
 	this.low = low;
 	this.close = close;
 	this.increase = close.doubleValue() > open.doubleValue() ? true : false;
+    }
+
+    @Override
+    public String getClipboardString() {
+	return start.toString() + "\t\"" + toString() + "\"";
     }
 
     public final Instant getStart() {
@@ -140,6 +147,15 @@ public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<O
 	    return false;
 	}
 	return true;
+    }
+
+    @Override
+    public String toString() {
+	return start.toString() + " -> " + end.toString() + //
+		": open=" + open.toString() + //
+		"; high=" + high.toString() + //
+		"; low=" + low.toString() + //
+		"; close=" + close.toString();
     }
 
 }

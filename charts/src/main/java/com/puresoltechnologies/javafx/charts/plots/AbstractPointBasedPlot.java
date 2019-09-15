@@ -19,7 +19,7 @@ import javafx.beans.property.SimpleObjectProperty;
  * @param <Y> see {@link Plot}.
  * @param <D> see {@link Plot}.
  */
-public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D>
+public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>>
 	extends AbstractPlot<X, Y, D> implements PointBasedPlot<X, Y, D> {
 
     private final ObjectProperty<MarkerType> markerType = new SimpleObjectProperty<>(MarkerType.CIRCLE);

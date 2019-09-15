@@ -10,6 +10,7 @@ import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlot;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 
 import javafx.collections.ObservableList;
 import javafx.geometry.VPos;
@@ -96,7 +97,8 @@ public class InstantAxisRenderer<A extends Axis<Instant>> extends AbstractAxisRe
 	case ALT_X:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
 		for (Object value : plot.getData()) {
-		    Instant i = ((AbstractPlot<Instant, ?, Object>) plot).getAxisX(value);
+		    Instant i = ((AbstractPlot<Instant, ?, PlotDatum<Instant, ?>>) plot)
+			    .getAxisX((PlotDatum<Instant, ?>) value);
 		    possibleTicks.add(i);
 		}
 	    }
@@ -105,7 +107,8 @@ public class InstantAxisRenderer<A extends Axis<Instant>> extends AbstractAxisRe
 	case ALT_Y:
 	    for (Plot<?, ?, ?> plot : getPlots()) {
 		for (Object value : plot.getData()) {
-		    Instant i = ((AbstractPlot<?, Instant, Object>) plot).getAxisY(value);
+		    Instant i = ((AbstractPlot<?, Instant, PlotDatum<?, Instant>>) plot)
+			    .getAxisY((PlotDatum<?, Instant>) value);
 		    possibleTicks.add(i);
 		}
 	    }

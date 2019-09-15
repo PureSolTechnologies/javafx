@@ -1,6 +1,8 @@
 package com.puresoltechnologies.javafx.charts.plots.xy;
 
-public class XYValue<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>> {
+import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
+
+public class XYValue<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>> implements PlotDatum<X, Y> {
 
     private final X x;
     private final Y y;
@@ -19,4 +21,13 @@ public class XYValue<X extends Number & Comparable<X>, Y extends Number & Compar
 	return y;
     }
 
+    @Override
+    public String getClipboardString() {
+	return x + "\t" + y;
+    }
+
+    @Override
+    public String toString() {
+	return x + "," + y;
+    }
 }
