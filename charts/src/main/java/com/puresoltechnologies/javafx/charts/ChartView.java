@@ -31,6 +31,7 @@ import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
@@ -153,19 +154,14 @@ public class ChartView extends GridPane {
     private void configureContextMenu() {
 	ContextMenu contextMenu = new ContextMenu();
 
-	MenuItem copyDataItem = new MenuItem("Copy Data");
-	copyDataItem.setOnAction(event -> {
-	    copyData();
-	    event.consume();
-	});
-	MenuItem copyImageItem = new MenuItem("Copy Image");
-	copyImageItem.setOnAction(event -> {
-	    copyImage();
+	MenuItem copyItem = new MenuItem("Copy");
+	copyItem.setOnAction(event -> {
+	    copy();
 	    event.consume();
 	});
 	SeparatorMenuItem separator = new SeparatorMenuItem();
 	MenuItem chartPropertiesItem = new MenuItem("Chart Propeties...");
-	contextMenu.getItems().addAll(copyDataItem, copyImageItem, separator, chartPropertiesItem);
+	contextMenu.getItems().addAll(copyItem, separator, chartPropertiesItem);
 
 	setOnMouseClicked(event -> {
 	    if (hasContextMenu.get()) {
@@ -186,7 +182,17 @@ public class ChartView extends GridPane {
 	});
     }
 
-    private void copyData() {
+    private void copy() {
+	String clipboardString = createClipboardDataString();
+	Image clipboardImage = createClipboardImage();
+
+	ClipboardContent clipboardContent = new ClipboardContent();
+	clipboardContent.putString(clipboardString);
+	clipboardContent.putImage(clipboardImage);
+	Clipboard.getSystemClipboard().setContent(clipboardContent);
+    }
+
+    private String createClipboardDataString() {
 	StringBuilder builder = new StringBuilder();
 
 	ObservableList<Plot<?, ?, ?>> plots = plotCanvas.getPlots();
@@ -237,18 +243,14 @@ public class ChartView extends GridPane {
 	    }
 	    builder.append('\n');
 	}
-
-	ClipboardContent clipboardContent = new ClipboardContent();
-	clipboardContent.putString(builder.toString());
-	Clipboard.getSystemClipboard().setContent(clipboardContent);
+	String clipboardString = builder.toString();
+	return clipboardString;
     }
 
-    private void copyImage() {
+    private Image createClipboardImage() {
 	WritableImage writableImage = new WritableImage((int) getWidth(), (int) getHeight());
 	this.snapshot(null, writableImage);
-	ClipboardContent clipboardContent = new ClipboardContent();
-	clipboardContent.putImage(writableImage);
-	Clipboard.getSystemClipboard().setContent(clipboardContent);
+	return writableImage;
     }
 
     public ObjectProperty<Insets> plotPaddingProperty() {
