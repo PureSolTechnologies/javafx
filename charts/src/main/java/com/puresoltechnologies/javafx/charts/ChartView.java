@@ -1,5 +1,6 @@
 package com.puresoltechnologies.javafx.charts;
 
+import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PlotCanvas;
 import com.puresoltechnologies.javafx.charts.preferences.ChartsProperties;
@@ -15,14 +16,22 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
+import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
@@ -44,6 +53,7 @@ public class ChartView extends GridPane {
     private static final ObjectProperty<FontDefinition> subtitleFontProperty = Preferences
 	    .getProperty(ChartsProperties.SUBTITLE_FONT);
 
+    private final BooleanProperty hasContextMenu = new SimpleBooleanProperty(true);
     private final BooleanProperty legendVisible = new SimpleBooleanProperty(true);
     private final StringProperty titleProperty = new SimpleStringProperty();
     private final StringProperty subTitleProperty = new SimpleStringProperty();
@@ -75,6 +85,7 @@ public class ChartView extends GridPane {
 	plotCanvas.setManaged(true);
 
 	configureLegendTable();
+	configureContextMenu();
 
 	HBox spacer1 = new HBox();
 	HBox spacer2 = new HBox();
@@ -134,6 +145,101 @@ public class ChartView extends GridPane {
 		header.setVisible(false);
 	    }
 	});
+    }
+
+    private void configureContextMenu() {
+	ContextMenu contextMenu = new ContextMenu();
+
+	MenuItem copyDataItem = new MenuItem("Copy Data");
+	copyDataItem.setOnAction(event -> {
+	    copyData();
+	    event.consume();
+	});
+	MenuItem copyImageItem = new MenuItem("Copy Image");
+	copyImageItem.setOnAction(event -> {
+	    copyImage();
+	    event.consume();
+	});
+	SeparatorMenuItem separator = new SeparatorMenuItem();
+	MenuItem chartPropertiesItem = new MenuItem("Chart Propeties...");
+	contextMenu.getItems().addAll(copyDataItem, copyImageItem, separator, chartPropertiesItem);
+
+	setOnMouseClicked(event -> {
+	    if (hasContextMenu.get()) {
+		if (event.getButton() == MouseButton.SECONDARY) {
+		    contextMenu.show(ChartView.this, event.getScreenX(), event.getScreenY());
+		    event.consume();
+		} else if (event.getButton() == MouseButton.PRIMARY) {
+		    if (contextMenu.isShowing()) {
+			contextMenu.hide();
+		    }
+		}
+		/*
+		 * Event is only consumed when context menu is used. Otherwise, the event is
+		 * propagated.
+		 */
+		event.consume();
+	    }
+	});
+    }
+
+    private void copyData() {
+	StringBuilder builder = new StringBuilder();
+
+	ObservableList<Plot<?, ?, ?>> plots = plotCanvas.getPlots();
+	int maxSize = 0;
+	// Determine max length and write chart titles...
+	boolean first = true;
+	for (Plot<?, ?, ?> plot : plots) {
+	    maxSize = Math.max(maxSize, plot.getData().size());
+	    if (first) {
+		first = false;
+	    } else {
+		builder.append('\t');
+	    }
+	    builder.append(plot.getTitle());
+	    builder.append('\t');
+	}
+	builder.append('\n');
+	// Write X and Y axes titles...
+	first = true;
+	for (Plot<?, ?, ?> plot : plots) {
+	    if (first) {
+		first = false;
+	    } else {
+		builder.append('\t');
+	    }
+	    Axis<?> xAxis = plot.getXAxis();
+	    builder.append(xAxis.getTitle() + "(" + plot.getXAxis().getUnit() + ")");
+	    builder.append('\t');
+	    Axis<?> yAxis = plot.getYAxis();
+	    builder.append(yAxis.getTitle() + "(" + plot.getYAxis().getUnit() + ")");
+	}
+	builder.append('\n');
+
+	for (int pos = 0; pos < maxSize; pos++) {
+	    first = true;
+	    for (Plot<?, ?, ?> plot : plots) {
+		if (first) {
+		    first = false;
+		} else {
+		    builder.append('\t');
+		}
+		Object datum = plot.getData().get(pos);
+	    }
+	}
+
+	ClipboardContent clipboardContent = new ClipboardContent();
+	clipboardContent.putString(builder.toString());
+	Clipboard.getSystemClipboard().setContent(clipboardContent);
+    }
+
+    private void copyImage() {
+	WritableImage writableImage = new WritableImage((int) getWidth(), (int) getHeight());
+	this.snapshot(null, writableImage);
+	ClipboardContent clipboardContent = new ClipboardContent();
+	clipboardContent.putImage(writableImage);
+	Clipboard.getSystemClipboard().setContent(clipboardContent);
     }
 
     public ObjectProperty<Insets> plotPaddingProperty() {
