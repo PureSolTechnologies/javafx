@@ -12,14 +12,11 @@ import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 import com.puresoltechnologies.javafx.preferences.Preferences;
 import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -29,22 +26,14 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
-import javafx.scene.paint.Color;
 
 /**
  * This is the component to be used to plot into.
@@ -66,7 +55,7 @@ public class ChartView extends GridPane {
     private final PlotCanvas plotCanvas = new PlotCanvas();
     private final Label titleLabel = new Label();
     private final Label subTitleLabel = new Label();
-    private final TableView<Plot<?, ?, ?>> legendTable = new TableView<>();
+    private final LegendTable legendTable = new LegendTable(plotCanvas.getPlots());
 
     public ChartView(String title) {
 	this();
@@ -106,50 +95,8 @@ public class ChartView extends GridPane {
     }
 
     private void configureLegendTable() {
-	TableColumn<Plot<?, ?, ?>, Plot<?, ?, ?>> markerColumn = new TableColumn<>("Marker");
-	markerColumn.setCellValueFactory(plot -> new SimpleObjectProperty<>(plot.getValue()));
-	markerColumn.setCellFactory(column -> new TableCell<>() {
-	    @Override
-	    protected void updateItem(Plot<?, ?, ?> plot, boolean empty) {
-		super.updateItem(plot, empty);
-		setText(null);
-		if ((plot == null) || empty) {
-		    setGraphic(null);
-		} else {
-		    Color color = plot.getColor();
-		    Pane pane = new Pane();
-		    pane.backgroundProperty()
-			    .setValue(new Background(new BackgroundFill(color, CornerRadii.EMPTY, Insets.EMPTY)));
-		    setGraphic(pane);
-		}
-	    }
-	});
-	legendTable.getColumns().add(markerColumn);
-
-	TableColumn<Plot<?, ?, ?>, String> nameColumn = new TableColumn<>("Name");
-	nameColumn.setCellValueFactory(plot -> new SimpleStringProperty(plot.getValue().getTitle()));
-	legendTable.getColumns().add(nameColumn);
-
 	legendTable.visibleProperty().bind(legendVisible);
 	legendTable.managedProperty().bind(legendVisible);
-	legendTable.setItems(plotCanvas.getPlots());
-	legendTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-	legendTable.setFixedCellSize(25);
-	legendTable.prefHeightProperty()
-		.bind(legendTable.fixedCellSizeProperty().multiply(Bindings.size(legendTable.getItems()).add(0.1)));
-	legendTable.minHeightProperty().bind(legendTable.prefHeightProperty());
-	legendTable.maxHeightProperty().bind(legendTable.prefHeightProperty());
-
-	legendTable.widthProperty().addListener((ChangeListener<Number>) (source, oldWidth, newWidth) -> {
-	    Pane header = (Pane) legendTable.lookup("TableHeaderRow");
-	    if (header.isVisible()) {
-		header.setMaxHeight(0);
-		header.setMinHeight(0);
-		header.setPrefHeight(0);
-		header.setVisible(false);
-	    }
-	});
     }
 
     private void configureContextMenu() {

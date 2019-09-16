@@ -39,7 +39,6 @@ public class PlotCanvas extends Canvas {
 	super();
 	widthProperty().addListener(event -> draw());
 	heightProperty().addListener(event -> draw());
-	draw();
     }
 
     @Override
@@ -49,7 +48,7 @@ public class PlotCanvas extends Canvas {
 
     @Override
     public double maxHeight(double height) {
-	return 10000;
+	return Double.MAX_VALUE;
     }
 
     @Override
@@ -64,7 +63,7 @@ public class PlotCanvas extends Canvas {
 
     @Override
     public double maxWidth(double width) {
-	return 10000;
+	return Double.MAX_VALUE;
     }
 
     @Override
