@@ -7,6 +7,7 @@ module com.puresoltechnologies.javafx.charts {
 
     requires java.desktop;
     requires transitive javafx.graphics;
+    requires commons.math3;
 
     exports com.puresoltechnologies.javafx.charts;
     exports com.puresoltechnologies.javafx.charts.axes;

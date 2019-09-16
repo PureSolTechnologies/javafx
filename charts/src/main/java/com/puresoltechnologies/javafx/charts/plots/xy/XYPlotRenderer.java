@@ -1,9 +1,13 @@
 package com.puresoltechnologies.javafx.charts.plots.xy;
 
+import java.util.List;
+
+import org.apache.commons.math3.analysis.interpolation.SplineInterpolator;
+import org.apache.commons.math3.analysis.polynomials.PolynomialSplineFunction;
+
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
-import com.puresoltechnologies.javafx.charts.plots.InterpolationType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 
@@ -21,6 +25,49 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 
     @Override
     public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	if ((width <= 0) || (height <= 0)) {
+	    return;
+	}
+	drawPoints(canvas, x, y, width, height);
+	drawInterpolation(canvas, x, y, width, height);
+    }
+
+    private void drawPoints(Canvas canvas, double x, double y, double width, double height) {
+	GraphicsContext gc = canvas.getGraphicsContext2D();
+	NumberAxisRenderer<?, ?> xAxisRenderer = getXAxisRenderer();
+	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
+	@SuppressWarnings("unchecked")
+	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
+	gc.setStroke(plot.getColor());
+	gc.setFill(plot.getColor());
+	gc.setLineWidth(1.0);
+
+	double markerSize = plot.markerSizeProperty().get();
+	for (XYValue<X, Y> value : plot.getData()) {
+	    double posX = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
+	    double posY = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
+	    plot.getMarkerType().renderTo(canvas, posX - (markerSize / 2.0), posY - (markerSize / 2.0), markerSize,
+		    markerSize);
+	}
+    }
+
+    private void drawInterpolation(Canvas canvas, double x, double y, double width, double height) {
+	@SuppressWarnings("unchecked")
+	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
+	switch (plot.getInterpolationType()) {
+	case NONE:
+	    // Nothing to draw
+	    return;
+	case STRAIGHT_LINE:
+	    drawStraightInterpolation(canvas, x, y, width, height);
+	    return;
+	case CUBIC_SPLINES:
+	    drawCubicInterpolation(canvas, x, y, width, height);
+	    return;
+	}
+    }
+
+    private void drawStraightInterpolation(Canvas canvas, double x, double y, double width, double height) {
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	NumberAxisRenderer<?, ?> xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
@@ -31,22 +78,51 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	gc.setLineWidth(1.0);
 	double oldPosX = -Double.MAX_VALUE;
 	double oldPosY = -Double.MAX_VALUE;
-	double markerSize = plot.markerSizeProperty().get();
 	for (XYValue<X, Y> value : plot.getData()) {
 	    double posX = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
 	    double posY = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
-	    plot.getMarkerType().renderTo(canvas, posX - (markerSize / 2.0), posY - (markerSize / 2.0), markerSize,
-		    markerSize);
-	    if (posX != -Double.MAX_VALUE) {
-		if (plot.getInterpolationType() == InterpolationType.STRAIGHT_LINE) {
-		    gc.setGlobalAlpha(0.2);
-		    gc.strokeLine(oldPosX, oldPosY, posX, posY);
-		    gc.setGlobalAlpha(1.0);
-		}
+	    if (oldPosX != -Double.MAX_VALUE) {
+		gc.setGlobalAlpha(0.2);
+		gc.strokeLine(oldPosX, oldPosY, posX, posY);
+		gc.setGlobalAlpha(1.0);
+	    }
+	    oldPosX = posX;
+	    oldPosY = posY;
+	}
+
+    }
+
+    private void drawCubicInterpolation(Canvas canvas, double x, double y, double width, double height) {
+	NumberAxisRenderer<?, ?> xAxisRenderer = getXAxisRenderer();
+	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
+	@SuppressWarnings("unchecked")
+	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
+
+	List<XYValue<X, Y>> data = plot.getData();
+	double xValues[] = new double[data.size()];
+	double yValues[] = new double[data.size()];
+	for (int i = 0; i < data.size(); i++) {
+	    XYValue<X, Y> value = data.get(i);
+	    xValues[i] = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
+	    yValues[i] = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
+	}
+	PolynomialSplineFunction interpolator = new SplineInterpolator().interpolate(xValues, yValues);
+
+	GraphicsContext gc = canvas.getGraphicsContext2D();
+	gc.setStroke(plot.getColor());
+	gc.setFill(plot.getColor());
+	gc.setLineWidth(1.0);
+	double oldPosX = -Double.MAX_VALUE;
+	double oldPosY = -Double.MAX_VALUE;
+	for (double posX = xValues[0]; posX <= xValues[xValues.length - 1]; posX += 1.0) {
+	    double posY = interpolator.value(posX);
+	    if (oldPosX != -Double.MAX_VALUE) {
+		gc.setGlobalAlpha(0.2);
+		gc.strokeLine(oldPosX, oldPosY, posX, posY);
+		gc.setGlobalAlpha(1.0);
 	    }
 	    oldPosX = posX;
 	    oldPosY = posY;
 	}
     }
-
 }

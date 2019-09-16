@@ -59,14 +59,14 @@ public class XYPlotSampleViewer extends AbstractViewer {
 
 	XYPlot<Double, Double> xyCosinePlot = new XYPlot<>("Cosine", xAxis, yAxis);
 	xyCosinePlot.setColor(Color.GREEN);
-	xyCosinePlot.setInterpolationType(InterpolationType.STRAIGHT_LINE);
+	xyCosinePlot.setInterpolationType(InterpolationType.NONE);
 	xyCosinePlot.setMarkerType(MarkerType.DIAMOND);
 	xyCosinePlot.setMarkerSize(5.0);
 
 	XYPlot<Double, Double> xyTangentPlot = new XYPlot<>("Tangent", altXAxis, altYAxis);
 	xyTangentPlot.setColor(Color.BLUE);
-	xyTangentPlot.setInterpolationType(InterpolationType.NONE);
-	xyTangentPlot.setMarkerType(MarkerType.CIRCLE);
+	xyTangentPlot.setInterpolationType(InterpolationType.CUBIC_SPLINES);
+	xyTangentPlot.setMarkerType(MarkerType.CROSS);
 	xyTangentPlot.setMarkerSize(10.0);
 
 	ChartView chartView = new ChartView("XY Plot");

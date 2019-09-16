@@ -17,6 +17,10 @@ public enum InterpolationType {
      * This constant tells to connect points with straight lines to each other.
      */
     STRAIGHT_LINE, //
+    /**
+     * This constant tells to connect points with cubic splines.
+     */
+    CUBIC_SPLINES, //
     ;
 
 }
