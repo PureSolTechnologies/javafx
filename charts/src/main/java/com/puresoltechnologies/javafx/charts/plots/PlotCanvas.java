@@ -88,6 +88,12 @@ public class PlotCanvas extends Canvas {
 	return frameColor;
     }
 
+    /**
+     * This property specifies the background color of the plot. If
+     * <code>null</code> is provided, the plot is transparent.
+     *
+     * @return An {@link ObjectProperty} of {@link Color} is returned.
+     */
     public ObjectProperty<Color> backgroundColorProperty() {
 	return backgroundColor;
     }
@@ -170,9 +176,14 @@ public class PlotCanvas extends Canvas {
 
     private void clearPlotArea() {
 	GraphicsContext gc = getGraphicsContext2D();
-	gc.setFill(backgroundColor.get());
-	gc.setStroke(backgroundColor.get());
-	gc.fillRect(0.0, 0.0, getWidth(), getHeight());
+	Color bgColor = backgroundColor.get();
+	if (bgColor != null) {
+	    gc.setFill(bgColor);
+	    gc.setStroke(bgColor);
+	    gc.fillRect(0.0, 0.0, getWidth(), getHeight());
+	} else {
+	    gc.clearRect(0.0, 0.0, getWidth(), getHeight());
+	}
     }
 
     private void drawFrame() {

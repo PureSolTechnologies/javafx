@@ -39,9 +39,7 @@ public class MarkerCanvas extends Canvas {
 		double size = pointBasedPlot.getMarkerSize();
 		double x = (width - size) / 2.0;
 		double y = (height - size) / 2.0;
-		gc.setFill(Color.WHITE);
-		gc.setStroke(Color.WHITE);
-		gc.fillRect(0, 0, width, height);
+		gc.clearRect(0, 0, width, height);
 		gc.setFill(color);
 		gc.setStroke(color);
 		MarkerType markerType = pointBasedPlot.getMarkerType();
