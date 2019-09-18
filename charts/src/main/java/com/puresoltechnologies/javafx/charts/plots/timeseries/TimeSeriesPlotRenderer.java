@@ -24,14 +24,21 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D extends 
 
     @Override
     public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	if ((width <= 0) || (height <= 0)) {
+	    return;
+	}
+	drawPoints(canvas, x, y, width, height);
+    }
+
+    private void drawPoints(Canvas canvas, double x, double y, double width, double height) {
 	TimeSeriesPlot<Y, D> plot = (TimeSeriesPlot<Y, D>) getPlot();
 	List<D> data = plot.getData();
 	if (data.size() == 0) {
 	    return;
 	}
-	InstantAxisRenderer xAxisRenderer = getXAxisRenderer();
-	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
 	GraphicsContext gc = canvas.getGraphicsContext2D();
+	InstantAxisRenderer<?> xAxisRenderer = getXAxisRenderer();
+	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
 	gc.setStroke(plot.getColor());
 	gc.setLineWidth(1.0);
 	double lastXValue = xAxisRenderer.calculatePos(x, y, width, height, plot.getAxisX(data.get(0)));

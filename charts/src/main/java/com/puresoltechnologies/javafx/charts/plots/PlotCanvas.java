@@ -28,6 +28,7 @@ public class PlotCanvas extends Canvas {
     protected final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(5.0));
 
     private final ObservableList<Plot<?, ?, ?>> plots = FXCollections.observableArrayList();
+    private final Map<Plot<?, ?, ?>, PlotRenderer<?, ?, ?, ?, ?>> plotRenderers = new HashMap<>();
     private final List<Axis<?>> xAxes = new ArrayList<>();
     private final List<Axis<?>> yAxes = new ArrayList<>();
     private final List<Axis<?>> altXAxes = new ArrayList<>();
@@ -116,6 +117,11 @@ public class PlotCanvas extends Canvas {
 
     public void addPlot(Plot<?, ?, ?> plot) {
 	plots.add(plot);
+
+	PlotRenderer<?, ?, ?, ?, ?> plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
+		.getGenericRenderer(renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
+	plotRenderers.put(plot, plotRenderer);
+
 	Axis<?> xAxis = plot.getXAxis();
 	switch (xAxis.getAxisType()) {
 	case X:
@@ -252,8 +258,7 @@ public class PlotCanvas extends Canvas {
     private void drawPlots(Rectangle plottingArea) {
 	for (Plot<?, ?, ?> plot : plots) {
 	    if (plot.hasData()) {
-		PlotRenderer<?, ?, ?, ?, ?> plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
-			.getGenericRenderer(renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
+		PlotRenderer<?, ?, ?, ?, ?> plotRenderer = plotRenderers.get(plot);
 		plotRenderer.renderTo(this, plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
 			plottingArea.getHeight());
 	    }

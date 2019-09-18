@@ -33,17 +33,21 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
     }
 
     private void drawPoints(Canvas canvas, double x, double y, double width, double height) {
+	@SuppressWarnings("unchecked")
+	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
+	List<XYValue<X, Y>> data = plot.getData();
+	if (data.size() == 0) {
+	    return;
+	}
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	NumberAxisRenderer<?, ?> xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
-	@SuppressWarnings("unchecked")
-	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
 	gc.setStroke(plot.getColor());
 	gc.setFill(plot.getColor());
 	gc.setLineWidth(1.0);
 
 	double markerSize = plot.markerSizeProperty().get();
-	for (XYValue<X, Y> value : plot.getData()) {
+	for (XYValue<X, Y> value : data) {
 	    double posX = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
 	    double posY = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
 	    plot.getMarkerType().renderTo(canvas, posX - (markerSize / 2.0), posY - (markerSize / 2.0), markerSize,
