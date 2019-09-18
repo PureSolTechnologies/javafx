@@ -18,8 +18,7 @@ public class BoxPlotRenderer<X extends Comparable<X>, Y extends Number & Compara
 
     @Override
     public void renderTo(Canvas canvas, double x, double y, double width, double height) {
-	// TODO Auto-generated method stub
-
+	super.renderTo(canvas, x, y, width, height);
     }
 
 }

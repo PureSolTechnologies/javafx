@@ -31,9 +31,10 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>> extends
 
     @Override
     public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	super.renderTo(canvas, x, y, width, height);
 	GraphicsContext gc = canvas.getGraphicsContext2D();
-	InstantAxisRenderer xAxisRenderer = getXAxisRenderer();
-	NumberAxisRenderer yAxisRenderer = getYAxisRenderer();
+	InstantAxisRenderer<?> xAxisRenderer = getXAxisRenderer();
+	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
 	Plot<Instant, Y, OHLCValue<Y>> plot = getPlot();
 	gc.setStroke(plot.getColor());
 	gc.setLineWidth(1.0);

@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Tooltip;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
@@ -40,6 +41,23 @@ public class PlotCanvas extends Canvas {
 	super();
 	widthProperty().addListener(event -> draw());
 	heightProperty().addListener(event -> draw());
+
+	Tooltip tooltip = new Tooltip();
+	Tooltip.install(this, tooltip);
+	setOnMouseMoved(e -> {
+	    for (PlotRenderer<?, ?, ?, ?, ?> renderer : plotRenderers.values()) {
+		Object v = renderer.findDataPoint(e.getX(), e.getY());
+		if (v != null) {
+		    tooltip.setText(v.toString());
+		    return;
+		}
+	    }
+	    tooltip.hide();
+	    tooltip.setText("");
+	});
+	setOnMouseExited(e -> {
+	    tooltip.hide();
+	});
     }
 
     @Override
@@ -117,10 +135,6 @@ public class PlotCanvas extends Canvas {
 
     public void addPlot(Plot<?, ?, ?> plot) {
 	plots.add(plot);
-
-	PlotRenderer<?, ?, ?, ?, ?> plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
-		.getGenericRenderer(renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
-	plotRenderers.put(plot, plotRenderer);
 
 	Axis<?> xAxis = plot.getXAxis();
 	switch (xAxis.getAxisType()) {
@@ -256,9 +270,13 @@ public class PlotCanvas extends Canvas {
     }
 
     private void drawPlots(Rectangle plottingArea) {
+	plotRenderers.clear();
 	for (Plot<?, ?, ?> plot : plots) {
 	    if (plot.hasData()) {
-		PlotRenderer<?, ?, ?, ?, ?> plotRenderer = plotRenderers.get(plot);
+		PlotRenderer<?, ?, ?, ?, ?> plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
+			.getGenericRenderer(renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
+		plotRenderers.put(plot, plotRenderer);
+
 		plotRenderer.renderTo(this, plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
 			plottingArea.getHeight());
 	    }

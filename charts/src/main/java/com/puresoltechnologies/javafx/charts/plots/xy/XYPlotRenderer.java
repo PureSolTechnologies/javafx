@@ -11,6 +11,7 @@ import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 
@@ -25,6 +26,7 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 
     @Override
     public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	super.renderTo(canvas, x, y, width, height);
 	if ((width <= 0) || (height <= 0)) {
 	    return;
 	}
@@ -50,8 +52,12 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	for (XYValue<X, Y> value : data) {
 	    double posX = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
 	    double posY = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
-	    plot.getMarkerType().renderTo(canvas, posX - (markerSize / 2.0), posY - (markerSize / 2.0), markerSize,
-		    markerSize);
+	    double renderX = posX - (markerSize / 2.0);
+	    double renderY = posY - (markerSize / 2.0);
+	    plot.getMarkerType().renderTo(canvas, renderX, renderY, markerSize, markerSize);
+	    @SuppressWarnings("unchecked")
+	    D d = (D) value;
+	    registerPlottedPoint(new Rectangle2D(renderX, renderY, markerSize, markerSize), d);
 	}
     }
 

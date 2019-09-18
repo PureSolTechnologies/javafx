@@ -1,24 +1,22 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Map.Entry;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
 import com.puresoltechnologies.javafx.charts.AbstractRenderer;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.canvas.Canvas;
 
 public abstract class AbstractPlotRenderer<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>, XAR extends AxisRenderer<?>, YAR extends AxisRenderer<?>>
 	extends AbstractRenderer implements PlotRenderer<X, Y, D, XAR, YAR> {
 
-    private final DoubleProperty dataPointCaptureRange = new SimpleDoubleProperty(5.0);
-
     private final Plot<X, Y, D> plot;
     private final XAR xAxisRenderer;
     private final YAR yAxisRenderer;
-    private final NavigableMap<Double, NavigableMap<Double, D>> plottedPoints = new TreeMap<>();
+    private final Map<Rectangle2D, D> plottedPoints = new HashMap<>();
 
     public AbstractPlotRenderer(Plot<X, Y, D> plot, XAR xAxisRenderer, YAR yAxisRenderer) {
 	this.plot = plot;
@@ -41,11 +39,6 @@ public abstract class AbstractPlotRenderer<X extends Comparable<X>, Y extends Co
 	return yAxisRenderer;
     }
 
-    @Override
-    public DoubleProperty dataPointCaptureRangeProperty() {
-	return dataPointCaptureRange;
-    }
-
     /**
      * Clears all plotted points registered by
      * {@link #registerPlottedPoint(double, double, PlotDatum)}.
@@ -60,32 +53,34 @@ public abstract class AbstractPlotRenderer<X extends Comparable<X>, Y extends Co
      * @param y
      * @param dataPoint
      */
-    protected void registerPlottedPoint(double x, double y, D dataPoint) {
-	NavigableMap<Double, D> yPoints = plottedPoints.get(x);
-	if (yPoints == null) {
-	    yPoints = new TreeMap<>();
-	    plottedPoints.put(x, yPoints);
-	}
-	yPoints.put(y, dataPoint);
+    protected void registerPlottedPoint(Rectangle2D location, D dataPoint) {
+	plottedPoints.put(location, dataPoint);
     }
 
     @Override
     public D findDataPoint(double canvasX, double canvasY) {
-	double range = dataPointCaptureRange.get();
 	D dataPoint = null;
 	double minDistance = Double.MAX_VALUE;
-	for (Entry<Double, NavigableMap<Double, D>> xEntry : plottedPoints.subMap(canvasX - range, canvasX + range)
-		.entrySet()) {
-	    double x = xEntry.getKey();
-	    for (Entry<Double, D> yEntry : xEntry.getValue().subMap(canvasY - range, canvasY + range).entrySet()) {
-		double y = yEntry.getKey();
-		double distance = Math.sqrt(((canvasX - x) * (canvasX - x)) + ((canvasY - y) * (canvasY - y)));
-		if ((distance < range) && (distance < minDistance)) {
+	for (Entry<Rectangle2D, D> entry : plottedPoints.entrySet()) {
+	    Rectangle2D location = entry.getKey();
+	    if (location.contains(canvasX, canvasY)) {
+		double centerX = (location.getMaxX() + location.getMinX()) / 2.0;
+		double centerY = (location.getMaxY() + location.getMinY()) / 2.0;
+		double distance = Math.sqrt( //
+			((canvasX - centerX) * (canvasX - centerX)) //
+				+ ((canvasY - centerY) * (canvasY - centerY)) //
+		);
+		if (distance < minDistance) {
 		    minDistance = distance;
-		    dataPoint = yEntry.getValue();
+		    dataPoint = entry.getValue();
 		}
 	    }
 	}
 	return dataPoint;
+    }
+
+    @Override
+    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	clearPlottedPoints();
     }
 }

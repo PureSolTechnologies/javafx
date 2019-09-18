@@ -24,6 +24,7 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D extends 
 
     @Override
     public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+	super.renderTo(canvas, x, y, width, height);
 	if ((width <= 0) || (height <= 0)) {
 	    return;
 	}
