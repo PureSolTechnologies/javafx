@@ -22,7 +22,7 @@ import javafx.beans.property.SimpleObjectProperty;
 public abstract class AbstractPointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>>
 	extends AbstractPlot<X, Y, D> implements PointBasedPlot<X, Y, D> {
 
-    private final ObjectProperty<MarkerType> markerType = new SimpleObjectProperty<>(MarkerType.CIRCLE);
+    private final ObjectProperty<MarkerType> markerType = new SimpleObjectProperty<>(MarkerType.DOT);
     private final DoubleProperty markerSize = new SimpleDoubleProperty(3.0);
 
     private final ObjectProperty<InterpolationType> interpolationType = new SimpleObjectProperty<>(

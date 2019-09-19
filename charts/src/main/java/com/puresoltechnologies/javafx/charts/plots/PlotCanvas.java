@@ -53,7 +53,6 @@ public class PlotCanvas extends Canvas {
 		}
 	    }
 	    tooltip.hide();
-	    tooltip.setText("");
 	});
 	setOnMouseExited(e -> {
 	    tooltip.hide();

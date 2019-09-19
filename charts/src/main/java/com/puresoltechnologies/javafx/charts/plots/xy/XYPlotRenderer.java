@@ -25,8 +25,8 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
     }
 
     @Override
-    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
-	super.renderTo(canvas, x, y, width, height);
+    public void draw(Canvas canvas, double x, double y, double width, double height) {
+	super.draw(canvas, x, y, width, height);
 	if ((width <= 0) || (height <= 0)) {
 	    return;
 	}

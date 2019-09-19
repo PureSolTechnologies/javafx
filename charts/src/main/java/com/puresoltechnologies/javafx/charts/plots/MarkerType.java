@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.charts.plots;
 
 import com.puresoltechnologies.javafx.charts.Renderer;
 
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 
 /**
@@ -13,6 +14,8 @@ public enum MarkerType implements Renderer {
 
     SQUARE(new SquareMarkerRenderer()), //
     CROSS(new CrossMarkerRenderer()), //
+    PLUS(new PlusMarkerRenderer()), //
+    DOT(new DotMarkerRenderer()), //
     CIRCLE(new CircleMarkerRenderer()), //
     DIAMOND(new DiamondMarkerRenderer()), //
     ;
@@ -24,8 +27,13 @@ public enum MarkerType implements Renderer {
     }
 
     @Override
-    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
-	renderer.renderTo(canvas, x, y, width, height);
+    public void renderTo(Canvas canvas, Rectangle2D location) {
+	renderer.renderTo(canvas, location);
+    }
+
+    @Override
+    public Rectangle2D getLocation() {
+	return renderer.getLocation();
     }
 
 }

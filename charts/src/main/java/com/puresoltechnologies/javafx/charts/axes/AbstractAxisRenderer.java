@@ -109,14 +109,14 @@ public abstract class AbstractAxisRenderer<T, A extends Axis<T>> extends Abstrac
     protected abstract double getLabelThickness();
 
     @Override
-    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+    public void draw(Canvas canvas, double x, double y, double width, double height) {
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	clearAxisArea(gc, x, y, width, height);
 	drawAxis(gc, x, y, width, height);
 	if (hasData()) {
 	    drawTicks(gc, x, y, width, height);
 	}
-	renderAxisTitle(canvas, x, y, width, height);
+	drawAxisTitle(canvas, x, y, width, height);
     }
 
     private boolean hasData() {
@@ -150,7 +150,7 @@ public abstract class AbstractAxisRenderer<T, A extends Axis<T>> extends Abstrac
 
     protected abstract void drawTicks(GraphicsContext gc, double x, double y, double width, double height);
 
-    private void renderAxisTitle(Canvas canvas, double x, double y, double width, double height) {
+    private void drawAxisTitle(Canvas canvas, double x, double y, double width, double height) {
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	// TITLE
 	String axisTitle = axis.getTitle();

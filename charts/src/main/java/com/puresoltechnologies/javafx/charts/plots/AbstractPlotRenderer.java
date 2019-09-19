@@ -80,7 +80,7 @@ public abstract class AbstractPlotRenderer<X extends Comparable<X>, Y extends Co
     }
 
     @Override
-    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
+    public void draw(Canvas canvas, double x, double y, double width, double height) {
 	clearPlottedPoints();
     }
 }

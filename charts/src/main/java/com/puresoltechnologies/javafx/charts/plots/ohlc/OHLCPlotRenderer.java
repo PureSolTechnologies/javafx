@@ -30,8 +30,8 @@ public class OHLCPlotRenderer<Y extends Number & Comparable<Y>> extends
     }
 
     @Override
-    public void renderTo(Canvas canvas, double x, double y, double width, double height) {
-	super.renderTo(canvas, x, y, width, height);
+    public void draw(Canvas canvas, double x, double y, double width, double height) {
+	super.draw(canvas, x, y, width, height);
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	InstantAxisRenderer<?> xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
