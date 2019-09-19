@@ -102,18 +102,28 @@ public class ChartView extends GridPane {
     private void configureContextMenu() {
 	ContextMenu contextMenu = new ContextMenu();
 
+	MenuItem autoScaleItem = new MenuItem("Autoscale");
+	autoScaleItem.setOnAction(event -> {
+	    plotCanvas.autoScale();
+	    event.consume();
+	});
 	MenuItem copyItem = new MenuItem("Copy");
 	copyItem.setOnAction(event -> {
 	    copy();
 	    event.consume();
 	});
-	SeparatorMenuItem separator = new SeparatorMenuItem();
 	MenuItem chartPropertiesItem = new MenuItem("Chart Properties...");
 	chartPropertiesItem.setOnAction(event -> {
 	    new ChartPropertiesDialog(ChartView.this, plotCanvas.getPlots()).showAndWait();
 	    event.consume();
 	});
-	contextMenu.getItems().addAll(copyItem, separator, chartPropertiesItem);
+	contextMenu.getItems().addAll( //
+		autoScaleItem, //
+		new SeparatorMenuItem(), //
+		copyItem, //
+		new SeparatorMenuItem(), //
+		chartPropertiesItem //
+	);
 
 	setOnMouseClicked(event -> {
 	    if (hasContextMenu.get()) {

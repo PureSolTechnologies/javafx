@@ -23,6 +23,31 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
     }
 
     @Override
+    public void scale(double factor, double ratioMinToMax) {
+	T min = getMin();
+	T max = getMax();
+	if ((min != null) && (max != null)) {
+	    if (Double.class.isAssignableFrom(min.getClass())) {
+		double range = max.doubleValue() - min.doubleValue();
+		double newMin = min.doubleValue() //
+			+ (range * ((1.0 - factor) * ratioMinToMax));
+		double newMax = max.doubleValue() //
+			- (range * ((1.0 - factor) * (1.0 - ratioMinToMax)));
+		setMin((T) Double.valueOf(newMin));
+		setMax((T) Double.valueOf(newMax));
+	    } else if (Double.class.isAssignableFrom(min.getClass())) {
+		float range = max.floatValue() - min.floatValue();
+		float newMin = min.floatValue() //
+			+ (float) (range * ((1.0 - factor) * ratioMinToMax));
+		float newMax = max.floatValue() //
+			- (float) (range * ((1.0 - factor) * (1.0 - ratioMinToMax)));
+		setMin((T) Double.valueOf(newMin));
+		setMax((T) Double.valueOf(newMax));
+	    }
+	}
+    }
+
+    @Override
     protected void updateMinMax() {
 	A axis = getAxis();
 	ObservableList<Plot<?, ?, ?>> plots = getPlots();

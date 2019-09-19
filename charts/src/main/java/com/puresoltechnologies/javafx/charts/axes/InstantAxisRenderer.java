@@ -27,6 +27,19 @@ public class InstantAxisRenderer<A extends Axis<Instant>> extends AbstractAxisRe
     }
 
     @Override
+    public void scale(double factor, double ratioMinToMax) {
+	Instant min = getMin();
+	Instant max = getMax();
+	if ((min != null) && (max != null)) {
+	    long seconds = max.getEpochSecond() - min.getEpochSecond();
+	    setMin(Instant.ofEpochSecond((long) (min.getEpochSecond() //
+		    + (seconds * (factor * ratioMinToMax)))));
+	    setMax(Instant.ofEpochSecond((long) (min.getEpochSecond() //
+		    - (seconds * (factor * (1.0 - ratioMinToMax))))));
+	}
+    }
+
+    @Override
     protected void updateMinMax() {
 	Axis<Instant> axis = getAxis();
 	ObservableList<Plot<?, ?, ?>> plots = getPlots();

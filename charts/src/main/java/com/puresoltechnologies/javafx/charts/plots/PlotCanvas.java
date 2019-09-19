@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
@@ -16,11 +17,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class PlotCanvas extends Canvas {
 
@@ -34,8 +36,10 @@ public class PlotCanvas extends Canvas {
     private final List<Axis<?>> yAxes = new ArrayList<>();
     private final List<Axis<?>> altXAxes = new ArrayList<>();
     private final List<Axis<?>> altYAxes = new ArrayList<>();
-    private final Map<Axis<?>, AxisRenderer<?>> renderers = new HashMap<>();
+    private final Map<Axis<?>, AxisRenderer<?>> axisRenderers = new HashMap<>();
     private final Map<Axis<?>, ObservableList<Plot<?, ?, ?>>> affectedPlots = new HashMap<>();
+
+    private Rectangle2D plotArea = null;
 
     public PlotCanvas() {
 	super();
@@ -57,6 +61,47 @@ public class PlotCanvas extends Canvas {
 	setOnMouseExited(e -> {
 	    tooltip.hide();
 	});
+	setOnScroll(event -> {
+	    if ( //
+	    (event.isControlDown()) //
+		    && (plotArea != null) //
+		    && (plotArea.contains(event.getX(), event.getY())) //
+	    ) {
+		scale(event);
+		event.consume();
+	    }
+	});
+
+	setOnZoom(event -> {
+	    if ((plotArea != null) && (plotArea.contains(event.getX(), event.getY()))) {
+		System.err.println("zoom: factor=" + event.getTotalZoomFactor());
+		event.consume();
+	    }
+	});
+
+    }
+
+    private void scale(ScrollEvent event) {
+	for (Entry<Axis<?>, AxisRenderer<?>> entry : axisRenderers.entrySet()) {
+	    Axis<?> axis = entry.getKey();
+	    AxisRenderer<?> renderer = entry.getValue();
+	    Rectangle2D location = renderer.getLocation();
+	    double ratioMinToMax = 0.0;
+	    switch (axis.getAxisType()) {
+	    case X:
+	    case ALT_X:
+		double size = location.getWidth();
+		ratioMinToMax = (event.getX() - location.getMinX()) / size;
+		break;
+	    case Y:
+	    case ALT_Y:
+		size = location.getHeight();
+		ratioMinToMax = 1.0 - ((event.getY() - location.getMinY()) / size);
+		break;
+	    }
+	    renderer.scale(Math.pow(1.1, event.getDeltaY() / event.getMultiplierY()), ratioMinToMax);
+	    draw();
+	}
     }
 
     @Override
@@ -100,6 +145,14 @@ public class PlotCanvas extends Canvas {
 	setWidth(width);
 	setHeight(height);
 	draw();
+    }
+
+    public void autoScale() {
+	for (AxisRenderer<?> renderer : axisRenderers.values()) {
+	    renderer.setAutoScaleMin(true);
+	    renderer.setAutoScaleMax(true);
+	    draw();
+	}
     }
 
     public ObjectProperty<Color> frameColorProperty() {
@@ -167,33 +220,35 @@ public class PlotCanvas extends Canvas {
 	}
 
 	for (Axis<?> axis : Arrays.asList(xAxis, yAxis)) {
-	    if (!renderers.containsKey(axis)) {
+	    if (!axisRenderers.containsKey(axis)) {
 		ObservableList<Plot<?, ?, ?>> plots = FXCollections.observableArrayList();
 		plots.add(plot);
 		affectedPlots.put(axis, plots);
 	    } else {
 		affectedPlots.get(axis).add(plot);
 	    }
-	    renderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
+	    axisRenderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
 	}
 	plot.data().addListener((ListChangeListener<Object>) change -> draw());
     }
 
     private void draw() {
-	clearPlotArea();
+	clear();
 	Insets padding = this.padding.getValue();
-	Rectangle frameArea = new Rectangle( //
-		padding.getLeft(), //
-		padding.getTop(), //
-		getWidth() - padding.getLeft() - padding.getRight(), //
-		getHeight() - padding.getTop() - padding.getBottom() //
-	);
-	Rectangle plotArea = drawAxes(frameArea);
-	drawPlots(plotArea);
-	drawFrame();
+	double x = padding.getLeft();
+	double y = padding.getTop();
+	double width = getWidth() - x - padding.getRight();
+	double height = getHeight() - y - padding.getBottom();
+	if ((width > 0) && (height > 0)) {
+	    Rectangle2D frameArea = new Rectangle2D( //
+		    x, y, width, height);
+	    this.plotArea = drawAxes(frameArea);
+	    drawPlots(plotArea);
+	    drawFrame();
+	}
     }
 
-    private void clearPlotArea() {
+    private void clear() {
 	GraphicsContext gc = getGraphicsContext2D();
 	Color bgColor = backgroundColor.get();
 	if (bgColor != null) {
@@ -221,62 +276,62 @@ public class PlotCanvas extends Canvas {
      *
      * @return
      */
-    private Rectangle drawAxes(Rectangle plottingArea) {
-	double xAxesThickness = calculateThickness(xAxes, renderers);
-	double yAxesThickness = calculateThickness(yAxes, renderers);
-	double altXAxesThickness = calculateThickness(altXAxes, renderers);
-	double altYAxesThickness = calculateThickness(altYAxes, renderers);
+    private Rectangle2D drawAxes(Rectangle2D plottingArea) {
+	double xAxesThickness = calculateThickness(xAxes, axisRenderers);
+	double yAxesThickness = calculateThickness(yAxes, axisRenderers);
+	double altXAxesThickness = calculateThickness(altXAxes, axisRenderers);
+	double altYAxesThickness = calculateThickness(altYAxes, axisRenderers);
 
-	double position = (plottingArea.getY() + plottingArea.getHeight()) - xAxesThickness;
+	double position = (plottingArea.getMinY() + plottingArea.getHeight()) - xAxesThickness;
 	for (Axis<?> axis : xAxes) {
-	    AxisRenderer<?> renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = axisRenderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(this, plottingArea.getX() + yAxesThickness, position,
+	    renderer.renderTo(this, plottingArea.getMinX() + yAxesThickness, position,
 		    plottingArea.getWidth() - yAxesThickness - altYAxesThickness, tickness);
 	    position += tickness;
 	}
-	position = plottingArea.getX();
+	position = plottingArea.getMinX();
 	for (Axis<?> axis : yAxes) {
-	    AxisRenderer<?> renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = axisRenderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(this, position, plottingArea.getY() + altXAxesThickness, tickness,
+	    renderer.renderTo(this, position, plottingArea.getMinY() + altXAxesThickness, tickness,
 		    plottingArea.getHeight() - xAxesThickness - altXAxesThickness);
 	    position += tickness;
 	}
-	position = plottingArea.getY();
+	position = plottingArea.getMinY();
 	for (Axis<?> axis : altXAxes) {
-	    AxisRenderer<?> renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = axisRenderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(this, plottingArea.getX() + yAxesThickness, position,
+	    renderer.renderTo(this, plottingArea.getMinX() + yAxesThickness, position,
 		    plottingArea.getWidth() - yAxesThickness - altYAxesThickness, tickness);
 	    position += tickness;
 	}
-	position = (plottingArea.getX() + plottingArea.getWidth()) - altYAxesThickness;
+	position = (plottingArea.getMinX() + plottingArea.getWidth()) - altYAxesThickness;
 	for (Axis<?> axis : altYAxes) {
-	    AxisRenderer<?> renderer = renderers.get(axis);
+	    AxisRenderer<?> renderer = axisRenderers.get(axis);
 	    double tickness = renderer.getTickness();
-	    renderer.renderTo(this, position, plottingArea.getY() + altXAxesThickness, tickness,
+	    renderer.renderTo(this, position, plottingArea.getMinY() + altXAxesThickness, tickness,
 		    plottingArea.getHeight() - xAxesThickness - altXAxesThickness);
 	    position += tickness;
 	}
 
-	return new Rectangle( //
-		plottingArea.getX() + yAxesThickness, //
-		plottingArea.getY() + altXAxesThickness, //
+	return new Rectangle2D( //
+		plottingArea.getMinX() + yAxesThickness, //
+		plottingArea.getMinY() + altXAxesThickness, //
 		plottingArea.getWidth() - yAxesThickness - altYAxesThickness, //
 		plottingArea.getHeight() - xAxesThickness - altXAxesThickness //
 	);
     }
 
-    private void drawPlots(Rectangle plottingArea) {
+    private void drawPlots(Rectangle2D plottingArea) {
 	plotRenderers.clear();
 	for (Plot<?, ?, ?> plot : plots) {
 	    if (plot.hasData()) {
 		PlotRenderer<?, ?, ?, ?, ?> plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
-			.getGenericRenderer(renderers.get(plot.getXAxis()), renderers.get(plot.getYAxis()));
+			.getGenericRenderer(axisRenderers.get(plot.getXAxis()), axisRenderers.get(plot.getYAxis()));
 		plotRenderers.put(plot, plotRenderer);
 
-		plotRenderer.renderTo(this, plottingArea.getX(), plottingArea.getY(), plottingArea.getWidth(),
+		plotRenderer.renderTo(this, plottingArea.getMinX(), plottingArea.getMinY(), plottingArea.getWidth(),
 			plottingArea.getHeight());
 	    }
 	}

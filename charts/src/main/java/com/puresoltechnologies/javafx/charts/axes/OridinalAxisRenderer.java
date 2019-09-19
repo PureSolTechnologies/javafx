@@ -14,6 +14,11 @@ public class OridinalAxisRenderer<A extends Axis<Comparable<Object>>>
     }
 
     @Override
+    public void scale(double factor, double ratioMinToMax) {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
 	text.setFont(getAxis().getLabelFont().toFont());

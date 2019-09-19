@@ -3,6 +3,10 @@ package com.puresoltechnologies.javafx.charts.axes;
 import com.puresoltechnologies.javafx.charts.AbstractRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.VPos;
@@ -17,11 +21,14 @@ public abstract class AbstractAxisRenderer<T, A extends Axis<T>> extends Abstrac
     protected static final double MIN_X_DISTANCE = 50.0;
     protected static final double MIN_Y_DISTANCE = 25.0;
 
+    private final BooleanProperty autoScaleMin = new SimpleBooleanProperty(true);
+    private final BooleanProperty autoScaleMax = new SimpleBooleanProperty(true);
+
     private final A axis;
     private final ObservableList<Plot<?, ?, ?>> plots;
 
-    private T min = null;
-    private T max = null;
+    private final ObjectProperty<T> min = new SimpleObjectProperty<>(null);
+    private final ObjectProperty<T> max = new SimpleObjectProperty<>(null);
 
     public AbstractAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	this.axis = axis;
@@ -29,25 +36,37 @@ public abstract class AbstractAxisRenderer<T, A extends Axis<T>> extends Abstrac
 	plots.addListener((ListChangeListener<Plot<?, ?, ?>>) c -> updateMinMax());
 	plots.forEach(plot -> plot.data().addListener((ListChangeListener<Object>) arg0 -> updateMinMax()));
 	updateMinMax();
+	autoScaleMin.addListener((o, oldValue, newValue) -> {
+	    if (newValue) {
+		updateMinMax();
+	    }
+	});
+	autoScaleMax.addListener((o, oldValue, newValue) -> {
+	    if (newValue) {
+		updateMinMax();
+	    }
+	});
+    }
+
+    @Override
+    public BooleanProperty autoScaleMinProperty() {
+	return autoScaleMin;
+    }
+
+    @Override
+    public BooleanProperty autoScaleMaxProperty() {
+	return autoScaleMax;
     }
 
     protected abstract void updateMinMax();
 
-    protected final void setMin(T min) {
-	this.min = min;
-    }
-
     @Override
-    public final T getMin() {
+    public ObjectProperty<T> minProperty() {
 	return min;
     }
 
-    protected final void setMax(T max) {
-	this.max = max;
-    }
-
     @Override
-    public final T getMax() {
+    public ObjectProperty<T> maxProperty() {
 	return max;
     }
 
