@@ -18,6 +18,11 @@ public class NominalAxisRenderer<A extends Axis<Object>> extends AbstractAxisRen
     }
 
     @Override
+    public void move(double fractionOfRange) {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
     protected double getLabelThickness() {
 	Text text = new Text("WQ");
 	text.setFont(getAxis().getLabelFont().toFont());

@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
@@ -21,6 +20,7 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Tooltip;
+import javafx.scene.input.GestureEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.paint.Color;
 
@@ -62,46 +62,114 @@ public class PlotCanvas extends Canvas {
 	    tooltip.hide();
 	});
 	setOnScroll(event -> {
-	    if ( //
-	    (event.isControlDown()) //
-		    && (plotArea != null) //
-		    && (plotArea.contains(event.getX(), event.getY())) //
-	    ) {
-		scale(event);
-		event.consume();
+	    double x = event.getX();
+	    double y = event.getY();
+	    if (event.isControlDown()) {
+		int stepsY = (int) (event.getDeltaY() / event.getMultiplierY());
+		double zoomFactor = Math.pow(0.9, stepsY);
+		zoom(event, x, y, zoomFactor);
+	    } else {
+		move(event, x, y, event.getDeltaX(), event.getDeltaY());
 	    }
 	});
-
 	setOnZoom(event -> {
-	    if ((plotArea != null) && (plotArea.contains(event.getX(), event.getY()))) {
-		System.err.println("zoom: factor=" + event.getTotalZoomFactor());
-		event.consume();
-	    }
+	    System.err.println("zoom: factor=" + event.getTotalZoomFactor());
+	    double x = event.getX();
+	    double y = event.getY();
+	    double zoomFactor = event.getZoomFactor();
+	    zoom(event, x, y, zoomFactor);
 	});
 
     }
 
-    private void scale(ScrollEvent event) {
-	for (Entry<Axis<?>, AxisRenderer<?>> entry : axisRenderers.entrySet()) {
-	    Axis<?> axis = entry.getKey();
-	    AxisRenderer<?> renderer = entry.getValue();
-	    Rectangle2D location = renderer.getLocation();
-	    double ratioMinToMax = 0.0;
-	    switch (axis.getAxisType()) {
-	    case X:
-	    case ALT_X:
-		double size = location.getWidth();
-		ratioMinToMax = (event.getX() - location.getMinX()) / size;
-		break;
-	    case Y:
-	    case ALT_Y:
-		size = location.getHeight();
-		ratioMinToMax = 1.0 - ((event.getY() - location.getMinY()) / size);
-		break;
-	    }
-	    renderer.scale(Math.pow(1.1, event.getDeltaY() / event.getMultiplierY()), ratioMinToMax);
+    private void move(ScrollEvent event, double x, double y, double deltaX, double deltaY) {
+	if ((plotArea != null) //
+		&& (plotArea.contains(x, y)) //
+	) {
+	    move(x, y, deltaX, deltaY);
 	    draw();
+	    event.consume();
+	} else {
+	    boolean handled = false;
+	    for (AxisRenderer<?> renderer : axisRenderers.values()) {
+		if (renderer.getLocation().contains(x, y)) {
+		    moveSingleAxis(x, y, deltaX, deltaY, renderer);
+		    handled = true;
+		}
+	    }
+	    if (handled) {
+		draw();
+		event.consume();
+	    }
 	}
+    }
+
+    private void move(double x, double y, double deltaX, double deltaY) {
+	for (AxisRenderer<?> renderer : axisRenderers.values()) {
+	    moveSingleAxis(x, y, deltaX, deltaY, renderer);
+	}
+    }
+
+    private void moveSingleAxis(double x, double y, double deltaX, double deltaY, AxisRenderer<?> renderer) {
+	Rectangle2D location = renderer.getLocation();
+	switch (renderer.getAxis().getAxisType()) {
+	case X:
+	case ALT_X:
+	    double size = location.getWidth();
+	    renderer.move(deltaX / size);
+	    break;
+	case Y:
+	case ALT_Y:
+	    size = location.getHeight();
+	    renderer.move(-deltaY / size);
+	    break;
+	}
+    }
+
+    private void zoom(GestureEvent event, double x, double y, double zoomFactor) {
+	if ((plotArea != null) //
+		&& (plotArea.contains(x, y)) //
+	) {
+	    zoom(x, y, zoomFactor);
+	    draw();
+	    event.consume();
+	} else {
+	    boolean handled = false;
+	    for (AxisRenderer<?> renderer : axisRenderers.values()) {
+		if (renderer.getLocation().contains(x, y)) {
+		    zoomSingleAxis(x, y, zoomFactor, renderer);
+		    handled = true;
+		}
+	    }
+	    if (handled) {
+		draw();
+		event.consume();
+	    }
+	}
+    }
+
+    private void zoom(double x, double y, double zoomFactor) {
+	for (AxisRenderer<?> renderer : axisRenderers.values()) {
+	    zoomSingleAxis(x, y, zoomFactor, renderer);
+	}
+    }
+
+    private void zoomSingleAxis(double x, double y, double zoomFactor, AxisRenderer<?> renderer) {
+	Rectangle2D location = renderer.getLocation();
+	double ratioMinToMax = 0.0;
+	switch (renderer.getAxis().getAxisType()) {
+	case X:
+	case ALT_X:
+	    double size = location.getWidth();
+	    ratioMinToMax = (x - location.getMinX()) / size;
+	    break;
+	case Y:
+	case ALT_Y:
+	    size = location.getHeight();
+	    ratioMinToMax = 1.0 - ((y - location.getMinY()) / size);
+	    break;
+	}
+	renderer.scale(zoomFactor, ratioMinToMax);
     }
 
     @Override

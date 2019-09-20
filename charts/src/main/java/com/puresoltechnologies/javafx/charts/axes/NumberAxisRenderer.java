@@ -20,6 +20,12 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 
     public NumberAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(axis, plots);
+	minProperty().addListener((o, oldValue, newValue) -> {
+	    updateAccuracy();
+	});
+	maxProperty().addListener((o, oldValue, newValue) -> {
+	    updateAccuracy();
+	});
     }
 
     @Override
@@ -41,6 +47,27 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 			+ (float) (range * ((1.0 - factor) * ratioMinToMax));
 		float newMax = max.floatValue() //
 			- (float) (range * ((1.0 - factor) * (1.0 - ratioMinToMax)));
+		setMin((T) Double.valueOf(newMin));
+		setMax((T) Double.valueOf(newMax));
+	    }
+	}
+    }
+
+    @Override
+    public void move(double fractionOfRange) {
+	T min = getMin();
+	T max = getMax();
+	if ((min != null) && (max != null)) {
+	    if (Double.class.isAssignableFrom(min.getClass())) {
+		double range = max.doubleValue() - min.doubleValue();
+		double newMin = min.doubleValue() + (fractionOfRange * range);
+		double newMax = max.doubleValue() + (fractionOfRange * range);
+		setMin((T) Double.valueOf(newMin));
+		setMax((T) Double.valueOf(newMax));
+	    } else if (Double.class.isAssignableFrom(min.getClass())) {
+		float range = max.floatValue() - min.floatValue();
+		float newMin = min.floatValue() + ((float) fractionOfRange * range);
+		float newMax = max.floatValue() + ((float) fractionOfRange * range);
 		setMin((T) Double.valueOf(newMin));
 		setMax((T) Double.valueOf(newMax));
 	    }
@@ -75,9 +102,9 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 	default:
 	    throw new IllegalStateException("Wrong type of axis found.");
 	}
-	int accuracyExponent = 0;
 	if ((min != null) && (max != null)) {
-	    accuracyExponent = TickCalculator.calculateAccuracy(min.doubleValue(), max.doubleValue());
+	    // optimize min and max
+	    int accuracyExponent = TickCalculator.calculateAccuracy(min.doubleValue(), max.doubleValue());
 	    if (Double.class.isAssignableFrom(min.getClass())) {
 		min = (T) Double.valueOf(TickCalculator.calculateChartMin(min.doubleValue(), accuracyExponent));
 		max = (T) Double.valueOf(TickCalculator.calculateChartMax(max.doubleValue(), accuracyExponent));
@@ -85,11 +112,19 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 		min = (T) Float.valueOf((float) TickCalculator.calculateChartMin(min.floatValue(), accuracyExponent));
 		max = (T) Float.valueOf((float) TickCalculator.calculateChartMax(max.floatValue(), accuracyExponent));
 	    }
-	    // optimize min and max
 	}
-	setAccuracy(accuracyExponent);
 	setMin(min);
 	setMax(max);
+    }
+
+    private void updateAccuracy() {
+	int accuracyExponent = 0;
+	T min = getMin();
+	T max = getMax();
+	if ((min != null) && (max != null)) {
+	    accuracyExponent = TickCalculator.calculateAccuracy(min.doubleValue(), max.doubleValue());
+	}
+	setAccuracy(accuracyExponent);
     }
 
     private void setAccuracy(int accuracy) {

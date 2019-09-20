@@ -70,6 +70,7 @@ public abstract class AbstractAxisRenderer<T, A extends Axis<T>> extends Abstrac
 	return max;
     }
 
+    @Override
     public final A getAxis() {
 	return axis;
     }

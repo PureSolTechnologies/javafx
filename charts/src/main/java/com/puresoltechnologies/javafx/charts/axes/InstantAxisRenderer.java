@@ -40,6 +40,11 @@ public class InstantAxisRenderer<A extends Axis<Instant>> extends AbstractAxisRe
     }
 
     @Override
+    public void move(double fractionOfRange) {
+	// TODO Auto-generated method stub
+    }
+
+    @Override
     protected void updateMinMax() {
 	Axis<Instant> axis = getAxis();
 	ObservableList<Plot<?, ?, ?>> plots = getPlots();

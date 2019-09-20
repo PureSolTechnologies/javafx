@@ -13,6 +13,8 @@ import javafx.beans.property.ObjectProperty;
  */
 public interface AxisRenderer<T> extends Renderer {
 
+    Axis<T> getAxis();
+
     /**
      * Returns the property for the auto scale setting for the minimum value.
      *
@@ -126,5 +128,13 @@ public interface AxisRenderer<T> extends Renderer {
      * @return The thickness of the axis.
      */
     double getTickness();
+
+    /**
+     * This method moves the axis values by a defined number of steps. A step is
+     * simply the current accuracy.
+     *
+     * @param steps
+     */
+    void move(double fractionOfRange);
 
 }
