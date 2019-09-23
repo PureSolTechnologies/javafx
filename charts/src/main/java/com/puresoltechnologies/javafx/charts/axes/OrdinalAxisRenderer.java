@@ -6,10 +6,10 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 
-public class OridinalAxisRenderer<A extends Axis<Comparable<Object>>>
+public class OrdinalAxisRenderer<A extends Axis<Comparable<Object>>>
 	extends AbstractAxisRenderer<Comparable<Object>, A> {
 
-    public OridinalAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
+    public OrdinalAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(axis, plots);
     }
 

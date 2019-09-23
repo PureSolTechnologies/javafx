@@ -17,6 +17,7 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Cursor;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Tooltip;
@@ -60,6 +61,16 @@ public class PlotCanvas extends Canvas {
 	});
 	setOnMouseExited(e -> {
 	    tooltip.hide();
+	});
+	setOnScrollStarted(event -> {
+	    if (event.isControlDown()) {
+		setCursor(Cursor.CROSSHAIR);
+	    } else {
+		setCursor(Cursor.MOVE);
+	    }
+	});
+	setOnScrollFinished(event -> {
+	    setCursor(Cursor.DEFAULT);
 	});
 	setOnScroll(event -> {
 	    double x = event.getX();
