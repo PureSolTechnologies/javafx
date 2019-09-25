@@ -41,7 +41,7 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 			- (range * ((1.0 - factor) * (1.0 - ratioMinToMax)));
 		setMin((T) Double.valueOf(newMin));
 		setMax((T) Double.valueOf(newMax));
-	    } else if (Double.class.isAssignableFrom(min.getClass())) {
+	    } else if (Float.class.isAssignableFrom(min.getClass())) {
 		float range = max.floatValue() - min.floatValue();
 		float newMin = min.floatValue() //
 			+ (float) (range * ((1.0 - factor) * ratioMinToMax));
@@ -49,6 +49,38 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 			- (float) (range * ((1.0 - factor) * (1.0 - ratioMinToMax)));
 		setMin((T) Double.valueOf(newMin));
 		setMax((T) Double.valueOf(newMax));
+	    } else if (Byte.class.isAssignableFrom(min.getClass())) {
+		byte range = (byte) (max.byteValue() - min.byteValue());
+		byte newMin = (byte) (min.byteValue() //
+			+ (byte) (range * ((1.0 - factor) * ratioMinToMax)));
+		byte newMax = (byte) (max.floatValue() //
+			- (byte) (range * ((1.0 - factor) * (1.0 - ratioMinToMax))));
+		setMin((T) Byte.valueOf(newMin));
+		setMax((T) Byte.valueOf(newMax));
+	    } else if (Short.class.isAssignableFrom(min.getClass())) {
+		short range = (short) (max.shortValue() - min.shortValue());
+		short newMin = (short) (min.shortValue() //
+			+ (short) (range * ((1.0 - factor) * ratioMinToMax)));
+		short newMax = (short) (max.shortValue() //
+			- (short) (range * ((1.0 - factor) * (1.0 - ratioMinToMax))));
+		setMin((T) Short.valueOf(newMin));
+		setMax((T) Short.valueOf(newMax));
+	    } else if (Integer.class.isAssignableFrom(min.getClass())) {
+		int range = max.intValue() - min.intValue();
+		int newMin = min.intValue() //
+			+ (int) (range * ((1.0 - factor) * ratioMinToMax));
+		int newMax = max.intValue() //
+			- (int) (range * ((1.0 - factor) * (1.0 - ratioMinToMax)));
+		setMin((T) Integer.valueOf(newMin));
+		setMax((T) Integer.valueOf(newMax));
+	    } else if (Long.class.isAssignableFrom(min.getClass())) {
+		long range = max.longValue() - min.longValue();
+		long newMin = min.longValue() //
+			+ (long) (range * ((1.0 - factor) * ratioMinToMax));
+		long newMax = max.longValue() //
+			- (long) (range * ((1.0 - factor) * (1.0 - ratioMinToMax)));
+		setMin((T) Long.valueOf(newMin));
+		setMax((T) Long.valueOf(newMax));
 	    }
 	}
     }
@@ -64,12 +96,36 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 		double newMax = max.doubleValue() + (fractionOfRange * range);
 		setMin((T) Double.valueOf(newMin));
 		setMax((T) Double.valueOf(newMax));
-	    } else if (Double.class.isAssignableFrom(min.getClass())) {
+	    } else if (Float.class.isAssignableFrom(min.getClass())) {
 		float range = max.floatValue() - min.floatValue();
 		float newMin = min.floatValue() + ((float) fractionOfRange * range);
 		float newMax = max.floatValue() + ((float) fractionOfRange * range);
-		setMin((T) Double.valueOf(newMin));
-		setMax((T) Double.valueOf(newMax));
+		setMin((T) Float.valueOf(newMin));
+		setMax((T) Float.valueOf(newMax));
+	    } else if (Byte.class.isAssignableFrom(min.getClass())) {
+		byte range = (byte) (max.byteValue() - min.byteValue());
+		byte newMin = (byte) (min.byteValue() + (byte) (fractionOfRange * range));
+		byte newMax = (byte) (max.byteValue() + (byte) (fractionOfRange * range));
+		setMin((T) Byte.valueOf(newMin));
+		setMax((T) Byte.valueOf(newMax));
+	    } else if (Short.class.isAssignableFrom(min.getClass())) {
+		short range = (short) (max.shortValue() - min.shortValue());
+		short newMin = (short) (min.shortValue() + (short) (fractionOfRange * range));
+		short newMax = (short) (max.shortValue() + (short) (fractionOfRange * range));
+		setMin((T) Short.valueOf(newMin));
+		setMax((T) Short.valueOf(newMax));
+	    } else if (Integer.class.isAssignableFrom(min.getClass())) {
+		int range = max.intValue() - min.intValue();
+		int newMin = min.intValue() + (int) (fractionOfRange * range);
+		int newMax = max.intValue() + (int) (fractionOfRange * range);
+		setMin((T) Integer.valueOf(newMin));
+		setMax((T) Integer.valueOf(newMax));
+	    } else if (Long.class.isAssignableFrom(min.getClass())) {
+		long range = max.longValue() - min.longValue();
+		long newMin = min.longValue() + (long) (fractionOfRange * range);
+		long newMax = max.longValue() + (long) (fractionOfRange * range);
+		setMin((T) Long.valueOf(newMin));
+		setMax((T) Long.valueOf(newMax));
 	    }
 	}
     }
