@@ -47,6 +47,8 @@ public class PlotCanvas extends Canvas {
 	widthProperty().addListener(event -> draw());
 	heightProperty().addListener(event -> draw());
 
+	plots.addListener((ListChangeListener<Object>) change -> draw());
+
 	Tooltip tooltip = new Tooltip();
 	Tooltip.install(this, tooltip);
 	setOnMouseMoved(e -> {
