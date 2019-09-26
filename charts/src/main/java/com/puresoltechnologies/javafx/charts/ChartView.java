@@ -263,8 +263,11 @@ public class ChartView extends GridPane {
 	return legendVisible.getValue();
     }
 
+    public ObservableList<Plot<?, ?, ?>> getPlots() {
+	return plotCanvas.getPlots();
+    }
+
     public void addPlot(Plot<?, ?, ?> plot) {
 	plotCanvas.addPlot(plot);
     }
-
 }
