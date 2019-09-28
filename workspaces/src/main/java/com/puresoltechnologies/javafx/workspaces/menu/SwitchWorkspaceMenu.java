@@ -29,7 +29,7 @@ public class SwitchWorkspaceMenu extends Menu {
     private final Stage stage;
 
     public SwitchWorkspaceMenu(Stage stage) {
-	super("Switch _Workspace", new ImageView(icon));
+	super("Switch _" + Workspace.getWorkspaceTerm(), new ImageView(icon));
 	this.stage = stage;
 	initialize();
     }
@@ -69,6 +69,9 @@ public class SwitchWorkspaceMenu extends Menu {
 	});
 	getItems().add(new SeparatorMenuItem());
 	getItems().add(new SwitchWorkspaceMenuItem(stage, "Other..."));
+	Workspace.workspaceTermProperty().addListener((o, oldValue, newValue) -> {
+	    setText("Switch _" + newValue);
+	});
     }
 
 }

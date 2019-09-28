@@ -32,8 +32,8 @@ public class WorkspaceSelectionDialog extends Dialog<File> {
 
     public WorkspaceSelectionDialog() {
 	super();
-	setTitle("Workspace Selection");
-	setHeaderText(WorkspaceSelectionPane.CONTENT_STRING);
+	setTitle(Workspace.getWorkspaceTerm() + " Selection");
+	setHeaderText("Select a directory for the " + Workspace.getWorkspaceTerm().toLowerCase() + ".");
 	setGraphic(new ImageView(iconBig));
 	Stage stage = (Stage) getDialogPane().getScene().getWindow();
 	stage.getIcons().addAll(iconSmall, iconBig);

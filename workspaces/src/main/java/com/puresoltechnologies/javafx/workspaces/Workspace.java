@@ -9,23 +9,38 @@ import com.puresoltechnologies.javafx.workspaces.dialogs.WorkspaceSelectionDialo
 
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
  * This is the main class to start a JavaFX {@link Application} in a defined
  * Workspace area.
- * 
+ *
  * Just use {@link #launchApplicationInWorkspace(Class, String[])} method to run
  * the Application. The selection of the workspace directory takes place in this
  * class.
- * 
+ *
  * @author Rick-Rainer Ludwig
  *
  */
 public class Workspace {
 
+    private static final StringProperty workspaceTerm = new SimpleStringProperty("Workspace");
     private static Workspace instance = null;
+
+    public static StringProperty workspaceTermProperty() {
+	return workspaceTerm;
+    }
+
+    public static String getWorkspaceTerm() {
+	return workspaceTerm.get();
+    }
+
+    public static void setWorkspaceTerm(String workspaceTerm) {
+	Workspace.workspaceTerm.set(workspaceTerm);
+    }
 
     public static void launchApplicationInWorkspace(Class<? extends Application> applicationClass, String[] args)
 	    throws InterruptedException {
@@ -102,7 +117,7 @@ public class Workspace {
     /**
      * This method is used to initialize once the {@link Preferences} service.
      * Without initialization, the service cannot be used.
-     * 
+     *
      * @throws IOException
      */
     static void initialize(File directory) throws IOException {

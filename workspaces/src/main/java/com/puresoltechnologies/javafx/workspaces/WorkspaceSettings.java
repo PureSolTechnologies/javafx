@@ -4,15 +4,16 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
 
 import com.puresoltechnologies.javafx.utils.Settings;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+
 /**
  * This class handles reading the workspace settings.
- * 
+ *
  * @author Rick-Rainer Ludwig
  */
 public class WorkspaceSettings {
@@ -27,7 +28,7 @@ public class WorkspaceSettings {
     private static final String WORKSPACE_SELECTION_PROPERTIES_FILENAME = "workspace-selection.properties";
 
     private final Properties properties = new Properties();
-    private final List<File> formerDirectories = new ArrayList<>();
+    private final ObservableList<File> formerDirectories = FXCollections.observableArrayList();
 
     public WorkspaceSettings() {
 	readSettings();
@@ -101,7 +102,7 @@ public class WorkspaceSettings {
 	properties.setProperty(RESTARTING_PROPERTY_BASE, Boolean.valueOf(d).toString());
     }
 
-    public List<File> getFormerDirectories() {
+    public ObservableList<File> getFormerDirectories() {
 	return formerDirectories;
     }
 
