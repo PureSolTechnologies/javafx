@@ -68,7 +68,7 @@ public class SwitchWorkspaceMenu extends Menu {
 	    getItems().add(menuItem);
 	});
 	getItems().add(new SeparatorMenuItem());
-	getItems().add(new SwitchWorkspaceMenuItem(stage, "Other..."));
+	getItems().add(new SwitchWorkspaceMenuItem(stage));
 	Workspace.workspaceTermProperty().addListener((o, oldValue, newValue) -> {
 	    setText("Switch _" + newValue);
 	});

@@ -13,8 +13,8 @@ import javafx.stage.Window;
 public interface DialogSelector extends NodeSearch {
 
     default Selection<Parent> findDialogByTitle(String title) {
-	List<Window> stages = Window.getWindows().stream()
-		.filter(window -> Stage.class.equals(window.getClass()) && title.equals(((Stage) window).getTitle()))
+	List<Window> stages = Window.getWindows().stream().filter(
+		window -> Stage.class.isAssignableFrom(window.getClass()) && title.equals(((Stage) window).getTitle()))
 		.collect(Collectors.toList());
 	if (stages.isEmpty()) {
 	    return null;
