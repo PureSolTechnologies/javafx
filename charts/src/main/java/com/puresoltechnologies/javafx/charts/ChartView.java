@@ -1,6 +1,7 @@
 package com.puresoltechnologies.javafx.charts;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.dialogs.ChartPropertiesDialog;
@@ -15,6 +16,7 @@ import com.puresoltechnologies.javafx.utils.FXNodeUtils;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -51,6 +53,7 @@ public class ChartView extends GridPane {
     private final BooleanProperty legendVisible = new SimpleBooleanProperty(true);
     private final StringProperty titleProperty = new SimpleStringProperty();
     private final StringProperty subTitleProperty = new SimpleStringProperty();
+    private final ObjectProperty<Locale> copyLocale = new SimpleObjectProperty<>(Locale.getDefault());
 
     private final PlotCanvas plotCanvas = new PlotCanvas();
     private final Label titleLabel = new Label();
@@ -200,7 +203,7 @@ public class ChartView extends GridPane {
 		List<PlotDatum<?, ?>> data = (List<PlotDatum<?, ?>>) plot.getData();
 		if (data.size() > pos) {
 		    PlotDatum<?, ?> datum = data.get(pos);
-		    builder.append(datum.getClipboardString());
+		    builder.append(datum.getClipboardString(copyLocale.get()));
 		}
 	    }
 	    builder.append('\n');
@@ -249,6 +252,34 @@ public class ChartView extends GridPane {
 
     public String getSubTitle() {
 	return subTitleProperty.get();
+    }
+
+    /**
+     * This property is the {@link Locale} used to convert the data for the clip
+     * board. The default locale is taken from {@link Locale#getDefault()}.
+     *
+     * @return An {@link ObjectProperty} is returned.
+     */
+    public ObjectProperty<Locale> copyLocaleProperty() {
+	return copyLocale;
+    }
+
+    /**
+     * Sets the {@link #copyLocaleProperty()}.
+     *
+     * @param locale is the locale to be set.
+     */
+    public void setCopyLocale(Locale locale) {
+	copyLocale.setValue(locale);
+    }
+
+    /**
+     * Returns the {@link #copyLocaleProperty()}.
+     *
+     * @return A {@link Locale} is returned.
+     */
+    public Locale getCopyLocale() {
+	return copyLocale.getValue();
     }
 
     public BooleanProperty legendVisibleProperty() {

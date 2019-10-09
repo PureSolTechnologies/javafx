@@ -1,5 +1,7 @@
 package com.puresoltechnologies.javafx.charts.plots;
 
+import java.util.Locale;
+
 /**
  * This interface is used to specify some essential functionality for plot data.
  *
@@ -7,6 +9,6 @@ package com.puresoltechnologies.javafx.charts.plots;
  */
 public interface PlotDatum<X, Y> {
 
-    String getClipboardString();
+    String getClipboardString(Locale locale);
 
 }

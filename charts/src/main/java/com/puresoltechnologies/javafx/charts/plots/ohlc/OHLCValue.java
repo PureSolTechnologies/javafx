@@ -1,6 +1,7 @@
 package com.puresoltechnologies.javafx.charts.plots.ohlc;
 
 import java.time.Instant;
+import java.util.Locale;
 
 import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 
@@ -26,7 +27,7 @@ public class OHLCValue<T extends Number & Comparable<T>> implements Comparable<O
     }
 
     @Override
-    public String getClipboardString() {
+    public String getClipboardString(Locale locale) {
 	return start.toString() + "\t\"" + toString() + "\"";
     }
 

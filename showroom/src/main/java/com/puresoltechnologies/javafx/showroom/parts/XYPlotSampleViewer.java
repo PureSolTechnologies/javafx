@@ -3,6 +3,7 @@ package com.puresoltechnologies.javafx.showroom.parts;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.charts.ChartView;
@@ -70,6 +71,7 @@ public class XYPlotSampleViewer extends AbstractViewer {
 	xyTangentPlot.setMarkerSize(10.0);
 
 	ChartView chartView = new ChartView("XY Plot");
+	chartView.setCopyLocale(Locale.GERMANY);
 	chartView.addPlot(xySinePlot);
 	chartView.addPlot(xyCosinePlot);
 	chartView.addPlot(xyTangentPlot);
