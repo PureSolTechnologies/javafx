@@ -1,5 +1,7 @@
 module com.puresoltechnologies.javafx.reactive {
 
+    requires com.puresoltechnologies.javafx.utils;
+
     requires slf4j.api;
 
     exports com.puresoltechnologies.javafx.reactive;

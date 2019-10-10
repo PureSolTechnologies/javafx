@@ -5,22 +5,28 @@ import com.puresoltechnologies.javafx.charts.plots.MarkerType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PointBasedPlot;
 
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.TableCell;
+import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
 
 public class MarkerCanvas extends Canvas {
 
-    private final Plot<?, ?, ?> plot;
+    private final ObjectProperty<Plot<?, ?, ?>> plot = new SimpleObjectProperty<>();
 
-    public MarkerCanvas(TableCell<Plot<?, ?, ?>, Plot<?, ?, ?>> tableCell, Plot<?, ?, ?> plot) {
-	this.plot = plot;
-	tableCell.widthProperty().addListener((o, oldValue, newValue) -> {
-	    setWidth(newValue.doubleValue() - tableCell.getInsets().getLeft() - tableCell.getInsets().getRight());
+    public MarkerCanvas(Region region, Plot<?, ?, ?> plot) {
+	this(region);
+	this.plot.setValue(plot);
+    }
+
+    public MarkerCanvas(Region region) {
+	region.widthProperty().addListener((o, oldValue, newValue) -> {
+	    setWidth(newValue.doubleValue() - region.getInsets().getLeft() - region.getInsets().getRight());
 	});
-	tableCell.heightProperty().addListener((o, oldValue, newValue) -> {
-	    setHeight(newValue.doubleValue() - tableCell.getInsets().getTop() - tableCell.getInsets().getBottom());
+	region.heightProperty().addListener((o, oldValue, newValue) -> {
+	    setHeight(newValue.doubleValue() - region.getInsets().getTop() - region.getInsets().getBottom());
 	});
 
 	widthProperty().addListener(event -> draw());
@@ -30,7 +36,8 @@ public class MarkerCanvas extends Canvas {
     private void draw() {
 	double width = getWidth();
 	double height = getHeight();
-	if ((width > 0.0) && (height > 0.0)) {
+	Plot<?, ?, ?> plot = this.plot.getValue();
+	if ((width > 0.0) && (height > 0.0) && (plot != null)) {
 	    Color color = plot.getColor();
 	    GraphicsContext gc = getGraphicsContext2D();
 
@@ -90,5 +97,9 @@ public class MarkerCanvas extends Canvas {
     @Override
     public boolean isResizable() {
 	return true;
+    }
+
+    public void setPlot(Plot<?, ?, ?> plot) {
+	this.plot.setValue(plot);
     }
 }

@@ -3,8 +3,6 @@ package com.puresoltechnologies.javafx.charts;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
@@ -14,38 +12,39 @@ import javafx.scene.layout.Pane;
 
 public class LegendTable extends TableView<Plot<?, ?, ?>> {
 
-    private final ObservableList<Plot<?, ?, ?>> plots;
-
     public LegendTable(ObservableList<Plot<?, ?, ?>> plots) {
-	this.plots = plots;
-	TableColumn<Plot<?, ?, ?>, Plot<?, ?, ?>> markerColumn = new TableColumn<>("Marker");
-	markerColumn.setCellValueFactory(plot -> new SimpleObjectProperty<>(plot.getValue()));
+	TableColumn<Plot<?, ?, ?>, String> markerColumn = new TableColumn<>("Marker");
+	markerColumn.setCellValueFactory(plot -> plot.getValue().titleProperty());
 	markerColumn.setCellFactory(column -> new TableCell<>() {
 
 	    @Override
-	    protected void updateItem(Plot<?, ?, ?> plot, boolean empty) {
-		super.updateItem(plot, empty);
-		setText(null);
-		if ((plot == null) || empty) {
+	    protected void updateItem(String title, boolean empty) {
+		super.updateItem(title, empty);
+		if ((title == null) || empty) {
+		    setText(null);
 		    setGraphic(null);
 		} else {
-		    MarkerCanvas canvas = new MarkerCanvas(this, plot);
-
-		    setGraphic(canvas);
+		    ObservableList<Plot<?, ?, ?>> items = LegendTable.this.getItems();
+		    Plot<?, ?, ?> plot = items.get(getIndex());
+		    Pane pane = new Pane();
+		    MarkerCanvas canvas = new MarkerCanvas(pane, plot);
+		    pane.getChildren().add(canvas);
+		    pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+		    setGraphic(pane);
 		}
 	    }
 	});
 	getColumns().add(markerColumn);
 
 	TableColumn<Plot<?, ?, ?>, String> nameColumn = new TableColumn<>("Name");
-	nameColumn.setCellValueFactory(plot -> new SimpleStringProperty(plot.getValue().getTitle()));
+	nameColumn.setCellValueFactory(plot -> plot.getValue().titleProperty());
 	getColumns().add(nameColumn);
 
 	setItems(plots);
 	setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 
 	setFixedCellSize(25);
-	prefHeightProperty().bind(fixedCellSizeProperty().multiply(Bindings.size(getItems()).add(0.1)));
+	prefHeightProperty().bind(fixedCellSizeProperty().multiply(Bindings.size(getItems()).add(1.1)));
 	minHeightProperty().bind(prefHeightProperty());
 	maxHeightProperty().bind(prefHeightProperty());
 	// The header are hidden as next step...

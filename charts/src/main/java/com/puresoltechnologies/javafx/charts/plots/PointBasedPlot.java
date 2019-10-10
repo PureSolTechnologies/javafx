@@ -20,21 +20,21 @@ public interface PointBasedPlot<X extends Comparable<X>, Y extends Comparable<Y>
     ObjectProperty<MarkerType> markerTypeProperty();
 
     default MarkerType getMarkerType() {
-	return markerTypeProperty().get();
+	return markerTypeProperty().getValue();
     }
 
     default void setMarkerType(MarkerType markerType) {
-	markerTypeProperty().set(markerType);
+	markerTypeProperty().setValue(markerType);
     }
 
     DoubleProperty markerSizeProperty();
 
     default double getMarkerSize() {
-	return markerSizeProperty().get();
+	return markerSizeProperty().getValue();
     }
 
     default void setMarkerSize(double markerSize) {
-	markerSizeProperty().set(markerSize);
+	markerSizeProperty().setValue(markerSize);
     }
 
     /**

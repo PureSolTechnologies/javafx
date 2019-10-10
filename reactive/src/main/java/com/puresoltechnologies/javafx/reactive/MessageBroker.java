@@ -11,6 +11,8 @@ import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.puresoltechnologies.javafx.utils.FXThreads;
+
 /**
  * This is a broker implementation for a Publish-Subscribe-Pattern.
  *
@@ -97,13 +99,15 @@ public class MessageBroker {
     }
 
     public <T> void publish(Topic<T> topic, T message) {
-	Subject<T> subject = assurePresenceOfTopic(topic);
-	subject.submissionPublisher.submit(message);
-	List<T> lastItems = subject.lastItems;
-	lastItems.add(message);
-	if (lastItems.size() > topic.getHistorySize()) {
-	    lastItems.remove(0);
-	}
+	FXThreads.runAsync(() -> {
+	    Subject<T> subject = assurePresenceOfTopic(topic);
+	    subject.submissionPublisher.submit(message);
+	    List<T> lastItems = subject.lastItems;
+	    lastItems.add(message);
+	    if (lastItems.size() > topic.getHistorySize()) {
+		lastItems.remove(0);
+	    }
+	});
     }
 
     public <T> void subscribe(Topic<T> topic, Subscriber<T> subscriber) {
