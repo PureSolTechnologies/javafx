@@ -11,8 +11,6 @@ import java.util.concurrent.SubmissionPublisher;
 import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.puresoltechnologies.javafx.utils.FXThreads;
-
 /**
  * This is a broker implementation for a Publish-Subscribe-Pattern.
  *
@@ -29,10 +27,10 @@ public class MessageBroker {
      *                               initialized.
      */
     public static synchronized void initialize() {
-	if (instance != null) {
-	    throw new IllegalStateException("Broker was initialized already.");
-	}
-	instance = new MessageBroker();
+        if (instance != null) {
+            throw new IllegalStateException("Broker was initialized already.");
+        }
+        instance = new MessageBroker();
     }
 
     /**
@@ -42,8 +40,8 @@ public class MessageBroker {
      *                               shutdown or not initialized.
      */
     public static synchronized void shutdown() {
-	instance.close();
-	instance = null;
+        instance.close();
+        instance = null;
     }
 
     /**
@@ -53,26 +51,26 @@ public class MessageBroker {
      *         <code>false</code> is returned otherwise.
      */
     public static synchronized boolean isInitialized() {
-	return instance != null;
+        return instance != null;
     }
 
     public static synchronized MessageBroker getBroker() {
-	return instance;
+        return instance;
     }
 
     private class Subject<T> implements AutoCloseable {
-	private final SubmissionPublisher<T> submissionPublisher;
-	private final List<T> lastItems;
+        private final SubmissionPublisher<T> submissionPublisher;
+        private final List<T> lastItems;
 
-	private Subject(Topic<T> topic) {
-	    this.submissionPublisher = new SubmissionPublisher<>(executorService, topic.getBufferSize());
-	    this.lastItems = new ArrayList<>();
-	}
+        private Subject(Topic<T> topic) {
+            this.submissionPublisher = new SubmissionPublisher<>(executorService, topic.getBufferSize());
+            this.lastItems = new ArrayList<>();
+        }
 
-	@Override
-	public void close() {
-	    submissionPublisher.close();
-	}
+        @Override
+        public void close() {
+            submissionPublisher.close();
+        }
     }
 
     private final Map<Topic<?>, Subject<?>> subjects = new HashMap<>();
@@ -80,55 +78,53 @@ public class MessageBroker {
     private final ExecutorService executorService;
 
     private MessageBroker() {
-	executorService = Executors.newCachedThreadPool(new ThreadFactory() {
-	    private final AtomicInteger id = new AtomicInteger(0);
+        executorService = Executors.newCachedThreadPool(new ThreadFactory() {
+            private final AtomicInteger id = new AtomicInteger(0);
 
-	    @Override
-	    public Thread newThread(Runnable target) {
-		return new Thread(target, "FluxStore-thread-" + id.incrementAndGet());
-	    }
-	});
+            @Override
+            public Thread newThread(Runnable target) {
+                return new Thread(target, "FluxStore-thread-" + id.incrementAndGet());
+            }
+        });
     }
 
     private void close() {
-	subjects.values().forEach(subject -> {
-	    subject.close();
-	});
-	executorService.shutdownNow();
-	subjects.clear();
+        subjects.values().forEach(subject -> {
+            subject.close();
+        });
+        executorService.shutdownNow();
+        subjects.clear();
     }
 
     public <T> void publish(Topic<T> topic, T message) {
-	FXThreads.runAsync(() -> {
-	    Subject<T> subject = assurePresenceOfTopic(topic);
-	    subject.submissionPublisher.submit(message);
-	    List<T> lastItems = subject.lastItems;
-	    lastItems.add(message);
-	    if (lastItems.size() > topic.getHistorySize()) {
-		lastItems.remove(0);
-	    }
-	});
+        Subject<T> subject = assurePresenceOfTopic(topic);
+        subject.submissionPublisher.submit(message);
+        List<T> lastItems = subject.lastItems;
+        lastItems.add(message);
+        if (lastItems.size() > topic.getHistorySize()) {
+            lastItems.remove(0);
+        }
     }
 
     public <T> void subscribe(Topic<T> topic, Subscriber<T> subscriber) {
-	Subject<T> subject = assurePresenceOfTopic(topic);
-	subject.submissionPublisher.subscribe(subscriber);
-	subject.lastItems.stream().forEach(message -> subscriber.onNext(message));
+        Subject<T> subject = assurePresenceOfTopic(topic);
+        subject.submissionPublisher.subscribe(subscriber);
+        subject.lastItems.stream().forEach(message -> subscriber.onNext(message));
     }
 
     @SuppressWarnings("unchecked")
     private <T> Subject<T> assurePresenceOfTopic(Topic<T> topic) {
-	Subject<T> subject = (Subject<T>) subjects.get(topic);
-	if (subject == null) {
-	    synchronized (subjects) {
-		subject = (Subject<T>) subjects.get(topic);
-		if (subject == null) {
-		    subject = new Subject<>(topic);
-		    subjects.put(topic, subject);
-		}
-	    }
-	}
-	return subject;
+        Subject<T> subject = (Subject<T>) subjects.get(topic);
+        if (subject == null) {
+            synchronized (subjects) {
+                subject = (Subject<T>) subjects.get(topic);
+                if (subject == null) {
+                    subject = new Subject<>(topic);
+                    subjects.put(topic, subject);
+                }
+            }
+        }
+        return subject;
     }
 
 }
