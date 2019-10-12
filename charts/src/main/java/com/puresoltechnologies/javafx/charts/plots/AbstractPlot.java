@@ -7,7 +7,9 @@ import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -21,6 +23,8 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
 
     private final StringProperty title = new SimpleStringProperty();
     private final ObjectProperty<Color> color = new SimpleObjectProperty<>();
+    private final BooleanProperty visible = new SimpleBooleanProperty(true);
+
     private final ObservableList<D> data = FXCollections.observableArrayList();
     private final Axis<X> xAxis;
     private final Axis<Y> yAxis;
@@ -64,16 +68,6 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
     }
 
     @Override
-    public final String getTitle() {
-	return title.get();
-    }
-
-    @Override
-    public final void setTitle(String title) {
-	this.title.set(title);
-    }
-
-    @Override
     public final StringProperty titleProperty() {
 	return title;
     }
@@ -84,13 +78,8 @@ public abstract class AbstractPlot<X extends Comparable<X>, Y extends Comparable
     }
 
     @Override
-    public final void setColor(Color color) {
-	this.color.setValue(color);
-    }
-
-    @Override
-    public final Color getColor() {
-	return color.getValue();
+    public final BooleanProperty visibleProperty() {
+	return visible;
     }
 
     @Override

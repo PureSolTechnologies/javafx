@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.puresoltechnologies.javafx.charts.axes.Axis;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
@@ -19,17 +20,35 @@ import javafx.scene.paint.Color;
  */
 public interface Plot<X extends Comparable<X>, Y extends Comparable<Y>, D extends PlotDatum<X, Y>> {
 
-    String getTitle();
-
-    void setTitle(String title);
-
     StringProperty titleProperty();
+
+    default String getTitle() {
+	return titleProperty().get();
+    }
+
+    default void setTitle(String title) {
+	titleProperty().set(title);
+    }
 
     ObjectProperty<Color> colorProperty();
 
-    void setColor(Color color);
+    default void setColor(Color color) {
+	colorProperty().set(color);
+    }
 
-    Color getColor();
+    default Color getColor() {
+	return colorProperty().get();
+    }
+
+    BooleanProperty visibleProperty();
+
+    default void setVisible(boolean visible) {
+	visibleProperty().set(visible);
+    }
+
+    default boolean isVisible() {
+	return visibleProperty().get();
+    }
 
     Axis<X> getXAxis();
 
