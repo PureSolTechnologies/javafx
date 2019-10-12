@@ -311,6 +311,8 @@ public class PlotCanvas extends Canvas {
 	    axisRenderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
 	}
 	plot.data().addListener((ListChangeListener<Object>) change -> draw());
+	plot.visibleProperty().addListener((o, oldValue, newValue) -> draw());
+	plot.colorProperty().addListener((o, oldValue, newValue) -> draw());
     }
 
     private void draw() {
@@ -407,7 +409,7 @@ public class PlotCanvas extends Canvas {
     private void drawPlots(Rectangle2D plottingArea) {
 	plotRenderers.clear();
 	for (Plot<?, ?, ?> plot : plots) {
-	    if (plot.hasData()) {
+	    if (plot.isVisible() && plot.hasData()) {
 		PlotRenderer<?, ?, ?, ?, ?> plotRenderer = ((AbstractPlot<?, ?, ?>) plot)
 			.getGenericRenderer(axisRenderers.get(plot.getXAxis()), axisRenderers.get(plot.getYAxis()));
 		plotRenderers.put(plot, plotRenderer);
