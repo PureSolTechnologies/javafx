@@ -131,7 +131,7 @@ public class ShowRoom extends Application {
 	Menu helpMenu = new Menu("_Help");
 	windowMenu.setId("menu.main.help");
 	helpMenu.getItems().addAll( //
-		new AboutMenuItem() //
+		new AboutMenuItem(ShowRoom.this) //
 	);
 	// Menu Bar
 	MenuBar menuBar = new MenuBar();

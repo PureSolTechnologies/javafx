@@ -3,9 +3,14 @@ package com.puresoltechnologies.javafx.extensions.dialogs.about;
 import java.io.IOException;
 import java.util.ServiceLoader;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.javafx.utils.web.WebEngineUtils;
 
+import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -13,9 +18,10 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
 /**
@@ -26,6 +32,8 @@ import javafx.stage.Stage;
  * @author Rick-Rainer Ludwig
  */
 public class AboutDialog extends Dialog<Void> {
+
+    private static final Logger logger = LoggerFactory.getLogger(AboutDialog.class);
 
     private static final Image iconSmall;
     private static final Image iconBig;
@@ -38,10 +46,14 @@ public class AboutDialog extends Dialog<Void> {
 	}
     }
 
+    private final Application application;
+
     /**
      * Default constructor.
      */
-    public AboutDialog() {
+    public AboutDialog(Application application) {
+	super();
+	this.application = application;
 	setTitle("About");
 	Stage stage = (Stage) getDialogPane().getScene().getWindow();
 	stage.getIcons().addAll(iconSmall, iconBig);
@@ -53,30 +65,50 @@ public class AboutDialog extends Dialog<Void> {
 
 	ServiceLoader<AboutDialogContribution> loader = ServiceLoader.load(AboutDialogContribution.class);
 	loader.forEach(contributor -> {
+	    contributor.setApplication(application);
 	    Tab tab = new Tab(contributor.getName());
 	    if (contributor.getImage().isPresent()) {
 		tab.setGraphic(new ImageView(contributor.getImage().get()));
 	    }
+	    tab.setClosable(false);
 	    tab.setContent(contributor.getContent());
 	    tabPane.getTabs().add(tab);
 	});
 
-	Tab javaFX = new Tab("PST JavaFX");
-	javaFX.setClosable(false);
-	TextArea textArea = new TextArea();
-	textArea.setText("PureSol Technologies' JavaFX\n" //
-		+ "(c) 2018 PureSol Technologies (http://puresol-technologies.com)\n\n" //
-		+ "License: Apache License, Version 2.0\n\n" //
-		+ "This software incorporates FatCow \"Farm-Fresh Web Icons\" (http://www.fatcow.com/free-icons).");
-	javaFX.setContent(textArea);
+	addFrameworkTab(tabPane);
 
-	tabPane.getTabs().add(javaFX);
-
-	ButtonType buttonTypeOk = new ButtonType("OK", ButtonData.OK_DONE);
-	ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+	ButtonType buttonTypeClose = new ButtonType("Close", ButtonData.CANCEL_CLOSE);
 	ObservableList<ButtonType> buttonTypes = getDialogPane().getButtonTypes();
-	buttonTypes.addAll(buttonTypeOk, buttonTypeCancel);
+	buttonTypes.addAll(buttonTypeClose);
 
+    }
+
+    /**
+     * This method adds an additional tab for the framework information.
+     *
+     * @param tabPane
+     */
+    private void addFrameworkTab(TabPane tabPane) {
+	String path = "icons/FatCow_Icons16x16/information.png";
+	Image logoPureSolTechnologies = null;
+	try {
+	    logoPureSolTechnologies = ResourceUtils.getImage(StatusBar.class, path);
+	} catch (IOException e) {
+	    logger.warn("Could not read about icon '" + path + "'.", e);
+	}
+
+	Tab javaFX = new Tab();
+	javaFX.setGraphic(new ImageView(logoPureSolTechnologies));
+	javaFX.setClosable(false);
+
+	WebView webView = new WebView();
+	webView.setContextMenuEnabled(false);
+	WebEngine engine = webView.getEngine();
+	engine.load(AboutDialog.class.getResource("framework.html").toString());
+	WebEngineUtils.configOpenLinksExternally(engine, application);
+
+	javaFX.setContent(webView);
+	tabPane.getTabs().add(javaFX);
     }
 
 }

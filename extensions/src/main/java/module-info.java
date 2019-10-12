@@ -6,6 +6,7 @@ module com.puresoltechnologies.javafx.extensions {
     requires transitive javafx.controls;
     requires transitive javafx.graphics;
     requires slf4j.api;
+    requires jdk.xml.dom;
 
     exports com.puresoltechnologies.javafx.extensions;
     exports com.puresoltechnologies.javafx.extensions.dialogs;
