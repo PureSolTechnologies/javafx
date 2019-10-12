@@ -63,6 +63,7 @@ public class AboutDialog extends Dialog<Void> {
 	    if (contributor.getImage().isPresent()) {
 		tab.setGraphic(new ImageView(contributor.getImage().get()));
 	    }
+	    tab.setClosable(false);
 	    tab.setContent(contributor.getContent());
 	    tabPane.getTabs().add(tab);
 	});
@@ -96,11 +97,6 @@ public class AboutDialog extends Dialog<Void> {
 
 	WebEngine engine = webView.getEngine();
 	engine.load(AboutDialog.class.getResource("framework.html").toString());
-//	TextArea textArea = new TextArea();
-//	textArea.setText("PureSol Technologies' JavaFX\n" //
-//		+ "(c) 2018 PureSol Technologies (http://puresol-technologies.com)\n\n" //
-//		+ "License: Apache License, Version 2.0\n\n" //
-//		+ "This software incorporates FatCow \"Farm-Fresh Web Icons\" (http://www.fatcow.com/free-icons).");
 	javaFX.setContent(webView);
 
 	tabPane.getTabs().add(javaFX);
