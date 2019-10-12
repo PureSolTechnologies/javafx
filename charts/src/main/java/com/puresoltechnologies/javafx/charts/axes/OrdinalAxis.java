@@ -3,7 +3,7 @@ package com.puresoltechnologies.javafx.charts.axes;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 
-public class OrdinalAxis<T extends Comparable<T>> extends AbstractAxis<T> {
+public class OrdinalAxis<T extends Comparable<T>> extends NominalAxis<T> {
 
     private final ObjectProperty<T> min = new SimpleObjectProperty<>(null);
     private final ObjectProperty<T> max = new SimpleObjectProperty<>(null);

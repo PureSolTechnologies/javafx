@@ -18,7 +18,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
-public class InstantAxisRenderer<A extends Axis<Instant>> extends AbstractAxisRenderer<Instant, A> {
+public class InstantAxisRenderer<A extends OrdinalAxis<Instant>> extends OrdinalAxisRenderer<Instant, A> {
 
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy MMM dd\nHH:mm");
 
@@ -72,8 +72,12 @@ public class InstantAxisRenderer<A extends Axis<Instant>> extends AbstractAxisRe
 	default:
 	    throw new IllegalStateException("Wrong type of axis found.");
 	}
-	setMin(min);
-	setMax(max);
+	if (autoScaleMinProperty().getValue()) {
+	    setMin(min);
+	}
+	if (autoScaleMaxProperty().getValue()) {
+	    setMax(max);
+	}
     }
 
     @Override

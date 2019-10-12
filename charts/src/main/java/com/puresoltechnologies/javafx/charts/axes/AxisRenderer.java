@@ -87,7 +87,6 @@ public interface AxisRenderer<T> extends Renderer {
     ObjectProperty<T> maxProperty();
 
     default void setMin(T min) {
-	autoScaleMinProperty().set(false);
 	minProperty().set(min);
     }
 
@@ -101,7 +100,6 @@ public interface AxisRenderer<T> extends Renderer {
     }
 
     default void setMax(T max) {
-	autoScaleMaxProperty().set(false);
 	maxProperty().set(max);
     }
 

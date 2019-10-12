@@ -6,11 +6,19 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 
-public class OrdinalAxisRenderer<A extends Axis<Comparable<Object>>>
-	extends AbstractAxisRenderer<Comparable<Object>, A> {
+public class OrdinalAxisRenderer<T extends Comparable<T>, A extends OrdinalAxis<T>> extends NominalAxisRenderer<T, A> {
 
     public OrdinalAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(axis, plots);
+	/*
+	 * For Ordinal Axes, auto-scaling is possible to be handled.
+	 */
+	axis.minProperty().addListener((o, oldValue, newValue) -> {
+	    autoScaleMinProperty().set(newValue == null);
+	});
+	axis.maxProperty().addListener((o, oldValue, newValue) -> {
+	    autoScaleMaxProperty().set(newValue == null);
+	});
     }
 
     @Override
@@ -32,7 +40,7 @@ public class OrdinalAxisRenderer<A extends Axis<Comparable<Object>>>
     }
 
     @Override
-    public double calculatePos(double x, double y, double width, double height, Comparable<Object> value) {
+    public double calculatePos(double x, double y, double width, double height, T value) {
 	// TODO Auto-generated method stub
 	return 0;
     }

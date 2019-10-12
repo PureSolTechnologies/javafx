@@ -2,10 +2,10 @@ package com.puresoltechnologies.javafx.charts.plots.ohlc;
 
 import java.time.Instant;
 
-import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.axes.InstantAxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
+import com.puresoltechnologies.javafx.charts.axes.OrdinalAxis;
 import com.puresoltechnologies.javafx.charts.plots.AbstractPlotRenderer;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.preferences.OHLCPlotProperties;
@@ -17,7 +17,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 public class OHLCPlotRenderer<Y extends Number & Comparable<Y>> extends
-	AbstractPlotRenderer<Instant, Y, OHLCValue<Y>, InstantAxisRenderer<Axis<Instant>>, NumberAxisRenderer<Y, NumberAxis<Y>>> {
+	AbstractPlotRenderer<Instant, Y, OHLCValue<Y>, InstantAxisRenderer<OrdinalAxis<Instant>>, NumberAxisRenderer<Y, NumberAxis<Y>>> {
 
     private static final ObjectProperty<Color> upwardTrendColor = Preferences
 	    .getProperty(OHLCPlotProperties.UPWARD_TREND_COLOR);

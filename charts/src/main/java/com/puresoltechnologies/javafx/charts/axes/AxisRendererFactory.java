@@ -27,7 +27,7 @@ public class AxisRendererFactory {
 	} else if (Long.class.isAssignableFrom(valueType)) {
 	    return new NumberAxisRenderer<>((NumberAxis<Long>) axis, plots);
 	} else if (Comparable.class.isAssignableFrom(valueType)) {
-	    return new OrdinalAxisRenderer(axis, plots);
+	    return new OrdinalAxisRenderer((OrdinalAxis) axis, plots);
 	} else {
 	    return new NominalAxisRenderer(axis, plots);
 	}

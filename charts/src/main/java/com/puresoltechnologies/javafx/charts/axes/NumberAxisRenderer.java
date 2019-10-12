@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 
 public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends NumberAxis<T>>
-	extends AbstractAxisRenderer<T, A> {
+	extends OrdinalAxisRenderer<T, A> {
 
     /**
      * Keeps the accuracy of the tick numbers as exponent to base 10.
@@ -171,6 +171,10 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 	}
 	setMin(min);
 	setMax(max);
+	if (autoScaleMinProperty().getValue()) {
+	}
+	if (autoScaleMaxProperty().getValue()) {
+	}
     }
 
     private void updateAccuracy() {

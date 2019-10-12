@@ -6,7 +6,7 @@ import javafx.collections.ObservableList;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.text.Text;
 
-public class NominalAxisRenderer<A extends Axis<Object>> extends AbstractAxisRenderer<Object, A> {
+public class NominalAxisRenderer<T, A extends Axis<T>> extends AbstractAxisRenderer<T, A> {
 
     public NominalAxisRenderer(A axis, ObservableList<Plot<?, ?, ?>> plots) {
 	super(axis, plots);
@@ -14,12 +14,12 @@ public class NominalAxisRenderer<A extends Axis<Object>> extends AbstractAxisRen
 
     @Override
     public void scale(double factor, double ratioMinToMax) {
-	// TODO Auto-generated method stub
+	// intentionally left empty, because a nominal axis cannot be scaled
     }
 
     @Override
     public void move(double fractionOfRange) {
-	// TODO Auto-generated method stub
+	// intentionally left empty, because a nominal axis cannot be moved
     }
 
     @Override
@@ -31,7 +31,7 @@ public class NominalAxisRenderer<A extends Axis<Object>> extends AbstractAxisRen
     }
 
     @Override
-    public double calculatePos(double x, double y, double width, double height, Object value) {
+    public double calculatePos(double x, double y, double width, double height, T value) {
 	// TODO Auto-generated method stub
 	return 0;
     }
