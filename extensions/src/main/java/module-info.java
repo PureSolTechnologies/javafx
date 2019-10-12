@@ -5,8 +5,8 @@ module com.puresoltechnologies.javafx.extensions {
     requires com.github.spotbugs.annotations;
     requires transitive javafx.controls;
     requires transitive javafx.graphics;
-    requires transitive javafx.web;
     requires slf4j.api;
+    requires jdk.xml.dom;
 
     exports com.puresoltechnologies.javafx.extensions;
     exports com.puresoltechnologies.javafx.extensions.dialogs;

@@ -8,7 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import com.puresoltechnologies.javafx.extensions.StatusBar;
 import com.puresoltechnologies.javafx.utils.ResourceUtils;
+import com.puresoltechnologies.javafx.utils.web.WebEngineUtils;
 
+import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.geometry.Side;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -44,10 +46,14 @@ public class AboutDialog extends Dialog<Void> {
 	}
     }
 
+    private final Application application;
+
     /**
      * Default constructor.
      */
-    public AboutDialog() {
+    public AboutDialog(Application application) {
+	super();
+	this.application = application;
 	setTitle("About");
 	Stage stage = (Stage) getDialogPane().getScene().getWindow();
 	stage.getIcons().addAll(iconSmall, iconBig);
@@ -59,6 +65,7 @@ public class AboutDialog extends Dialog<Void> {
 
 	ServiceLoader<AboutDialogContribution> loader = ServiceLoader.load(AboutDialogContribution.class);
 	loader.forEach(contributor -> {
+	    contributor.setApplication(application);
 	    Tab tab = new Tab(contributor.getName());
 	    if (contributor.getImage().isPresent()) {
 		tab.setGraphic(new ImageView(contributor.getImage().get()));
@@ -83,22 +90,24 @@ public class AboutDialog extends Dialog<Void> {
      */
     private void addFrameworkTab(TabPane tabPane) {
 	String path = "icons/FatCow_Icons16x16/information.png";
-	Image i = null;
+	Image logoPureSolTechnologies = null;
 	try {
-	    i = ResourceUtils.getImage(StatusBar.class, path);
+	    logoPureSolTechnologies = ResourceUtils.getImage(StatusBar.class, path);
 	} catch (IOException e) {
 	    logger.warn("Could not read about icon '" + path + "'.", e);
 	}
 
 	Tab javaFX = new Tab();
-	javaFX.setGraphic(new ImageView(i));
+	javaFX.setGraphic(new ImageView(logoPureSolTechnologies));
 	javaFX.setClosable(false);
-	WebView webView = new WebView();
 
+	WebView webView = new WebView();
+	webView.setContextMenuEnabled(false);
 	WebEngine engine = webView.getEngine();
 	engine.load(AboutDialog.class.getResource("framework.html").toString());
-	javaFX.setContent(webView);
+	WebEngineUtils.configOpenLinksExternally(engine, application);
 
+	javaFX.setContent(webView);
 	tabPane.getTabs().add(javaFX);
     }
 

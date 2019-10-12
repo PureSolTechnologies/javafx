@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.extensions.dialogs.about;
 
 import java.util.Optional;
 
+import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 
@@ -12,6 +13,14 @@ import javafx.scene.image.Image;
  * @author Rick-Rainer Ludwig
  */
 public interface AboutDialogContribution {
+
+    /**
+     * This method sets the reference to the application for which the about box is
+     * to be shown.
+     *
+     * @param application is the {@link Application}
+     */
+    void setApplication(Application application);
 
     /**
      * This method returns the name to be presented in the tab header.
