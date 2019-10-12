@@ -47,7 +47,10 @@ public class PlotCanvas extends Canvas {
 	widthProperty().addListener(event -> draw());
 	heightProperty().addListener(event -> draw());
 
-	plots.addListener((ListChangeListener<Object>) change -> draw());
+	plots.addListener((ListChangeListener<Object>) change -> {
+	    reregisterAllPlots();
+	    draw();
+	});
 
 	Tooltip tooltip = new Tooltip();
 	Tooltip.install(this, tooltip);
@@ -269,6 +272,25 @@ public class PlotCanvas extends Canvas {
     public void addPlot(Plot<?, ?, ?> plot) {
 	plots.add(plot);
 
+	registerPlot(plot);
+
+	plot.data().addListener((ListChangeListener<Object>) change -> draw());
+	plot.visibleProperty().addListener((o, oldValue, newValue) -> draw());
+	plot.colorProperty().addListener((o, oldValue, newValue) -> draw());
+    }
+
+    private void reregisterAllPlots() {
+	plotRenderers.clear();
+	xAxes.clear();
+	yAxes.clear();
+	altXAxes.clear();
+	altYAxes.clear();
+	axisRenderers.clear();
+	affectedPlots.clear();
+	plots.forEach(plot -> registerPlot(plot));
+    }
+
+    private void registerPlot(Plot<?, ?, ?> plot) {
 	Axis<?> xAxis = plot.getXAxis();
 	switch (xAxis.getAxisType()) {
 	case X:
@@ -310,9 +332,6 @@ public class PlotCanvas extends Canvas {
 	    }
 	    axisRenderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
 	}
-	plot.data().addListener((ListChangeListener<Object>) change -> draw());
-	plot.visibleProperty().addListener((o, oldValue, newValue) -> draw());
-	plot.colorProperty().addListener((o, oldValue, newValue) -> draw());
     }
 
     private void draw() {

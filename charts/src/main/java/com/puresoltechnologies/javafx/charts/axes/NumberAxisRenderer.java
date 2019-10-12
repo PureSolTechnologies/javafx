@@ -171,10 +171,6 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
 	}
 	setMin(min);
 	setMax(max);
-	if (autoScaleMinProperty().getValue()) {
-	}
-	if (autoScaleMaxProperty().getValue()) {
-	}
     }
 
     private void updateAccuracy() {
