@@ -32,7 +32,7 @@ public interface AxisRenderer<T> extends Renderer {
      * @param autoScale defines whether the minimum value is auto scaled or not.
      */
     default void setAutoScaleMin(boolean autoScale) {
-	autoScaleMinProperty().set(autoScale);
+        autoScaleMinProperty().set(autoScale);
     }
 
     /**
@@ -43,7 +43,7 @@ public interface AxisRenderer<T> extends Renderer {
      *         <code>false</code> is returned otherwise.
      */
     default boolean getAutoScaleMin() {
-	return autoScaleMinProperty().get();
+        return autoScaleMinProperty().get();
     }
 
     /**
@@ -63,7 +63,7 @@ public interface AxisRenderer<T> extends Renderer {
      * @param autoScale defines whether the maximum value is auto scaled or not.
      */
     default void setAutoScaleMax(boolean autoScale) {
-	autoScaleMaxProperty().set(autoScale);
+        autoScaleMaxProperty().set(autoScale);
     }
 
     /**
@@ -74,7 +74,7 @@ public interface AxisRenderer<T> extends Renderer {
      *         <code>false</code> is returned otherwise.
      */
     default boolean getAutoScaleMax() {
-	return autoScaleMaxProperty().get();
+        return autoScaleMaxProperty().get();
     }
 
     /**
@@ -87,7 +87,7 @@ public interface AxisRenderer<T> extends Renderer {
     ObjectProperty<T> maxProperty();
 
     default void setMin(T min) {
-	minProperty().set(min);
+        minProperty().set(min);
     }
 
     /**
@@ -96,11 +96,11 @@ public interface AxisRenderer<T> extends Renderer {
      * @return The minimum value is returned with the given type
      */
     default T getMin() {
-	return minProperty().get();
+        return minProperty().get();
     }
 
     default void setMax(T max) {
-	maxProperty().set(max);
+        maxProperty().set(max);
     }
 
     /**
@@ -109,11 +109,11 @@ public interface AxisRenderer<T> extends Renderer {
      * @return The maximum value is returned with the given type
      */
     default T getMax() {
-	return maxProperty().get();
+        return maxProperty().get();
     }
 
     default void scale(double factor) {
-	scale(factor, 0.5);
+        scale(factor, 0.5);
     }
 
     void scale(double factor, double ratioMinToMax);
