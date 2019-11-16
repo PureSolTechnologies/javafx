@@ -10,9 +10,9 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.layout.Pane;
 
-public class LegendTable extends TableView<Plot<?, ?, ?>> {
+public class LegendPane extends TableView<Plot<?, ?, ?>> {
 
-    public LegendTable(ObservableList<Plot<?, ?, ?>> plots) {
+    public LegendPane(ObservableList<Plot<?, ?, ?>> plots) {
 	TableColumn<Plot<?, ?, ?>, String> markerColumn = new TableColumn<>("Marker");
 	markerColumn.setCellValueFactory(plot -> plot.getValue().titleProperty());
 	markerColumn.setCellFactory(column -> new TableCell<>() {
@@ -24,7 +24,7 @@ public class LegendTable extends TableView<Plot<?, ?, ?>> {
 		    setText(null);
 		    setGraphic(null);
 		} else {
-		    ObservableList<Plot<?, ?, ?>> items = LegendTable.this.getItems();
+		    ObservableList<Plot<?, ?, ?>> items = LegendPane.this.getItems();
 		    Plot<?, ?, ?> plot = items.get(getIndex());
 		    Pane pane = new Pane();
 		    MarkerCanvas canvas = new MarkerCanvas(pane, plot);

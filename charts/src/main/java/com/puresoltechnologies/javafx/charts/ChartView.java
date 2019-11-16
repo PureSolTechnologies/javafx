@@ -32,8 +32,8 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.MouseButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.paint.Color;
 
@@ -56,9 +56,10 @@ public class ChartView extends GridPane {
     private final ObjectProperty<Locale> copyLocale = new SimpleObjectProperty<>(Locale.getDefault());
 
     private final PlotCanvas plotCanvas = new PlotCanvas();
+    private final BorderPane plotBorderPane = new BorderPane();
     private final Label titleLabel = new Label();
     private final Label subTitleLabel = new Label();
-    private final LegendTable legendTable = new LegendTable(plotCanvas.getPlots());
+    private final LegendPane legendPane = new LegendPane(plotCanvas.getPlots());
 
     public ChartView(String title) {
 	this();
@@ -84,22 +85,21 @@ public class ChartView extends GridPane {
 	configureLegendTable();
 	configureContextMenu();
 
-	HBox spacer1 = new HBox();
-	HBox spacer2 = new HBox();
-	GridPane.setConstraints(titleLabel, 0, 0, 2, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
-	GridPane.setConstraints(subTitleLabel, 0, 1, 2, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
-	GridPane.setConstraints(plotCanvas, 0, 2, 1, 3, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
-	GridPane.setConstraints(spacer1, 1, 2, 1, 1, HPos.CENTER, VPos.TOP, Priority.SOMETIMES, Priority.ALWAYS);
-	GridPane.setConstraints(legendTable, 1, 3, 1, 1, HPos.CENTER, VPos.TOP, Priority.SOMETIMES, Priority.NEVER,
-		new Insets(5.0));
-	GridPane.setConstraints(spacer2, 1, 4, 1, 1, HPos.CENTER, VPos.TOP, Priority.SOMETIMES, Priority.ALWAYS);
-	getChildren().addAll(titleLabel, subTitleLabel, plotCanvas, spacer1, legendTable, spacer2);
-	setGridLinesVisible(false);
+	plotBorderPane.setCenter(plotCanvas);
+	plotBorderPane.setRight(legendPane);
+
+	GridPane.setConstraints(titleLabel, 0, 0, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
+	GridPane.setConstraints(subTitleLabel, 0, 1, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
+	GridPane.setConstraints(plotBorderPane, 0, 2, 1, 1, HPos.CENTER, VPos.CENTER, Priority.ALWAYS, Priority.ALWAYS);
+	getChildren().addAll(titleLabel, subTitleLabel, plotBorderPane);
+	setMaxHeight(Double.MAX_VALUE);
+	setMaxWidth(Double.MAX_VALUE);
+	setGridLinesVisible(true);
     }
 
     private void configureLegendTable() {
-	legendTable.visibleProperty().bind(legendVisible);
-	legendTable.managedProperty().bind(legendVisible);
+	legendPane.visibleProperty().bind(legendVisible);
+	legendPane.managedProperty().bind(legendVisible);
     }
 
     private void configureContextMenu() {
