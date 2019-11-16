@@ -2,61 +2,44 @@ package com.puresoltechnologies.javafx.charts;
 
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 
-import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.HPos;
+import javafx.geometry.VPos;
+import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
 
-public class LegendPane extends TableView<Plot<?, ?, ?>> {
+public class LegendPane extends FlowPane {
 
     public LegendPane(ObservableList<Plot<?, ?, ?>> plots) {
-	TableColumn<Plot<?, ?, ?>, String> markerColumn = new TableColumn<>("Marker");
-	markerColumn.setCellValueFactory(plot -> plot.getValue().titleProperty());
-	markerColumn.setCellFactory(column -> new TableCell<>() {
-
-	    @Override
-	    protected void updateItem(String title, boolean empty) {
-		super.updateItem(title, empty);
-		if ((title == null) || empty) {
-		    setText(null);
-		    setGraphic(null);
-		} else {
-		    ObservableList<Plot<?, ?, ?>> items = LegendPane.this.getItems();
-		    Plot<?, ?, ?> plot = items.get(getIndex());
-		    Pane pane = new Pane();
-		    MarkerCanvas canvas = new MarkerCanvas(pane, plot);
-		    pane.getChildren().add(canvas);
-		    pane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-		    setGraphic(pane);
-		}
-	    }
+	plots.addListener((ListChangeListener<Plot<?, ?, ?>>) (change) -> {
+	    showSymbols(change.getList());
 	});
-	getColumns().add(markerColumn);
+    }
 
-	TableColumn<Plot<?, ?, ?>, String> nameColumn = new TableColumn<>("Name");
-	nameColumn.setCellValueFactory(plot -> plot.getValue().titleProperty());
-	getColumns().add(nameColumn);
+    private void showSymbols(ObservableList<? extends Plot<?, ?, ?>> plots) {
+	getChildren().clear();
+	plots.forEach(plot -> showSymbol(plot));
+    }
 
-	setItems(plots);
-	setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
+    private void showSymbol(Plot<?, ?, ?> plot) {
+	GridPane pane = new GridPane();
 
-	setFixedCellSize(25);
-	prefHeightProperty().bind(fixedCellSizeProperty().multiply(Bindings.size(getItems()).add(1.1)));
-	minHeightProperty().bind(prefHeightProperty());
-	maxHeightProperty().bind(prefHeightProperty());
-	// The header are hidden as next step...
-	widthProperty().addListener((ChangeListener<Number>) (source, oldWidth, newWidth) -> {
-	    Pane header = (Pane) lookup("TableHeaderRow");
-	    if (header.isVisible()) {
-		header.setMaxHeight(0);
-		header.setMinHeight(0);
-		header.setPrefHeight(0);
-		header.setVisible(false);
-	    }
-	});
+	Pane symbolPane = new Pane();
+	MarkerCanvas canvas = new MarkerCanvas(symbolPane, plot);
+	symbolPane.getChildren().add(canvas);
+	symbolPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+
+	Label label = new Label(plot.getTitle());
+
+	GridPane.setConstraints(symbolPane, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.NEVER);
+	GridPane.setConstraints(label, 1, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.NEVER);
+	pane.getChildren().addAll(symbolPane, label);
+
+	getChildren().add(pane);
     }
 
 }
