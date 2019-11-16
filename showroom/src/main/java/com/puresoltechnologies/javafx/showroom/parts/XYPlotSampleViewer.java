@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.Optional;
 
 import com.puresoltechnologies.javafx.charts.ChartView;
+import com.puresoltechnologies.javafx.charts.ChartView.LegendPosition;
 import com.puresoltechnologies.javafx.charts.axes.AxisType;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.plots.InterpolationType;
@@ -76,6 +77,7 @@ public class XYPlotSampleViewer extends AbstractViewer {
 	chartView.addPlot(xyCosinePlot);
 	chartView.addPlot(xyTangentPlot);
 	chartView.setPlotPadding(new Insets(20.0));
+	chartView.setLegendPosition(LegendPosition.BOTTOM);
 
 	borderPane.setCenter(chartView);
 	FXThreads.proceedOnFXThread(() -> xySinePlot.setData(generateSineXYData()));

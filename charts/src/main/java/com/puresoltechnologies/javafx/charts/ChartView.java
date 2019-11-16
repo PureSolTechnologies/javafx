@@ -44,6 +44,17 @@ import javafx.scene.paint.Color;
  */
 public class ChartView extends GridPane {
 
+    /**
+     * This enum is used to specify the legend in relationship to the plot.
+     *
+     * @author Rick-Rainer Ludwig
+     */
+    public enum LegendPosition {
+
+	LEFT, RIGHT, TOP, BOTTOM;
+
+    }
+
     private static final ObjectProperty<FontDefinition> titleFontProperty = Preferences
 	    .getProperty(ChartsProperties.TITLE_FONT);
     private static final ObjectProperty<FontDefinition> subtitleFontProperty = Preferences
@@ -54,6 +65,7 @@ public class ChartView extends GridPane {
     private final StringProperty titleProperty = new SimpleStringProperty();
     private final StringProperty subTitleProperty = new SimpleStringProperty();
     private final ObjectProperty<Locale> copyLocale = new SimpleObjectProperty<>(Locale.getDefault());
+    private final ObjectProperty<LegendPosition> legendPosition = new SimpleObjectProperty<>(LegendPosition.RIGHT);
 
     private final PlotCanvas plotCanvas = new PlotCanvas();
     private final BorderPane plotBorderPane = new BorderPane();
@@ -81,12 +93,13 @@ public class ChartView extends GridPane {
 	subTitleLabel.setAlignment(Pos.TOP_CENTER);
 	FXNodeUtils.setTextColor(subTitleLabel, subtitleFontProperty.get().getColor());
 	plotCanvas.setManaged(true);
+	legendPosition.addListener((observable, oldValue, newValue) -> applyLegend());
 
 	configureLegendTable();
 	configureContextMenu();
 
 	plotBorderPane.setCenter(plotCanvas);
-	plotBorderPane.setRight(legendPane);
+	applyLegend();
 
 	GridPane.setConstraints(titleLabel, 0, 0, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
 	GridPane.setConstraints(subTitleLabel, 0, 1, 1, 1, HPos.CENTER, VPos.TOP, Priority.ALWAYS, Priority.NEVER);
@@ -100,6 +113,26 @@ public class ChartView extends GridPane {
     private void configureLegendTable() {
 	legendPane.visibleProperty().bind(legendVisible);
 	legendPane.managedProperty().bind(legendVisible);
+    }
+
+    private void applyLegend() {
+	plotBorderPane.getChildren().remove(legendPane);
+	switch (legendPosition.get()) {
+	case LEFT:
+	    plotBorderPane.setLeft(legendPane);
+	    break;
+	case RIGHT:
+	    plotBorderPane.setRight(legendPane);
+	    break;
+	case TOP:
+	    plotBorderPane.setTop(legendPane);
+	    break;
+	case BOTTOM:
+	    plotBorderPane.setBottom(legendPane);
+	    break;
+	default:
+	    // intentionally left empty
+	}
     }
 
     private void configureContextMenu() {
@@ -316,6 +349,18 @@ public class ChartView extends GridPane {
 
     public Color getBackgroundColor() {
 	return plotCanvas.backgroundColorProperty().get();
+    }
+
+    public ObjectProperty<LegendPosition> legendPositionProperty() {
+	return legendPosition;
+    }
+
+    public void setLegendPosition(LegendPosition legendPosition) {
+	this.legendPosition.set(legendPosition);
+    }
+
+    public LegendPosition getLegendPosition() {
+	return legendPosition.get();
     }
 
     public ObservableList<Plot<?, ?, ?>> getPlots() {
