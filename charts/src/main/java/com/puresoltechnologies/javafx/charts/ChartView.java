@@ -21,6 +21,7 @@ import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.ContextMenu;
@@ -71,7 +72,7 @@ public class ChartView extends GridPane {
     private final BorderPane plotBorderPane = new BorderPane();
     private final Label titleLabel = new Label();
     private final Label subTitleLabel = new Label();
-    private final LegendPane legendPane = new LegendPane(plotCanvas.getPlots());
+    private final LegendPane legendPane = new LegendPane(this, plotCanvas.getPlots());
 
     public ChartView(String title) {
 	this();
@@ -107,7 +108,7 @@ public class ChartView extends GridPane {
 	getChildren().addAll(titleLabel, subTitleLabel, plotBorderPane);
 	setMaxHeight(Double.MAX_VALUE);
 	setMaxWidth(Double.MAX_VALUE);
-	setGridLinesVisible(true);
+	setGridLinesVisible(false);
     }
 
     private void configureLegendTable() {
@@ -120,15 +121,19 @@ public class ChartView extends GridPane {
 	switch (legendPosition.get()) {
 	case LEFT:
 	    plotBorderPane.setLeft(legendPane);
+	    legendPane.setOrientation(Orientation.VERTICAL);
 	    break;
 	case RIGHT:
 	    plotBorderPane.setRight(legendPane);
+	    legendPane.setOrientation(Orientation.VERTICAL);
 	    break;
 	case TOP:
 	    plotBorderPane.setTop(legendPane);
+	    legendPane.setOrientation(Orientation.HORIZONTAL);
 	    break;
 	case BOTTOM:
 	    plotBorderPane.setBottom(legendPane);
+	    legendPane.setOrientation(Orientation.HORIZONTAL);
 	    break;
 	default:
 	    // intentionally left empty
