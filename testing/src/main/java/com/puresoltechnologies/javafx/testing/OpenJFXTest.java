@@ -22,6 +22,13 @@ import javafx.collections.ObservableList;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
+/**
+ * This class is used to extend JUnit5 test classes to get support for JavaFX
+ * testing.
+ *
+ * @author Rick-Rainer Ludwig
+ *
+ */
 public abstract class OpenJFXTest
 	implements NodeFullSearch, MouseInteraction, ButtonSelector, MenuSelector, DialogSelector {
 

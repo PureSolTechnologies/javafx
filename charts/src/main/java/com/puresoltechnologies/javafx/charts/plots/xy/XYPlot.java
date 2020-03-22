@@ -5,11 +5,11 @@ import java.util.List;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxis;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
-import com.puresoltechnologies.javafx.charts.plots.AbstractPointBasedPlot;
+import com.puresoltechnologies.javafx.charts.plots.AbstractLinePlot;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
 public class XYPlot<X extends Number & Comparable<X>, Y extends Number & Comparable<Y>>
-	extends AbstractPointBasedPlot<X, Y, XYValue<X, Y>> {
+	extends AbstractLinePlot<X, Y, XYValue<X, Y>> {
 
     public XYPlot(String title, NumberAxis<X> xAxis, NumberAxis<Y> yAxis) {
 	super(title, xAxis, yAxis);

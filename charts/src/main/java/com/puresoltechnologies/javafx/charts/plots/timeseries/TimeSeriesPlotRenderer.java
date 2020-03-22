@@ -41,7 +41,7 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D extends 
 	InstantAxisRenderer<?> xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
 	gc.setStroke(plot.getColor());
-	gc.setLineWidth(1.0);
+	gc.setLineWidth(plot.getLineWidth());
 	double lastXValue = xAxisRenderer.calculatePos(x, y, width, height, plot.getAxisX(data.get(0)));
 	double lastYValue = yAxisRenderer.calculatePos(x, y, width, height, plot.getAxisY(data.get(0)));
 	for (D value : data) {

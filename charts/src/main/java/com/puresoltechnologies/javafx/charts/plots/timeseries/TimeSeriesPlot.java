@@ -8,12 +8,12 @@ import com.puresoltechnologies.javafx.charts.axes.Axis;
 import com.puresoltechnologies.javafx.charts.axes.AxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.InstantAxisRenderer;
 import com.puresoltechnologies.javafx.charts.axes.NumberAxisRenderer;
-import com.puresoltechnologies.javafx.charts.plots.AbstractPointBasedPlot;
+import com.puresoltechnologies.javafx.charts.plots.AbstractLinePlot;
 import com.puresoltechnologies.javafx.charts.plots.PlotDatum;
 import com.puresoltechnologies.javafx.charts.plots.PlotRenderer;
 
 public class TimeSeriesPlot<Y extends Number & Comparable<Y>, D extends PlotDatum<Instant, Y>>
-	extends AbstractPointBasedPlot<Instant, Y, D> {
+	extends AbstractLinePlot<Instant, Y, D> {
 
     private final Function<D, Instant> xValueFactory;
     private final Function<D, Y> yValueFactory;

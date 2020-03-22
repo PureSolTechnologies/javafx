@@ -46,7 +46,7 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
 	gc.setStroke(plot.getColor());
 	gc.setFill(plot.getColor());
-	gc.setLineWidth(1.0);
+	gc.setLineWidth(plot.getLineWidth());
 
 	double markerSize = plot.markerSizeProperty().get();
 	for (XYValue<X, Y> value : data) {
@@ -85,7 +85,7 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
 	gc.setStroke(plot.getColor());
 	gc.setFill(plot.getColor());
-	gc.setLineWidth(1.0);
+	gc.setLineWidth(plot.getLineWidth());
 	double oldPosX = -Double.MAX_VALUE;
 	double oldPosY = -Double.MAX_VALUE;
 	for (XYValue<X, Y> value : plot.getData()) {
@@ -121,7 +121,7 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	gc.setStroke(plot.getColor());
 	gc.setFill(plot.getColor());
-	gc.setLineWidth(1.0);
+	gc.setLineWidth(plot.getLineWidth());
 	double oldPosX = -Double.MAX_VALUE;
 	double oldPosY = -Double.MAX_VALUE;
 	for (double posX = xValues[0]; posX <= xValues[xValues.length - 1]; posX += 1.0) {

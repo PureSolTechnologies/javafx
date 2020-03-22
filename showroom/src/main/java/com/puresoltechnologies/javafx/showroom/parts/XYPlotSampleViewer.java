@@ -70,6 +70,7 @@ public class XYPlotSampleViewer extends AbstractViewer {
 	xyTangentPlot.setInterpolationType(InterpolationType.CUBIC_SPLINES);
 	xyTangentPlot.setMarkerType(MarkerType.CROSS);
 	xyTangentPlot.setMarkerSize(10.0);
+	xyTangentPlot.setLineWidth(2.0);
 
 	ChartView chartView = new ChartView("XY Plot");
 	chartView.setCopyLocale(Locale.GERMANY);
