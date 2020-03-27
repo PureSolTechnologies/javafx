@@ -20,4 +20,14 @@ public interface LinePlot {
 	return lineWidthProperty().get();
     }
 
+    DoubleProperty lineAlphaProperty();
+
+    default void setLineAlpha(double alpha) {
+	lineAlphaProperty().set(alpha);
+    }
+
+    default double getLineAlpha() {
+	return lineAlphaProperty().get();
+    }
+
 }

@@ -11,6 +11,7 @@ public abstract class AbstractLinePlot<X extends Comparable<X>, Y extends Compar
 	extends AbstractPointBasedPlot<X, Y, D> implements LinePlot {
 
     private final DoubleProperty lineWidth = new SimpleDoubleProperty(1.0);
+    private final DoubleProperty lineAlpha = new SimpleDoubleProperty(0.2);
 
     public AbstractLinePlot(Axis<X> xAxis, Axis<Y> yAxis) {
 	super(xAxis, yAxis);
@@ -29,4 +30,8 @@ public abstract class AbstractLinePlot<X extends Comparable<X>, Y extends Compar
 	return lineWidth;
     }
 
+    @Override
+    public DoubleProperty lineAlphaProperty() {
+	return lineAlpha;
+    }
 }

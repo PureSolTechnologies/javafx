@@ -127,8 +127,7 @@ public class XYPlotSampleViewer extends AbstractViewer {
 
     @Override
     public void close() {
-	// TODO Auto-generated method stub
-
+	// intentionally left empty
     }
 
     @Override

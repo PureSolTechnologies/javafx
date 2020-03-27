@@ -92,7 +92,7 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	    double posX = xAxisRenderer.calculatePos(x, y, width, height, value.getX());
 	    double posY = yAxisRenderer.calculatePos(x, y, width, height, value.getY());
 	    if (oldPosX != -Double.MAX_VALUE) {
-		gc.setGlobalAlpha(0.2);
+		gc.setGlobalAlpha(plot.getLineAlpha());
 		gc.strokeLine(oldPosX, oldPosY, posX, posY);
 		gc.setGlobalAlpha(1.0);
 	    }
