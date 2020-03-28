@@ -123,7 +123,7 @@ public class ShowRoom extends Application {
 	);
 	// Tools Menu
 	Menu toolsMenu = new Menu("_Tools");
-	windowMenu.setId("menu.main.tools");
+	toolsMenu.setId("menu.main.tools");
 	toolsMenu.getItems().addAll( //
 		new ServiceControlMenuItem() //
 	);

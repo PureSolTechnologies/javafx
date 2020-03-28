@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
 import com.puresoltechnologies.javafx.testing.select.Selection;
+import com.puresoltechnologies.javafx.testing.utils.ComponentTreePrinter;
 
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -48,6 +49,7 @@ public class SimpleTest extends OpenJFXTest {
 
     @Test
     public void test() throws InterruptedException {
+	new ComponentTreePrinter(System.out).print();
 	Selection<Label> label = findNodeById(Label.class, "test.label");
 	assertTrue(label.isPresent());
 	Selection<Button> button = findButtonById("test.button");
