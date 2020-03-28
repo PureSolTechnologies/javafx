@@ -250,6 +250,7 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
         if (accuracy < 0) {
             formatString = "%." + Math.abs(accuracy) + "f";
         }
+        gc.setLineWidth(getAxis().getTickWidth());
         boolean first = true;
         for (double current = getMin().doubleValue(); current <= getMax().doubleValue(); current += tickSteps) {
             double currentPosition = calculatePos(x, y, width, height, current);

@@ -139,6 +139,7 @@ public class InstantAxisRenderer<A extends OrdinalAxis<Instant>> extends Ordinal
             break;
         }
         Collections.sort(possibleTicks);
+        gc.setLineWidth(getAxis().getTickWidth());
         double position = 0.0;
         for (Instant current : possibleTicks) {
             long maxEpochSecond = getMax().getEpochSecond();

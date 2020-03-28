@@ -152,6 +152,7 @@ public abstract class AbstractAxisRenderer<T, A extends Axis<T>> extends Abstrac
     private void drawAxis(GraphicsContext gc, double x, double y, double width, double height) {
         gc.setFill(axis.getColor());
         gc.setStroke(axis.getColor());
+        gc.setLineWidth(axis.getAxisWidth());
         switch (axis.getAxisType()) {
         case X:
             gc.strokeLine(x, y, x + width, y);

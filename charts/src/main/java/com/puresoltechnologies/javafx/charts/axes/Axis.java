@@ -2,6 +2,7 @@ package com.puresoltechnologies.javafx.charts.axes;
 
 import com.puresoltechnologies.javafx.extensions.fonts.FontDefinition;
 
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.scene.paint.Color;
 
@@ -15,41 +16,61 @@ public interface Axis<T> {
     ObjectProperty<FontDefinition> titleFontProperty();
 
     default void setTitleFont(FontDefinition titleFont) {
-	titleFontProperty().setValue(titleFont);
+        titleFontProperty().setValue(titleFont);
     }
 
     default FontDefinition getTitleFont() {
-	return titleFontProperty().getValue();
+        return titleFontProperty().getValue();
     }
 
     ObjectProperty<FontDefinition> labelFontProperty();
 
     default void setLabelFont(FontDefinition labelFont) {
-	labelFontProperty().setValue(labelFont);
+        labelFontProperty().setValue(labelFont);
     }
 
     default FontDefinition getLabelFont() {
-	return labelFontProperty().getValue();
+        return labelFontProperty().getValue();
     }
 
     ObjectProperty<Color> colorProperty();
 
     default void setColor(Color color) {
-	colorProperty().setValue(color);
+        colorProperty().setValue(color);
     }
 
     default Color getColor() {
-	return colorProperty().getValue();
+        return colorProperty().getValue();
+    }
+
+    DoubleProperty axisWidthProperty();
+
+    default void setAxisWidth(double width) {
+        axisWidthProperty().setValue(width);
+    }
+
+    default double getAxisWidth() {
+        return axisWidthProperty().getValue();
+    }
+
+    DoubleProperty tickWidthProperty();
+
+    default void setTickWidth(double width) {
+        tickWidthProperty().setValue(width);
+    }
+
+    default double getTickWidth() {
+        return tickWidthProperty().getValue();
     }
 
     ObjectProperty<Color> backgroundColorProperty();
 
     default void setBackgroundColor(Color color) {
-	backgroundColorProperty().setValue(color);
+        backgroundColorProperty().setValue(color);
     }
 
     default Color getBackgroundColor() {
-	return backgroundColorProperty().getValue();
+        return backgroundColorProperty().getValue();
     }
 
     /**
