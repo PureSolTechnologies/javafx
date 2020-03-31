@@ -30,8 +30,8 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	if ((width <= 0) || (height <= 0)) {
 	    return;
 	}
-	drawPoints(canvas, x, y, width, height);
 	drawInterpolation(canvas, x, y, width, height);
+	drawPoints(canvas, x, y, width, height);
     }
 
     private void drawPoints(Canvas canvas, double x, double y, double width, double height) {
@@ -83,8 +83,8 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
 	@SuppressWarnings("unchecked")
 	XYPlot<X, Y> plot = (XYPlot<X, Y>) getPlot();
-	gc.setStroke(plot.getColor());
-	gc.setFill(plot.getColor());
+	gc.setStroke(plot.getLineColor());
+	gc.setFill(plot.getLineColor());
 	gc.setLineWidth(plot.getLineWidth());
 	double oldPosX = -Double.MAX_VALUE;
 	double oldPosY = -Double.MAX_VALUE;
@@ -119,8 +119,8 @@ public class XYPlotRenderer<X extends Number & Comparable<X>, Y extends Number &
 	PolynomialSplineFunction interpolator = new SplineInterpolator().interpolate(xValues, yValues);
 
 	GraphicsContext gc = canvas.getGraphicsContext2D();
-	gc.setStroke(plot.getColor());
-	gc.setFill(plot.getColor());
+	gc.setStroke(plot.getLineColor());
+	gc.setFill(plot.getLineColor());
 	gc.setLineWidth(plot.getLineWidth());
 	double oldPosX = -Double.MAX_VALUE;
 	double oldPosY = -Double.MAX_VALUE;

@@ -1,6 +1,7 @@
 package com.puresoltechnologies.javafx.charts;
 
 import com.puresoltechnologies.javafx.charts.plots.InterpolationType;
+import com.puresoltechnologies.javafx.charts.plots.LinePlot;
 import com.puresoltechnologies.javafx.charts.plots.MarkerType;
 import com.puresoltechnologies.javafx.charts.plots.Plot;
 import com.puresoltechnologies.javafx.charts.plots.PointBasedPlot;
@@ -47,15 +48,21 @@ public class MarkerCanvas extends Canvas {
 		double x = (width - size) / 2.0;
 		double y = (height - size) / 2.0;
 		gc.clearRect(0, 0, width, height);
+		if (LinePlot.class.isAssignableFrom(plot.getClass())) {
+		    LinePlot<?, ?, ?> linePlot = (LinePlot<?, ?, ?>) plot;
+		    if (pointBasedPlot.getInterpolationType() != InterpolationType.NONE) {
+			gc.setFill(linePlot.getLineColor());
+			gc.setStroke(linePlot.getLineColor());
+			gc.setLineWidth(linePlot.getLineWidth());
+			gc.setGlobalAlpha(linePlot.getLineAlpha());
+			gc.strokeLine(0.0, height / 2.0, width, height / 2.0);
+			gc.setGlobalAlpha(1.0);
+		    }
+		}
 		gc.setFill(color);
 		gc.setStroke(color);
 		MarkerType markerType = pointBasedPlot.getMarkerType();
 		markerType.renderTo(this, x, y, size, size);
-		if (pointBasedPlot.getInterpolationType() != InterpolationType.NONE) {
-		    gc.setGlobalAlpha(0.2);
-		    gc.strokeLine(0.0, height / 2.0, width, height / 2.0);
-		    gc.setGlobalAlpha(1.0);
-		}
 	    } else {
 		gc.setFill(color);
 		gc.setStroke(color);

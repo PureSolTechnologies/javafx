@@ -29,8 +29,8 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D extends 
 	if ((width <= 0) || (height <= 0)) {
 	    return;
 	}
-	drawPoints(canvas, x, y, width, height);
 	drawLines(canvas, x, y, width, height);
+	drawPoints(canvas, x, y, width, height);
     }
 
     private void drawPoints(Canvas canvas, double x, double y, double width, double height) {
@@ -66,7 +66,7 @@ public class TimeSeriesPlotRenderer<Y extends Number & Comparable<Y>, D extends 
 	GraphicsContext gc = canvas.getGraphicsContext2D();
 	InstantAxisRenderer<?> xAxisRenderer = getXAxisRenderer();
 	NumberAxisRenderer<?, ?> yAxisRenderer = getYAxisRenderer();
-	gc.setStroke(plot.getColor());
+	gc.setStroke(plot.getLineColor());
 	gc.setLineWidth(plot.getLineWidth());
 	double lastXValue = xAxisRenderer.calculatePos(x, y, width, height, plot.getAxisX(data.get(0)));
 	double lastYValue = yAxisRenderer.calculatePos(x, y, width, height, plot.getAxisY(data.get(0)));

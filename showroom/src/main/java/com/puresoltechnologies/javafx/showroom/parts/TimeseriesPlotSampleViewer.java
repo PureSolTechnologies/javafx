@@ -74,7 +74,8 @@ public class TimeseriesPlotSampleViewer extends AbstractViewer {
 	plot.setMarkerType(MarkerType.SQUARE);
 	plot.setMarkerSize(5.0);
 	plot.setLineWidth(3.0);
-	plot.setLineAlpha(0.5);
+	plot.setLineAlpha(1.0);
+	plot.setLineColor(Color.GREENYELLOW);
 
 	ChartView chartView = new ChartView("Time Series Plot");
 	chartView.setCopyLocale(Locale.GERMANY);
