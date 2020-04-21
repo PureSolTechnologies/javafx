@@ -14,37 +14,33 @@ public interface NodeFullSearch extends NodeSearch {
 
     @Override
     default List<Node> findNodes(Predicate<Node> filter) {
-	System.err.println("find nodes...");
-	return Window.getWindows().stream() //
-		.map(window -> {
-		    System.err.println("window: " + window.getClass().getName());
-		    return findNodesInScene(window.getScene(), filter);
-		}) //
-		.flatMap(nodeList -> nodeList.stream()) //
-		.collect(Collectors.toList());
+        return Window.getWindows().stream() //
+                .map(window -> {
+                    return findNodesInScene(window.getScene(), filter);
+                }) //
+                .flatMap(nodeList -> nodeList.stream()) //
+                .collect(Collectors.toList());
     }
 
     default List<Node> findNodesInScene(Scene scene, Predicate<Node> filter) {
-	System.err.println("scene...");
-	List<Node> nodes = new ArrayList<>();
-	Parent rootNode = scene.getRoot();
-	if (filter.test(rootNode)) {
-	    nodes.add(rootNode);
-	}
-	addAllChildren(rootNode, nodes, filter);
-	return nodes;
+        List<Node> nodes = new ArrayList<>();
+        Parent rootNode = scene.getRoot();
+        if (filter.test(rootNode)) {
+            nodes.add(rootNode);
+        }
+        addAllChildren(rootNode, nodes, filter);
+        return nodes;
     }
 
     private void addAllChildren(Parent parent, List<Node> nodes, Predicate<Node> filter) {
-	System.out.println(parent.getClass().getName());
-	for (Node node : parent.getChildrenUnmodifiable()) {
-	    if (filter.test(node)) {
-		nodes.add(node);
-	    }
-	    if (Parent.class.isAssignableFrom(node.getClass())) {
-		addAllChildren((Parent) node, nodes, filter);
-	    }
-	}
+        for (Node node : parent.getChildrenUnmodifiable()) {
+            if (filter.test(node)) {
+                nodes.add(node);
+            }
+            if (Parent.class.isAssignableFrom(node.getClass())) {
+                addAllChildren((Parent) node, nodes, filter);
+            }
+        }
     }
 
 }
