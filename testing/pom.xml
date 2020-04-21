@@ -13,6 +13,11 @@
 	<name>${officalName} - ${project.artifactId}</name>
 
 	<dependencies>
+		<!-- self -->
+		<dependency>
+			<groupId>com.puresoltechnologies.javafx</groupId>
+			<artifactId>utils</artifactId>
+		</dependency>
 		<!-- PureSol Technologies -->
 		<dependency>
 			<groupId>com.puresoltechnologies.graphs</groupId>
@@ -31,6 +36,10 @@
 		<dependency>
 			<groupId>org.openjfx</groupId>
 			<artifactId>javafx-controls</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-swing</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
