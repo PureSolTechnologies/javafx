@@ -4,12 +4,6 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.fail;
 
-import java.awt.AWTException;
-import java.awt.Dimension;
-import java.awt.Rectangle;
-import java.awt.Robot;
-import java.awt.Toolkit;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
@@ -34,6 +28,7 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.Window;
 
@@ -163,7 +158,6 @@ public abstract class OpenJFXTest
                 try {
                     WritableImage snapshot = getStage().getScene().getRoot().snapshot(new SnapshotParameters(), null);
                     ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
-
                 } catch (IOException e) {
                     e.printStackTrace();
                 } finally {
@@ -194,14 +188,22 @@ public abstract class OpenJFXTest
             File file = new File(directory,
                     getClass().getSimpleName() + "-" + System.currentTimeMillis() + "-screenshot.png");
 
-            Robot robot = new Robot();
-            Toolkit myToolkit = Toolkit.getDefaultToolkit();
-            Dimension screenSize = myToolkit.getScreenSize();
-            Rectangle screen = new Rectangle(screenSize);
-            BufferedImage screenFullImage = robot.createScreenCapture(screen);
-            ImageIO.write(screenFullImage, "png", file);
+            CountDownLatch latch = new CountDownLatch(1);
+            FXThreads.runOnFXThread(() -> {
+                try {
+                    Screen primary = Screen.getPrimary();
+                    WritableImage snapshot = OpenJFXRobot.getRobot().getScreenCapture(null, primary.getBounds());
+                    ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    latch.countDown();
+                }
+            });
+            assertTrue(latch.await(10, TimeUnit.SECONDS), "Taking snapshot timed out.");
+            assertTrue(file.exists(), "Could not store snapshot.");
             return file;
-        } catch (AWTException | IOException e) {
+        } catch (InterruptedException e) {
             fail("Could not create screenshot.", e);
             return null;
         }

@@ -15,6 +15,7 @@ import com.puresoltechnologies.javafx.testing.utils.CoordinateUtils;
 import javafx.application.Platform;
 import javafx.geometry.Point2D;
 import javafx.scene.Node;
+import javafx.scene.control.ButtonBase;
 import javafx.scene.input.MouseButton;
 import javafx.scene.robot.Robot;
 
@@ -26,6 +27,20 @@ import javafx.scene.robot.Robot;
  */
 public interface MouseInteraction extends NodeSearch {
 
+    default boolean hasMouse() {
+        Robot robot = OpenJFXRobot.getRobot();
+        Point2D currentPosition = robot.getMousePosition();
+        if ((currentPosition.getX() < 0.0) || (currentPosition.getY() < 0.0)) {
+            System.err.println("No working mouse found.");
+            return false;
+        }
+        if ((currentPosition.getX() > 10_000.0) || (currentPosition.getY() > 10_000.0)) {
+            System.err.println("No working mouse found.");
+            return false;
+        }
+        return true;
+    }
+
     default void click(String id) {
         click(id, MouseButton.PRIMARY);
     }
@@ -33,7 +48,9 @@ public interface MouseInteraction extends NodeSearch {
     default void click(String id, MouseButton mouseButton) {
         if (id.startsWith("#")) {
             Selection<Node> node = findNodeById(Node.class, id.substring(1));
-            node.click(mouseButton);
+            click(node.getNode(), mouseButton);
+        } else {
+            throw new IllegalArgumentException("The provided id '" + id + "' does not start with a sharp '#'.");
         }
     }
 
@@ -42,8 +59,19 @@ public interface MouseInteraction extends NodeSearch {
     }
 
     default void click(Node node, MouseButton mouseButton) {
-        Point2D coordinates = CoordinateUtils.getScreenCenterCoordinates(node);
-        click(coordinates, mouseButton);
+        if (hasMouse()) {
+            Point2D coordinates = CoordinateUtils.getScreenCenterCoordinates(node);
+            click(coordinates, mouseButton);
+        } else {
+            System.out.println("No working mouse found. Trying fall-back scenario...");
+            if (ButtonBase.class.isAssignableFrom(node.getClass())) {
+                System.out.println("Button base compatible node found. Invoke fire() directly...");
+                ((ButtonBase) node).fire();
+            } else {
+                throw new IllegalStateException(
+                        "Current system seems not to have a valid mouse and no fallback available.");
+            }
+        }
     }
 
     default void click(Point2D coordinates, MouseButton mouseButton) {
@@ -67,6 +95,9 @@ public interface MouseInteraction extends NodeSearch {
     }
 
     default void moveTo(Point2D coordinates) {
+        if (!hasMouse()) {
+            throw new IllegalStateException("Current system seems not to have a valid mouse.");
+        }
         CountDownLatch latch = new CountDownLatch(1);
         Platform.runLater(() -> {
             try {
