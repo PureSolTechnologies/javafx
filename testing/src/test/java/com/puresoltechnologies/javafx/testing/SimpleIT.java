@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class SimpleTest extends OpenJFXTest {
+public class SimpleIT extends OpenJFXTest {
 
     @BeforeAll
     public static void setupTest() {

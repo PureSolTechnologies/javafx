@@ -18,12 +18,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
 /**
- * This class tests the snapshotting feature of tests.
+ * This class tests the snapshot feature of tests.
  *
  * @author Rick-Rainer Ludwig
  *
  */
-public class SnapshotTest extends OpenJFXTest {
+public class SnapshotIT extends OpenJFXTest {
 
     @BeforeAll
     public static void setupTest() {

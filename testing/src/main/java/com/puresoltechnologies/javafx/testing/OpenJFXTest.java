@@ -2,7 +2,14 @@ package com.puresoltechnologies.javafx.testing;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
+import java.awt.AWTException;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
@@ -133,7 +140,7 @@ public abstract class OpenJFXTest
     }
 
     public final File snapshot() {
-        return snapshot(defaultSnapshotDirectory, System.currentTimeMillis() + ".png");
+        return snapshot(defaultSnapshotDirectory, "scene-snapshot");
     }
 
     public final File snapshot(String name) {
@@ -148,7 +155,9 @@ public abstract class OpenJFXTest
                 assertTrue(directory.isDirectory(),
                         "Provided snapshot directory '" + directory + "' is not a directory.");
             }
-            File file = new File(directory, name);
+            File file = new File(directory,
+                    getClass().getSimpleName() + "-" + System.currentTimeMillis() + "-" + name + ".png");
+
             CountDownLatch latch = new CountDownLatch(1);
             FXThreads.runOnFXThread(() -> {
                 try {
@@ -161,13 +170,40 @@ public abstract class OpenJFXTest
                     latch.countDown();
                 }
             });
-            latch.await(10, TimeUnit.SECONDS);
+            assertTrue(latch.await(10, TimeUnit.SECONDS), "Taking snapshot timed out.");
             assertTrue(file.exists(), "Could not store snapshot.");
             return file;
         } catch (InterruptedException e) {
-            e.printStackTrace();
+            fail("Could not create snapshot.", e);
             return null;
         }
     }
 
+    public final File screenshot() {
+        return screenshot(defaultSnapshotDirectory);
+    }
+
+    public File screenshot(File directory) {
+        try {
+            if (!directory.exists()) {
+                assertTrue(directory.mkdirs(), "Could not created needed snapshot directory '" + directory + "'.");
+            } else {
+                assertTrue(directory.isDirectory(),
+                        "Provided snapshot directory '" + directory + "' is not a directory.");
+            }
+            File file = new File(directory,
+                    getClass().getSimpleName() + "-" + System.currentTimeMillis() + "-screenshot.png");
+
+            Robot robot = new Robot();
+            Toolkit myToolkit = Toolkit.getDefaultToolkit();
+            Dimension screenSize = myToolkit.getScreenSize();
+            Rectangle screen = new Rectangle(screenSize);
+            BufferedImage screenFullImage = robot.createScreenCapture(screen);
+            ImageIO.write(screenFullImage, "png", file);
+            return file;
+        } catch (AWTException | IOException e) {
+            fail("Could not create screenshot.", e);
+            return null;
+        }
+    }
 }
