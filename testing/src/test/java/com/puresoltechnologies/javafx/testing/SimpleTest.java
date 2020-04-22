@@ -20,42 +20,42 @@ public class SimpleTest extends OpenJFXTest {
 
     @BeforeAll
     public static void setupTest() {
-	ReplayTimings.setSpeed(Speed.MEDIUM);
+        ReplayTimings.setSpeed(Speed.MEDIUM);
     }
 
     @Override
     protected Stage start() {
-	VBox vBox = new VBox();
-	Label label = new Label("Test");
-	label.setId("test.label");
-	Button button = new Button("Click me!");
-	button.setId("test.button");
-	button.setOnAction(event -> {
-	    System.out.println("button click!");
-	});
-	vBox.getChildren().addAll(label, button);
+        VBox vBox = new VBox();
+        Label label = new Label("Test");
+        label.setId("test.label");
+        Button button = new Button("Click me!");
+        button.setId("test.button");
+        button.setOnAction(event -> {
+            System.out.println("button click!");
+        });
+        vBox.getChildren().addAll(label, button);
 
-	Stage stage = new Stage(StageStyle.DECORATED);
-	Scene scene = new Scene(vBox, 320, 200);
-	stage.setScene(scene);
+        Stage stage = new Stage(StageStyle.DECORATED);
+        Scene scene = new Scene(vBox, 320, 200);
+        stage.setScene(scene);
 
-	return stage;
+        return stage;
     }
 
     @Override
     protected void stop() {
-	// TODO Auto-generated method stub
+        // TODO Auto-generated method stub
     }
 
     @Test
     public void test() throws InterruptedException {
-	new ComponentTreePrinter(System.out).print();
-	Selection<Label> label = findNodeById(Label.class, "test.label");
-	assertTrue(label.isPresent());
-	Selection<Button> button = findButtonById("test.button");
-	assertTrue(button.isPresent());
-	click("#test.button");
-	Thread.sleep(3000);
+        new ComponentTreePrinter(System.out).print();
+        Selection<Label> label = findNodeById(Label.class, "test.label");
+        assertTrue(label.isPresent());
+        Selection<Button> button = findButtonById("test.button");
+        assertTrue(button.isPresent());
+        click("#test.button");
+        Thread.sleep(3000);
     }
 
 }

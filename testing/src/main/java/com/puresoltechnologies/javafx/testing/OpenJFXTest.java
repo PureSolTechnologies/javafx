@@ -2,14 +2,11 @@ package com.puresoltechnologies.javafx.testing;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
 
 import javax.imageio.ImageIO;
 
@@ -144,21 +141,31 @@ public abstract class OpenJFXTest
     }
 
     public final File snapshot(File directory, String name) {
-        if (!directory.exists()) {
-            assertTrue(directory.mkdirs(), "Could not created needed snapshot directory '" + directory + "'.");
-        } else {
-            assertTrue(directory.isDirectory(), "Provided snapshot directory '" + directory + "' is not a directory.");
-        }
-        Future<File> future = FXThreads.runAsync(() -> {
-            WritableImage snapshot = getStage().getScene().getRoot().snapshot(new SnapshotParameters(), null);
-            File file = new File(directory, name);
-            ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
-            return file;
-        });
         try {
-            return future.get(10, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            fail("Could not store snapshot.", e);
+            if (!directory.exists()) {
+                assertTrue(directory.mkdirs(), "Could not created needed snapshot directory '" + directory + "'.");
+            } else {
+                assertTrue(directory.isDirectory(),
+                        "Provided snapshot directory '" + directory + "' is not a directory.");
+            }
+            File file = new File(directory, name);
+            CountDownLatch latch = new CountDownLatch(1);
+            FXThreads.runOnFXThread(() -> {
+                try {
+                    WritableImage snapshot = getStage().getScene().getRoot().snapshot(new SnapshotParameters(), null);
+                    ImageIO.write(SwingFXUtils.fromFXImage(snapshot, null), "png", file);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    latch.countDown();
+                }
+            });
+            latch.await(10, TimeUnit.SECONDS);
+            assertTrue(file.exists(), "Could not store snapshot.");
+            return file;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
             return null;
         }
     }
