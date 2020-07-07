@@ -16,6 +16,9 @@ import java.util.Objects;
  */
 public class Topic<T> {
 
+    private static final int DEFAULT_BUFFER_SIZE = 1;
+    private static final int DEFAULT_HISTORY_SIZE = 1;
+
     private final String id;
     private final Class<T> type;
     private final int historySize;
@@ -23,78 +26,78 @@ public class Topic<T> {
     private final int hash;
 
     public Topic(String id, Class<T> type) {
-	this(id, type, 1, 1);
+        this(id, type, DEFAULT_HISTORY_SIZE, DEFAULT_BUFFER_SIZE);
     }
 
     public Topic(String id, Class<T> type, int historySize) {
-	this(id, type, historySize, historySize);
+        this(id, type, historySize, Math.max(historySize, DEFAULT_BUFFER_SIZE));
     }
 
     public Topic(String id, Class<T> type, int historySize, int bufferSize) {
-	super();
-	this.id = id;
-	this.type = type;
-	this.historySize = historySize;
-	this.bufferSize = bufferSize;
-	this.hash = Objects.hash(id, type, historySize, bufferSize);
+        super();
+        this.id = id;
+        this.type = type;
+        this.historySize = historySize;
+        this.bufferSize = bufferSize;
+        this.hash = Objects.hash(id, type, historySize, bufferSize);
     }
 
     public String getId() {
-	return id;
+        return id;
     }
 
     public Class<T> getType() {
-	return type;
+        return type;
     }
 
     public int getHistorySize() {
-	return historySize;
+        return historySize;
     }
 
     public int getBufferSize() {
-	return bufferSize;
+        return bufferSize;
     }
 
     @Override
     public int hashCode() {
-	return hash;
+        return hash;
     }
 
     @Override
     public boolean equals(Object obj) {
-	if (this == obj) {
-	    return true;
-	}
-	if (obj == null) {
-	    return false;
-	}
-	if (getClass() != obj.getClass()) {
-	    return false;
-	}
-	Topic<?> other = (Topic<?>) obj;
-	if (hash != other.hash) {
-	    return false;
-	}
-	if (id == null) {
-	    if (other.id != null) {
-		return false;
-	    }
-	} else if (!id.equals(other.id)) {
-	    return false;
-	}
-	if (type == null) {
-	    if (other.type != null) {
-		return false;
-	    }
-	} else if (!type.equals(other.type)) {
-	    return false;
-	}
-	if (bufferSize != other.bufferSize) {
-	    return false;
-	}
-	if (historySize != other.historySize) {
-	    return false;
-	}
-	return true;
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        Topic<?> other = (Topic<?>) obj;
+        if (hash != other.hash) {
+            return false;
+        }
+        if (id == null) {
+            if (other.id != null) {
+                return false;
+            }
+        } else if (!id.equals(other.id)) {
+            return false;
+        }
+        if (type == null) {
+            if (other.type != null) {
+                return false;
+            }
+        } else if (!type.equals(other.type)) {
+            return false;
+        }
+        if (bufferSize != other.bufferSize) {
+            return false;
+        }
+        if (historySize != other.historySize) {
+            return false;
+        }
+        return true;
     }
 }
