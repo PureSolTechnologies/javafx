@@ -4,7 +4,7 @@
 
 	<groupId>com.puresoltechnologies.javafx</groupId>
 	<artifactId>parent</artifactId>
-	<version>0.11.0</version>
+	<version>0.12.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>${officalName} - ${project.artifactId}</name>
