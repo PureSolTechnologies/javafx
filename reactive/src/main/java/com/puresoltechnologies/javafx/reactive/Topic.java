@@ -100,4 +100,9 @@ public class Topic<T> {
         }
         return true;
     }
+
+    @Override
+    public String toString() {
+        return id + " (buffer=" + bufferSize + ", history=" + historySize + ")";
+    }
 }
