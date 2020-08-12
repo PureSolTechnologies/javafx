@@ -362,10 +362,10 @@ public class PlotCanvas extends Canvas {
             ObservableList<Plot<?, ?, ?>> affectedByAxis = affectedPlots.get(axis);
             if (affectedByAxis != null) {
                 affectedByAxis.remove(plot);
-            }
-            if (affectedByAxis.isEmpty()) {
-                affectedPlots.remove(axis);
-                axisRenderers.remove(axis);
+                if (affectedByAxis.isEmpty()) {
+                    affectedPlots.remove(axis);
+                    axisRenderers.remove(axis);
+                }
             }
         }
 
