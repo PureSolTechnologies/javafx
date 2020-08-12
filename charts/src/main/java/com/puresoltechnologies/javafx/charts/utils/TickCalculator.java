@@ -21,7 +21,7 @@ public class TickCalculator {
         if ((max - min) == 0.0) {
             return 0;
         }
-        return (int) Math.floor(Math.log10(max - min) - 1);
+        return (int) Math.round(Math.log10(max - min) - 1);
     }
 
     /**
