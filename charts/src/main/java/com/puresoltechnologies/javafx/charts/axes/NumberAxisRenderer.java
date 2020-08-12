@@ -26,6 +26,7 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
         maxProperty().addListener((o, oldValue, newValue) -> {
             updateAccuracy();
         });
+        updateAccuracy();
     }
 
     @Override

@@ -12,8 +12,6 @@ import com.puresoltechnologies.javafx.charts.axes.AxisRendererFactory;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.ReadOnlyListProperty;
-import javafx.beans.property.ReadOnlyListWrapper;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
@@ -36,8 +34,7 @@ public class PlotCanvas extends Canvas {
     protected final ObjectProperty<Color> backgroundColor = new SimpleObjectProperty<>(Color.WHITE);
     protected final ObjectProperty<Insets> padding = new SimpleObjectProperty<>(new Insets(5.0));
 
-    private final ReadOnlyListWrapper<Plot<?, ?, ?>> plots = new ReadOnlyListWrapper<>(
-            FXCollections.observableArrayList());
+    private final ObservableList<Plot<?, ?, ?>> plots = FXCollections.observableArrayList();
     private final Map<Plot<?, ?, ?>, PlotRenderer<?, ?, ?, ?, ?>> plotRenderers = new HashMap<>();
     private final List<Axis<?>> xAxes = new ArrayList<>();
     private final List<Axis<?>> yAxes = new ArrayList<>();
@@ -274,8 +271,8 @@ public class PlotCanvas extends Canvas {
         padding.setValue(insets);
     }
 
-    public ReadOnlyListProperty<Plot<?, ?, ?>> getPlots() {
-        return plots.getReadOnlyProperty();
+    public ObservableList<Plot<?, ?, ?>> getPlots() {
+        return plots;
     }
 
     public void addPlot(Plot<?, ?, ?> plot) {
@@ -286,6 +283,20 @@ public class PlotCanvas extends Canvas {
         plot.data().addListener((ListChangeListener<Object>) change -> draw());
         plot.visibleProperty().addListener((o, oldValue, newValue) -> draw());
         plot.colorProperty().addListener((o, oldValue, newValue) -> draw());
+        draw();
+    }
+
+    public void removePlot(Plot<?, ?, ?> plot) {
+        if (plots.remove(plot)) {
+            unregisterPlot(plot);
+            draw();
+        }
+    }
+
+    public void removeAllPlots() {
+        plots.forEach(plot -> unregisterPlot(plot));
+        plots.clear();
+        draw();
     }
 
     private void reregisterAllPlots() {
@@ -332,16 +343,59 @@ public class PlotCanvas extends Canvas {
         }
 
         for (Axis<?> axis : Arrays.asList(xAxis, yAxis)) {
-            if (!axisRenderers.containsKey(axis)) {
-                ObservableList<Plot<?, ?, ?>> plots = FXCollections.observableArrayList();
-                plots.add(plot);
-                affectedPlots.put(axis, plots);
-            } else {
-                affectedPlots.get(axis).add(plot);
+            ObservableList<Plot<?, ?, ?>> affectedByAxis = affectedPlots.get(axis);
+            if (affectedByAxis == null) {
+                affectedByAxis = FXCollections.observableArrayList();
+                affectedPlots.put(axis, affectedByAxis);
             }
+            affectedByAxis.add(plot);
             if (!axisRenderers.containsKey(axis)) {
                 axisRenderers.put(axis, AxisRendererFactory.forAxis(this, axis, affectedPlots.get(axis)));
             }
+        }
+    }
+
+    private void unregisterPlot(Plot<?, ?, ?> plot) {
+        Axis<?> xAxis = plot.getXAxis();
+        Axis<?> yAxis = plot.getYAxis();
+        for (Axis<?> axis : Arrays.asList(xAxis, yAxis)) {
+            ObservableList<Plot<?, ?, ?>> affectedByAxis = affectedPlots.get(axis);
+            if (affectedByAxis != null) {
+                affectedByAxis.remove(plot);
+            }
+            if (affectedByAxis.isEmpty()) {
+                affectedPlots.remove(axis);
+                axisRenderers.remove(axis);
+            }
+        }
+
+        switch (xAxis.getAxisType()) {
+        case X:
+            if (!axisRenderers.containsKey(xAxis)) {
+                xAxes.remove(xAxis);
+            }
+            break;
+        case ALT_X:
+            if (!axisRenderers.containsKey(xAxis)) {
+                altXAxes.remove(xAxis);
+            }
+            break;
+        default:
+            throw new RuntimeException("Invalid X axis type '" + xAxis.getAxisType() + "' found.");
+        }
+        switch (yAxis.getAxisType()) {
+        case Y:
+            if (!axisRenderers.containsKey(yAxis)) {
+                yAxes.remove(yAxis);
+            }
+            break;
+        case ALT_Y:
+            if (!axisRenderers.containsKey(yAxis)) {
+                altYAxes.remove(yAxis);
+            }
+            break;
+        default:
+            throw new RuntimeException("Invalid X axis type '" + yAxis.getAxisType() + "' found.");
         }
     }
 
