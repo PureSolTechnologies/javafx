@@ -18,10 +18,10 @@ public class TickCalculator {
      * @return An integer is returned for accuracy as exponent for base 10.
      */
     public static int calculateAccuracy(double min, double max) {
-	if ((max - min) == 0.0) {
-	    return 0;
-	}
-	return (int) Math.round(Math.log10(max - min) - 1);
+        if ((max - min) == 0.0) {
+            return 0;
+        }
+        return (int) Math.round(Math.log10(max - min) - 1);
     }
 
     /**
@@ -35,8 +35,8 @@ public class TickCalculator {
      * @return Returns the optimal minimum value for the axis as double value.
      */
     public static double calculateChartMin(double min, int accuracyExponent) {
-	double step = Math.pow(10.0, accuracyExponent);
-	return Math.floor(min / step) * step;
+        double step = Math.pow(10.0, accuracyExponent);
+        return Math.floor(min / step) * step;
     }
 
     /**
@@ -51,8 +51,8 @@ public class TickCalculator {
      */
 
     public static double calculateChartMax(double max, int accuracyExponent) {
-	double step = Math.pow(10.0, accuracyExponent);
-	return Math.ceil(max / step) * step;
+        double step = Math.pow(10.0, accuracyExponent);
+        return Math.ceil(max / step) * step;
     }
 
 }
