@@ -39,35 +39,19 @@ import javafx.stage.Window;
  * @author Rick-Rainer Ludwig
  *
  */
-public abstract class OpenJFXTest
+public abstract class AbstractUITest
         implements NodeFullSearch, MouseInteraction, ButtonSelector, MenuSelector, DialogSelector {
 
     private static final File defaultSnapshotDirectory = new File("target/test-snapshots");
 
     @BeforeAll
     public static void startJavaFX() throws InterruptedException {
-        assertFalse(Platform.isFxApplicationThread(), "FX thread is not correct here.");
-        System.out.println("Starting OpenJFX...");
-        CountDownLatch latch = new CountDownLatch(1);
-        Platform.startup(() -> {
-            try {
-                OpenJFXRobot.initialize();
-            } finally {
-                latch.countDown();
-            }
-        });
-        Platform.setImplicitExit(false);
-        assertTrue(latch.await(10, TimeUnit.SECONDS), "OpenJFX not started in time.");
-        System.out.println("OpenJFX started.");
+        OpenJFX.startOpenJFX();
     }
 
     @AfterAll
     public static void stopJavaFX() {
-        assertFalse(Platform.isFxApplicationThread(), "FX thread is not correct here.");
-        System.out.println("Stopping OpenJFX...");
-        OpenJFXRobot.shutdown();
-        Platform.exit();
-        System.out.println("OpenJFX stopped.");
+        OpenJFX.stopOpenJFX();
     }
 
     private Stage stage;
