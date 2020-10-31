@@ -21,15 +21,15 @@ public interface NodeLifecycle {
      * @param parentNode is the parent node containing the disposable children.
      */
     static <N extends Parent> void disposeChildren(N parentNode) {
-	ObservableList<Node> children = parentNode.getChildrenUnmodifiable();
-	for (Node child : children) {
-	    if (Parent.class.isAssignableFrom(child.getClass())) {
-		disposeChildren((Parent) child);
-	    }
-	    if (NodeLifecycle.class.isAssignableFrom(child.getClass())) {
-		((NodeLifecycle) child).dispose();
-	    }
-	}
+        ObservableList<Node> children = parentNode.getChildrenUnmodifiable();
+        for (Node child : children) {
+            if (Parent.class.isAssignableFrom(child.getClass())) {
+                disposeChildren((Parent) child);
+            }
+            if (NodeLifecycle.class.isAssignableFrom(child.getClass())) {
+                ((NodeLifecycle) child).dispose();
+            }
+        }
     }
 
     /**

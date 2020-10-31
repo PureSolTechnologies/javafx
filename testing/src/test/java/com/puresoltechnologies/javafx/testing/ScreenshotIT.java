@@ -23,7 +23,7 @@ import javafx.stage.StageStyle;
  * @author Rick-Rainer Ludwig
  *
  */
-public class ScreenshotIT extends AbstractUITest {
+public class ScreenshotIT extends AbstractOpenJFXTest {
 
     @BeforeAll
     public static void setupTest() {

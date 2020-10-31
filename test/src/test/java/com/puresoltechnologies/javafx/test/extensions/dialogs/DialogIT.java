@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.extensions.dialogs.Dialog;
 import com.puresoltechnologies.javafx.test.extensions.dialogs.wizard.TestWizardResult;
-import com.puresoltechnologies.javafx.testing.AbstractUITest;
+import com.puresoltechnologies.javafx.testing.AbstractOpenJFXTest;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
 
@@ -15,7 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.FlowPane;
 import javafx.stage.Stage;
 
-public class DialogIT extends AbstractUITest {
+public class DialogIT extends AbstractOpenJFXTest {
 
     @BeforeAll
     public static void initialize() {

@@ -12,7 +12,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
-import com.puresoltechnologies.javafx.testing.AbstractUITest;
+import com.puresoltechnologies.javafx.testing.AbstractOpenJFXTest;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
 import com.puresoltechnologies.javafx.testing.select.Selection;
@@ -31,7 +31,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 @Tag("workspace")
-public class WorkspaceTermIT extends AbstractUITest {
+public class WorkspaceTermIT extends AbstractOpenJFXTest {
 
     @BeforeAll
     public static void initialize() {

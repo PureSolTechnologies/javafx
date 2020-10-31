@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.showroom.ShowRoom;
-import com.puresoltechnologies.javafx.testing.AbstractUITest;
+import com.puresoltechnologies.javafx.testing.AbstractOpenJFXTest;
 import com.puresoltechnologies.javafx.testing.OpenJFXRobot;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
@@ -19,7 +19,7 @@ import javafx.scene.robot.Robot;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class SimpleTest extends AbstractUITest {
+public class SimpleTest extends AbstractOpenJFXTest {
 
     @BeforeAll
     public static void setup() {

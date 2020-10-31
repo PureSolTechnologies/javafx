@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.extensions.dialogs.wizard.WizardDialog;
-import com.puresoltechnologies.javafx.testing.AbstractUITest;
+import com.puresoltechnologies.javafx.testing.AbstractOpenJFXTest;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
 import com.puresoltechnologies.javafx.testing.select.Selection;
@@ -17,7 +17,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
-public class WizardDialogUIT extends AbstractUITest {
+public class WizardDialogUIT extends AbstractOpenJFXTest {
 
     @BeforeAll
     public static void initialize() {

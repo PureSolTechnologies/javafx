@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.charts.ChartView;
 import com.puresoltechnologies.javafx.preferences.Preferences;
-import com.puresoltechnologies.javafx.testing.AbstractUITest;
+import com.puresoltechnologies.javafx.testing.AbstractOpenJFXTest;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ChartsViewIT extends AbstractUITest {
+public class ChartsViewIT extends AbstractOpenJFXTest {
 
     @BeforeAll
     public static void initialize() throws IOException {

@@ -39,7 +39,7 @@ import javafx.stage.Window;
  * @author Rick-Rainer Ludwig
  *
  */
-public abstract class AbstractUITest
+public abstract class AbstractOpenJFXTest
         implements NodeFullSearch, MouseInteraction, ButtonSelector, MenuSelector, DialogSelector {
 
     private static final File defaultSnapshotDirectory = new File("target/test-snapshots");

@@ -5,14 +5,14 @@ import org.junit.jupiter.api.Test;
 
 import com.puresoltechnologies.javafx.extensions.status.BooleanLEDRenderer;
 import com.puresoltechnologies.javafx.extensions.status.StatusIndicator;
-import com.puresoltechnologies.javafx.testing.AbstractUITest;
+import com.puresoltechnologies.javafx.testing.AbstractOpenJFXTest;
 import com.puresoltechnologies.javafx.testing.ReplayTimings;
 import com.puresoltechnologies.javafx.testing.ReplayTimings.Speed;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class StatusIndicatorIT extends AbstractUITest {
+public class StatusIndicatorIT extends AbstractOpenJFXTest {
 
     private StatusIndicator<Boolean> statusIndicator;
 
