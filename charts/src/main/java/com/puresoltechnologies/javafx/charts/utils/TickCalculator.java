@@ -21,7 +21,9 @@ public class TickCalculator {
         if ((max - min) == 0.0) {
             return 0;
         }
-        return (int) Math.round(Math.log10(max - min) - 1);
+        double base = max - min;
+        double log10 = Math.log10(base);
+        return (int) Math.round(log10 - 1);
     }
 
     /**
@@ -36,7 +38,7 @@ public class TickCalculator {
      */
     public static double calculateChartMin(double min, int accuracyExponent) {
         double step = Math.pow(10.0, accuracyExponent);
-        return Math.floor(min / step) * step;
+        return Math.ceil(min / step) * step;
     }
 
     /**
@@ -52,7 +54,7 @@ public class TickCalculator {
 
     public static double calculateChartMax(double max, int accuracyExponent) {
         double step = Math.pow(10.0, accuracyExponent);
-        return Math.ceil(max / step) * step;
+        return Math.floor(max / step) * step;
     }
 
 }

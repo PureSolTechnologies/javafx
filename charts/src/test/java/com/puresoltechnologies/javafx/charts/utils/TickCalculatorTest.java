@@ -17,18 +17,18 @@ public class TickCalculatorTest {
 
     @Test
     public void testCalculateChartMin() {
-        assertEquals(-400.0, TickCalculator.calculateChartMin(-350.0, 2));
+        assertEquals(-300.0, TickCalculator.calculateChartMin(-350.0, 2));
         assertEquals(-400.0, TickCalculator.calculateChartMin(-400.0, 2));
         assertEquals(400.0, TickCalculator.calculateChartMin(400.0, 2));
-        assertEquals(300.0, TickCalculator.calculateChartMin(350.0, 2));
+        assertEquals(400.0, TickCalculator.calculateChartMin(350.0, 2));
     }
 
     @Test
     public void testCalculateChartMax() {
-        assertEquals(-300.0, TickCalculator.calculateChartMax(-350.0, 2));
+        assertEquals(-400.0, TickCalculator.calculateChartMax(-350.0, 2));
         assertEquals(-400.0, TickCalculator.calculateChartMax(-400.0, 2));
         assertEquals(400.0, TickCalculator.calculateChartMax(400.0, 2));
-        assertEquals(400.0, TickCalculator.calculateChartMax(350.0, 2));
+        assertEquals(300.0, TickCalculator.calculateChartMax(350.0, 2));
     }
 
 }

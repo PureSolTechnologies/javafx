@@ -167,17 +167,6 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
         default:
             throw new IllegalStateException("Wrong type of axis found.");
         }
-        if ((min != null) && (max != null)) {
-            // optimize min and max
-            int accuracyExponent = TickCalculator.calculateAccuracy(min.doubleValue(), max.doubleValue());
-            if (Double.class.isAssignableFrom(min.getClass())) {
-                min = (T) Double.valueOf(TickCalculator.calculateChartMin(min.doubleValue(), accuracyExponent));
-                max = (T) Double.valueOf(TickCalculator.calculateChartMax(max.doubleValue(), accuracyExponent));
-            } else if (Float.class.isAssignableFrom(min.getClass())) {
-                min = (T) Float.valueOf((float) TickCalculator.calculateChartMin(min.floatValue(), accuracyExponent));
-                max = (T) Float.valueOf((float) TickCalculator.calculateChartMax(max.floatValue(), accuracyExponent));
-            }
-        }
         setMin(min);
         setMax(max);
     }
@@ -247,13 +236,16 @@ public class NumberAxisRenderer<T extends Number & Comparable<T>, A extends Numb
         default:
             throw new IllegalStateException("Unknown axis type '" + axisType + "' found.");
         }
-        String formatString = "%.0f";
+        int digits = 0;
         if (accuracy < 0) {
-            formatString = "%." + Math.abs(accuracy) + "f";
+            digits = Math.abs(accuracy);
         }
+        String formatString = "%." + digits + "f";
         gc.setLineWidth(getAxis().getTickWidth());
         boolean first = true;
-        for (double current = getMin().doubleValue(); current <= getMax().doubleValue(); current += tickSteps) {
+        // double plotMin = Math.ceil(getMin().doubleValue() / tickSteps) * tickSteps;
+        double plotMin = TickCalculator.calculateChartMin(getMin().doubleValue(), accuracy);
+        for (double current = plotMin; current <= getMax().doubleValue(); current += tickSteps) {
             double currentPosition = calculatePos(x, y, width, height, current);
             if ((Math.abs(currentPosition - position) < minDinstance) && !first) {
                 continue;
